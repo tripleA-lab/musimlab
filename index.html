@@ -584,51 +584,78 @@
 
 
         // Cari event yang berlaku pada hari ini
-        const dayEvents =
-          getEventsForDate(
-            year,
-            month,
-            day
-          );
+        function getEventsForDate(
+  year,
+  month,
+  day
+) {
+
+  const target =
+    new Date(
+      year,
+      month,
+      day
+    );
+
+  target.setHours(0, 0, 0, 0);
+
+
+  return allEvents.filter(event => {
+
+    if (!event["Start Date"]) {
+      return false;
+    }
+
+
+    let start =
+      parseDate(
+        event["Start Date"]
+      );
+
+
+    let end =
+      event["End Date"]
+        ? parseDate(
+            event["End Date"]
+          )
+        : start;
+
+
+    if (!start) {
+      return false;
+    }
+
+
+    if (!end) {
+      end = start;
+    }
+
+
+    // Kalau end date tersalah lebih awal
+    // daripada start date, swap
+    if (end < start) {
+
+      const temp = start;
+
+      start = end;
+
+      end = temp;
+
+    }
+
+
+    return (
+      target >= start &&
+      target <= end
+    );
+
+  });
+
+}
 
 
         // Masukkan event
-        dayEvents.forEach(event => {
-
-          const eventElement =
-            document.createElement("div");
-
-          eventElement.className =
-            "event";
-
-
-          eventElement.textContent =
-            event["Event Name"] ||
-            "Event";
-
-
-          eventElement.onclick =
-            function() {
-
-              showEvent(event);
-
-            };
-
-
-          dayElement.appendChild(
-            eventElement
-          );
-
-        });
-
-
-        calendarDays.appendChild(
-          dayElement
-        );
-
-      }
-
-    }
+        
 
 
     // ==========================================
@@ -692,32 +719,60 @@
     // ==========================================
     // PARSE TARIKH
     // ==========================================
+function parseDate(value) {
 
-    function parseDate(value) {
+  if (!value) {
+    return null;
+  }
 
-      if (!value) {
-        return null;
-      }
+  // Kalau Google Sheets bagi Date object dalam bentuk ISO
+  if (typeof value === "string" && value.includes("T")) {
 
+    const date = new Date(value);
 
-      const date =
-        new Date(value);
-
-
-      if (isNaN(date.getTime())) {
-        return null;
-      }
-
-
-      date.setHours(
-        0, 0, 0, 0
-      );
-
-
-      return date;
-
+    if (isNaN(date.getTime())) {
+      return null;
     }
 
+    date.setHours(0, 0, 0, 0);
+
+    return date;
+  }
+
+
+  // Format DD/MM/YYYY
+  if (typeof value === "string" && value.includes("/")) {
+
+    const parts = value.split("/");
+
+    if (parts.length === 3) {
+
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+
+      const date =
+        new Date(year, month, day);
+
+      date.setHours(0, 0, 0, 0);
+
+      return date;
+    }
+  }
+
+
+  // Fallback
+  const date = new Date(value);
+
+  if (isNaN(date.getTime())) {
+    return null;
+  }
+
+  date.setHours(0, 0, 0, 0);
+
+  return date;
+}
+    
 
     // ==========================================
     // SHOW EVENT INFO
