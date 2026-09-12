@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Musim Lab — Admin</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f3;
+      color: #222;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 22px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 26px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .add-btn {
+      background: #111;
+      color: white;
+    }
+
+    .edit-btn {
+      background: #eee;
+    }
+
+    .delete-btn {
+      background: #eee;
+    }
+
+    .event-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .event-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .event-card h3 {
+      margin-bottom: 6px;
+    }
+
+    .event-meta {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .form-box {
+      display: none;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-box.active {
+      display: block;
+    }
+
+    .form-box h2 {
+      margin-bottom: 18px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .save-btn {
+      background: #111;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: #eee;
+    }
+
+    .message {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .empty {
+      background: white;
+      border: 1px dashed #ccc;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      color: #777;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+
+      .top-bar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .add-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Musim Lab — Admin</h1>
+    <p>Manage events</p>
+  </header>
+
+  <div id="message" class="message"></div>
+
+  <div id="formBox" class="form-box">
+
+    <h2 id="formTitle">Add Event</h2>
+
+    <input type="hidden" id="eventId">
+
+    <div class="field">
+      <label>Event Name</label>
+      <input type="text" id="eventName" placeholder="Contoh: MIHAS">
+    </div>
+
+    <div class="field">
+      <label>Start Date</label>
+      <input type="date" id="startDate">
+    </div>
+
+    <div class="field">
+      <label>End Date</label>
+      <input type="date" id="endDate">
+    </div>
+
+    <div class="field">
+      <label>Category</label>
+
+      <select id="category">
+        <option value="">Pilih kategori</option>
+        <option>Muzik & Konsert</option>
+        <option>Sukan & Outdoor</option>
+        <option>Budaya & Agama</option>
+        <option>Teknologi & Perniagaan</option>
+        <option>Gaya Hidup</option>
+        <option>Local</option>
+        <option>Cuti Sekolah</option>
+        <option>Musim</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Location</label>
+      <input type="text" id="location" placeholder="Contoh: MITEC, Kuala Lumpur">
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <textarea id="description"
+        placeholder="Penerangan ringkas event..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Image URL</label>
+      <input type="url" id="imageUrl"
+        placeholder="https://...">
+    </div>
+
+    <div class="field">
+      <label>Official Link</label>
+      <input type="url" id="officialLink"
+        placeholder="https://...">
+    </div>
+
+    <div class="field">
+      <label>Status</label>
+
+      <select id="status">
+        <option value="Draft">Draft</option>
+        <option value="Published">Published</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+
+      <button class="save-btn" onclick="saveEvent()">
+        Save Event
+      </button>
+
+      <button class="cancel-btn" onclick="closeForm()">
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="top-bar">
+
+    <h2>Events</h2>
+
+    <button class="add-btn" onclick="openAddForm()">
+      + Add Event
+    </button>
+
+  </div>
+
+  <div id="eventList" class="event-list">
+
+    <div class="empty">
+      Loading events...
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  /*
+    URL Apps Script kau.
+    Gantikan bahagian ini dengan URL Web App kau.
+  */
+
+  const API_URL =
+    "https://script.google.com/macros/s/AKfycbxEGV5ZfShKK0gsALDr48ENe4uzYuY4Qqdv0ob64EFwF5QZ2PUNqDHUQCJIWrOwwzCp/exec";
+
+
+  let events = [];
+
+
+  function showMessage(text) {
+
+    const box = document.getElementById("message");
+
+    box.textContent = text;
+    box.style.display = "block";
+
+    setTimeout(() => {
+      box.style.display = "none";
+    }, 3000);
+
+  }
+
+
+  function loadEvents() {
+
+    fetch(API_URL)
+      .then(response => response.json())
+      .then(data => {
+
+        events = data;
+
+        displayEvents();
+
+      })
+      .catch(error => {
+
+        console.error(error);
+
+        document.getElementById("eventList").innerHTML = `
+          <div class="empty">
+            Tak dapat load database.
+          </div>
+        `;
+
+      });
+
+  }
+
+
+  function displayEvents() {
+
+    const list = document.getElementById("eventList");
+
+    if (!events.length) {
+
+      list.innerHTML = `
+        <div class="empty">
+          Belum ada event.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    list.innerHTML = events.map(event => `
+
+      <div class="event-card">
+
+        <h3>${event["Event Name"] || ""}</h3>
+
+        <div class="event-meta">
+
+          ${event["Start Date"] || ""}
+          ${event["End Date"] ? " — " + event["End Date"] : ""}
+
+          <br>
+
+          ${event["Location"] || ""}
+
+          <br>
+
+          ${event["Category"] || ""}
+
+        </div>
+
+        <div class="actions">
+
+          <button
+            class="edit-btn"
+            onclick="editEvent('${event["Event ID"]}')">
+            Edit
+          </button>
+
+          <button
+            class="delete-btn"
+            onclick="deleteEvent('${event["Event ID"]}')">
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+  }
+
+
+  function openAddForm() {
+
+    document.getElementById("formBox")
+      .classList.add("active");
+
+    document.getElementById("formTitle")
+      .textContent = "Add Event";
+
+    clearForm();
+
+  }
+
+
+  function closeForm() {
+
+    document.getElementById("formBox")
+      .classList.remove("active");
+
+    clearForm();
+
+  }
+
+
+  function clearForm() {
+
+    document.getElementById("eventId").value = "";
+    document.getElementById("eventName").value = "";
+    document.getElementById("startDate").value = "";
+    document.getElementById("endDate").value = "";
+    document.getElementById("category").value = "";
+    document.getElementById("location").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("imageUrl").value = "";
+    document.getElementById("officialLink").value = "";
+    document.getElementById("status").value = "Draft";
+
+  }
+
+
+  function editEvent(id) {
+
+    const event = events.find(
+      item => String(item["Event ID"]) === String(id)
+    );
+
+    if (!event) return;
+
+
+    document.getElementById("formBox")
+      .classList.add("active");
+
+    document.getElementById("formTitle")
+      .textContent = "Edit Event";
+
+
+    document.getElementById("eventId").value =
+      event["Event ID"] || "";
+
+    document.getElementById("eventName").value =
+      event["Event Name"] || "";
+
+    document.getElementById("startDate").value =
+      formatDateForInput(event["Start Date"]);
+
+    document.getElementById("endDate").value =
+      formatDateForInput(event["End Date"]);
+
+    document.getElementById("category").value =
+      event["Category"] || "";
+
+    document.getElementById("location").value =
+      event["Location"] || "";
+
+    document.getElementById("description").value =
+      event["Description"] || "";
+
+    document.getElementById("imageUrl").value =
+      event["Image URL"] || "";
+
+    document.getElementById("officialLink").value =
+      event["Official Link"] || "";
+
+    document.getElementById("status").value =
+      event["Status"] || "Draft";
+
+
+    document.getElementById("formBox")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+
+  }
+
+
+  function formatDateForInput(value) {
+
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (isNaN(date)) return "";
+
+    return date.toISOString().split("T")[0];
+
+  }
+
+
+  function saveEvent() {
+
+    const id =
+      document.getElementById("eventId").value;
+
+    const eventData = {
+
+      eventId: id,
+
+      eventName:
+        document.getElementById("eventName").value,
+
+      startDate:
+        document.getElementById("startDate").value,
+
+      endDate:
+        document.getElementById("endDate").value,
+
+      category:
+        document.getElementById("category").value,
+
+      location:
+        document.getElementById("location").value,
+
+      description:
+        document.getElementById("description").value,
+
+      imageUrl:
+        document.getElementById("imageUrl").value,
+
+      officialLink:
+        document.getElementById("officialLink").value,
+
+      status:
+        document.getElementById("status").value
+
+    };
+
+
+    if (!eventData.eventName ||
+        !eventData.startDate) {
+
+      alert("Event Name dan Start Date wajib diisi.");
+
+      return;
+
+    }
+
+
+    const action = id ? "updateEvent" : "addEvent";
+
+
+    fetch(API_URL, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+
+      body: JSON.stringify({
+
+        action: action,
+
+        data: eventData
+
+      })
+
+    })
+
+    .then(response => response.json())
+
+    .then(result => {
+
+      if (result.success) {
+
+        showMessage("Event berjaya disimpan.");
+
+        closeForm();
+
+        loadEvents();
+
+      } else {
+
+        alert(
+          result.message ||
+          "Ada masalah semasa menyimpan."
+        );
+
+      }
+
+    })
+
+    .catch(error => {
+
+      console.error(error);
+
+      alert(
+        "Tak dapat connect dengan database."
+      );
+
+    });
+
+  }
+
+
+  function deleteEvent(id) {
+
+    const event = events.find(
+      item => String(item["Event ID"]) === String(id)
+    );
+
+    const name =
+      event ? event["Event Name"] : "event ini";
+
+
+    const confirmDelete =
+      confirm(
+        `Delete "${name}"?\n\nTindakan ini tidak boleh diundur.`
+      );
+
+
+    if (!confirmDelete) return;
+
+
+    fetch(API_URL, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+
+      body: JSON.stringify({
+
+        action: "deleteEvent",
+
+        data: {
+          eventId: id
+        }
+
+      })
+
+    })
+
+    .then(response => response.json())
+
+    .then(result => {
+
+      if (result.success) {
+
+        showMessage("Event telah dipadam.");
+
+        loadEvents();
+
+      } else {
+
+        alert(
+          result.message ||
+          "Gagal delete event."
+        );
+
+      }
+
+    })
+
+    .catch(error => {
+
+      console.error(error);
+
+      alert(
+        "Tak dapat connect dengan database."
+      );
+
+    });
+
+  }
+
+
+  loadEvents();
+
+</script>
+
+</body>
+</html>
