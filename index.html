@@ -434,80 +434,50 @@
   // ==========================================
   // LOAD EVENTS
   // ==========================================
+async function loadEvents() {
 
-  async function loadEvents() {
+  const loading = document.getElementById("loading");
 
-    const calendarDays =
-      document.getElementById("calendarDays");
+  try {
 
+    loading.innerText = "Test API sedang berjalan...";
 
-    calendarDays.innerHTML = `
-      <div class="loading">
-        Sedang baca musim...
-      </div>
-    `;
+    console.log("API URL:", API_URL);
 
+    const response = await fetch(API_URL);
 
-    try {
+    console.log("Response status:", response.status);
+    console.log("Response:", response);
 
-      const response = await fetch(API_URL);
+    const text = await response.text();
 
+    console.log("API TEXT:", text);
 
-      if (!response.ok) {
-
-        throw new Error(
-          "API Error: " + response.status
-        );
-
-      }
-
-
-      const text =
-        await response.text();
-
-
-      console.log(
-        "Musim Lab API:",
-        text
-      );
-
-
-      const data =
-        JSON.parse(text);
-
-
-      allEvents =
-        Array.isArray(data)
-          ? data
-          : [];
-
-
-      console.log(
-        "Jumlah event:",
-        allEvents.length
-      );
-
-
-      renderCalendar();
-
-
-    } catch (error) {
-
-      console.error(
-        "Musim Lab Error:",
-        error
-      );
-
-
-      calendarDays.innerHTML = `
-        <div class="error">
-          Tak dapat baca data event buat masa ini.
-        </div>
-      `;
-
+    if (!text) {
+      throw new Error("API pulangkan data kosong.");
     }
 
+    const data = JSON.parse(text);
+
+    console.log("API DATA:", data);
+
+    allEvents = data;
+
+    loading.innerText = "API berjaya dibaca. " + allEvents.length + " event dijumpai.";
+
+    renderCalendar();
+
+  } catch (error) {
+
+    console.error("API ERROR:", error);
+
+    loading.innerText =
+      "API ERROR: " + error.message;
+
   }
+
+}
+  
 
 
   // ==========================================
