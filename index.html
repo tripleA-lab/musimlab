@@ -4,202 +4,308 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Musim Lab — Tahu Musim, Tahu Keperluan</title>
+  <title>Musim Lab</title>
+
+  <meta
+    name="description"
+    content="Musim Lab - tahu apa yang akan datang, supaya kita boleh bersedia."
+  >
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: Arial, sans-serif;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
       background: #f7f7f5;
       color: #222;
-      line-height: 1.5;
     }
 
+    /* =========================
+       HEADER
+    ========================= */
+
     header {
-      background: #111;
-      color: white;
+      background: #ffffff;
+      border-bottom: 1px solid #e8e8e8;
       padding: 18px 20px;
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
     }
 
     .header-inner {
       max-width: 1100px;
       margin: auto;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 20px;
     }
 
-    .logo {
-      font-size: 25px;
-      font-weight: bold;
+    .brand {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
     }
 
     .tagline {
       font-size: 13px;
-      opacity: 0.75;
+      color: #777;
+      margin-top: 3px;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 16px 60px;
     }
 
     .hero {
-      max-width: 1100px;
-      margin: auto;
-      padding: 50px 20px 30px;
+      margin: 10px 0 24px;
     }
 
     .hero h1 {
-      font-size: clamp(32px, 6vw, 58px);
-      line-height: 1.05;
-      max-width: 750px;
-      margin-bottom: 18px;
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.15;
+      letter-spacing: -1px;
     }
 
     .hero p {
-      max-width: 650px;
-      font-size: 17px;
+      margin: 8px 0 0;
       color: #666;
-    }
-
-    .section {
-      max-width: 1100px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-      gap: 10px;
-    }
-
-    .section-title h2 {
-      font-size: 25px;
-    }
-
-    .month {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    button {
-      border: 1px solid #ddd;
-      background: white;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
       font-size: 15px;
     }
 
-    button:hover {
-      background: #eee;
+    /* =========================
+       WEATHER PLACEHOLDER
+    ========================= */
+
+    .weather-card {
+      background: #ffffff;
+      border: 1px solid #e8e8e8;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 22px;
     }
 
-    .calendar {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 14px;
+    .weather-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .weather-title {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .weather-subtitle {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .weather-badge {
+      font-size: 12px;
+      color: #777;
+      background: #f2f2f2;
+      padding: 7px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .weather-content {
+      margin-top: 15px;
+      padding: 15px;
+      background: #fafafa;
+      border-radius: 13px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .weather-button {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 9px 13px;
+      border-radius: 10px;
+      background: #222;
+      color: white;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    /* =========================
+       CALENDAR CARD
+    ========================= */
+
+    .calendar-card {
+      background: #ffffff;
+      border: 1px solid #e8e8e8;
+      border-radius: 20px;
       overflow: hidden;
     }
 
-    .weekdays,
-    .days {
+    .calendar-header {
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .calendar-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .calendar-controls {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .month-button {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .month-button:hover {
+      background: #f5f5f5;
+    }
+
+    /* =========================
+       CALENDAR GRID
+    ========================= */
+
+    .calendar-weekdays,
+    .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
     }
 
-    .weekday {
-      padding: 12px 8px;
-      background: #eee;
-      font-weight: bold;
-      font-size: 13px;
-      text-align: center;
+    .calendar-weekdays {
+      background: #fafafa;
+      border-bottom: 1px solid #eeeeee;
     }
 
-    .day {
-      min-height: 105px;
-      padding: 10px;
-      border-right: 1px solid #eee;
-      border-top: 1px solid #eee;
+    .weekday {
+      text-align: center;
+      padding: 11px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #777;
+    }
+
+    .calendar-day {
+      min-height: 92px;
+      border-right: 1px solid #eeeeee;
+      border-bottom: 1px solid #eeeeee;
+      padding: 8px;
       position: relative;
       cursor: pointer;
-      transition: background 0.15s;
+      background: #fff;
+      transition: background 0.15s ease;
     }
 
-    .day:nth-child(7n) {
+    .calendar-day:nth-child(7n) {
       border-right: none;
     }
 
-    .day:hover {
-      background: #f3f3f3;
+    .calendar-day:hover {
+      background: #fafafa;
     }
 
-    .day.empty {
-      background: #fafafa;
+    .calendar-day.empty {
+      background: #fbfbfb;
       cursor: default;
     }
 
-    .date {
+    .day-number {
       font-size: 13px;
-      color: #777;
-      margin-bottom: 12px;
+      font-weight: 700;
+      color: #555;
     }
 
-    /* CATEGORY DOTS */
+    .calendar-day.today .day-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #222;
+      color: white;
+    }
 
-    .dots {
+    /* =========================
+       CATEGORY DOTS
+    ========================= */
+
+    .category-dots {
       display: flex;
       flex-wrap: wrap;
-      gap: 7px;
-      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
     }
 
-    .dot {
-      width: 11px;
-      height: 11px;
+    .category-dot {
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       display: inline-block;
-      border: 1px solid rgba(0, 0, 0, 0.12);
+      flex-shrink: 0;
     }
 
-    .dot-blue {
-      background: #2878d0;
+    .dot-music {
+      background: #3182ce;
     }
 
-    .dot-yellow {
-      background: #e8b72f;
+    .dot-sport {
+      background: #eab308;
     }
 
-    .dot-green {
-      background: #39a85b;
+    .dot-culture {
+      background: #22a06b;
     }
 
-    .dot-red {
-      background: #d94a45;
+    .dot-tech {
+      background: #dc2626;
     }
 
-    .dot-orange {
-      background: #e88932;
+    .dot-lifestyle {
+      background: #f97316;
     }
 
-    .dot-brown {
-      background: #8a6246;
+    .dot-local {
+      background: #8b5e34;
     }
 
-    .dot-purple {
-      background: #8a55c7;
+    .dot-season {
+      background: #8b5cf6;
     }
 
-    /* CUTI SEKOLAH */
+    .dot-default {
+      background: #777;
+    }
+
+    /* =========================
+       SCHOOL HOLIDAY OVERLAY
+    ========================= */
 
     .school-holiday {
       position: absolute;
@@ -207,41 +313,23 @@
       right: 5px;
       bottom: 5px;
       font-size: 8px;
+      font-weight: 700;
       color: #aaa;
       text-align: center;
+      letter-spacing: 0.5px;
       pointer-events: none;
-      z-index: 0;
-      white-space: nowrap;
-      overflow: hidden;
     }
 
-    .date,
-    .dots {
-      position: relative;
-      z-index: 1;
-    }
-
-    .loading {
-      padding: 30px;
-      text-align: center;
-      color: #777;
-      grid-column: 1 / -1;
-    }
-
-    .error {
-      padding: 30px;
-      text-align: center;
-      color: #b00020;
-      grid-column: 1 / -1;
-    }
-
-    /* LEGEND */
+    /* =========================
+       LEGEND
+    ========================= */
 
     .legend {
+      padding: 15px 18px;
       display: flex;
       flex-wrap: wrap;
       gap: 12px 18px;
-      margin-top: 18px;
+      border-top: 1px solid #eeeeee;
       font-size: 12px;
       color: #555;
     }
@@ -252,588 +340,1029 @@
       gap: 6px;
     }
 
-    /* DATE EVENTS */
+    /* =========================
+       EXPLORE
+    ========================= */
 
-    .date-events {
+    .section {
       margin-top: 30px;
-      padding: 25px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      display: none;
     }
 
-    .date-events.active {
-      display: block;
+    .section-title {
+      font-size: 20px;
+      font-weight: 750;
+      margin-bottom: 12px;
     }
 
-    .date-events h3 {
-      font-size: 23px;
-      margin-bottom: 5px;
-    }
-
-    .date-events-subtitle {
+    .section-subtitle {
       color: #777;
-      font-size: 14px;
-      margin-bottom: 20px;
+      font-size: 13px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+    }
+
+    .explore-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .explore-box {
+      background: #ffffff;
+      border: 1px solid #e8e8e8;
+      border-radius: 15px;
+      padding: 15px 13px;
+      text-decoration: none;
+      color: #222;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 62px;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .explore-box:hover {
+      transform: translateY(-2px);
+      background: #fafafa;
+    }
+
+    .explore-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .explore-name {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    /* =========================
+       DATE EVENTS
+    ========================= */
+
+    #dateEvents {
+      margin-top: 25px;
+    }
+
+    .date-panel {
+      background: #ffffff;
+      border: 1px solid #e8e8e8;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .date-panel h2 {
+      margin: 0 0 5px;
+      font-size: 20px;
+    }
+
+    .date-panel-subtitle {
+      color: #777;
+      font-size: 13px;
+      margin-bottom: 15px;
     }
 
     .event-card {
-      border-top: 1px solid #eee;
-      padding: 17px 0;
-      cursor: pointer;
+      border: 1px solid #e8e8e8;
+      border-radius: 15px;
+      padding: 15px;
+      margin-top: 10px;
+      background: #fff;
     }
 
-    .event-card:first-child {
-      border-top: none;
-      padding-top: 0;
-    }
-
-    .event-card:last-child {
-      padding-bottom: 0;
-    }
-
-    .event-card:hover .event-title {
-      text-decoration: underline;
-    }
-
-    .event-category {
+    .event-card-top {
       display: flex;
       align-items: center;
       gap: 7px;
       font-size: 12px;
-      color: #777;
-      margin-bottom: 5px;
+      color: #666;
     }
 
     .event-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 4px;
+      font-size: 17px;
+      font-weight: 750;
+      margin: 8px 0 5px;
     }
 
-    .event-date-range {
-      font-size: 13px;
-      color: #777;
-    }
-
-    .event-location {
+    .event-meta {
       font-size: 13px;
       color: #666;
-      margin-top: 4px;
+      line-height: 1.5;
     }
 
-    .see-detail {
-      display: inline-block;
-      margin-top: 9px;
-      font-size: 13px;
-      font-weight: bold;
-      color: #111;
-    }
-
-    /* EVENT DETAIL */
-
-    .info-box {
-      margin-top: 20px;
-      padding: 25px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      display: none;
-    }
-
-    .info-box.active {
-      display: block;
-    }
-
-    .info-box h3 {
-      margin-bottom: 8px;
-      font-size: 22px;
-    }
-
-    .info-box p {
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    .info-meta {
-      font-size: 13px;
-      color: #777;
+    .event-description {
       margin-top: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #555;
     }
 
-    .official-link {
+    .detail-link {
       display: inline-block;
       margin-top: 12px;
-      color: #111;
-      font-weight: bold;
+      color: #222;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .detail-link:hover {
       text-decoration: underline;
     }
 
-    .back-button {
-      margin-bottom: 15px;
-      background: #f5f5f5;
-    }
+    /* =========================
+       LOADING
+    ========================= */
 
-    /* EXPLORE */
-
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .category {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 16px;
-      border-radius: 10px;
+    .loading {
       text-align: center;
+      padding: 40px 20px;
+      color: #777;
       font-size: 14px;
-      cursor: pointer;
     }
 
-    .category:hover {
-      background: #eee;
+    .error {
+      background: #fff1f1;
+      border: 1px solid #f1cccc;
+      color: #a33;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 13px;
+      margin-top: 15px;
     }
+
+    /* =========================
+       FOOTER
+    ========================= */
 
     footer {
-      margin-top: 60px;
-      background: #111;
-      color: white;
-      padding: 30px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 25px 16px 40px;
+      color: #999;
+      font-size: 12px;
       text-align: center;
     }
 
-    footer p {
-      opacity: 0.7;
-      font-size: 13px;
-    }
+    /* =========================
+       MOBILE
+    ========================= */
 
-    @media (max-width: 700px) {
+    @media (max-width: 800px) {
+
+      main {
+        padding: 20px 10px 45px;
+      }
 
       .header-inner {
-        display: block;
+        padding: 0 3px;
       }
 
-      .tagline {
-        margin-top: 3px;
+      .hero h1 {
+        font-size: 28px;
       }
 
-      .hero {
-        padding-top: 35px;
+      .explore-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
 
-      .weekday {
-        font-size: 10px;
-        padding: 8px 2px;
-      }
-
-      .day {
-        min-height: 75px;
+      .calendar-day {
+        min-height: 72px;
         padding: 6px;
       }
 
-      .date {
-        font-size: 11px;
-        margin-bottom: 9px;
+      .day-number {
+        font-size: 12px;
       }
 
-      .dot {
-        width: 9px;
-        height: 9px;
+      .category-dots {
+        gap: 4px;
+        margin-top: 7px;
+      }
+
+      .category-dot {
+        width: 8px;
+        height: 8px;
+      }
+
+      .weekday {
+        font-size: 9px;
+        padding: 9px 2px;
       }
 
       .legend {
         gap: 9px 12px;
       }
+    }
 
-      .date-events,
-      .info-box {
-        padding: 20px;
+    @media (max-width: 480px) {
+
+      header {
+        padding: 14px 14px;
       }
 
+      .brand {
+        font-size: 21px;
+      }
+
+      .tagline {
+        font-size: 11px;
+      }
+
+      .calendar-header {
+        padding: 14px;
+      }
+
+      .calendar-title {
+        font-size: 17px;
+      }
+
+      .month-button {
+        width: 32px;
+        height: 32px;
+      }
+
+      .calendar-day {
+        min-height: 65px;
+      }
+
+      .school-holiday {
+        font-size: 6px;
+      }
+
+      .explore-box {
+        min-height: 58px;
+        padding: 12px 10px;
+      }
+
+      .explore-name {
+        font-size: 12px;
+      }
+
+      .explore-dot {
+        width: 10px;
+        height: 10px;
+      }
+
+      .weather-card {
+        padding: 15px;
+      }
+
+      .weather-top {
+        align-items: flex-start;
+      }
+
+      .weather-badge {
+        font-size: 10px;
+      }
     }
   </style>
 </head>
 
 <body>
 
+  <!-- =========================
+       HEADER
+  ========================== -->
+
   <header>
     <div class="header-inner">
-      <div class="logo">Musim Lab</div>
 
-      <div class="tagline">
-        Tahu Musim, Tahu Keperluan.
+      <div>
+        <div class="brand">Musim Lab</div>
+        <div class="tagline">
+          Tahu Musim, Tahu Keperluan.
+        </div>
       </div>
+
     </div>
   </header>
 
 
   <main>
 
+    <!-- =========================
+         HERO
+    ========================== -->
+
     <section class="hero">
 
-      <h1>
-        Apa yang akan datang?
-      </h1>
+      <h1>Apa yang akan datang?</h1>
 
       <p>
-        Musim Lab perhati apa yang sedang berlaku di Malaysia -
-        event, musim, trend dan perkara yang mungkin perlukan persediaan.
+        Tengok apa yang sedang berlaku, apa yang bakal tiba
+        dan apa yang patut kau bersedia.
       </p>
 
     </section>
 
 
-    <section class="section">
+    <!-- =========================
+         WEATHER
+    ========================== -->
 
-      <div class="section-title">
+    <section class="weather-card">
 
-        <h2 id="monthTitle">
-          September 2026
-        </h2>
+      <div class="weather-top">
 
-        <div class="month">
-
-          <button onclick="previousMonth()">
-            ←
-          </button>
-
-          <button onclick="nextMonth()">
-            →
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <div class="calendar">
-
-        <div class="weekdays">
-
-          <div class="weekday">Isn</div>
-          <div class="weekday">Sel</div>
-          <div class="weekday">Rab</div>
-          <div class="weekday">Kha</div>
-          <div class="weekday">Jum</div>
-          <div class="weekday">Sab</div>
-          <div class="weekday">Ahd</div>
-
-        </div>
-
-
-        <div
-          class="days"
-          id="calendarDays"
-        >
-
-          <div class="loading">
-            Sedang baca musim...
+        <div>
+          <div class="weather-title">
+            Musim Lab Weather
           </div>
 
+          <div class="weather-subtitle">
+            Cuaca hari ini & apa yang patut kau standby.
+          </div>
+        </div>
+
+        <div class="weather-badge">
+          Coming soon
         </div>
 
       </div>
 
+      <div class="weather-content">
 
-      <!-- LEGEND -->
+        Ruang ni kita simpan untuk weather update
+        dan short weather podcast Musim Lab.
 
-      <div class="legend">
+        <br>
 
-        <div class="legend-item">
-          <span class="dot dot-blue"></span>
-          Muzik & Konsert
-        </div>
+        Contoh nanti:
 
-        <div class="legend-item">
-          <span class="dot dot-yellow"></span>
-          Sukan & Outdoor
-        </div>
+        <strong>
+          “Petang ni ada kemungkinan hujan. Kalau keluar
+          lama, payung standby.”
+        </strong>
 
-        <div class="legend-item">
-          <span class="dot dot-green"></span>
-          Budaya & Agama
-        </div>
+        <br>
 
-        <div class="legend-item">
-          <span class="dot dot-red"></span>
-          Teknologi & Perniagaan
-        </div>
-
-        <div class="legend-item">
-          <span class="dot dot-orange"></span>
-          Gaya Hidup
-        </div>
-
-        <div class="legend-item">
-          <span class="dot dot-brown"></span>
-          Local
-        </div>
-
-        <div class="legend-item">
-          <span class="dot dot-purple"></span>
-          Musim
-        </div>
-
-      </div>
-
-
-      <!-- DATE EVENTS -->
-
-      <div
-        class="date-events"
-        id="dateEvents"
-      >
-
-        <h3 id="selectedDateTitle">
-          -
-        </h3>
-
-        <div
-          class="date-events-subtitle"
-          id="selectedDateSubtitle"
-        >
-          -
-        </div>
-
-        <div id="dateEventsList"></div>
-
-      </div>
-
-
-      <!-- EVENT DETAIL -->
-
-      <div
-        class="info-box"
-        id="eventInfo"
-      >
+        <a href="#" class="weather-button" onclick="return false;">
+          🎙️ Dengar Weather Update
+        </a>
 
       </div>
 
     </section>
 
 
-    <section class="section">
+    <!-- =========================
+         CALENDAR
+    ========================== -->
 
-      <div class="section-title">
+    <section class="calendar-card">
 
-        <h2>
-          Explore
-        </h2>
+      <div class="calendar-header">
 
-      </div>
-
-
-      <div class="categories">
-
-        <div class="category">
-          🎵 Muzik & Konsert
+        <div class="calendar-title" id="monthTitle">
+          September 2026
         </div>
 
-        <div class="category">
-          🏃 Sukan & Outdoor
-        </div>
+        <div class="calendar-controls">
 
-        <div class="category">
-          🌙 Budaya & Agama
-        </div>
+          <button
+            class="month-button"
+            onclick="changeMonth(-1)"
+            aria-label="Bulan sebelumnya"
+          >
+            ‹
+          </button>
 
-        <div class="category">
-          💼 Teknologi & Perniagaan
-        </div>
+          <button
+            class="month-button"
+            onclick="changeMonth(1)"
+            aria-label="Bulan seterusnya"
+          >
+            ›
+          </button>
 
-        <div class="category">
-          🌴 Gaya Hidup
-        </div>
-
-        <div class="category">
-          📍 Local
-        </div>
-
-        <div class="category">
-          🎒 Cuti Sekolah
-        </div>
-
-        <div class="category">
-          🌦️ Musim
         </div>
 
       </div>
 
-    </section>
 
-  </main>
+      <div class="calendar-weekdays">
 
+        <div class="weekday">ISN</div>
+        <div class="weekday">SEL</div>
+        <div class="weekday">RAB</div>
+        <div class="weekday">KHA</div>
+        <div class="weekday">JUM</div>
+        <div class="weekday">SAB</div>
+        <div class="weekday">AHD</div>
 
-  <footer>
-
-    <p>
-      Musim Lab - perhati musim, faham keperluan, bersedia.
-    </p>
-
-  </footer>
-
-
-  <script>
-
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbxbweeVHYVhHf30JzVrmztnxcU6nFxZ62k7TYNTvLP7OiNq8i8cPetGZmXzQuOpcNE6/exec";
+      </div>
 
 
-    let allEvents = [];
-
-
-    let currentDate =
-      new Date(2026, 8, 1);
-
-
-    const monthNames = [
-
-      "Januari",
-      "Februari",
-      "Mac",
-      "April",
-      "Mei",
-      "Jun",
-      "Julai",
-      "Ogos",
-      "September",
-      "Oktober",
-      "November",
-      "Disember"
-
-    ];
-
-
-    /* CATEGORY COLOURS */
-
-    const categoryColors = {
-
-      "Muzik & Konsert": "blue",
-
-      "Sukan & Outdoor": "yellow",
-
-      "Sukan & outdoor": "yellow",
-
-      "Budaya & Agama": "green",
-
-      "Teknologi & Perniagaan": "red",
-
-      "Gaya Hidup": "orange",
-
-      "Local": "brown",
-
-      "Musim": "purple"
-
-    };
-
-
-    /* LOAD EVENTS */
-
-    async function loadEvents() {
-
-      const calendarDays =
-        document.getElementById(
-          "calendarDays"
-        );
-
-
-      calendarDays.innerHTML = `
+      <div
+        id="calendarGrid"
+        class="calendar-grid"
+      >
 
         <div class="loading">
           Sedang baca musim...
         </div>
 
-      `;
+      </div>
 
+
+      <div class="legend">
+
+        <div class="legend-item">
+          <span class="category-dot dot-music"></span>
+          Muzik & Konsert
+        </div>
+
+        <div class="legend-item">
+          <span class="category-dot dot-sport"></span>
+          Sukan & Outdoor
+        </div>
+
+        <div class="legend-item">
+          <span class="category-dot dot-culture"></span>
+          Budaya & Agama
+        </div>
+
+        <div class="legend-item">
+          <span class="category-dot dot-tech"></span>
+          Teknologi & Perniagaan
+        </div>
+
+        <div class="legend-item">
+          <span class="category-dot dot-lifestyle"></span>
+          Gaya Hidup
+        </div>
+
+        <div class="legend-item">
+          <span class="category-dot dot-local"></span>
+          Local
+        </div>
+
+        <div class="legend-item">
+          <span class="category-dot dot-season"></span>
+          Musim
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         EXPLORE
+    ========================== -->
+
+    <section class="section">
+
+      <div class="section-title">
+        Explore
+      </div>
+
+      <div class="section-subtitle">
+        Nak tengok musim atau kategori tertentu?
+      </div>
+
+
+      <div class="explore-grid">
+
+        <a href="#" class="explore-box" data-category="Muzik & Konsert">
+          <span class="explore-dot dot-music"></span>
+          <span class="explore-name">
+            Muzik & Konsert
+          </span>
+        </a>
+
+
+        <a href="#" class="explore-box" data-category="Sukan & Outdoor">
+          <span class="explore-dot dot-sport"></span>
+          <span class="explore-name">
+            Sukan & Outdoor
+          </span>
+        </a>
+
+
+        <a href="#" class="explore-box" data-category="Budaya & Agama">
+          <span class="explore-dot dot-culture"></span>
+          <span class="explore-name">
+            Budaya & Agama
+          </span>
+        </a>
+
+
+        <a href="#" class="explore-box" data-category="Teknologi & Perniagaan">
+          <span class="explore-dot dot-tech"></span>
+          <span class="explore-name">
+            Teknologi & Perniagaan
+          </span>
+        </a>
+
+
+        <a href="#" class="explore-box" data-category="Gaya Hidup">
+          <span class="explore-dot dot-lifestyle"></span>
+          <span class="explore-name">
+            Gaya Hidup
+          </span>
+        </a>
+
+
+        <a href="#" class="explore-box" data-category="Local">
+          <span class="explore-dot dot-local"></span>
+          <span class="explore-name">
+            Local
+          </span>
+        </a>
+
+
+        <a href="#" class="explore-box" data-category="Musim">
+          <span class="explore-dot dot-season"></span>
+          <span class="explore-name">
+            Musim
+          </span>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         DATE EVENTS
+    ========================== -->
+
+    <section id="dateEvents"></section>
+
+  </main>
+
+
+  <footer>
+    © 2026 Musim Lab
+  </footer>
+
+
+  <script>
+
+    /* =========================
+       API
+    ========================== */
+
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbxbweeVHYVhHf30JzVrmztnxcU6nFxZ62k7TYNTvLP7OiNq8i8cPetGZmXzQuOpcNE6/exec";
+
+
+    /* =========================
+       GLOBAL DATA
+    ========================== */
+
+    let events = [];
+
+    let currentDate = new Date(2026, 8, 1);
+
+    let currentMonth =
+      currentDate.getMonth();
+
+    let currentYear =
+      currentDate.getFullYear();
+
+
+    /* =========================
+       CATEGORY HELPERS
+    ========================== */
+
+    function getCategoryClass(category) {
+
+      const value =
+        String(category || "").toLowerCase();
+
+      if (
+        value.includes("muzik") ||
+        value.includes("konsert")
+      ) {
+        return "dot-music";
+      }
+
+      if (
+        value.includes("sukan") ||
+        value.includes("outdoor")
+      ) {
+        return "dot-sport";
+      }
+
+      if (
+        value.includes("budaya") ||
+        value.includes("agama")
+      ) {
+        return "dot-culture";
+      }
+
+      if (
+        value.includes("teknologi") ||
+        value.includes("perniagaan") ||
+        value.includes("bisnes")
+      ) {
+        return "dot-tech";
+      }
+
+      if (
+        value.includes("gaya hidup") ||
+        value.includes("lifestyle")
+      ) {
+        return "dot-lifestyle";
+      }
+
+      if (
+        value.includes("local") ||
+        value.includes("lokal")
+      ) {
+        return "dot-local";
+      }
+
+      if (
+        value.includes("musim")
+      ) {
+        return "dot-season";
+      }
+
+      return "dot-default";
+    }
+
+
+    function isSchoolHoliday(category) {
+
+      return String(category || "")
+        .toLowerCase()
+        .includes("cuti");
+    }
+
+
+    /* =========================
+       DATE PARSER
+    ========================== */
+
+    function parseDate(value) {
+
+      if (!value) {
+        return null;
+      }
+
+      if (value instanceof Date) {
+        return new Date(value);
+      }
+
+      const text =
+        String(value).trim();
+
+      /*
+        Format:
+        DD/MM/YYYY
+      */
+
+      const slashMatch =
+        text.match(
+          /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+        );
+
+      if (slashMatch) {
+
+        const day =
+          Number(slashMatch[1]);
+
+        const month =
+          Number(slashMatch[2]) - 1;
+
+        const year =
+          Number(slashMatch[3]);
+
+        return new Date(
+          year,
+          month,
+          day
+        );
+      }
+
+
+      /*
+        ISO date
+      */
+
+      const parsed =
+        new Date(text);
+
+      if (!isNaN(parsed.getTime())) {
+
+        /*
+          Google API sometimes returns UTC.
+
+          We only care about the calendar date,
+          so use UTC components for ISO values.
+        */
+
+        if (
+          text.includes("T") ||
+          text.includes("Z")
+        ) {
+
+          return new Date(
+            parsed.getUTCFullYear(),
+            parsed.getUTCMonth(),
+            parsed.getUTCDate()
+          );
+
+        }
+
+        return parsed;
+      }
+
+      return null;
+    }
+
+
+    /* =========================
+       DATE KEY
+    ========================== */
+
+    function dateKey(date) {
+
+      return (
+        date.getFullYear() +
+        "-" +
+        String(
+          date.getMonth() + 1
+        ).padStart(2, "0") +
+        "-" +
+        String(
+          date.getDate()
+        ).padStart(2, "0")
+      );
+
+    }
+
+
+    /* =========================
+       EVENT DATE RANGE
+    ========================== */
+
+    function eventCoversDate(event, date) {
+
+      const start =
+        parseDate(
+          event["Start Date"] ||
+          event["StartDate"] ||
+          event["startDate"]
+        );
+
+      const end =
+        parseDate(
+          event["End Date"] ||
+          event["EndDate"] ||
+          event["endDate"]
+        );
+
+      if (!start && !end) {
+        return false;
+      }
+
+      const startDate =
+        start || end;
+
+      const endDate =
+        end || start;
+
+
+      /*
+        Safety:
+        kalau end date lebih kecil
+        daripada start date, swap.
+      */
+
+      let first =
+        new Date(startDate);
+
+      let last =
+        new Date(endDate);
+
+      if (first > last) {
+
+        const temp = first;
+
+        first = last;
+        last = temp;
+      }
+
+
+      first.setHours(0, 0, 0, 0);
+      last.setHours(0, 0, 0, 0);
+
+      const check =
+        new Date(date);
+
+      check.setHours(0, 0, 0, 0);
+
+      return (
+        check >= first &&
+        check <= last
+      );
+    }
+
+
+    /* =========================
+       GET EVENT ID
+    ========================== */
+
+    function getEventId(event) {
+
+      return (
+        event["Event ID"] ||
+        event["EventID"] ||
+        event["eventId"] ||
+        event["ID"] ||
+        ""
+      );
+
+    }
+
+
+    /* =========================
+       GET EVENT NAME
+    ========================== */
+
+    function getEventName(event) {
+
+      return (
+        event["Event Name"] ||
+        event["EventName"] ||
+        event["eventName"] ||
+        "Event tanpa nama"
+      );
+
+    }
+
+
+    /* =========================
+       GET CATEGORY
+    ========================== */
+
+    function getCategory(event) {
+
+      return (
+        event["Category"] ||
+        event["category"] ||
+        ""
+      );
+
+    }
+
+
+    /* =========================
+       GET LOCATION
+    ========================== */
+
+    function getLocation(event) {
+
+      return (
+        event["Location"] ||
+        event["location"] ||
+        ""
+      );
+
+    }
+
+
+    /* =========================
+       GET DESCRIPTION
+    ========================== */
+
+    function getDescription(event) {
+
+      return (
+        event["Description"] ||
+        event["description"] ||
+        ""
+      );
+
+    }
+
+
+    /* =========================
+       FORMAT DATE RANGE
+    ========================== */
+
+    function formatDateRange(event) {
+
+      const start =
+        parseDate(
+          event["Start Date"] ||
+          event["StartDate"] ||
+          event["startDate"]
+        );
+
+      const end =
+        parseDate(
+          event["End Date"] ||
+          event["EndDate"] ||
+          event["endDate"]
+        );
+
+      if (!start && !end) {
+        return "";
+      }
+
+      const options = {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      };
+
+      if (!start) {
+        return end.toLocaleDateString(
+          "ms-MY",
+          options
+        );
+      }
+
+      if (!end) {
+        return start.toLocaleDateString(
+          "ms-MY",
+          options
+        );
+      }
+
+      if (
+        start.getTime() ===
+        end.getTime()
+      ) {
+
+        return start.toLocaleDateString(
+          "ms-MY",
+          options
+        );
+
+      }
+
+      return (
+        start.toLocaleDateString(
+          "ms-MY",
+          {
+            day: "numeric",
+            month: "short"
+          }
+        ) +
+        " - " +
+        end.toLocaleDateString(
+          "ms-MY",
+          options
+        )
+      );
+    }
+
+
+    /* =========================
+       LOAD EVENTS
+    ========================== */
+
+    async function loadEvents() {
+
+      const calendar =
+        document.getElementById(
+          "calendarGrid"
+        );
 
       try {
 
         const response =
           await fetch(API_URL);
 
-
         if (!response.ok) {
-
           throw new Error(
-            "API Error: HTTP " +
-            response.status
+            "API tidak dapat dicapai."
           );
-
         }
 
-
-        const text =
-          await response.text();
-
-
-        if (!text) {
-
-          throw new Error(
-            "API pulangkan data kosong."
-          );
-
-        }
-
-
-        let data;
-
-
-        try {
-
-          data =
-            JSON.parse(text);
-
-        } catch (jsonError) {
-
-          throw new Error(
-            "API tidak pulangkan JSON yang sah."
-          );
-
-        }
-
+        const data =
+          await response.json();
 
         if (!Array.isArray(data)) {
-
           throw new Error(
             "Format data API tidak betul."
           );
-
         }
 
-
-        allEvents =
-          data;
-
+        events = data;
 
         renderCalendar();
 
-
       } catch (error) {
 
-        console.error(
-          "Musim Lab API ERROR:",
-          error
-        );
+        console.error(error);
 
-
-        calendarDays.innerHTML = `
-
-          <div class="error">
-
-            Tak dapat baca data event.
-
+        calendar.innerHTML = `
+          <div class="loading">
+            Tak dapat baca data musim sekarang.
             <br><br>
-
-            <small>
-              ${escapeHtml(error.message)}
-            </small>
-
+            Cuba refresh page.
           </div>
-
         `;
 
       }
@@ -841,60 +1370,115 @@
     }
 
 
-    /* RENDER CALENDAR */
+    /* =========================
+       CHANGE MONTH
+    ========================== */
+
+    function changeMonth(direction) {
+
+      currentMonth += direction;
+
+      if (currentMonth < 0) {
+
+        currentMonth = 11;
+        currentYear--;
+
+      }
+
+      if (currentMonth > 11) {
+
+        currentMonth = 0;
+        currentYear++;
+
+      }
+
+      renderCalendar();
+
+      document
+        .getElementById("dateEvents")
+        .innerHTML = "";
+
+    }
+
+
+    /* =========================
+       RENDER CALENDAR
+    ========================== */
 
     function renderCalendar() {
 
-      const year =
-        currentDate.getFullYear();
+      const grid =
+        document.getElementById(
+          "calendarGrid"
+        );
 
-
-      const month =
-        currentDate.getMonth();
-
-
-      const monthTitle =
+      const title =
         document.getElementById(
           "monthTitle"
         );
 
 
-      monthTitle.textContent =
-        monthNames[month] +
+      const monthNames = [
+        "Januari",
+        "Februari",
+        "Mac",
+        "April",
+        "Mei",
+        "Jun",
+        "Julai",
+        "Ogos",
+        "September",
+        "Oktober",
+        "November",
+        "Disember"
+      ];
+
+
+      title.textContent =
+        monthNames[currentMonth] +
         " " +
-        year;
+        currentYear;
 
 
-      const calendarDays =
-        document.getElementById(
-          "calendarDays"
-        );
+      grid.innerHTML = "";
 
 
-      calendarDays.innerHTML = "";
+      /*
+        JS:
+        Sunday = 0
+        Monday = 1
 
+        Kita nak:
+        Monday = first column
+      */
 
       const firstDay =
         new Date(
-          year,
-          month,
+          currentYear,
+          currentMonth,
           1
         );
 
+      let startingDay =
+        firstDay.getDay();
 
-      const startingDay =
-        (firstDay.getDay() + 6) % 7;
+      startingDay =
+        startingDay === 0
+          ? 6
+          : startingDay - 1;
 
 
       const daysInMonth =
         new Date(
-          year,
-          month + 1,
+          currentYear,
+          currentMonth + 1,
           0
         ).getDate();
 
 
-      /* EMPTY DAYS */
+      /*
+        Empty cells sebelum 1hb
+      */
 
       for (
         let i = 0;
@@ -902,24 +1486,21 @@
         i++
       ) {
 
-        const emptyDay =
+        const empty =
           document.createElement(
             "div"
           );
 
+        empty.className =
+          "calendar-day empty";
 
-        emptyDay.className =
-          "day empty";
-
-
-        calendarDays.appendChild(
-          emptyDay
-        );
-
+        grid.appendChild(empty);
       }
 
 
-      /* ACTUAL DAYS */
+      /*
+        Hari-hari bulan
+      */
 
       for (
         let day = 1;
@@ -927,939 +1508,478 @@
         day++
       ) {
 
-        const dayElement =
-          document.createElement(
-            "div"
-          );
-
-
-        dayElement.className =
-          "day";
-
-
-        const dateElement =
-          document.createElement(
-            "div"
-          );
-
-
-        dateElement.className =
-          "date";
-
-
-        dateElement.textContent =
-          day;
-
-
-        dayElement.appendChild(
-          dateElement
-        );
-
-
-        const dayEvents =
-          getEventsForDate(
-            year,
-            month,
+        const date =
+          new Date(
+            currentYear,
+            currentMonth,
             day
           );
 
 
+        const cell =
+          document.createElement(
+            "div"
+          );
+
+        cell.className =
+          "calendar-day";
+
+
         /*
-          ONE DOT PER CATEGORY
+          Today
+        */
+
+        const today =
+          new Date();
+
+        if (
+          today.getFullYear() === currentYear &&
+          today.getMonth() === currentMonth &&
+          today.getDate() === day
+        ) {
+
+          cell.classList.add(
+            "today"
+          );
+
+        }
+
+
+        const number =
+          document.createElement(
+            "div"
+          );
+
+        number.className =
+          "day-number";
+
+        number.textContent =
+          day;
+
+        cell.appendChild(number);
+
+
+        /*
+          Cari event yang cover
+          tarikh ini.
+        */
+
+        const dateEvents =
+          events.filter(
+            event =>
+              eventCoversDate(
+                event,
+                date
+              )
+          );
+
+
+        /*
+          Satu dot sahaja
+          untuk setiap kategori.
         */
 
         const categories =
-          new Set();
+          new Map();
 
 
-        let hasSchoolHoliday =
-          false;
-
-
-        dayEvents.forEach(
+        dateEvents.forEach(
           event => {
 
             const category =
-              String(
-                event["Category"] || ""
-              ).trim();
+              getCategory(event);
 
-
-            if (
-              categoryColors[category]
-            ) {
-
-              categories.add(
-                categoryColors[category]
-              );
-
+            if (!category) {
+              return;
             }
 
-
-            /*
-              Cuti Sekolah
-              is treated differently.
-            */
-
-            if (
+            const normalized =
               category
                 .toLowerCase()
-                .includes(
-                  "cuti"
-                )
+                .trim();
+
+            if (
+              !categories.has(
+                normalized
+              )
             ) {
 
-              hasSchoolHoliday =
-                true;
+              categories.set(
+                normalized,
+                category
+              );
 
             }
 
           }
         );
 
-
-        /*
-          DOT CONTAINER
-        */
 
         const dots =
           document.createElement(
             "div"
           );
 
-
         dots.className =
-          "dots";
+          "category-dots";
 
 
         categories.forEach(
-          color => {
+          category => {
+
+            /*
+              Cuti sekolah
+              bukan dot.
+            */
+
+            if (
+              isSchoolHoliday(
+                category
+              )
+            ) {
+              return;
+            }
+
 
             const dot =
               document.createElement(
                 "span"
               );
 
-
             dot.className =
-              "dot dot-" +
-              color;
+              "category-dot " +
+              getCategoryClass(
+                category
+              );
 
+            dot.title =
+              category;
 
-            dots.appendChild(
-              dot
-            );
+            dots.appendChild(dot);
 
           }
         );
 
 
-        dayElement.appendChild(
-          dots
-        );
+        cell.appendChild(dots);
 
 
         /*
-          SCHOOL HOLIDAY TEXT
+          Cuti sekolah
         */
+
+        const hasSchoolHoliday =
+          dateEvents.some(
+            event =>
+              isSchoolHoliday(
+                getCategory(event)
+              )
+          );
+
 
         if (
           hasSchoolHoliday
         ) {
 
-          const holidayText =
+          const holidayLabel =
             document.createElement(
               "div"
             );
 
-
-          holidayText.className =
+          holidayLabel.className =
             "school-holiday";
 
-
-          holidayText.textContent =
+          holidayLabel.textContent =
             "CUTI SEKOLAH";
 
-
-          dayElement.appendChild(
-            holidayText
+          cell.appendChild(
+            holidayLabel
           );
 
         }
 
 
         /*
-          CLICK DATE
+          Klik tarikh
         */
 
-        dayElement.onclick =
-          function () {
-
-            showDateEvents(
-              year,
-              month,
-              day,
-              dayEvents
-            );
-
-          };
-
-
-        calendarDays.appendChild(
-          dayElement
-        );
-
-      }
-
-    }
-
-
-    /* GET EVENTS FOR DATE */
-
-    function getEventsForDate(
-      year,
-      month,
-      day
-    ) {
-
-      const target =
-        new Date(
-          year,
-          month,
-          day
-        );
-
-
-      target.setHours(
-        0,
-        0,
-        0,
-        0
-      );
-
-
-      return allEvents.filter(
-        event => {
-
-          if (
-            !event["Start Date"]
-          ) {
-
-            return false;
-
-          }
-
-
-          let start =
-            parseDate(
-              event["Start Date"]
-            );
-
-
-          let end =
-            event["End Date"]
-              ? parseDate(
-                  event["End Date"]
-                )
-              : start;
-
-
-          if (!start) {
-
-            return false;
-
-          }
-
-
-          if (!end) {
-
-            end =
-              start;
-
-          }
-
-
-          /*
-            FIX REVERSED DATES
-          */
-
-          if (
-            end < start
-          ) {
-
-            const temp =
-              start;
-
-
-            start =
-              end;
-
-
-            end =
-              temp;
-
-          }
-
-
-          return (
-
-            target >= start &&
-            target <= end
-
-          );
-
-        }
-      );
-
-    }
-
-
-    /* DATE PARSER */
-
-    function parseDate(value) {
-
-      if (!value) {
-
-        return null;
-
-      }
-
-
-      if (
-
-        typeof value === "string" &&
-        value.includes("/")
-
-      ) {
-
-        const parts =
-          value.split("/");
-
-
         if (
-          parts.length === 3
+          dateEvents.length > 0
         ) {
 
-          const day =
-            parseInt(
-              parts[0],
-              10
-            );
+          cell.addEventListener(
+            "click",
+            () => {
 
+              showDateEvents(
+                date,
+                dateEvents
+              );
 
-          const month =
-            parseInt(
-              parts[1],
-              10
-            ) - 1;
-
-
-          const year =
-            parseInt(
-              parts[2],
-              10
-            );
-
-
-          const date =
-            new Date(
-              year,
-              month,
-              day
-            );
-
-
-          date.setHours(
-            0,
-            0,
-            0,
-            0
+            }
           );
-
-
-          return date;
 
         }
 
-      }
 
-
-      const date =
-        new Date(value);
-
-
-      if (
-        isNaN(
-          date.getTime()
-        )
-      ) {
-
-        return null;
+        grid.appendChild(cell);
 
       }
-
-
-      date.setHours(
-        0,
-        0,
-        0,
-        0
-      );
-
-
-      return date;
 
     }
 
 
-    /* SHOW EVENTS FOR SELECTED DATE */
+    /* =========================
+       SHOW DATE EVENTS
+    ========================== */
 
     function showDateEvents(
-      year,
-      month,
-      day,
-      events
+      date,
+      dateEvents
     ) {
 
-      const dateEvents =
+      const container =
         document.getElementById(
           "dateEvents"
         );
 
 
-      const title =
-        document.getElementById(
-          "selectedDateTitle"
-        );
-
-
-      const subtitle =
-        document.getElementById(
-          "selectedDateSubtitle"
-        );
-
-
-      const list =
-        document.getElementById(
-          "dateEventsList"
-        );
-
-
-      const selectedDate =
-        new Date(
-          year,
-          month,
-          day
-        );
-
-
-      const formattedDate =
-        day +
-        " " +
-        monthNames[month] +
-        " " +
-        year;
-
-
-      title.textContent =
-        formattedDate;
-
-
-      if (
-        events.length === 0
-      ) {
-
-        subtitle.textContent =
-          "Tak ada event direkodkan pada tarikh ni.";
-
-
-        list.innerHTML = "";
-
-
-      } else {
-
-        subtitle.textContent =
-          events.length +
-          " perkara sedang berlaku pada tarikh ni.";
-
-
-        list.innerHTML = "";
-
-
-        events.forEach(
-          event => {
-
-            const card =
-              document.createElement(
-                "div"
-              );
-
-
-            card.className =
-              "event-card";
-
-
-            const category =
-              event["Category"] ||
-              "Lain-lain";
-
-
-            const color =
-              categoryColors[
-                category
-              ] ||
-              null;
-
-
-            const start =
-              parseDate(
-                event["Start Date"]
-              );
-
-
-            const end =
-              event["End Date"]
-                ? parseDate(
-                    event["End Date"]
-                  )
-                : start;
-
-
-            const dateRange =
-              formatDateRange(
-                start,
-                end
-              );
-
-
-            const titleText =
-              event["Event Name"] ||
-              "Event";
-
-
-            const location =
-              event["Location"] ||
-              "";
-
-
-            card.innerHTML = `
-
-              <div class="event-category">
-
-                ${
-                  color
-                    ? `
-                      <span
-                        class="dot dot-${color}"
-                      ></span>
-                    `
-                    : ""
-                }
-
-                ${escapeHtml(category)}
-
-              </div>
-
-
-              <div class="event-title">
-
-                ${escapeHtml(titleText)}
-
-              </div>
-
-
-              <div class="event-date-range">
-
-                ${escapeHtml(dateRange)}
-
-              </div>
-
-
-              ${
-                location
-                  ? `
-                    <div class="event-location">
-                      📍 ${escapeHtml(location)}
-                    </div>
-                  `
-                  : ""
-              }
-
-
-              <div class="see-detail">
-
-                See more detail →
-
-              </div>
-
-            `;
-
-
-            card.onclick =
-              function () {
-
-                showEvent(
-                  event
-                );
-
-              };
-
-
-            list.appendChild(
-              card
-            );
-
+      const readableDate =
+        date.toLocaleDateString(
+          "ms-MY",
+          {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
           }
         );
 
-      }
+
+      /*
+        Group ikut category
+        supaya mudah scan.
+      */
+
+      const grouped = {};
 
 
-      dateEvents.classList.add(
-        "active"
+      dateEvents.forEach(
+        event => {
+
+          const category =
+            getCategory(event) ||
+            "Lain-lain";
+
+          if (
+            !grouped[category]
+          ) {
+            grouped[category] = [];
+          }
+
+          grouped[category].push(
+            event
+          );
+
+        }
       );
 
 
-      document.getElementById(
-        "eventInfo"
-      ).classList.remove(
-        "active"
-      );
+      let html = `
 
+        <div class="date-panel">
 
-      dateEvents.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+          <h2>
+            ${readableDate}
+          </h2>
 
-    }
-
-
-    /* SHOW EVENT DETAIL */
-
-    function showEvent(event) {
-
-      const info =
-        document.getElementById(
-          "eventInfo"
-        );
-
-
-      const title =
-        event["Event Name"] ||
-        "Event";
-
-
-      const description =
-        event["Description"] ||
-        "Tiada penerangan buat masa ini.";
-
-
-      const location =
-        event["Location"] ||
-        "";
-
-
-      const category =
-        event["Category"] ||
-        "";
-
-
-      const officialLink =
-        event["Official Link"] ||
-        "";
-
-
-      const start =
-        parseDate(
-          event["Start Date"]
-        );
-
-
-      const end =
-        event["End Date"]
-          ? parseDate(
-              event["End Date"]
-            )
-          : start;
-
-
-      const dateRange =
-        formatDateRange(
-          start,
-          end
-        );
-
-
-      info.innerHTML = `
-
-        <button
-          class="back-button"
-          onclick="backToDateEvents()"
-        >
-          ← Kembali ke tarikh
-        </button>
-
-
-        <h3>
-          ${escapeHtml(title)}
-        </h3>
-
-
-        <p>
-          ${escapeHtml(description)}
-        </p>
-
-
-        ${
-          dateRange
-            ? `
-              <div class="info-meta">
-                📅 ${escapeHtml(dateRange)}
-              </div>
-            `
-            : ""
-        }
-
-
-        ${
-          location
-            ? `
-              <div class="info-meta">
-                📍 ${escapeHtml(location)}
-              </div>
-            `
-            : ""
-        }
-
-
-        ${
-          category
-            ? `
-              <div class="info-meta">
-                🏷️ ${escapeHtml(category)}
-              </div>
-            `
-            : ""
-        }
-
-
-        ${
-          officialLink
-            ? `
-              <a
-                class="official-link"
-                href="${escapeAttribute(officialLink)}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Lihat official link →
-              </a>
-            `
-            : ""
-        }
+          <div class="date-panel-subtitle">
+            ${dateEvents.length}
+            ${dateEvents.length === 1 ? "perkara" : "perkara"}
+            yang sedang berlaku.
+          </div>
 
       `;
 
 
-      info.classList.add(
-        "active"
-      );
+      Object.keys(grouped)
+        .forEach(
+          category => {
+
+            grouped[category]
+              .forEach(
+                event => {
+
+                  const name =
+                    getEventName(
+                      event
+                    );
+
+                  const location =
+                    getLocation(
+                      event
+                    );
+
+                  const description =
+                    getDescription(
+                      event
+                    );
+
+                  const eventId =
+                    getEventId(
+                      event
+                    );
+
+                  const safeDescription =
+                    description
+                      ? description
+                      : "Maklumat lanjut akan dikemaskini.";
 
 
-      info.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+                  /*
+                    Dedicated event page
+                  */
 
-    }
+                  const detailUrl =
+                    "event.html?id=" +
+                    encodeURIComponent(
+                      eventId
+                    );
 
 
-    /* BACK TO DATE */
+                  html += `
 
-    function backToDateEvents() {
+                    <div class="event-card">
 
-      const info =
-        document.getElementById(
-          "eventInfo"
+                      <div class="event-card-top">
+
+                        <span
+                          class="category-dot ${getCategoryClass(category)}"
+                        ></span>
+
+                        <span>
+                          ${category}
+                        </span>
+
+                      </div>
+
+
+                      <div class="event-title">
+                        ${name}
+                      </div>
+
+
+                      <div class="event-meta">
+
+                        📅
+                        ${formatDateRange(event)}
+
+                        ${
+                          location
+                            ? `
+                              <br>
+                              📍 ${location}
+                            `
+                            : ""
+                        }
+
+                      </div>
+
+
+                      <div class="event-description">
+                        ${safeDescription}
+                      </div>
+
+
+                      <a
+                        class="detail-link"
+                        href="${detailUrl}"
+                      >
+                        See more detail →
+                      </a>
+
+                    </div>
+
+                  `;
+
+                }
+              );
+
+          }
         );
 
 
-      info.classList.remove(
-        "active"
-      );
+      html += `</div>`;
 
 
-      document.getElementById(
-        "dateEvents"
-      ).scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-
-    }
+      container.innerHTML =
+        html;
 
 
-    /* DATE RANGE */
+      /*
+        Scroll ke panel
+      */
 
-    function formatDateRange(
-      start,
-      end
-    ) {
+      setTimeout(
+        () => {
 
-      if (!start) {
+          container.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
 
-        return "";
-
-      }
-
-
-      const startText =
-        start.getDate() +
-        "/" +
-        (start.getMonth() + 1) +
-        "/" +
-        start.getFullYear();
-
-
-      if (
-        !end ||
-        start.getTime() ===
-        end.getTime()
-      ) {
-
-        return startText;
-
-      }
-
-
-      const endText =
-        end.getDate() +
-        "/" +
-        (end.getMonth() + 1) +
-        "/" +
-        end.getFullYear();
-
-
-      return (
-        startText +
-        " → " +
-        endText
+        },
+        50
       );
 
     }
 
 
-    /* ESCAPE HTML */
+    /* =========================
+       EXPLORE BOXES
+    ========================== */
 
-    function escapeHtml(value) {
+    document
+      .querySelectorAll(
+        ".explore-box"
+      )
+      .forEach(
+        box => {
 
-      return String(value)
+          box.addEventListener(
+            "click",
+            event => {
 
-        .replace(
-          /&/g,
-          "&amp;"
-        )
+              event.preventDefault();
 
-        .replace(
-          /</g,
-          "&lt;"
-        )
+              const category =
+                box.dataset.category;
 
-        .replace(
-          />/g,
-          "&gt;"
-        )
+              /*
+                Buat sementara,
+                Explore belum ada
+                category page.
 
-        .replace(
-          /"/g,
-          "&quot;"
-        )
+                Nanti kita boleh
+                sambungkan ke:
+                category.html?cat=...
+              */
 
-        .replace(
-          /'/g,
-          "&#039;"
-        );
+              alert(
+                category +
+                " page kita buat selepas ni 👍"
+              );
 
-    }
+            }
+          );
 
-
-    /* ESCAPE ATTRIBUTE */
-
-    function escapeAttribute(value) {
-
-      return String(value)
-
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-
-        .replace(
-          /'/g,
-          "&#039;"
-        );
-
-    }
-
-
-    /* PREVIOUS MONTH */
-
-    function previousMonth() {
-
-      currentDate.setMonth(
-        currentDate.getMonth() - 1
+        }
       );
 
 
-      document.getElementById(
-        "dateEvents"
-      ).classList.remove(
-        "active"
-      );
-
-
-      document.getElementById(
-        "eventInfo"
-      ).classList.remove(
-        "active"
-      );
-
-
-      renderCalendar();
-
-    }
-
-
-    /* NEXT MONTH */
-
-    function nextMonth() {
-
-      currentDate.setMonth(
-        currentDate.getMonth() + 1
-      );
-
-
-      document.getElementById(
-        "dateEvents"
-      ).classList.remove(
-        "active"
-      );
-
-
-      document.getElementById(
-        "eventInfo"
-      ).classList.remove(
-        "active"
-      );
-
-
-      renderCalendar();
-
-    }
-
-
-    /* START */
+    /* =========================
+       START
+    ========================== */
 
     loadEvents();
 
