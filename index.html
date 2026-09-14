@@ -1,128 +1,2935 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Musim Lab</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f7f7f5;color:#222}
-.container{width:min(1100px,94%);margin:auto}header{padding:28px 0 18px}
-.brand{font-size:30px;font-weight:800;margin:0}.tagline{margin:6px 0;color:#666;font-size:14px}
-.hero,.calendar-card,.events-panel{background:#fff;border:1px solid #e7e7e7;border-radius:18px}
-.hero{padding:24px;margin:10px 0 22px}.hero h1{margin:0 0 7px;font-size:clamp(25px,5vw,40px)}.hero p{margin:0;color:#666}
-.section-title{margin:24px 0 12px;font-size:20px}
-.explore{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.explore-btn{border:1px solid #ddd;background:#fff;border-radius:14px;padding:13px 12px;cursor:pointer;text-align:left;font-size:14px}
-.explore-btn.active{border:2px solid #222;padding:12px 11px;box-shadow:0 3px 12px #0000000f}
-.explore-label{display:flex;align-items:center;gap:9px;font-weight:700}
-.dot{width:11px;height:11px;border-radius:50%;display:inline-block;flex:0 0 11px}
-.dot-muzik{background:#3182ce}.dot-sukan{background:#eab308}.dot-budaya{background:#22a06b}.dot-teknologi{background:#e5533d}.dot-gaya{background:#f28c28}.dot-local{background:#8b5e3c}.dot-musim{background:#8b5cf6}
-.calendar-card{padding:18px;overflow:hidden}.calendar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.month-title{font-size:21px;font-weight:800;text-transform:capitalize}.calendar-nav{display:flex;gap:7px}
-.nav-btn{border:1px solid #ddd;background:#fff;border-radius:10px;width:38px;height:38px;cursor:pointer;font-size:18px}
-.filter-status{min-height:25px;margin-bottom:8px;color:#555;font-size:14px;font-weight:700}
-.calendar{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid #eee;border-left:1px solid #eee}
-.weekday{padding:10px 4px;text-align:center;font-size:12px;font-weight:700;color:#777;border-right:1px solid #eee;border-bottom:1px solid #eee}
-.day{min-height:88px;position:relative;padding:8px 6px;background:#fff;border-right:1px solid #eee;border-bottom:1px solid #eee;cursor:pointer;overflow:hidden}
-.day.empty{cursor:default;background:#fbfbfb}.day:hover{background:#fafafa}.day-number{position:relative;z-index:2;font-size:13px;font-weight:700}
-.dots{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
-.day.cuti{background:#fafafa}.cuti-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#d0d0d0;font-size:9px;font-weight:800;letter-spacing:.5px;transform:rotate(-18deg);pointer-events:none}
-.events-panel{margin-top:18px;padding:18px;display:none}.events-panel.show{display:block}.events-panel h2{margin:0 0 14px;font-size:20px}
-.event-card{border:1px solid #e5e5e5;border-radius:14px;padding:15px;margin-bottom:10px;cursor:pointer}.event-category{display:flex;align-items:center;gap:7px;color:#666;font-size:12px;margin-bottom:6px}.event-title{font-size:16px;font-weight:800;margin-bottom:5px}.event-meta{font-size:13px;color:#666}
-.loading{text-align:center;padding:30px 10px;color:#777}footer{padding:35px 0;color:#888;font-size:12px;text-align:center}
-@media(max-width:800px){.explore{grid-template-columns:repeat(2,1fr)}.day{min-height:72px}}
-@media(max-width:520px){.container{width:96%}.hero{padding:19px}.calendar-card{padding:10px}.day{min-height:67px;padding:6px 4px}.weekday{padding:8px 2px;font-size:10px}.dots{gap:4px;margin-top:7px}.dot{width:8px;height:8px;flex-basis:8px}.cuti-label{font-size:7px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <title>Musim Lab</title>
+  <meta name="description" content="Musim Lab - tahu apa yang akan datang, bersedia sebelum tiba.">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0 0 95px 0;
+      background: #f7f7f8;
+      color: #171717;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .top-header {
+      background: #ffffff;
+      padding: 18px 16px 14px;
+      border-bottom: 1px solid #eeeeee;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-sub {
+      margin-top: 3px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 14px 12px 30px;
+    }
+
+    .calendar-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 8px 4px 12px;
+    }
+
+    .calendar-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .active-filter {
+      font-size: 12px;
+      color: #666;
+      background: #eeeeee;
+      padding: 5px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* =========================
+       CALENDAR CARD
+    ========================= */
+
+    .calendar-card {
+      background: #ffffff;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #ededed;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+
+    .month-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 14px;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .month-name {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .month-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .month-btn {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 12px;
+      background: #f1f1f2;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .month-btn:active {
+      transform: scale(0.95);
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .weekday {
+      text-align: center;
+      padding: 10px 2px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #888;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+    }
+
+    .day-cell {
+      min-height: 72px;
+      border-right: 1px solid #eeeeee;
+      border-bottom: 1px solid #eeeeee;
+      padding: 7px 5px;
+      position: relative;
+      background: #fff;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .day-cell:nth-child(7n) {
+      border-right: 0;
+    }
+
+    .day-cell.empty {
+      cursor: default;
+      background: #fafafa;
+    }
+
+    .day-cell.today {
+      background: #f7f4ff;
+    }
+
+    .day-number {
+      font-size: 12px;
+      font-weight: 700;
+      color: #555;
+      position: relative;
+      z-index: 3;
+    }
+
+    .day-cell.today .day-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #171717;
+      color: #fff;
+    }
+
+    /* =========================
+       HOLIDAY BACKGROUND
+    ========================= */
+
+    .holiday-label {
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      bottom: 3px;
+      font-size: 7px;
+      line-height: 9px;
+      color: #c7c7c7;
+      text-align: center;
+      text-transform: uppercase;
+      pointer-events: none;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    /* =========================
+       CATEGORY DOTS
+    ========================= */
+
+    .dots {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 7px;
+      min-height: 8px;
+    }
+
+    .category-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+    }
+
+    .dot-muzik {
+      background: #3182ce;
+    }
+
+    .dot-sukan {
+      background: #eab308;
+    }
+
+    .dot-budaya {
+      background: #22a06b;
+    }
+
+    .dot-teknologi {
+      background: #e5533d;
+    }
+
+    .dot-gaya {
+      background: #f28c28;
+    }
+
+    .dot-local {
+      background: #8b5e3c;
+    }
+
+    .dot-musim {
+      background: #8b5cf6;
+    }
+
+    /* =========================
+       EVENTS PANEL
+    ========================= */
+
+    .date-panel {
+      margin-top: 14px;
+    }
+
+    .date-panel.hidden {
+      display: none;
+    }
+
+    .date-panel-header {
+      padding: 4px 4px 10px;
+    }
+
+    .date-panel-date {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .date-panel-sub {
+      margin-top: 3px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    .event-card {
+      background: #fff;
+      border: 1px solid #e9e9e9;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 9px;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+    }
+
+    .event-card:active {
+      transform: scale(0.99);
+    }
+
+    .event-category {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      color: #777;
+      margin-bottom: 7px;
+    }
+
+    .event-category .category-dot {
+      width: 8px;
+      height: 8px;
+    }
+
+    .event-name {
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .event-meta {
+      margin-top: 7px;
+      color: #666;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .event-more {
+      margin-top: 11px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #6d4aff;
+    }
+
+    /* =========================
+       DETAIL PANEL
+    ========================= */
+
+    .detail-panel {
+      margin-top: 14px;
+      background: #fff;
+      border-radius: 18px;
+      border: 1px solid #e9e9e9;
+      overflow: hidden;
+    }
+
+    .detail-panel.hidden {
+      display: none;
+    }
+
+    .detail-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      display: block;
+      background: #eee;
+    }
+
+    .detail-content {
+      padding: 18px;
+    }
+
+    .back-button {
+      border: 0;
+      background: #f0f0f1;
+      border-radius: 10px;
+      padding: 8px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      cursor: pointer;
+    }
+
+    .detail-category {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 8px;
+    }
+
+    .detail-title {
+      font-size: 24px;
+      line-height: 1.2;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .detail-meta {
+      margin-top: 12px;
+      color: #666;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .detail-description {
+      margin-top: 18px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #333;
+      white-space: pre-line;
+    }
+
+    .official-link {
+      display: inline-block;
+      margin-top: 18px;
+      text-decoration: none;
+      background: #171717;
+      color: #fff;
+      padding: 11px 15px;
+      border-radius: 11px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading {
+      text-align: center;
+      padding: 35px 15px;
+      color: #888;
+      font-size: 13px;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 92px;
+      transform: translate(-50%, 20px);
+      background: #171717;
+      color: #fff;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 200;
+      white-space: nowrap;
+      max-width: calc(100vw - 30px);
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* =========================
+       BOTTOM SHEET
+    ========================= */
+
+    .sheet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .sheet-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .bottom-sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #fff;
+      border-radius: 22px 22px 0 0;
+      z-index: 110;
+      padding: 10px 16px calc(18px + env(safe-area-inset-bottom));
+      transform: translateY(105%);
+      transition: transform 0.28s ease;
+      max-height: 82vh;
+      overflow-y: auto;
+    }
+
+    .bottom-sheet.open {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 42px;
+      height: 4px;
+      border-radius: 999px;
+      background: #d6d6d6;
+      margin: 2px auto 16px;
+    }
+
+    .sheet-title {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .sheet-subtitle {
+      margin-top: 4px;
+      color: #777;
+      font-size: 12px;
+      margin-bottom: 17px;
+    }
+
+    .explore-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .explore-option {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      border: 1px solid #ededed;
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 13px;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .explore-option:active {
+      transform: scale(0.98);
+    }
+
+    .explore-option .category-dot {
+      width: 10px;
+      height: 10px;
+    }
+
+    .explore-option.all-option {
+      justify-content: center;
+      background: #171717;
+      color: #fff;
+      border-color: #171717;
+    }
+
+    /* =========================
+       BOTTOM NAV
+    ========================= */
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 90;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid #e9e9e9;
+      padding: 7px 8px calc(7px + env(safe-area-inset-bottom));
+    }
+
+    .nav-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: end;
+    }
+
+    .nav-button {
+      border: 0;
+      background: transparent;
+      padding: 5px 2px;
+      cursor: pointer;
+      color: #777;
+      min-height: 54px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .nav-icon {
+      font-size: 19px;
+      line-height: 20px;
+    }
+
+    .nav-label {
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .nav-button.active {
+      color: #171717;
+    }
+
+    .nav-button.musim-button {
+      position: relative;
+      margin-top: -18px;
+    }
+
+    .nav-button.musim-button .nav-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #8b5cf6;
+      color: #fff;
+      box-shadow: 0 7px 18px rgba(139,92,246,0.28);
+      border: 4px solid #fff;
+      font-size: 20px;
+    }
+
+    /* =========================
+       DESKTOP
+    ========================= */
+
+    @media (min-width: 700px) {
+      body {
+        padding-bottom: 90px;
+      }
+
+      .top-header {
+        padding-left: calc((100% - 760px) / 2 + 4px);
+        padding-right: calc((100% - 760px) / 2 + 4px);
+      }
+
+      .bottom-nav {
+        border-radius: 18px 18px 0 0;
+      }
+
+      .day-cell {
+        min-height: 92px;
+      }
+
+      .bottom-sheet {
+        left: 50%;
+        right: auto;
+        width: 520px;
+        transform: translate(-50%, 105%);
+      }
+
+      .bottom-sheet.open {
+        transform: translate(-50%, 0);
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="container">
-<header><h1 class="brand">Musim Lab</h1><p class="tagline">Tahu Musim, Tahu Keperluan.</p></header>
 
-<section class="hero"><h1>Apa yang akan datang?</h1><p>Check apa yang sedang berlaku, apa yang bakal tiba dan apa yang patut kau sediakan.</p></section>
+  <!-- =========================
+       HEADER
+  ========================= -->
 
-<h2 class="section-title">Explore</h2>
-<section class="explore">
-<button class="explore-btn" data-category="Muzik & Konsert"><span class="explore-label"><span class="dot dot-muzik"></span>Muzik & Konsert</span></button>
-<button class="explore-btn" data-category="Sukan & Outdoor"><span class="explore-label"><span class="dot dot-sukan"></span>Sukan & Outdoor</span></button>
-<button class="explore-btn" data-category="Budaya & Agama"><span class="explore-label"><span class="dot dot-budaya"></span>Budaya & Agama</span></button>
-<button class="explore-btn" data-category="Teknologi & Perniagaan"><span class="explore-label"><span class="dot dot-teknologi"></span>Teknologi & Perniagaan</span></button>
-<button class="explore-btn" data-category="Gaya Hidup"><span class="explore-label"><span class="dot dot-gaya"></span>Gaya Hidup</span></button>
-<button class="explore-btn" data-category="Local"><span class="explore-label"><span class="dot dot-local"></span>Local</span></button>
-<button class="explore-btn" data-category="Musim"><span class="explore-label"><span class="dot dot-musim"></span>Musim</span></button>
-<button class="explore-btn" data-category="ALL"><span class="explore-label">Lihat Semua</span></button>
-</section>
+  <header class="top-header">
+    <div class="brand">Musim Lab</div>
+    <div class="brand-sub">Tahu musim. Tahu keperluan.</div>
+  </header>
 
-<h2 class="section-title">Calendar</h2>
-<section class="calendar-card">
-<div class="calendar-top"><div class="month-title" id="monthTitle"></div><div class="calendar-nav"><button class="nav-btn" id="prev">‹</button><button class="nav-btn" id="next">›</button></div></div>
-<div class="filter-status" id="filterStatus"></div>
-<div id="calendar" class="calendar"><div class="loading">Sedang baca musim...</div></div>
-</section>
-<section id="eventsPanel" class="events-panel"></section>
-<footer>Musim Lab © 2026</footer>
-</div>
 
-<script>
-const API_URL='https://script.google.com/macros/s/AKfycbxbweeVHYVhHf30JzVrmztnxcU6nFxZ62k7TYNTvLP7OiNq8i8cPetGZmXzQuOpcNE6/exec';
-let allEvents=[],selectedCategory=null,currentMonth=8,currentYear=2026;
-let publicData={holidays:[]};
-const dots={"muzik & konsert":"dot-muzik","sukan & outdoor":"dot-sukan","budaya & agama":"dot-budaya","teknologi & perniagaan":"dot-teknologi","gaya hidup":"dot-gaya","local":"dot-local","musim":"dot-musim"};
+  <!-- =========================
+       MAIN
+  ========================= -->
 
-document.addEventListener("DOMContentLoaded",()=>{loadEvents();loadPublicHoliday();});
-document.querySelectorAll(".explore-btn").forEach(b=>b.addEventListener("click",()=>setFilter(b.dataset.category==="ALL"?null:b.dataset.category)));
-document.getElementById("prev").onclick=()=>changeMonth(-1);
-document.getElementById("next").onclick=()=>changeMonth(1);
+  <main>
 
-async function loadEvents(){
- try{let r=await fetch(API_URL);let d=await r.json();allEvents=Array.isArray(d)?d:[];renderCalendar();}
- catch(e){console.error(e);document.getElementById("calendar").innerHTML='<div class="loading">Tak dapat baca data event sekarang.</div>';}
-}
-async function loadPublicHoliday(){
- try{let r=await fetch("public-holidayMalaysia.json",{cache:"no-store"});if(!r.ok)throw Error();publicData=await r.json();renderCalendar();}
- catch(e){console.log("public-holidayMalaysia.json belum ada. Calendar event tetap berjalan.");}
-}
-function setFilter(c){selectedCategory=c;document.querySelectorAll(".explore-btn").forEach(b=>b.classList.toggle("active",(c===null&&b.dataset.category==="ALL")||b.dataset.category===c));document.getElementById("eventsPanel").classList.remove("show");renderCalendar();}
-function changeMonth(n){currentMonth+=n;if(currentMonth>11){currentMonth=0;currentYear++}if(currentMonth<0){currentMonth=11;currentYear--}renderCalendar();}
-function renderCalendar(){
- const cal=document.getElementById("calendar"),title=document.getElementById("monthTitle"),status=document.getElementById("filterStatus");
- title.textContent=new Date(currentYear,currentMonth,1).toLocaleDateString("ms-MY",{month:"long",year:"numeric"});
- status.textContent=selectedCategory?"Menunjukkan: "+selectedCategory:"";
- cal.innerHTML="";
- ["Isn","Sel","Rab","Kha","Jum","Sab","Aha"].forEach(x=>{let e=document.createElement("div");e.className="weekday";e.textContent=x;cal.appendChild(e);});
- let first=new Date(currentYear,currentMonth,1).getDay();first=first===0?6:first-1;
- for(let i=0;i<first;i++){let e=document.createElement("div");e.className="day empty";cal.appendChild(e);}
- let total=new Date(currentYear,currentMonth+1,0).getDate();
- for(let d=1;d<=total;d++){
-  let cell=document.createElement("div");cell.className="day",key=dateKey(currentYear,currentMonth,d);
-  cell.innerHTML='<div class="day-number">'+d+'</div>';
-  let h=holiday(key);if(h){cell.classList.add("cuti");let x=document.createElement("div");x.className="cuti-label";x.textContent=h.name||"CUTI";cell.appendChild(x);}
-  let ev=getEvents(key),cats=[...new Set(ev.map(e=>String(e.E||e.Category||"").trim()).filter(Boolean))];
-  let dotsEl=document.createElement("div");dotsEl.className="dots";
-  cats.forEach(c=>{if(dots[c.toLowerCase()]){let x=document.createElement("span");x.className="dot "+dots[c.toLowerCase()];x.title=c;dotsEl.appendChild(x);}});
-  cell.appendChild(dotsEl);
-  if(ev.length||h)cell.onclick=()=>showDate(key);
-  cal.appendChild(cell);
- }
-}
-function getEvents(key){return allEvents.filter(e=>{
- let c=String(e.E||e.Category||"").trim();if(selectedCategory&&c.toLowerCase()!==selectedCategory.toLowerCase())return false;
- let s=parseDate(e.C||e["Start Date"]||e.StartDate),en=parseDate(e.D||e["End Date"]||e.EndDate),t=parseDate(key);if(!s)return false;if(!en)en=s;if(en<s)[s,en]=[en,s];return t>=s&&t<=en;
-})}
-function showDate(key){
- let p=document.getElementById("eventsPanel"),ev=getEvents(key),h=holiday(key);p.innerHTML="<h2>"+readable(key)+"</h2>";
- if(h)p.innerHTML+='<div class="event-card" style="cursor:default"><div class="event-category">Calendar Malaysia</div><div class="event-title">'+esc(h.name||"Cuti")+'</div></div>';
- if(!ev.length&&!h)p.innerHTML+="<p>Tak ada event untuk tarikh ni.</p>";
- ev.forEach(e=>{
-  let c=String(e.E||e.Category||"").trim(),name=String(e.B||e["Event Name"]||e.eventName||"Event"),loc=String(e.F||e.Location||"").trim(),id=String(e.A||e["Event ID"]||"").trim();
-  let card=document.createElement("div");card.className="event-card";card.innerHTML='<div class="event-category"><span class="dot '+(dots[c.toLowerCase()]||"")+'"></span>'+esc(c||"Lain-lain")+'</div><div class="event-title">'+esc(name)+'</div><div class="event-meta">'+esc(loc||"Lokasi belum dinyatakan")+'</div><div class="event-meta" style="margin-top:7px">See more detail →</div>';
-  card.onclick=()=>{if(id)location.href="event.html?id="+encodeURIComponent(id)};p.appendChild(card);
- });
- p.classList.add("show");p.scrollIntoView({behavior:"smooth",block:"start"});
-}
-function holiday(key){let a=Array.isArray(publicData.holidays)?publicData.holidays:[],t=parseDate(key);return a.find(h=>{let s=parseDate(h.start),e=parseDate(h.end||h.start);return s&&e&&t>=s&&t<=(e<s?s:e)})||null;}
-function dateKey(y,m,d){return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0")}
-function parseDate(v){if(!v)return null;let s=String(v).trim(),m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(m)return new Date(+m[3],+m[2]-1,+m[1]);let d=new Date(s);return isNaN(d)?null:new Date(d.getFullYear(),d.getMonth(),d.getDate());}
-function readable(k){return parseDate(k).toLocaleDateString("ms-MY",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
-function esc(v){return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-</script>
-</body></html>
+    <div class="calendar-title-row">
+      <div class="calendar-title" id="calendarTitle">
+        Calendar
+      </div>
+
+      <div class="active-filter" id="filterLabel">
+        Semua
+      </div>
+    </div>
+
+
+    <section class="calendar-card">
+
+      <div class="month-header">
+
+        <div class="month-name" id="monthName">
+          September 2026
+        </div>
+
+        <div class="month-buttons">
+          <button
+            class="month-btn"
+            id="prevMonth"
+            aria-label="Bulan sebelumnya">
+            ‹
+          </button>
+
+          <button
+            class="month-btn"
+            id="nextMonth"
+            aria-label="Bulan seterusnya">
+            ›
+          </button>
+        </div>
+
+      </div>
+
+
+      <div class="weekdays">
+        <div class="weekday">Isn</div>
+        <div class="weekday">Sel</div>
+        <div class="weekday">Rab</div>
+        <div class="weekday">Kha</div>
+        <div class="weekday">Jum</div>
+        <div class="weekday">Sab</div>
+        <div class="weekday">Aha</div>
+      </div>
+
+
+      <div class="calendar-grid" id="calendarGrid">
+        <div class="loading">
+          Sedang baca musim...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- DATE EVENTS -->
+
+    <section
+      class="date-panel hidden"
+      id="datePanel">
+
+      <div class="date-panel-header">
+
+        <div
+          class="date-panel-date"
+          id="datePanelDate">
+        </div>
+
+        <div
+          class="date-panel-sub"
+          id="datePanelSub">
+        </div>
+
+      </div>
+
+      <div id="dateEvents"></div>
+
+    </section>
+
+
+    <!-- EVENT DETAIL -->
+
+    <section
+      class="detail-panel hidden"
+      id="detailPanel">
+
+      <div id="detailImageContainer"></div>
+
+      <div class="detail-content">
+
+        <button
+          class="back-button"
+          id="backToDate">
+          ← Kembali
+        </button>
+
+        <div
+          class="detail-category"
+          id="detailCategory">
+        </div>
+
+        <h1
+          class="detail-title"
+          id="detailTitle">
+        </h1>
+
+        <div
+          class="detail-meta"
+          id="detailMeta">
+        </div>
+
+        <div
+          class="detail-description"
+          id="detailDescription">
+        </div>
+
+        <div id="detailLink"></div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       TOAST
+  ========================= -->
+
+  <div
+    class="toast"
+    id="toast">
+  </div>
+
+
+  <!-- =========================
+       EXPLORE OVERLAY
+  ========================= -->
+
+  <div
+    class="sheet-overlay"
+    id="sheetOverlay">
+  </div>
+
+
+  <!-- =========================
+       EXPLORE BOTTOM SHEET
+  ========================= -->
+
+  <div
+    class="bottom-sheet"
+    id="exploreSheet">
+
+    <div class="sheet-handle"></div>
+
+    <div class="sheet-title">
+      Explore
+    </div>
+
+    <div class="sheet-subtitle">
+      Apa yang kau nak tengok?
+    </div>
+
+    <div class="explore-list">
+
+      <button
+        class="explore-option all-option"
+        data-category="ALL">
+        Lihat Semua
+      </button>
+
+      <button
+        class="explore-option"
+        data-category="Muzik & Konsert">
+
+        <span class="category-dot dot-muzik"></span>
+
+        <span>
+          Muzik & Konsert
+        </span>
+
+      </button>
+
+
+      <button
+        class="explore-option"
+        data-category="Sukan & Outdoor">
+
+        <span class="category-dot dot-sukan"></span>
+
+        <span>
+          Sukan & Outdoor
+        </span>
+
+      </button>
+
+
+      <button
+        class="explore-option"
+        data-category="Budaya & Agama">
+
+        <span class="category-dot dot-budaya"></span>
+
+        <span>
+          Budaya & Agama
+        </span>
+
+      </button>
+
+
+      <button
+        class="explore-option"
+        data-category="Teknologi & Perniagaan">
+
+        <span class="category-dot dot-teknologi"></span>
+
+        <span>
+          Teknologi & Perniagaan
+        </span>
+
+      </button>
+
+
+      <button
+        class="explore-option"
+        data-category="Gaya Hidup">
+
+        <span class="category-dot dot-gaya"></span>
+
+        <span>
+          Gaya Hidup
+        </span>
+
+      </button>
+
+
+      <button
+        class="explore-option"
+        data-category="Local">
+
+        <span class="category-dot dot-local"></span>
+
+        <span>
+          Local
+        </span>
+
+      </button>
+
+
+      <button
+        class="explore-option"
+        data-category="Musim">
+
+        <span class="category-dot dot-musim"></span>
+
+        <span>
+          Musim
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       BOTTOM NAV
+  ========================= -->
+
+  <nav class="bottom-nav">
+
+    <div class="nav-inner">
+
+      <button
+        class="nav-button active"
+        id="navHome">
+
+        <div class="nav-icon">⌂</div>
+        <div class="nav-label">Home</div>
+
+      </button>
+
+
+      <button
+        class="nav-button"
+        id="navExplore">
+
+        <div class="nav-icon">⌕</div>
+        <div class="nav-label">Explore</div>
+
+      </button>
+
+
+      <button
+        class="nav-button musim-button"
+        id="navMusim">
+
+        <div class="nav-icon">✦</div>
+        <div class="nav-label">Musim</div>
+
+      </button>
+
+
+      <button
+        class="nav-button"
+        id="navCheck">
+
+        <div class="nav-icon">✓</div>
+        <div class="nav-label">Check</div>
+
+      </button>
+
+
+      <button
+        class="nav-button"
+        id="navMore">
+
+        <div class="nav-icon">☰</div>
+        <div class="nav-label">More</div>
+
+      </button>
+
+    </div>
+
+  </nav>
+
+
+  <script>
+
+    /* =====================================================
+       MUSIM LAB
+       CALENDAR V3 MOBILE
+    ===================================================== */
+
+
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbxbweeVHYVhHf30JzVrmztnxcU6nFxZ62k7TYNTvLP7OiNq8i8cPetGZmXzQuOpcNE6/exec";
+
+
+    const HOLIDAY_URL =
+      "public-holidayMalaysia.json";
+
+
+    let allEvents = [];
+
+    let holidayData = [];
+
+    let currentDate = new Date(2026, 8, 1);
+
+    let selectedDate = null;
+
+    let selectedEvent = null;
+
+    let activeCategory = "ALL";
+
+
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Mac",
+      "April",
+      "Mei",
+      "Jun",
+      "Julai",
+      "Ogos",
+      "September",
+      "Oktober",
+      "November",
+      "Disember"
+    ];
+
+
+    const categoryClassMap = {
+
+      "Muzik & Konsert": "dot-muzik",
+
+      "Sukan & Outdoor": "dot-sukan",
+
+      "Budaya & Agama": "dot-budaya",
+
+      "Teknologi & Perniagaan": "dot-teknologi",
+
+      "Gaya Hidup": "dot-gaya",
+
+      "Local": "dot-local",
+
+      "Musim": "dot-musim"
+
+    };
+
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+
+    function normalise(value) {
+
+      return String(value || "")
+        .trim()
+        .toLowerCase();
+
+    }
+
+
+    function getCategoryClass(category) {
+
+      const clean =
+        normalise(category);
+
+      for (const key in categoryClassMap) {
+
+        if (
+          normalise(key) === clean
+        ) {
+
+          return categoryClassMap[key];
+
+        }
+
+      }
+
+      return "dot-local";
+
+    }
+
+
+    function parseDate(value) {
+
+      if (!value) return null;
+
+
+      if (value instanceof Date) {
+
+        return new Date(
+          value.getFullYear(),
+          value.getMonth(),
+          value.getDate()
+        );
+
+      }
+
+
+      const text =
+        String(value).trim();
+
+
+      /* DD/MM/YYYY */
+
+      const slashMatch =
+        text.match(
+          /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+        );
+
+
+      if (slashMatch) {
+
+        return new Date(
+          Number(slashMatch[3]),
+          Number(slashMatch[2]) - 1,
+          Number(slashMatch[1])
+        );
+
+      }
+
+
+      /* YYYY-MM-DD */
+
+      const dateMatch =
+        text.match(
+          /^(\d{4})-(\d{1,2})-(\d{1,2})/
+        );
+
+
+      if (dateMatch) {
+
+        return new Date(
+          Number(dateMatch[1]),
+          Number(dateMatch[2]) - 1,
+          Number(dateMatch[3])
+        );
+
+      }
+
+
+      /* ISO */
+
+      const parsed =
+        new Date(text);
+
+
+      if (!isNaN(parsed.getTime())) {
+
+        return new Date(
+          parsed.getFullYear(),
+          parsed.getMonth(),
+          parsed.getDate()
+        );
+
+      }
+
+
+      return null;
+
+    }
+
+
+    function dateKey(date) {
+
+      return [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0")
+      ].join("-");
+
+    }
+
+
+    function sameDate(a, b) {
+
+      if (!a || !b) return false;
+
+      return (
+        a.getFullYear() === b.getFullYear() &&
+        a.getMonth() === b.getMonth() &&
+        a.getDate() === b.getDate()
+      );
+
+    }
+
+
+    function formatDate(date) {
+
+      if (!date) return "";
+
+      return (
+        date.getDate() +
+        " " +
+        monthNames[date.getMonth()] +
+        " " +
+        date.getFullYear()
+      );
+
+    }
+
+
+    function getEventStart(event) {
+
+      return parseDate(
+        event["Start Date"] ||
+        event.startDate ||
+        event.start
+      );
+
+    }
+
+
+    function getEventEnd(event) {
+
+      return parseDate(
+        event["End Date"] ||
+        event.endDate ||
+        event.end
+      );
+
+    }
+
+
+    function getEventCategory(event) {
+
+      return String(
+        event["Category"] ||
+        event.category ||
+        ""
+      ).trim();
+
+    }
+
+
+    function getEventName(event) {
+
+      return String(
+        event["Event Name"] ||
+        event.eventName ||
+        event.name ||
+        "Event"
+      ).trim();
+
+    }
+
+
+    function getEventLocation(event) {
+
+      return String(
+        event["Location"] ||
+        event.location ||
+        ""
+      ).trim();
+
+    }
+
+
+    function getEventDescription(event) {
+
+      return String(
+        event["Description"] ||
+        event.description ||
+        ""
+      ).trim();
+
+    }
+
+
+    function getEventImage(event) {
+
+      return String(
+        event["Image URL"] ||
+        event.imageUrl ||
+        event.image ||
+        ""
+      ).trim();
+
+    }
+
+
+    function getEventLink(event) {
+
+      return String(
+        event["Official Link"] ||
+        event.officialLink ||
+        event.link ||
+        ""
+      ).trim();
+
+    }
+
+
+    function getEventId(event) {
+
+      return String(
+        event["Event ID"] ||
+        event.eventId ||
+        event.id ||
+        ""
+      ).trim();
+
+    }
+
+
+    function eventMatchesFilter(event) {
+
+      if (activeCategory === "ALL") {
+
+        return true;
+
+      }
+
+      return (
+        normalise(
+          getEventCategory(event)
+        ) === normalise(activeCategory)
+      );
+
+    }
+
+
+    /* =====================================================
+       EVENTS FOR DATE
+    ===================================================== */
+
+
+    function getEventsForDate(date) {
+
+      const target =
+        new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate()
+        );
+
+
+      return allEvents.filter(event => {
+
+        if (!eventMatchesFilter(event)) {
+          return false;
+        }
+
+
+        let start =
+          getEventStart(event);
+
+        let end =
+          getEventEnd(event);
+
+
+        if (!start) return false;
+
+        if (!end) {
+          end = start;
+        }
+
+
+        /* Kalau tarikh terbalik, swap */
+
+        if (end < start) {
+
+          const temp = start;
+
+          start = end;
+
+          end = temp;
+
+        }
+
+
+        const startOnly =
+          new Date(
+            start.getFullYear(),
+            start.getMonth(),
+            start.getDate()
+          );
+
+
+        const endOnly =
+          new Date(
+            end.getFullYear(),
+            end.getMonth(),
+            end.getDate()
+          );
+
+
+        return (
+          target >= startOnly &&
+          target <= endOnly
+        );
+
+      });
+
+    }
+
+
+    /* =====================================================
+       CATEGORY DOTS FOR DATE
+    ===================================================== */
+
+
+    function getCategoriesForDate(date) {
+
+      const events =
+        allEvents.filter(event => {
+
+          if (!eventMatchesFilter(event)) {
+            return false;
+          }
+
+
+          let start =
+            getEventStart(event);
+
+          let end =
+            getEventEnd(event);
+
+
+          if (!start) return false;
+
+          if (!end) end = start;
+
+
+          if (end < start) {
+
+            const temp = start;
+
+            start = end;
+
+            end = temp;
+
+          }
+
+
+          const targetKey =
+            dateKey(date);
+
+
+          const startKey =
+            dateKey(start);
+
+          const endKey =
+            dateKey(end);
+
+
+          return (
+            targetKey >= startKey &&
+            targetKey <= endKey
+          );
+
+        });
+
+
+      const categories = [];
+
+
+      events.forEach(event => {
+
+        const category =
+          getEventCategory(event);
+
+
+        if (!category) return;
+
+
+        const already =
+          categories.some(
+            item =>
+              normalise(item) ===
+              normalise(category)
+          );
+
+
+        if (!already) {
+
+          categories.push(category);
+
+        }
+
+      });
+
+
+      return categories;
+
+    }
+
+
+    /* =====================================================
+       HOLIDAY
+    ===================================================== */
+
+
+    function getHolidayForDate(date) {
+
+      if (!Array.isArray(holidayData)) {
+        return [];
+      }
+
+
+      const target =
+        dateKey(date);
+
+
+      return holidayData.filter(item => {
+
+        if (!item) return false;
+
+
+        const start =
+          parseDate(item.start);
+
+        const end =
+          parseDate(item.end || item.start);
+
+
+        if (!start) return false;
+
+
+        const finalEnd =
+          end || start;
+
+
+        return (
+          target >= dateKey(start) &&
+          target <= dateKey(finalEnd)
+        );
+
+      });
+
+    }
+
+
+    /* =====================================================
+       RENDER CALENDAR
+    ===================================================== */
+
+
+    function renderCalendar() {
+
+      const grid =
+        document.getElementById(
+          "calendarGrid"
+        );
+
+
+      grid.innerHTML = "";
+
+
+      const year =
+        currentDate.getFullYear();
+
+
+      const month =
+        currentDate.getMonth();
+
+
+      document.getElementById(
+        "monthName"
+      ).textContent =
+        monthNames[month] +
+        " " +
+        year;
+
+
+      const firstDay =
+        new Date(
+          year,
+          month,
+          1
+        );
+
+
+      /*
+        JS Sunday = 0
+        Kita nak Monday = 0
+      */
+
+      const startOffset =
+        (firstDay.getDay() + 6) % 7;
+
+
+      const daysInMonth =
+        new Date(
+          year,
+          month + 1,
+          0
+        ).getDate();
+
+
+      for (
+        let i = 0;
+        i < startOffset;
+        i++
+      ) {
+
+        const blank =
+          document.createElement(
+            "div"
+          );
+
+        blank.className =
+          "day-cell empty";
+
+        grid.appendChild(blank);
+
+      }
+
+
+      const today =
+        new Date();
+
+
+      for (
+        let day = 1;
+        day <= daysInMonth;
+        day++
+      ) {
+
+        const date =
+          new Date(
+            year,
+            month,
+            day
+          );
+
+
+        const cell =
+          document.createElement(
+            "div"
+          );
+
+        cell.className =
+          "day-cell";
+
+
+        if (
+          sameDate(
+            date,
+            today
+          )
+        ) {
+
+          cell.classList.add(
+            "today"
+          );
+
+        }
+
+
+        const number =
+          document.createElement(
+            "div"
+          );
+
+        number.className =
+          "day-number";
+
+        number.textContent =
+          day;
+
+
+        cell.appendChild(
+          number
+        );
+
+
+        /*
+          Holiday layer
+        */
+
+        const holidays =
+          getHolidayForDate(date);
+
+
+        if (
+          holidays.length > 0
+        ) {
+
+          const holidayNames =
+            holidays.map(
+              item =>
+                item.name ||
+                "Cuti"
+            );
+
+
+          const holidayLabel =
+            document.createElement(
+              "div"
+            );
+
+          holidayLabel.className =
+            "holiday-label";
+
+          holidayLabel.textContent =
+            holidayNames.join(" • ");
+
+
+          cell.appendChild(
+            holidayLabel
+          );
+
+        }
+
+
+        /*
+          Category dots
+        */
+
+        const categories =
+          getCategoriesForDate(
+            date
+          );
+
+
+        const dots =
+          document.createElement(
+            "div"
+          );
+
+        dots.className =
+          "dots";
+
+
+        categories.forEach(
+          category => {
+
+            const dot =
+              document.createElement(
+                "span"
+              );
+
+            dot.className =
+              "category-dot " +
+              getCategoryClass(
+                category
+              );
+
+
+            dot.title =
+              category;
+
+
+            dots.appendChild(
+              dot
+            );
+
+          }
+        );
+
+
+        cell.appendChild(
+          dots
+        );
+
+
+        cell.addEventListener(
+          "click",
+          () => {
+
+            selectDate(date);
+
+          }
+        );
+
+
+        grid.appendChild(
+          cell
+        );
+
+      }
+
+
+      updateCalendarTitle();
+
+    }
+
+
+    /* =====================================================
+       TITLE / FILTER
+    ===================================================== */
+
+
+    function updateCalendarTitle() {
+
+      const title =
+        document.getElementById(
+          "calendarTitle"
+        );
+
+      const label =
+        document.getElementById(
+          "filterLabel"
+        );
+
+
+      if (
+        activeCategory === "ALL"
+      ) {
+
+        title.textContent =
+          "Calendar";
+
+        label.textContent =
+          "Semua";
+
+      } else {
+
+        title.textContent =
+          activeCategory;
+
+        label.textContent =
+          "Filter aktif";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       SELECT DATE
+    ===================================================== */
+
+
+    function selectDate(date) {
+
+      selectedDate =
+        new Date(date);
+
+
+      selectedEvent = null;
+
+
+      hideDetail();
+
+
+      const events =
+        getEventsForDate(date);
+
+
+      const panel =
+        document.getElementById(
+          "datePanel"
+        );
+
+
+      const dateTitle =
+        document.getElementById(
+          "datePanelDate"
+        );
+
+
+      const dateSub =
+        document.getElementById(
+          "datePanelSub"
+        );
+
+
+      const container =
+        document.getElementById(
+          "dateEvents"
+        );
+
+
+      if (
+        events.length === 0
+      ) {
+
+        panel.classList.add(
+          "hidden"
+        );
+
+
+        const holidays =
+          getHolidayForDate(
+            date
+          );
+
+
+        if (
+          holidays.length > 0
+        ) {
+
+          showToast(
+            holidays
+              .map(
+                item =>
+                  item.name ||
+                  "Tarikh penting"
+              )
+              .join(" • ")
+          );
+
+        } else {
+
+          showToast(
+            "Tiada event untuk setakat ini."
+          );
+
+        }
+
+
+        return;
+
+      }
+
+
+      panel.classList.remove(
+        "hidden"
+      );
+
+
+      dateTitle.textContent =
+        formatDate(date);
+
+
+      dateSub.textContent =
+        events.length +
+        (
+          events.length === 1
+            ? " event"
+            : " events"
+        );
+
+
+      container.innerHTML = "";
+
+
+      events.forEach(
+        event => {
+
+          const card =
+            document.createElement(
+              "div"
+            );
+
+          card.className =
+            "event-card";
+
+
+          const category =
+            getEventCategory(event);
+
+
+          const categoryRow =
+            document.createElement(
+              "div"
+            );
+
+          categoryRow.className =
+            "event-category";
+
+
+          const dot =
+            document.createElement(
+              "span"
+            );
+
+          dot.className =
+            "category-dot " +
+            getCategoryClass(
+              category
+            );
+
+
+          const categoryText =
+            document.createElement(
+              "span"
+            );
+
+          categoryText.textContent =
+            category ||
+            "Local";
+
+
+          categoryRow.appendChild(
+            dot
+          );
+
+          categoryRow.appendChild(
+            categoryText
+          );
+
+
+          const title =
+            document.createElement(
+              "div"
+            );
+
+          title.className =
+            "event-name";
+
+          title.textContent =
+            getEventName(event);
+
+
+          const meta =
+            document.createElement(
+              "div"
+            );
+
+          meta.className =
+            "event-meta";
+
+
+          const start =
+            getEventStart(event);
+
+          const end =
+            getEventEnd(event);
+
+
+          let dateText = "";
+
+
+          if (start) {
+
+            dateText =
+              formatDate(start);
+
+          }
+
+
+          if (
+            end &&
+            start &&
+            !sameDate(
+              start,
+              end
+            )
+          ) {
+
+            dateText +=
+              " → " +
+              formatDate(end);
+
+          }
+
+
+          const location =
+            getEventLocation(event);
+
+
+          if (dateText) {
+
+            meta.textContent =
+              dateText;
+
+          }
+
+
+          if (location) {
+
+            if (meta.textContent) {
+
+              meta.textContent +=
+                " • ";
+
+            }
+
+            meta.textContent +=
+              location;
+
+          }
+
+
+          const more =
+            document.createElement(
+              "div"
+            );
+
+          more.className =
+            "event-more";
+
+          more.textContent =
+            "See more detail →";
+
+
+          card.appendChild(
+            categoryRow
+          );
+
+          card.appendChild(
+            title
+          );
+
+          card.appendChild(
+            meta
+          );
+
+          card.appendChild(
+            more
+          );
+
+
+          card.addEventListener(
+            "click",
+            () => {
+
+              showEventDetail(
+                event
+              );
+
+            }
+          );
+
+
+          container.appendChild(
+            card
+          );
+
+        }
+      );
+
+
+      /*
+        Mobile: scroll sikit ke panel
+      */
+
+      setTimeout(() => {
+
+        panel.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      }, 80);
+
+    }
+
+
+    /* =====================================================
+       EVENT DETAIL
+    ===================================================== */
+
+
+    function showEventDetail(event) {
+
+      selectedEvent =
+        event;
+
+
+      const datePanel =
+        document.getElementById(
+          "datePanel"
+        );
+
+
+      const detailPanel =
+        document.getElementById(
+          "detailPanel"
+        );
+
+
+      datePanel.classList.add(
+        "hidden"
+      );
+
+
+      detailPanel.classList.remove(
+        "hidden"
+      );
+
+
+      const category =
+        getEventCategory(event);
+
+
+      const categoryContainer =
+        document.getElementById(
+          "detailCategory"
+        );
+
+
+      categoryContainer.innerHTML = "";
+
+
+      const dot =
+        document.createElement(
+          "span"
+        );
+
+      dot.className =
+        "category-dot " +
+        getCategoryClass(
+          category
+        );
+
+
+      const categoryText =
+        document.createElement(
+          "span"
+        );
+
+      categoryText.textContent =
+        category ||
+        "Local";
+
+
+      categoryContainer.appendChild(
+        dot
+      );
+
+      categoryContainer.appendChild(
+        categoryText
+      );
+
+
+      document.getElementById(
+        "detailTitle"
+      ).textContent =
+        getEventName(event);
+
+
+      const start =
+        getEventStart(event);
+
+      const end =
+        getEventEnd(event);
+
+
+      let metaText = "";
+
+
+      if (start) {
+
+        metaText =
+          formatDate(start);
+
+      }
+
+
+      if (
+        end &&
+        start &&
+        !sameDate(
+          start,
+          end
+        )
+      ) {
+
+        metaText +=
+          " → " +
+          formatDate(end);
+
+      }
+
+
+      const location =
+        getEventLocation(event);
+
+
+      if (location) {
+
+        if (metaText) {
+
+          metaText +=
+            " • ";
+
+        }
+
+        metaText +=
+          location;
+
+      }
+
+
+      document.getElementById(
+        "detailMeta"
+      ).textContent =
+        metaText;
+
+
+      document.getElementById(
+        "detailDescription"
+      ).textContent =
+        getEventDescription(event);
+
+
+      /*
+        Image
+      */
+
+      const imageContainer =
+        document.getElementById(
+          "detailImageContainer"
+        );
+
+
+      imageContainer.innerHTML = "";
+
+
+      const imageUrl =
+        getEventImage(event);
+
+
+      if (imageUrl) {
+
+        const image =
+          document.createElement(
+            "img"
+          );
+
+        image.className =
+          "detail-image";
+
+        image.src =
+          imageUrl;
+
+        image.alt =
+          getEventName(event);
+
+
+        image.onerror =
+          () => {
+
+            image.remove();
+
+          };
+
+
+        imageContainer.appendChild(
+          image
+        );
+
+      }
+
+
+      /*
+        Official link
+      */
+
+      const linkContainer =
+        document.getElementById(
+          "detailLink"
+        );
+
+
+      linkContainer.innerHTML = "";
+
+
+      const officialLink =
+        getEventLink(event);
+
+
+      if (officialLink) {
+
+        const link =
+          document.createElement(
+            "a"
+          );
+
+        link.className =
+          "official-link";
+
+        link.href =
+          officialLink;
+
+        link.target =
+          "_blank";
+
+        link.rel =
+          "noopener noreferrer";
+
+        link.textContent =
+          "Official Link →";
+
+
+        linkContainer.appendChild(
+          link
+        );
+
+      }
+
+
+      setTimeout(() => {
+
+        detailPanel.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      }, 80);
+
+    }
+
+
+    function hideDetail() {
+
+      document.getElementById(
+        "detailPanel"
+      ).classList.add(
+        "hidden"
+      );
+
+    }
+
+
+    /* =====================================================
+       FILTER
+    ===================================================== */
+
+
+    function setCategory(category) {
+
+      activeCategory =
+        category;
+
+
+      selectedDate =
+        null;
+
+
+      selectedEvent =
+        null;
+
+
+      document.getElementById(
+        "datePanel"
+      ).classList.add(
+        "hidden"
+      );
+
+
+      document.getElementById(
+        "detailPanel"
+      ).classList.add(
+        "hidden"
+      );
+
+
+      renderCalendar();
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    /* =====================================================
+       EXPLORE SHEET
+    ===================================================== */
+
+
+    function openExplore() {
+
+      document.getElementById(
+        "sheetOverlay"
+      ).classList.add(
+        "open"
+      );
+
+
+      document.getElementById(
+        "exploreSheet"
+      ).classList.add(
+        "open"
+      );
+
+    }
+
+
+    function closeExplore() {
+
+      document.getElementById(
+        "sheetOverlay"
+      ).classList.remove(
+        "open"
+      );
+
+
+      document.getElementById(
+        "exploreSheet"
+      ).classList.remove(
+        "open"
+      );
+
+    }
+
+
+    document
+      .getElementById(
+        "sheetOverlay"
+      )
+      .addEventListener(
+        "click",
+        closeExplore
+      );
+
+
+    document
+      .querySelectorAll(
+        ".explore-option"
+      )
+      .forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              const category =
+                button.dataset.category;
+
+
+              if (
+                category === "ALL"
+              ) {
+
+                setCategory(
+                  "ALL"
+                );
+
+              } else {
+
+                setCategory(
+                  category
+                );
+
+              }
+
+
+              closeExplore();
+
+            }
+          );
+
+        }
+      );
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
+
+
+    let toastTimer = null;
+
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById(
+          "toast"
+        );
+
+
+      toast.textContent =
+        message;
+
+
+      toast.classList.add(
+        "show"
+      );
+
+
+      clearTimeout(
+        toastTimer
+      );
+
+
+      toastTimer =
+        setTimeout(
+          () => {
+
+            toast.classList.remove(
+              "show"
+            );
+
+          },
+          2600
+        );
+
+    }
+
+
+    /* =====================================================
+       BOTTOM NAV
+    ===================================================== */
+
+
+    document
+      .getElementById(
+        "navHome"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          setCategory(
+            "ALL"
+          );
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "navExplore"
+      )
+      .addEventListener(
+        "click",
+        openExplore
+      );
+
+
+    document
+      .getElementById(
+        "navMusim"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          setCategory(
+            "Musim"
+          );
+
+          showToast(
+            "Paparan Musim"
+          );
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "navCheck"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          showToast(
+            "Musim Lab Check belum dibuka lagi."
+          );
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "navMore"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          showToast(
+            "Menu tambahan akan datang."
+          );
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "prevMonth"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          currentDate =
+            new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth() - 1,
+              1
+            );
+
+
+          renderCalendar();
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "nextMonth"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          currentDate =
+            new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth() + 1,
+              1
+            );
+
+
+          renderCalendar();
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "backToDate"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          hideDetail();
+
+
+          if (selectedDate) {
+
+            document
+              .getElementById(
+                "datePanel"
+              )
+              .classList.remove(
+                "hidden"
+              );
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       LOAD EVENTS FROM GOOGLE APPS SCRIPT
+    ===================================================== */
+
+
+    async function loadEvents() {
+
+      try {
+
+        const response =
+          await fetch(
+            API_URL +
+            "?t=" +
+            Date.now()
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "API response error"
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          Array.isArray(data)
+        ) {
+
+          allEvents =
+            data;
+
+        } else {
+
+          allEvents =
+            [];
+
+        }
+
+
+        renderCalendar();
+
+
+      } catch (error) {
+
+        console.error(
+          "Load events error:",
+          error
+        );
+
+
+        allEvents =
+          [];
+
+
+        renderCalendar();
+
+
+        showToast(
+          "Tak dapat baca data event."
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOAD PUBLIC HOLIDAY JSON
+       OPTIONAL
+       Kalau file belum ada, website
+       tetap jalan macam biasa.
+    ===================================================== */
+
+
+    async function loadHolidays() {
+
+      try {
+
+        const response =
+          await fetch(
+            HOLIDAY_URL +
+            "?t=" +
+            Date.now()
+          );
+
+
+        if (!response.ok) {
+
+          return;
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        /*
+          Support:
+
+          {
+            "holidays": [...]
+          }
+
+          atau terus:
+
+          [...]
+        */
+
+        if (
+          Array.isArray(data)
+        ) {
+
+          holidayData =
+            data;
+
+        } else if (
+          Array.isArray(
+            data.holidays
+          )
+        ) {
+
+          holidayData =
+            data.holidays;
+
+        } else {
+
+          holidayData =
+            [];
+
+        }
+
+
+        renderCalendar();
+
+
+      } catch (error) {
+
+        /*
+          File belum wujud pun tak apa.
+          Calendar masih boleh jalan.
+        */
+
+        holidayData =
+          [];
+
+      }
+
+    }
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+
+    loadEvents();
+
+    loadHolidays();
+
+  </script>
+
+</body>
+</html>
