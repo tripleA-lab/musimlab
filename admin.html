@@ -1,715 +1,3150 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Musim Lab — Admin</title>
+<title>MusimLab — Admin</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:#f5f7fb;
+    color:#1f2937;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    height:72px;
+    background:#ffffff;
+    border-bottom:1px solid #e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 32px;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:-.5px;
+}
+
+.logo span{
+    font-weight:400;
+    color:#6b7280;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.btn{
+    border:none;
+    border-radius:10px;
+    padding:10px 16px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    background:#111827;
+    color:white;
+}
+
+.btn-secondary{
+    background:#ffffff;
+    border:1px solid #d1d5db;
+    color:#374151;
+}
+
+.btn-danger{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+.btn-small{
+    padding:7px 11px;
+    font-size:12px;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:32px 24px 60px;
+}
+
+.page-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:24px;
+}
+
+.page-title h1{
+    font-size:28px;
+    margin-bottom:6px;
+}
+
+.page-title p{
+    color:#6b7280;
+    font-size:14px;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar{
+    background:#ffffff;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    padding:14px;
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.search{
+    flex:1;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    border:1px solid #d1d5db;
+    border-radius:9px;
+    padding:11px 12px;
+    font-size:14px;
+    outline:none;
+    background:white;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:#6b7280;
+}
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+/* =========================
+   EVENT CARD
+========================= */
+
+.event-list{
+    display:grid;
+    gap:14px;
+}
+
+.event-card{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:15px;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.event-main{
+    min-width:0;
+    flex:1;
+}
+
+.event-name{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.event-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-bottom:10px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    padding:5px 9px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:700;
+    background:#f3f4f6;
+    color:#374151;
+}
+
+.badge-status{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.badge-draft{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.badge-season{
+    background:#ede9fe;
+    color:#6d28d9;
+}
+
+.short-description{
+    color:#6b7280;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.event-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+/* =========================
+   FORM VIEW
+========================= */
+
+.form-view{
+    display:none;
+}
+
+.form-view.active{
+    display:block;
+}
+
+.dashboard-view.hidden{
+    display:none;
+}
+
+.form-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+}
+
+.form-header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.back-btn{
+    border:none;
+    background:white;
+    border:1px solid #d1d5db;
+    border-radius:9px;
+    padding:9px 12px;
+    cursor:pointer;
+}
+
+.form-header h2{
+    font-size:22px;
+}
+
+.form-section{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:15px;
+    padding:24px;
+    margin-bottom:18px;
+}
+
+.section-title{
+    font-size:16px;
+    font-weight:750;
+    margin-bottom:20px;
+}
+
+.grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.field{
+    margin-bottom:16px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    font-weight:650;
+    margin-bottom:7px;
+    color:#374151;
+}
+
+.field small{
+    display:block;
+    color:#9ca3af;
+    font-size:11px;
+    margin-top:5px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+/* =========================
+   CHILD ROWS
+========================= */
+
+.child-list{
+    display:grid;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.child-row{
+    border:1px solid #e5e7eb;
+    border-radius:11px;
+    padding:13px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+}
+
+.child-info{
+    min-width:0;
+    flex:1;
+}
+
+.child-title{
+    font-weight:650;
+    font-size:14px;
+}
+
+.child-sub{
+    font-size:12px;
+    color:#6b7280;
+    margin-top:3px;
+    word-break:break-all;
+}
+
+.child-actions{
+    display:flex;
+    gap:6px;
+}
+
+.empty{
+    padding:24px;
+    text-align:center;
+    color:#9ca3af;
+    font-size:14px;
+    border:1px dashed #d1d5db;
+    border-radius:10px;
+}
+
+.add-child{
+    border:1px dashed #9ca3af;
+    background:#fafafa;
+    padding:10px 14px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+}
+
+/* =========================
+   FOOTER ACTIONS
+========================= */
+
+.form-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:8px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.45);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:500px;
+    background:white;
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 20px 50px rgba(0,0,0,.15);
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.modal-header h3{
+    font-size:18px;
+}
+
+.close{
+    border:none;
+    background:#f3f4f6;
+    width:32px;
+    height:32px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:18px;
+}
+
+/* =========================
+   SEASONS
+========================= */
+
+.season-list{
+    display:grid;
+    gap:10px;
+    margin-top:15px;
+}
+
+.season-row{
+    border:1px solid #e5e7eb;
+    border-radius:11px;
+    padding:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.season-left{
+    min-width:0;
+    flex:1;
+}
+
+.season-name{
+    font-weight:700;
+}
+
+.season-description{
+    font-size:12px;
+    color:#6b7280;
+    margin-top:3px;
+}
+
+.season-right{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.toggle{
+    border:none;
+    border-radius:999px;
+    padding:6px 10px;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.toggle.active{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.toggle.hidden{
+    background:#f3f4f6;
+    color:#6b7280;
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#111827;
+    color:white;
+    padding:13px 17px;
+    border-radius:10px;
+    font-size:13px;
+    display:none;
+    z-index:200;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.message.show{
+    display:block;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:700px){
+
+    .header{
+        padding:0 16px;
     }
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f3;
-      color: #222;
-      padding: 20px;
+    .container{
+        padding:22px 14px 40px;
     }
 
-    .container {
-      max-width: 900px;
-      margin: auto;
+    .page-title{
+        flex-direction:column;
+        gap:15px;
     }
 
-    header {
-      background: #111;
-      color: white;
-      padding: 22px;
-      border-radius: 14px;
-      margin-bottom: 20px;
+    .page-title .btn{
+        width:100%;
     }
 
-    header h1 {
-      font-size: 26px;
-      margin-bottom: 5px;
+    .toolbar{
+        flex-direction:column;
     }
 
-    header p {
-      font-size: 13px;
-      opacity: 0.7;
+    .grid-2{
+        grid-template-columns:1fr;
     }
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
+    .event-card{
+        flex-direction:column;
     }
 
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 10px 14px;
-      cursor: pointer;
-      font-size: 14px;
+    .event-actions{
+        width:100%;
     }
 
-    .add-btn {
-      background: #111;
-      color: white;
+    .event-actions button{
+        flex:1;
     }
 
-    .edit-btn {
-      background: #eee;
+    .form-header{
+        align-items:flex-start;
+        gap:10px;
     }
 
-    .delete-btn {
-      background: #eee;
+    .form-header-right{
+        display:flex;
+        gap:5px;
     }
 
-    .event-list {
-      display: grid;
-      gap: 12px;
+    .season-row{
+        align-items:flex-start;
+        flex-direction:column;
     }
 
-    .event-card {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 18px;
+    .season-right{
+        width:100%;
     }
 
-    .event-card h3 {
-      margin-bottom: 6px;
-    }
-
-    .event-meta {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 12px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .form-box {
-      display: none;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .form-box.active {
-      display: block;
-    }
-
-    .form-box h2 {
-      margin-bottom: 18px;
-    }
-
-    .field {
-      margin-bottom: 14px;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 14px;
-      font-family: inherit;
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 20px;
-    }
-
-    .save-btn {
-      background: #111;
-      color: white;
-    }
-
-    .cancel-btn {
-      background: #eee;
-    }
-
-    .message {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      display: none;
-    }
-
-    .empty {
-      background: white;
-      border: 1px dashed #ccc;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      color: #777;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 12px;
-      }
-
-      .top-bar {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .add-btn {
-        width: 100%;
-      }
-    }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- =========================
+     HEADER
+========================= -->
 
-  <header>
-    <h1>Musim Lab — Admin</h1>
-    <p>Manage events</p>
-  </header>
+<header class="header">
 
-  <div id="message" class="message"></div>
-
-  <div id="formBox" class="form-box">
-
-    <h2 id="formTitle">Add Event</h2>
-
-    <input type="hidden" id="eventId">
-
-    <div class="field">
-      <label>Event Name</label>
-      <input type="text" id="eventName" placeholder="Contoh: MIHAS">
+    <div class="logo">
+        MUSIM<span>LAB</span>
     </div>
 
-    <div class="field">
-      <label>Start Date</label>
-      <input type="date" id="startDate">
+    <div class="header-right">
+
+        <button class="btn btn-secondary"
+                onclick="openSeasons()">
+            Seasons
+        </button>
+
+        <button class="btn btn-primary"
+                onclick="openAddForm()">
+            + Add Event
+        </button>
+
     </div>
 
-    <div class="field">
-      <label>End Date</label>
-      <input type="date" id="endDate">
+</header>
+
+
+<!-- =========================
+     MAIN CONTAINER
+========================= -->
+
+<main class="container">
+
+
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<section id="dashboardView"
+         class="dashboard-view">
+
+    <div class="page-title">
+
+        <div>
+            <h1>Events</h1>
+            <p>Manage your events, seasons and event details.</p>
+        </div>
+
+        <button class="btn btn-primary"
+                onclick="openAddForm()">
+            + Add Event
+        </button>
+
     </div>
 
-    <div class="field">
-      <label>Category</label>
 
-      <select id="category">
-        <option value="">Pilih kategori</option>
-        <option>Muzik & Konsert</option>
-        <option>Sukan & Outdoor</option>
-        <option>Budaya & Agama</option>
-        <option>Teknologi & Perniagaan</option>
-        <option>Gaya Hidup</option>
-        <option>Local</option>
-        <option>Cuti Sekolah</option>
-        <option>Musim</option>
-      </select>
+    <div class="toolbar">
+
+        <div class="search">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search events..."
+                oninput="renderEvents()">
+
+        </div>
+
+        <select id="statusFilter"
+                onchange="renderEvents()">
+
+            <option value="">All Status</option>
+            <option value="Published">Published</option>
+            <option value="Draft">Draft</option>
+
+        </select>
+
+        <select id="seasonFilter"
+                onchange="renderEvents()">
+
+            <option value="">All Seasons</option>
+
+        </select>
+
     </div>
 
-    <div class="field">
-      <label>Location</label>
-      <input type="text" id="location" placeholder="Contoh: MITEC, Kuala Lumpur">
+
+    <div id="eventList"
+         class="event-list">
+
+        <div class="empty">
+            Loading events...
+        </div>
+
     </div>
 
-    <div class="field">
-      <label>Description</label>
-      <textarea id="description"
-        placeholder="Penerangan ringkas event..."></textarea>
+</section>
+
+
+<!-- =========================
+     EVENT FORM
+========================= -->
+
+<section id="formView"
+         class="form-view">
+
+    <div class="form-header">
+
+        <div class="form-header-left">
+
+            <button class="back-btn"
+                    onclick="closeForm()">
+                ← Back
+            </button>
+
+            <h2 id="formTitle">
+                Add Event
+            </h2>
+
+        </div>
+
+        <div class="form-header-right">
+
+            <button class="btn btn-primary"
+                    onclick="saveEvent()">
+                Save Event
+            </button>
+
+        </div>
+
     </div>
 
-    <div class="field">
-      <label>Image URL</label>
-      <input type="url" id="imageUrl"
-        placeholder="https://...">
+
+    <!-- BASIC INFORMATION -->
+
+    <div class="form-section">
+
+        <div class="section-title">
+            Basic Information
+        </div>
+
+
+        <div class="grid-2">
+
+            <div class="field full">
+
+                <label>Event Name</label>
+
+                <input
+                    type="text"
+                    id="eventName"
+                    placeholder="Example: Le Tour de Langkawi">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Start Date</label>
+
+                <input
+                    type="date"
+                    id="startDate">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>End Date</label>
+
+                <input
+                    type="date"
+                    id="endDate">
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Category</label>
+
+                <select id="category">
+
+                    <option value="">Select Category</option>
+
+                    <option>Muzik & Konsert</option>
+                    <option>Sukan & Outdoor</option>
+                    <option>Budaya & Agama</option>
+                    <option>Teknologi & Perniagaan</option>
+                    <option>Gaya Hidup</option>
+                    <option>Local</option>
+                    <option>Cuti Sekolah</option>
+                    <option>Musim</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Season</label>
+
+                <select id="seasonId">
+
+                    <option value="">
+                        No Season
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field full">
+
+                <label>Location</label>
+
+                <input
+                    type="text"
+                    id="location"
+                    placeholder="Example: Kuala Lumpur">
+
+            </div>
+
+
+            <div class="field full">
+
+                <label>Short Description</label>
+
+                <textarea
+                    id="shortDescription"
+                    style="min-height:80px"
+                    placeholder="Short summary shown on the event card..."></textarea>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="field">
-      <label>Official Link</label>
-      <input type="url" id="officialLink"
-        placeholder="https://...">
+
+    <!-- SEE MORE DETAIL -->
+
+    <div class="form-section">
+
+        <div class="section-title">
+            See More Detail
+        </div>
+
+
+        <div class="field">
+
+            <label>Google Drive Image URL</label>
+
+            <input
+                type="url"
+                id="imageUrl"
+                placeholder="https://drive.google.com/...">
+
+            <small>
+                Paste the Google Drive image link here.
+            </small>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Full Description</label>
+
+            <textarea
+                id="description"
+                placeholder="Full event description..."></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Official Link</label>
+
+            <input
+                type="url"
+                id="officialLink"
+                placeholder="https://...">
+
+        </div>
+
+
+        <div class="grid-2">
+
+            <div class="field">
+
+                <label>Status</label>
+
+                <select id="status">
+
+                    <option value="Draft">
+                        Draft
+                    </option>
+
+                    <option value="Published">
+                        Published
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="field">
-      <label>Status</label>
 
-      <select id="status">
-        <option value="Draft">Draft</option>
-        <option value="Published">Published</option>
-      </select>
+    <!-- PREPARATION -->
+
+    <div class="form-section">
+
+        <div class="section-title">
+            Preparation / Recommended Items
+        </div>
+
+        <div id="preparationList"
+             class="child-list">
+
+            <div class="empty">
+                No preparation items yet.
+            </div>
+
+        </div>
+
+        <button class="add-child"
+                onclick="openPreparationModal()">
+
+            + Add Item
+
+        </button>
+
     </div>
+
+
+    <!-- LINKS -->
+
+    <div class="form-section">
+
+        <div class="section-title">
+            Links / Affiliate
+        </div>
+
+        <div id="linkList"
+             class="child-list">
+
+            <div class="empty">
+                No links yet.
+            </div>
+
+        </div>
+
+        <button class="add-child"
+                onclick="openLinkModal()">
+
+            + Add Link
+
+        </button>
+
+    </div>
+
 
     <div class="form-actions">
 
-      <button class="save-btn" onclick="saveEvent()">
-        Save Event
-      </button>
+        <button class="btn btn-secondary"
+                onclick="closeForm()">
 
-      <button class="cancel-btn" onclick="closeForm()">
-        Cancel
-      </button>
+            Cancel
+
+        </button>
+
+        <button class="btn btn-primary"
+                onclick="saveEvent()">
+
+            Save Event
+
+        </button>
 
     </div>
 
-  </div>
+</section>
 
-  <div class="top-bar">
+</main>
 
-    <h2>Events</h2>
 
-    <button class="add-btn" onclick="openAddForm()">
-      + Add Event
-    </button>
+<!-- =========================
+     PREPARATION MODAL
+========================= -->
 
-  </div>
+<div id="preparationModal"
+     class="modal">
 
-  <div id="eventList" class="event-list">
+    <div class="modal-box">
 
-    <div class="empty">
-      Loading events...
+        <div class="modal-header">
+
+            <h3 id="preparationModalTitle">
+                Add Preparation
+            </h3>
+
+            <button class="close"
+                    onclick="closePreparationModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Item</label>
+
+            <input
+                id="prepItem"
+                placeholder="Example: Raincoat">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Reason</label>
+
+            <textarea
+                id="prepReason"
+                style="min-height:90px"
+                placeholder="Why is this item recommended?"></textarea>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button class="btn btn-secondary"
+                    onclick="closePreparationModal()">
+
+                Cancel
+
+            </button>
+
+            <button class="btn btn-primary"
+                    onclick="savePreparation()">
+
+                Save
+
+            </button>
+
+        </div>
+
     </div>
 
-  </div>
+</div>
 
+
+<!-- =========================
+     LINK MODAL
+========================= -->
+
+<div id="linkModal"
+     class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3 id="linkModalTitle">
+                Add Link
+            </h3>
+
+            <button class="close"
+                    onclick="closeLinkModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Link Type</label>
+
+            <select id="linkType">
+
+                <option value="">
+                    Select Type
+                </option>
+
+                <option value="Affiliate">
+                    Affiliate
+                </option>
+
+                <option value="Official">
+                    Official
+                </option>
+
+                <option value="Info">
+                    Info
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Title</label>
+
+            <input
+                id="linkTitle"
+                placeholder="Example: Raincoat">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>URL</label>
+
+            <input
+                id="linkUrl"
+                type="url"
+                placeholder="https://...">
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button class="btn btn-secondary"
+                    onclick="closeLinkModal()">
+
+                Cancel
+
+            </button>
+
+            <button class="btn btn-primary"
+                    onclick="saveLink()">
+
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     SEASONS MODAL
+========================= -->
+
+<div id="seasonModal"
+     class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Manage Seasons</h3>
+
+            <button class="close"
+                    onclick="closeSeasons()">
+                ×
+            </button>
+
+        </div>
+
+
+        <button class="btn btn-primary"
+                onclick="openSeasonEditor()">
+
+            + Add Season
+
+        </button>
+
+
+        <div id="seasonList"
+             class="season-list">
+
+            <div class="empty">
+                Loading seasons...
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     SEASON EDITOR MODAL
+========================= -->
+
+<div id="seasonEditorModal"
+     class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3 id="seasonEditorTitle">
+                Add Season
+            </h3>
+
+            <button class="close"
+                    onclick="closeSeasonEditor()">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Season Name</label>
+
+            <input
+                id="seasonName"
+                placeholder="Example: Musim Raya">
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Description</label>
+
+            <textarea
+                id="seasonDescription"
+                style="min-height:90px"
+                placeholder="Season description..."></textarea>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>Status</label>
+
+            <select id="seasonStatus">
+
+                <option value="Active">
+                    Active
+                </option>
+
+                <option value="Hidden">
+                    Hidden
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button class="btn btn-secondary"
+                    onclick="closeSeasonEditor()">
+
+                Cancel
+
+            </button>
+
+            <button class="btn btn-primary"
+                    onclick="saveSeason()">
+
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MESSAGE
+========================= -->
+
+<div id="message"
+     class="message">
 </div>
 
 
 <script>
 
-  /*
-    URL Apps Script kau.
-    Gantikan bahagian ini dengan URL Web App kau.
-  */
+/*************************************************
+ * API
+ *************************************************/
 
-  const API_URL =
-    "https://script.google.com/macros/s/AKfycbxEGV5ZfShKK0gsALDr48ENe4uzYuY4Qqdv0ob64EFwF5QZ2PUNqDHUQCJIWrOwwzCp/exec";
-
-
-  let events = [];
+const API_URL =
+"https://script.google.com/macros/s/AKfycbxEGV5ZfShKK0gsALDr48ENe4uzYuY4Qqdv0ob64EFwF5QZ2PUNqDHUQCJIWrOwwzCp/exec";
 
 
-  function showMessage(text) {
+/*************************************************
+ * STATE
+ *************************************************/
 
-    const box = document.getElementById("message");
+let events = [];
 
-    box.textContent = text;
-    box.style.display = "block";
+let seasons = [];
+
+let currentEventId = null;
+
+let editingPreparationId = null;
+
+let editingLinkId = null;
+
+let editingSeasonId = null;
+
+
+/*************************************************
+ * MESSAGE
+ *************************************************/
+
+function showMessage(text){
+
+    const el =
+        document.getElementById("message");
+
+    el.textContent = text;
+
+    el.classList.add("show");
 
     setTimeout(() => {
-      box.style.display = "none";
-    }, 3000);
 
-  }
+        el.classList.remove("show");
+
+    }, 2500);
+}
 
 
-  function loadEvents() {
+/*************************************************
+ * LOAD EVENTS
+ *************************************************/
 
-    fetch(API_URL)
-      .then(response => response.json())
-      .then(data => {
+async function loadEvents(){
 
-        events = data;
+    try{
 
-        displayEvents();
+        const response =
+            await fetch(API_URL);
 
-      })
-      .catch(error => {
+        events =
+            await response.json();
+
+        renderEvents();
+
+    }catch(error){
 
         console.error(error);
 
         document.getElementById("eventList").innerHTML = `
-          <div class="empty">
-            Tak dapat load database.
-          </div>
+            <div class="empty">
+                Failed to load events.
+            </div>
         `;
 
-      });
+    }
 
-  }
+}
 
 
-  function displayEvents() {
+/*************************************************
+ * LOAD SEASONS
+ *************************************************/
 
-    const list = document.getElementById("eventList");
+async function loadSeasons(){
 
-    if (!events.length) {
+    try{
 
-      list.innerHTML = `
-        <div class="empty">
-          Belum ada event.
-        </div>
-      `;
+        const response =
+            await fetch(
+                API_URL + "?action=getSeasons"
+            );
 
-      return;
+        seasons =
+            await response.json();
+
+        populateSeasonDropdown();
+
+        renderSeasonList();
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/*************************************************
+ * SEASON DROPDOWN
+ *************************************************/
+
+function populateSeasonDropdown(){
+
+    const select =
+        document.getElementById("seasonId");
+
+    const filter =
+        document.getElementById("seasonFilter");
+
+    select.innerHTML =
+        `<option value="">No Season</option>`;
+
+    filter.innerHTML =
+        `<option value="">All Seasons</option>`;
+
+
+    seasons
+        .filter(season =>
+            String(season.Status).toLowerCase()
+            === "active"
+        )
+        .forEach(season => {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                season["Season ID"];
+
+            option.textContent =
+                season["Season Name"];
+
+            select.appendChild(option);
+
+        });
+
+
+    seasons.forEach(season => {
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            season["Season ID"];
+
+        option.textContent =
+            season["Season Name"];
+
+        filter.appendChild(option);
+
+    });
+
+}
+
+
+/*************************************************
+ * RENDER EVENTS
+ *************************************************/
+
+function renderEvents(){
+
+    const list =
+        document.getElementById("eventList");
+
+    const search =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const status =
+        document.getElementById("statusFilter")
+        .value;
+
+    const season =
+        document.getElementById("seasonFilter")
+        .value;
+
+
+    const filtered =
+        events.filter(event => {
+
+            const name =
+                String(event["Event Name"] || "")
+                .toLowerCase();
+
+            const location =
+                String(event["Location"] || "")
+                .toLowerCase();
+
+            const matchSearch =
+                name.includes(search) ||
+                location.includes(search);
+
+            const matchStatus =
+                !status ||
+                String(event["Status"]) === status;
+
+            const matchSeason =
+                !season ||
+                String(event["Season ID"]) === season;
+
+            return (
+                matchSearch &&
+                matchStatus &&
+                matchSeason
+            );
+
+        });
+
+
+    if(!filtered.length){
+
+        list.innerHTML = `
+            <div class="empty">
+                No events found.
+            </div>
+        `;
+
+        return;
 
     }
 
 
-    list.innerHTML = events.map(event => `
+    list.innerHTML =
+        filtered.map(event => {
 
-      <div class="event-card">
-
-        <h3>${event["Event Name"] || ""}</h3>
-
-        <div class="event-meta">
-
-          ${event["Start Date"] || ""}
-          ${event["End Date"] ? " — " + event["End Date"] : ""}
-
-          <br>
-
-          ${event["Location"] || ""}
-
-          <br>
-
-          ${event["Category"] || ""}
-
-        </div>
-
-        <div class="actions">
-
-          <button
-            class="edit-btn"
-            onclick="editEvent('${event["Event ID"]}')">
-            Edit
-          </button>
-
-          <button
-            class="delete-btn"
-            onclick="deleteEvent('${event["Event ID"]}')">
-            Delete
-          </button>
-
-        </div>
-
-      </div>
-
-    `).join("");
-
-  }
+            const seasonName =
+                getSeasonName(
+                    event["Season ID"]
+                );
 
 
-  function openAddForm() {
+            const statusBadge =
+                String(event["Status"])
+                === "Published"
 
-    document.getElementById("formBox")
-      .classList.add("active");
+                ? `<span class="badge badge-status">
+                    Published
+                   </span>`
+
+                : `<span class="badge badge-draft">
+                    Draft
+                   </span>`;
+
+
+            const seasonBadge =
+                seasonName
+
+                ? `<span class="badge badge-season">
+                    ${escapeHtml(seasonName)}
+                   </span>`
+
+                : "";
+
+
+            return `
+
+                <div class="event-card">
+
+                    <div class="event-main">
+
+                        <div class="event-name">
+                            ${escapeHtml(
+                                event["Event Name"] || ""
+                            )}
+                        </div>
+
+
+                        <div class="event-meta">
+
+                            <span class="badge">
+                                ${formatDate(
+                                    event["Start Date"]
+                                )}
+                            </span>
+
+                            <span class="badge">
+                                ${escapeHtml(
+                                    event["Location"] || "No location"
+                                )}
+                            </span>
+
+                            <span class="badge">
+                                ${escapeHtml(
+                                    event["Category"] || ""
+                                )}
+                            </span>
+
+                            ${statusBadge}
+
+                            ${seasonBadge}
+
+                        </div>
+
+
+                        <div class="short-description">
+
+                            ${escapeHtml(
+                                event["Short Description"]
+                                ||
+                                event["Description"]
+                                ||
+                                "No description."
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="event-actions">
+
+                        <button
+                            class="btn btn-secondary btn-small"
+                            onclick="editEvent('${event["Event ID"]}')">
+
+                            Edit
+
+                        </button>
+
+
+                        <button
+                            class="btn btn-danger btn-small"
+                            onclick="deleteEvent('${event["Event ID"]}')">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/*************************************************
+ * FORM
+ *************************************************/
+
+function openAddForm(){
+
+    currentEventId = null;
 
     document.getElementById("formTitle")
-      .textContent = "Add Event";
+        .textContent = "Add Event";
 
     clearForm();
 
-  }
+    document.getElementById("dashboardView")
+        .classList.add("hidden");
+
+    document.getElementById("formView")
+        .classList.add("active");
+
+}
 
 
-  function closeForm() {
+function closeForm(){
 
-    document.getElementById("formBox")
-      .classList.remove("active");
+    document.getElementById("formView")
+        .classList.remove("active");
 
-    clearForm();
+    document.getElementById("dashboardView")
+        .classList.remove("hidden");
 
-  }
+    currentEventId = null;
+
+}
 
 
-  function clearForm() {
+/*************************************************
+ * CLEAR FORM
+ *************************************************/
 
-    document.getElementById("eventId").value = "";
+function clearForm(){
+
     document.getElementById("eventName").value = "";
+
     document.getElementById("startDate").value = "";
+
     document.getElementById("endDate").value = "";
+
     document.getElementById("category").value = "";
+
     document.getElementById("location").value = "";
+
+    document.getElementById("shortDescription").value = "";
+
     document.getElementById("description").value = "";
+
+    document.getElementById("seasonId").value = "";
+
     document.getElementById("imageUrl").value = "";
+
     document.getElementById("officialLink").value = "";
+
     document.getElementById("status").value = "Draft";
 
-  }
+
+    document.getElementById("preparationList").innerHTML = `
+        <div class="empty">
+            No preparation items yet.
+        </div>
+    `;
 
 
-  function editEvent(id) {
+    document.getElementById("linkList").innerHTML = `
+        <div class="empty">
+            No links yet.
+        </div>
+    `;
 
-    const event = events.find(
-      item => String(item["Event ID"]) === String(id)
-    );
-
-    if (!event) return;
+}
 
 
-    document.getElementById("formBox")
-      .classList.add("active");
+/*************************************************
+ * EDIT EVENT
+ *************************************************/
+
+async function editEvent(eventId){
+
+    const event =
+        events.find(
+            e => String(e["Event ID"])
+            === String(eventId)
+        );
+
+    if(!event) return;
+
+
+    currentEventId =
+        event["Event ID"];
+
 
     document.getElementById("formTitle")
-      .textContent = "Edit Event";
+        .textContent = "Edit Event";
 
-
-    document.getElementById("eventId").value =
-      event["Event ID"] || "";
 
     document.getElementById("eventName").value =
-      event["Event Name"] || "";
+        event["Event Name"] || "";
+
 
     document.getElementById("startDate").value =
-      formatDateForInput(event["Start Date"]);
+        formatDateForInput(
+            event["Start Date"]
+        );
+
 
     document.getElementById("endDate").value =
-      formatDateForInput(event["End Date"]);
+        formatDateForInput(
+            event["End Date"]
+        );
+
 
     document.getElementById("category").value =
-      event["Category"] || "";
+        event["Category"] || "";
+
 
     document.getElementById("location").value =
-      event["Location"] || "";
+        event["Location"] || "";
+
+
+    document.getElementById("shortDescription").value =
+        event["Short Description"] || "";
+
 
     document.getElementById("description").value =
-      event["Description"] || "";
+        event["Description"] || "";
+
+
+    document.getElementById("seasonId").value =
+        event["Season ID"] || "";
+
 
     document.getElementById("imageUrl").value =
-      event["Image URL"] || "";
+        event["Image URL"] || "";
+
 
     document.getElementById("officialLink").value =
-      event["Official Link"] || "";
+        event["Official Link"] || "";
+
 
     document.getElementById("status").value =
-      event["Status"] || "Draft";
+        event["Status"] || "Draft";
 
 
-    document.getElementById("formBox")
-      .scrollIntoView({
-        behavior: "smooth"
-      });
+    document.getElementById("dashboardView")
+        .classList.add("hidden");
 
-  }
-
-
-  function formatDateForInput(value) {
-
-    if (!value) return "";
-
-    const date = new Date(value);
-
-    if (isNaN(date)) return "";
-
-    return date.toISOString().split("T")[0];
-
-  }
+    document.getElementById("formView")
+        .classList.add("active");
 
 
-  function saveEvent() {
+    await loadPreparation(eventId);
 
-    const id =
-      document.getElementById("eventId").value;
+    await loadLinks(eventId);
 
-    const eventData = {
+}
 
-      eventId: id,
 
-      eventName:
-        document.getElementById("eventName").value,
+/*************************************************
+ * SAVE EVENT
+ *************************************************/
 
-      startDate:
-        document.getElementById("startDate").value,
+async function saveEvent(){
 
-      endDate:
-        document.getElementById("endDate").value,
+    const data = {
 
-      category:
-        document.getElementById("category").value,
+        eventId: currentEventId,
 
-      location:
-        document.getElementById("location").value,
+        eventName:
+            document.getElementById("eventName").value,
 
-      description:
-        document.getElementById("description").value,
+        startDate:
+            document.getElementById("startDate").value,
 
-      imageUrl:
-        document.getElementById("imageUrl").value,
+        endDate:
+            document.getElementById("endDate").value,
 
-      officialLink:
-        document.getElementById("officialLink").value,
+        category:
+            document.getElementById("category").value,
 
-      status:
-        document.getElementById("status").value
+        location:
+            document.getElementById("location").value,
+
+        shortDescription:
+            document.getElementById("shortDescription").value,
+
+        description:
+            document.getElementById("description").value,
+
+        seasonId:
+            document.getElementById("seasonId").value,
+
+        imageUrl:
+            document.getElementById("imageUrl").value,
+
+        officialLink:
+            document.getElementById("officialLink").value,
+
+        status:
+            document.getElementById("status").value
 
     };
 
 
-    if (!eventData.eventName ||
-        !eventData.startDate) {
+    if(!data.eventName.trim()){
 
-      alert("Event Name dan Start Date wajib diisi.");
+        showMessage("Event Name diperlukan.");
 
-      return;
+        return;
 
     }
 
 
-    const action = id ? "updateEvent" : "addEvent";
+    const action =
+        currentEventId
+        ? "updateEvent"
+        : "addEvent";
 
 
-    fetch(API_URL, {
+    try{
 
-      method: "POST",
+        const response =
+            await fetch(API_URL,{
 
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8"
-      },
+                method:"POST",
 
-      body: JSON.stringify({
+                body:JSON.stringify({
 
-        action: action,
+                    action:action,
 
-        data: eventData
+                    data:data
 
-      })
+                })
 
-    })
+            });
 
-    .then(response => response.json())
 
-    .then(result => {
+        const result =
+            await response.json();
 
-      if (result.success) {
 
-        showMessage("Event berjaya disimpan.");
+        if(!result.success){
+
+            showMessage(
+                result.message ||
+                "Failed to save event."
+            );
+
+            return;
+
+        }
+
+
+        showMessage(
+            result.message ||
+            "Event saved."
+        );
+
 
         closeForm();
 
-        loadEvents();
+        await loadEvents();
 
-      } else {
+        await loadSeasons();
 
-        alert(
-          result.message ||
-          "Ada masalah semasa menyimpan."
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Error saving event."
         );
 
-      }
+    }
 
-    })
-
-    .catch(error => {
-
-      console.error(error);
-
-      alert(
-        "Tak dapat connect dengan database."
-      );
-
-    });
-
-  }
+}
 
 
-  function deleteEvent(id) {
+/*************************************************
+ * DELETE EVENT
+ *************************************************/
 
-    const event = events.find(
-      item => String(item["Event ID"]) === String(id)
+async function deleteEvent(eventId){
+
+    if(!confirm(
+        "Delete this event?\n\nAll related preparation items and links will also be deleted."
+    )){
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:JSON.stringify({
+
+                    action:"deleteEvent",
+
+                    data:{
+                        eventId:eventId
+                    }
+
+                })
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        showMessage(
+            result.message ||
+            "Event deleted."
+        );
+
+
+        await loadEvents();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Error deleting event."
+        );
+
+    }
+
+}
+
+
+/*************************************************
+ * PREPARATION
+ *************************************************/
+
+async function loadPreparation(eventId){
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL +
+                "?action=getPreparation&eventId=" +
+                encodeURIComponent(eventId)
+            );
+
+        const data =
+            await response.json();
+
+        renderPreparation(data);
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+function renderPreparation(items){
+
+    const list =
+        document.getElementById(
+            "preparationList"
+        );
+
+
+    if(!items.length){
+
+        list.innerHTML = `
+            <div class="empty">
+                No preparation items yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        items.map(item => `
+
+            <div class="child-row">
+
+                <div class="child-info">
+
+                    <div class="child-title">
+                        ${escapeHtml(
+                            item["Item"] || ""
+                        )}
+                    </div>
+
+                    <div class="child-sub">
+                        ${escapeHtml(
+                            item["Reason"] || ""
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="child-actions">
+
+                    <button
+                        class="btn btn-secondary btn-small"
+                        onclick='editPreparation(${JSON.stringify(item)})'>
+
+                        Edit
+
+                    </button>
+
+
+                    <button
+                        class="btn btn-danger btn-small"
+                        onclick="deletePreparation('${item["Preparation ID"]}')">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+function openPreparationModal(item = null){
+
+    editingPreparationId =
+        item
+        ? item["Preparation ID"]
+        : null;
+
+
+    document.getElementById(
+        "preparationModalTitle"
+    ).textContent =
+        item
+        ? "Edit Preparation"
+        : "Add Preparation";
+
+
+    document.getElementById("prepItem").value =
+        item
+        ? item["Item"] || ""
+        : "";
+
+
+    document.getElementById("prepReason").value =
+        item
+        ? item["Reason"] || ""
+        : "";
+
+
+    document.getElementById(
+        "preparationModal"
+    ).classList.add("active");
+
+}
+
+
+function editPreparation(item){
+
+    openPreparationModal(item);
+
+}
+
+
+function closePreparationModal(){
+
+    document.getElementById(
+        "preparationModal"
+    ).classList.remove("active");
+
+    editingPreparationId = null;
+
+}
+
+
+async function savePreparation(){
+
+    if(!currentEventId){
+
+        showMessage(
+            "Save the event first before adding preparation."
+        );
+
+        return;
+
+    }
+
+
+    const item =
+        document.getElementById("prepItem")
+        .value
+        .trim();
+
+    const reason =
+        document.getElementById("prepReason")
+        .value
+        .trim();
+
+
+    if(!item){
+
+        showMessage("Item diperlukan.");
+
+        return;
+
+    }
+
+
+    const action =
+        editingPreparationId
+        ? "updatePreparation"
+        : "addPreparation";
+
+
+    const data =
+        editingPreparationId
+
+        ? {
+            preparationId:
+                editingPreparationId,
+            item:item,
+            reason:reason
+          }
+
+        : {
+            eventId:
+                currentEventId,
+            item:item,
+            reason:reason
+          };
+
+
+    try{
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:JSON.stringify({
+
+                    action:action,
+
+                    data:data
+
+                })
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        showMessage(
+            result.message ||
+            "Saved."
+        );
+
+
+        closePreparationModal();
+
+        await loadPreparation(
+            currentEventId
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Error saving preparation."
+        );
+
+    }
+
+}
+
+
+async function deletePreparation(id){
+
+    if(!confirm(
+        "Delete this preparation item?"
+    )) return;
+
+
+    try{
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:JSON.stringify({
+
+                    action:"deletePreparation",
+
+                    data:{
+                        preparationId:id
+                    }
+
+                })
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        showMessage(
+            result.message ||
+            "Deleted."
+        );
+
+
+        await loadPreparation(
+            currentEventId
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/*************************************************
+ * LINKS
+ *************************************************/
+
+async function loadLinks(eventId){
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL +
+                "?action=getLinks&eventId=" +
+                encodeURIComponent(eventId)
+            );
+
+        const data =
+            await response.json();
+
+        renderLinks(data);
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+function renderLinks(items){
+
+    const list =
+        document.getElementById(
+            "linkList"
+        );
+
+
+    if(!items.length){
+
+        list.innerHTML = `
+            <div class="empty">
+                No links yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        items.map(item => `
+
+            <div class="child-row">
+
+                <div class="child-info">
+
+                    <div class="child-title">
+
+                        ${escapeHtml(
+                            item["Title"] || ""
+                        )}
+
+                        <span class="badge">
+                            ${escapeHtml(
+                                item["Link Type"] || ""
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div class="child-sub">
+
+                        ${escapeHtml(
+                            item["URL"] || ""
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="child-actions">
+
+                    <button
+                        class="btn btn-secondary btn-small"
+                        onclick='editLink(${JSON.stringify(item)})'>
+
+                        Edit
+
+                    </button>
+
+
+                    <button
+                        class="btn btn-danger btn-small"
+                        onclick="deleteLink('${item["Link ID"]}')">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+function openLinkModal(item = null){
+
+    editingLinkId =
+        item
+        ? item["Link ID"]
+        : null;
+
+
+    document.getElementById(
+        "linkModalTitle"
+    ).textContent =
+        item
+        ? "Edit Link"
+        : "Add Link";
+
+
+    document.getElementById("linkType").value =
+        item
+        ? item["Link Type"] || ""
+        : "";
+
+
+    document.getElementById("linkTitle").value =
+        item
+        ? item["Title"] || ""
+        : "";
+
+
+    document.getElementById("linkUrl").value =
+        item
+        ? item["URL"] || ""
+        : "";
+
+
+    document.getElementById(
+        "linkModal"
+    ).classList.add("active");
+
+}
+
+
+function editLink(item){
+
+    openLinkModal(item);
+
+}
+
+
+function closeLinkModal(){
+
+    document.getElementById(
+        "linkModal"
+    ).classList.remove("active");
+
+    editingLinkId = null;
+
+}
+
+
+async function saveLink(){
+
+    if(!currentEventId){
+
+        showMessage(
+            "Save the event first before adding a link."
+        );
+
+        return;
+
+    }
+
+
+    const linkType =
+        document.getElementById("linkType")
+        .value;
+
+    const title =
+        document.getElementById("linkTitle")
+        .value
+        .trim();
+
+    const url =
+        document.getElementById("linkUrl")
+        .value
+        .trim();
+
+
+    if(!title || !url){
+
+        showMessage(
+            "Title and URL diperlukan."
+        );
+
+        return;
+
+    }
+
+
+    const action =
+        editingLinkId
+        ? "updateLink"
+        : "addLink";
+
+
+    const data =
+        editingLinkId
+
+        ? {
+            linkId:
+                editingLinkId,
+            linkType:
+                linkType,
+            title:
+                title,
+            url:
+                url
+          }
+
+        : {
+            eventId:
+                currentEventId,
+            linkType:
+                linkType,
+            title:
+                title,
+            url:
+                url
+          };
+
+
+    try{
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:JSON.stringify({
+
+                    action:action,
+
+                    data:data
+
+                })
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        showMessage(
+            result.message ||
+            "Saved."
+        );
+
+
+        closeLinkModal();
+
+        await loadLinks(
+            currentEventId
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Error saving link."
+        );
+
+    }
+
+}
+
+
+async function deleteLink(id){
+
+    if(!confirm(
+        "Delete this link?"
+    )) return;
+
+
+    try{
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:JSON.stringify({
+
+                    action:"deleteLink",
+
+                    data:{
+                        linkId:id
+                    }
+
+                })
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        showMessage(
+            result.message ||
+            "Deleted."
+        );
+
+
+        await loadLinks(
+            currentEventId
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/*************************************************
+ * SEASONS
+ *************************************************/
+
+function openSeasons(){
+
+    document.getElementById(
+        "seasonModal"
+    ).classList.add("active");
+
+    loadSeasons();
+
+}
+
+
+function closeSeasons(){
+
+    document.getElementById(
+        "seasonModal"
+    ).classList.remove("active");
+
+}
+
+
+function renderSeasonList(){
+
+    const list =
+        document.getElementById(
+            "seasonList"
+        );
+
+
+    if(!seasons.length){
+
+        list.innerHTML = `
+            <div class="empty">
+                No seasons yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        seasons.map(season => {
+
+            const active =
+                String(season.Status)
+                .toLowerCase()
+                === "active";
+
+
+            return `
+
+                <div class="season-row">
+
+                    <div class="season-left">
+
+                        <div class="season-name">
+
+                            ${escapeHtml(
+                                season["Season Name"] || ""
+                            )}
+
+                        </div>
+
+
+                        <div class="season-description">
+
+                            ${escapeHtml(
+                                season["Description"] || ""
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="season-right">
+
+                        <button
+                            class="toggle ${active ? "active" : "hidden"}"
+                            onclick="toggleSeason('${season["Season ID"]}')">
+
+                            ${active ? "ACTIVE" : "HIDDEN"}
+
+                        </button>
+
+
+                        <button
+                            class="btn btn-secondary btn-small"
+                            onclick='openSeasonEditor(${JSON.stringify(season)})'>
+
+                            Edit
+
+                        </button>
+
+
+                        <button
+                            class="btn btn-danger btn-small"
+                            onclick="deleteSeason('${season["Season ID"]}')">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+function openSeasonEditor(season = null){
+
+    editingSeasonId =
+        season
+        ? season["Season ID"]
+        : null;
+
+
+    document.getElementById(
+        "seasonEditorTitle"
+    ).textContent =
+        season
+        ? "Edit Season"
+        : "Add Season";
+
+
+    document.getElementById("seasonName").value =
+        season
+        ? season["Season Name"] || ""
+        : "";
+
+
+    document.getElementById("seasonDescription").value =
+        season
+        ? season["Description"] || ""
+        : "";
+
+
+    document.getElementById("seasonStatus").value =
+        season
+        ? season["Status"] || "Hidden"
+        : "Active";
+
+
+    document.getElementById(
+        "seasonEditorModal"
+    ).classList.add("active");
+
+}
+
+
+function closeSeasonEditor(){
+
+    document.getElementById(
+        "seasonEditorModal"
+    ).classList.remove("active");
+
+    editingSeasonId = null;
+
+}
+
+
+async function saveSeason(){
+
+    const seasonName =
+        document.getElementById("seasonName")
+        .value
+        .trim();
+
+    const description =
+        document.getElementById("seasonDescription")
+        .value
+        .trim();
+
+    const status =
+        document.getElementById("seasonStatus")
+        .value;
+
+
+    if(!seasonName){
+
+        showMessage(
+            "Season Name diperlukan."
+        );
+
+        return;
+
+    }
+
+
+    const action =
+        editingSeasonId
+        ? "updateSeason"
+        : "addSeason";
+
+
+    const data =
+        editingSeasonId
+
+        ? {
+            seasonId:
+                editingSeasonId,
+            seasonName:
+                seasonName,
+            description:
+                description,
+            status:
+                status
+          }
+
+        : {
+            seasonName:
+                seasonName,
+            description:
+                description,
+            status:
+                status
+          };
+
+
+    try{
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:JSON.stringify({
+
+                    action:action,
+
+                    data:data
+
+                })
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        showMessage(
+            result.message ||
+            "Season saved."
+        );
+
+
+        closeSeasonEditor();
+
+        await loadSeasons();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Error saving season."
+        );
+
+    }
+
+}
+
+
+async function toggleSeason(id){
+
+    const season =
+        seasons.find(
+            s => String(s["Season ID"])
+            === String(id)
+        );
+
+
+    if(!season) return;
+
+
+    const current =
+        String(season.Status)
+        .toLowerCase()
+        === "active";
+
+
+    const newStatus =
+        current
+        ? "Hidden"
+        : "Active";
+
+
+    try{
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:JSON.stringify({
+
+                    action:"toggleSeason",
+
+                    data:{
+                        seasonId:id,
+                        status:newStatus
+                    }
+
+                })
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        showMessage(
+            result.message ||
+            "Status updated."
+        );
+
+
+        await loadSeasons();
+
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+async function deleteSeason(id){
+
+    const linkedEvents =
+        events.filter(
+            event =>
+                String(event["Season ID"])
+                === String(id)
+        );
+
+
+    if(linkedEvents.length){
+
+        alert(
+            "Season ini masih digunakan oleh " +
+            linkedEvents.length +
+            " event(s).\n\n" +
+            "Sila tukarkan Season event tersebut dahulu sebelum delete."
+        );
+
+        return;
+
+    }
+
+
+    if(!confirm(
+        "Delete this season?"
+    )) return;
+
+
+    try{
+
+        const response =
+            await fetch(API_URL,{
+
+                method:"POST",
+
+                body:JSON.stringify({
+
+                    action:"deleteSeason",
+
+                    data:{
+                        seasonId:id
+                    }
+
+                })
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        showMessage(
+            result.message ||
+            "Season deleted."
+        );
+
+
+        await loadSeasons();
+
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/*************************************************
+ * HELPERS
+ *************************************************/
+
+function getSeasonName(id){
+
+    if(!id) return "";
+
+    const season =
+        seasons.find(
+            s =>
+                String(s["Season ID"])
+                === String(id)
+        );
+
+    return season
+        ? season["Season Name"]
+        : "";
+
+}
+
+
+function formatDate(value){
+
+    if(!value) return "";
+
+    const date =
+        new Date(value);
+
+    if(isNaN(date)) return value;
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
     );
 
-    const name =
-      event ? event["Event Name"] : "event ini";
+}
 
 
-    const confirmDelete =
-      confirm(
-        `Delete "${name}"?\n\nTindakan ini tidak boleh diundur.`
-      );
+function formatDateForInput(value){
+
+    if(!value) return "";
+
+    const date =
+        new Date(value);
+
+    if(isNaN(date)) return "";
+
+    const year =
+        date.getFullYear();
+
+    const month =
+        String(
+            date.getMonth()+1
+        ).padStart(2,"0");
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2,"0");
 
 
-    if (!confirmDelete) return;
+    return `${year}-${month}-${day}`;
+
+}
 
 
-    fetch(API_URL, {
+function escapeHtml(value){
 
-      method: "POST",
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8"
-      },
-
-      body: JSON.stringify({
-
-        action: "deleteEvent",
-
-        data: {
-          eventId: id
-        }
-
-      })
-
-    })
-
-    .then(response => response.json())
-
-    .then(result => {
-
-      if (result.success) {
-
-        showMessage("Event telah dipadam.");
-
-        loadEvents();
-
-      } else {
-
-        alert(
-          result.message ||
-          "Gagal delete event."
-        );
-
-      }
-
-    })
-
-    .catch(error => {
-
-      console.error(error);
-
-      alert(
-        "Tak dapat connect dengan database."
-      );
-
-    });
-
-  }
+}
 
 
-  loadEvents();
+/*************************************************
+ * INITIAL LOAD
+ *************************************************/
+
+loadSeasons();
+
+loadEvents();
 
 </script>
 
