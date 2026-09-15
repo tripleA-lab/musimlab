@@ -1,3152 +1,1474 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>MusimLab — Admin</title>
-
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    background:#f5f7fb;
-    color:#1f2937;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.header{
-    height:72px;
-    background:#ffffff;
-    border-bottom:1px solid #e5e7eb;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 32px;
-    position:sticky;
-    top:0;
-    z-index:50;
-}
-
-.logo{
-    font-size:22px;
-    font-weight:800;
-    letter-spacing:-.5px;
-}
-
-.logo span{
-    font-weight:400;
-    color:#6b7280;
-}
-
-.header-right{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-.btn{
-    border:none;
-    border-radius:10px;
-    padding:10px 16px;
-    font-size:14px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.btn:hover{
-    transform:translateY(-1px);
-}
-
-.btn-primary{
-    background:#111827;
-    color:white;
-}
-
-.btn-secondary{
-    background:#ffffff;
-    border:1px solid #d1d5db;
-    color:#374151;
-}
-
-.btn-danger{
-    background:#fee2e2;
-    color:#b91c1c;
-}
-
-.btn-small{
-    padding:7px 11px;
-    font-size:12px;
-}
-
-/* =========================
-   LAYOUT
-========================= */
-
-.container{
-    max-width:1200px;
-    margin:0 auto;
-    padding:32px 24px 60px;
-}
-
-.page-title{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    margin-bottom:24px;
-}
-
-.page-title h1{
-    font-size:28px;
-    margin-bottom:6px;
-}
-
-.page-title p{
-    color:#6b7280;
-    font-size:14px;
-}
-
-/* =========================
-   TOOLBAR
-========================= */
-
-.toolbar{
-    background:#ffffff;
-    border:1px solid #e5e7eb;
-    border-radius:14px;
-    padding:14px;
-    display:flex;
-    gap:10px;
-    margin-bottom:20px;
-}
-
-.search{
-    flex:1;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-    border:1px solid #d1d5db;
-    border-radius:9px;
-    padding:11px 12px;
-    font-size:14px;
-    outline:none;
-    background:white;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-    border-color:#6b7280;
-}
-
-textarea{
-    min-height:120px;
-    resize:vertical;
-}
-
-/* =========================
-   EVENT CARD
-========================= */
-
-.event-list{
-    display:grid;
-    gap:14px;
-}
-
-.event-card{
-    background:white;
-    border:1px solid #e5e7eb;
-    border-radius:15px;
-    padding:20px;
-    display:flex;
-    justify-content:space-between;
-    gap:20px;
-}
-
-.event-main{
-    min-width:0;
-    flex:1;
-}
-
-.event-name{
-    font-size:18px;
-    font-weight:700;
-    margin-bottom:8px;
-}
-
-.event-meta{
-    display:flex;
-    flex-wrap:wrap;
-    gap:7px;
-    margin-bottom:10px;
-}
-
-.badge{
-    display:inline-flex;
-    align-items:center;
-    padding:5px 9px;
-    border-radius:999px;
-    font-size:11px;
-    font-weight:700;
-    background:#f3f4f6;
-    color:#374151;
-}
-
-.badge-status{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.badge-draft{
-    background:#fef3c7;
-    color:#92400e;
-}
-
-.badge-season{
-    background:#ede9fe;
-    color:#6d28d9;
-}
-
-.short-description{
-    color:#6b7280;
-    font-size:14px;
-    line-height:1.5;
-}
-
-.event-actions{
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-/* =========================
-   FORM VIEW
-========================= */
-
-.form-view{
-    display:none;
-}
-
-.form-view.active{
-    display:block;
-}
-
-.dashboard-view.hidden{
-    display:none;
-}
-
-.form-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:24px;
-}
-
-.form-header-left{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-.back-btn{
-    border:none;
-    background:white;
-    border:1px solid #d1d5db;
-    border-radius:9px;
-    padding:9px 12px;
-    cursor:pointer;
-}
-
-.form-header h2{
-    font-size:22px;
-}
-
-.form-section{
-    background:white;
-    border:1px solid #e5e7eb;
-    border-radius:15px;
-    padding:24px;
-    margin-bottom:18px;
-}
-
-.section-title{
-    font-size:16px;
-    font-weight:750;
-    margin-bottom:20px;
-}
-
-.grid-2{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
-}
-
-.field{
-    margin-bottom:16px;
-}
-
-.field label{
-    display:block;
-    font-size:13px;
-    font-weight:650;
-    margin-bottom:7px;
-    color:#374151;
-}
-
-.field small{
-    display:block;
-    color:#9ca3af;
-    font-size:11px;
-    margin-top:5px;
-}
-
-.full{
-    grid-column:1/-1;
-}
-
-/* =========================
-   CHILD ROWS
-========================= */
-
-.child-list{
-    display:grid;
-    gap:10px;
-    margin-bottom:12px;
-}
-
-.child-row{
-    border:1px solid #e5e7eb;
-    border-radius:11px;
-    padding:13px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-}
-
-.child-info{
-    min-width:0;
-    flex:1;
-}
-
-.child-title{
-    font-weight:650;
-    font-size:14px;
-}
-
-.child-sub{
-    font-size:12px;
-    color:#6b7280;
-    margin-top:3px;
-    word-break:break-all;
-}
-
-.child-actions{
-    display:flex;
-    gap:6px;
-}
-
-.empty{
-    padding:24px;
-    text-align:center;
-    color:#9ca3af;
-    font-size:14px;
-    border:1px dashed #d1d5db;
-    border-radius:10px;
-}
-
-.add-child{
-    border:1px dashed #9ca3af;
-    background:#fafafa;
-    padding:10px 14px;
-    border-radius:9px;
-    cursor:pointer;
-    font-weight:600;
-    font-size:13px;
-}
-
-/* =========================
-   FOOTER ACTIONS
-========================= */
-
-.form-actions{
-    display:flex;
-    justify-content:flex-end;
-    gap:10px;
-    margin-top:8px;
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(15,23,42,.45);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:100;
-}
-
-.modal.active{
-    display:flex;
-}
-
-.modal-box{
-    width:100%;
-    max-width:500px;
-    background:white;
-    border-radius:16px;
-    padding:24px;
-    box-shadow:0 20px 50px rgba(0,0,0,.15);
-}
-
-.modal-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
-
-.modal-header h3{
-    font-size:18px;
-}
-
-.close{
-    border:none;
-    background:#f3f4f6;
-    width:32px;
-    height:32px;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-.modal-actions{
-    display:flex;
-    justify-content:flex-end;
-    gap:8px;
-    margin-top:18px;
-}
-
-/* =========================
-   SEASONS
-========================= */
-
-.season-list{
-    display:grid;
-    gap:10px;
-    margin-top:15px;
-}
-
-.season-row{
-    border:1px solid #e5e7eb;
-    border-radius:11px;
-    padding:14px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-}
-
-.season-left{
-    min-width:0;
-    flex:1;
-}
-
-.season-name{
-    font-weight:700;
-}
-
-.season-description{
-    font-size:12px;
-    color:#6b7280;
-    margin-top:3px;
-}
-
-.season-right{
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-.toggle{
-    border:none;
-    border-radius:999px;
-    padding:6px 10px;
-    font-size:11px;
-    font-weight:700;
-    cursor:pointer;
-}
-
-.toggle.active{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.toggle.hidden{
-    background:#f3f4f6;
-    color:#6b7280;
-}
-
-/* =========================
-   MESSAGE
-========================= */
-
-.message{
-    position:fixed;
-    right:20px;
-    bottom:20px;
-    background:#111827;
-    color:white;
-    padding:13px 17px;
-    border-radius:10px;
-    font-size:13px;
-    display:none;
-    z-index:200;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-}
-
-.message.show{
-    display:block;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width:700px){
-
-    .header{
-        padding:0 16px;
-    }
-
-    .container{
-        padding:22px 14px 40px;
-    }
-
-    .page-title{
-        flex-direction:column;
-        gap:15px;
-    }
-
-    .page-title .btn{
-        width:100%;
-    }
-
-    .toolbar{
-        flex-direction:column;
-    }
-
-    .grid-2{
-        grid-template-columns:1fr;
-    }
-
-    .event-card{
-        flex-direction:column;
-    }
-
-    .event-actions{
-        width:100%;
-    }
-
-    .event-actions button{
-        flex:1;
-    }
-
-    .form-header{
-        align-items:flex-start;
-        gap:10px;
-    }
-
-    .form-header-right{
-        display:flex;
-        gap:5px;
-    }
-
-    .season-row{
-        align-items:flex-start;
-        flex-direction:column;
-    }
-
-    .season-right{
-        width:100%;
-    }
-
-}
-</style>
-</head>
-
-<body>
-
-<!-- =========================
-     HEADER
-========================= -->
-
-<header class="header">
-
-    <div class="logo">
-        MUSIM<span>LAB</span>
-    </div>
-
-    <div class="header-right">
-
-        <button class="btn btn-secondary"
-                onclick="openSeasons()">
-            Seasons
-        </button>
-
-        <button class="btn btn-primary"
-                onclick="openAddForm()">
-            + Add Event
-        </button>
-
-    </div>
-
-</header>
-
-
-<!-- =========================
-     MAIN CONTAINER
-========================= -->
-
-<main class="container">
-
-
-<!-- =========================
-     DASHBOARD
-========================= -->
-
-<section id="dashboardView"
-         class="dashboard-view">
-
-    <div class="page-title">
-
-        <div>
-            <h1>Events</h1>
-            <p>Manage your events, seasons and event details.</p>
-        </div>
-
-        <button class="btn btn-primary"
-                onclick="openAddForm()">
-            + Add Event
-        </button>
-
-    </div>
-
-
-    <div class="toolbar">
-
-        <div class="search">
-
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search events..."
-                oninput="renderEvents()">
-
-        </div>
-
-        <select id="statusFilter"
-                onchange="renderEvents()">
-
-            <option value="">All Status</option>
-            <option value="Published">Published</option>
-            <option value="Draft">Draft</option>
-
-        </select>
-
-        <select id="seasonFilter"
-                onchange="renderEvents()">
-
-            <option value="">All Seasons</option>
-
-        </select>
-
-    </div>
-
-
-    <div id="eventList"
-         class="event-list">
-
-        <div class="empty">
-            Loading events...
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     EVENT FORM
-========================= -->
-
-<section id="formView"
-         class="form-view">
-
-    <div class="form-header">
-
-        <div class="form-header-left">
-
-            <button class="back-btn"
-                    onclick="closeForm()">
-                ← Back
-            </button>
-
-            <h2 id="formTitle">
-                Add Event
-            </h2>
-
-        </div>
-
-        <div class="form-header-right">
-
-            <button class="btn btn-primary"
-                    onclick="saveEvent()">
-                Save Event
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- BASIC INFORMATION -->
-
-    <div class="form-section">
-
-        <div class="section-title">
-            Basic Information
-        </div>
-
-
-        <div class="grid-2">
-
-            <div class="field full">
-
-                <label>Event Name</label>
-
-                <input
-                    type="text"
-                    id="eventName"
-                    placeholder="Example: Le Tour de Langkawi">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>Start Date</label>
-
-                <input
-                    type="date"
-                    id="startDate">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>End Date</label>
-
-                <input
-                    type="date"
-                    id="endDate">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>Category</label>
-
-                <select id="category">
-
-                    <option value="">Select Category</option>
-
-                    <option>Muzik & Konsert</option>
-                    <option>Sukan & Outdoor</option>
-                    <option>Budaya & Agama</option>
-                    <option>Teknologi & Perniagaan</option>
-                    <option>Gaya Hidup</option>
-                    <option>Local</option>
-                    <option>Cuti Sekolah</option>
-                    <option>Musim</option>
-
-                </select>
-
-            </div>
-
-
-            <div class="field">
-
-                <label>Season</label>
-
-                <select id="seasonId">
-
-                    <option value="">
-                        No Season
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="field full">
-
-                <label>Location</label>
-
-                <input
-                    type="text"
-                    id="location"
-                    placeholder="Example: Kuala Lumpur">
-
-            </div>
-
-
-            <div class="field full">
-
-                <label>Short Description</label>
-
-                <textarea
-                    id="shortDescription"
-                    style="min-height:80px"
-                    placeholder="Short summary shown on the event card..."></textarea>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- SEE MORE DETAIL -->
-
-    <div class="form-section">
-
-        <div class="section-title">
-            See More Detail
-        </div>
-
-
-        <div class="field">
-
-            <label>Google Drive Image URL</label>
-
-            <input
-                type="url"
-                id="imageUrl"
-                placeholder="https://drive.google.com/...">
-
-            <small>
-                Paste the Google Drive image link here.
-            </small>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Full Description</label>
-
-            <textarea
-                id="description"
-                placeholder="Full event description..."></textarea>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Official Link</label>
-
-            <input
-                type="url"
-                id="officialLink"
-                placeholder="https://...">
-
-        </div>
-
-
-        <div class="grid-2">
-
-            <div class="field">
-
-                <label>Status</label>
-
-                <select id="status">
-
-                    <option value="Draft">
-                        Draft
-                    </option>
-
-                    <option value="Published">
-                        Published
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- PREPARATION -->
-
-    <div class="form-section">
-
-        <div class="section-title">
-            Preparation / Recommended Items
-        </div>
-
-        <div id="preparationList"
-             class="child-list">
-
-            <div class="empty">
-                No preparation items yet.
-            </div>
-
-        </div>
-
-        <button class="add-child"
-                onclick="openPreparationModal()">
-
-            + Add Item
-
-        </button>
-
-    </div>
-
-
-    <!-- LINKS -->
-
-    <div class="form-section">
-
-        <div class="section-title">
-            Links / Affiliate
-        </div>
-
-        <div id="linkList"
-             class="child-list">
-
-            <div class="empty">
-                No links yet.
-            </div>
-
-        </div>
-
-        <button class="add-child"
-                onclick="openLinkModal()">
-
-            + Add Link
-
-        </button>
-
-    </div>
-
-
-    <div class="form-actions">
-
-        <button class="btn btn-secondary"
-                onclick="closeForm()">
-
-            Cancel
-
-        </button>
-
-        <button class="btn btn-primary"
-                onclick="saveEvent()">
-
-            Save Event
-
-        </button>
-
-    </div>
-
-</section>
-
-</main>
-
-
-<!-- =========================
-     PREPARATION MODAL
-========================= -->
-
-<div id="preparationModal"
-     class="modal">
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-
-            <h3 id="preparationModalTitle">
-                Add Preparation
-            </h3>
-
-            <button class="close"
-                    onclick="closePreparationModal()">
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Item</label>
-
-            <input
-                id="prepItem"
-                placeholder="Example: Raincoat">
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Reason</label>
-
-            <textarea
-                id="prepReason"
-                style="min-height:90px"
-                placeholder="Why is this item recommended?"></textarea>
-
-        </div>
-
-
-        <div class="modal-actions">
-
-            <button class="btn btn-secondary"
-                    onclick="closePreparationModal()">
-
-                Cancel
-
-            </button>
-
-            <button class="btn btn-primary"
-                    onclick="savePreparation()">
-
-                Save
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     LINK MODAL
-========================= -->
-
-<div id="linkModal"
-     class="modal">
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-
-            <h3 id="linkModalTitle">
-                Add Link
-            </h3>
-
-            <button class="close"
-                    onclick="closeLinkModal()">
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Link Type</label>
-
-            <select id="linkType">
-
-                <option value="">
-                    Select Type
-                </option>
-
-                <option value="Affiliate">
-                    Affiliate
-                </option>
-
-                <option value="Official">
-                    Official
-                </option>
-
-                <option value="Info">
-                    Info
-                </option>
-
-                <option value="Other">
-                    Other
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Title</label>
-
-            <input
-                id="linkTitle"
-                placeholder="Example: Raincoat">
-
-        </div>
-
-
-        <div class="field">
-
-            <label>URL</label>
-
-            <input
-                id="linkUrl"
-                type="url"
-                placeholder="https://...">
-
-        </div>
-
-
-        <div class="modal-actions">
-
-            <button class="btn btn-secondary"
-                    onclick="closeLinkModal()">
-
-                Cancel
-
-            </button>
-
-            <button class="btn btn-primary"
-                    onclick="saveLink()">
-
-                Save
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     SEASONS MODAL
-========================= -->
-
-<div id="seasonModal"
-     class="modal">
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-
-            <h3>Manage Seasons</h3>
-
-            <button class="close"
-                    onclick="closeSeasons()">
-                ×
-            </button>
-
-        </div>
-
-
-        <button class="btn btn-primary"
-                onclick="openSeasonEditor()">
-
-            + Add Season
-
-        </button>
-
-
-        <div id="seasonList"
-             class="season-list">
-
-            <div class="empty">
-                Loading seasons...
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     SEASON EDITOR MODAL
-========================= -->
-
-<div id="seasonEditorModal"
-     class="modal">
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-
-            <h3 id="seasonEditorTitle">
-                Add Season
-            </h3>
-
-            <button class="close"
-                    onclick="closeSeasonEditor()">
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Season Name</label>
-
-            <input
-                id="seasonName"
-                placeholder="Example: Musim Raya">
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Description</label>
-
-            <textarea
-                id="seasonDescription"
-                style="min-height:90px"
-                placeholder="Season description..."></textarea>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Status</label>
-
-            <select id="seasonStatus">
-
-                <option value="Active">
-                    Active
-                </option>
-
-                <option value="Hidden">
-                    Hidden
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="modal-actions">
-
-            <button class="btn btn-secondary"
-                    onclick="closeSeasonEditor()">
-
-                Cancel
-
-            </button>
-
-            <button class="btn btn-primary"
-                    onclick="saveSeason()">
-
-                Save
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     MESSAGE
-========================= -->
-
-<div id="message"
-     class="message">
-</div>
-
-
-<script>
-
 /*************************************************
- * API
+ * MUSIMLAB ADMIN API
+ * VERSION 4
  *************************************************/
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbxEGV5ZfShKK0gsALDr48ENe4uzYuY4Qqdv0ob64EFwF5QZ2PUNqDHUQCJIWrOwwzCp/exec";
+const SHEET_EVENTS = "EVENTS";
+const SHEET_SEASONS = "Seasons";
+const SHEET_PREPARATION = "Preparation";
+const SHEET_LINK = "Link";
 
 
 /*************************************************
- * STATE
+ * GET
  *************************************************/
 
-let events = [];
+function doGet(e) {
 
-let seasons = [];
+  try {
 
-let currentEventId = null;
+    const action =
+      e && e.parameter
+        ? e.parameter.action
+        : "";
 
-let editingPreparationId = null;
-
-let editingLinkId = null;
-
-let editingSeasonId = null;
-
-
-/*************************************************
- * MESSAGE
- *************************************************/
-
-function showMessage(text){
-
-    const el =
-        document.getElementById("message");
-
-    el.textContent = text;
-
-    el.classList.add("show");
-
-    setTimeout(() => {
-
-        el.classList.remove("show");
-
-    }, 2500);
-}
-
-
-/*************************************************
- * LOAD EVENTS
- *************************************************/
-
-async function loadEvents(){
-
-    try{
-
-        const response =
-            await fetch(API_URL);
-
-        events =
-            await response.json();
-
-        renderEvents();
-
-    }catch(error){
-
-        console.error(error);
-
-        document.getElementById("eventList").innerHTML = `
-            <div class="empty">
-                Failed to load events.
-            </div>
-        `;
-
+    if (action === "getSeasons") {
+      return getSeasons();
     }
+
+    if (action === "getPreparation") {
+      return getPreparation(e.parameter.eventId);
+    }
+
+    if (action === "getLinks") {
+      return getLinks(e.parameter.eventId);
+    }
+
+    return getEvents();
+
+  } catch (error) {
+
+    return jsonOutput({
+      success: false,
+      message: error.toString()
+    });
+
+  }
 
 }
 
 
 /*************************************************
- * LOAD SEASONS
+ * POST
  *************************************************/
 
-async function loadSeasons(){
+function doPost(e) {
 
-    try{
+  try {
 
-        const response =
-            await fetch(
-                API_URL + "?action=getSeasons"
-            );
+    if (!e || !e.postData || !e.postData.contents) {
 
-        seasons =
-            await response.json();
-
-        populateSeasonDropdown();
-
-        renderSeasonList();
-
-    }catch(error){
-
-        console.error(error);
+      return jsonOutput({
+        success: false,
+        message: "POST data tidak diterima."
+      });
 
     }
 
-}
+
+    const request =
+      JSON.parse(e.postData.contents);
 
 
-/*************************************************
- * SEASON DROPDOWN
- *************************************************/
-
-function populateSeasonDropdown(){
-
-    const select =
-        document.getElementById("seasonId");
-
-    const filter =
-        document.getElementById("seasonFilter");
-
-    select.innerHTML =
-        `<option value="">No Season</option>`;
-
-    filter.innerHTML =
-        `<option value="">All Seasons</option>`;
+    const action =
+      request.action;
 
 
-    seasons
-        .filter(season =>
-            String(season.Status).toLowerCase()
-            === "active"
-        )
-        .forEach(season => {
+    const data =
+      request.data || {};
 
-            const option =
-                document.createElement("option");
 
-            option.value =
-                season["Season ID"];
+    if (!action) {
 
-            option.textContent =
-                season["Season Name"];
+      return jsonOutput({
+        success: false,
+        message: "Action tidak dihantar."
+      });
 
-            select.appendChild(option);
+    }
+
+
+    switch (action) {
+
+      /* EVENTS */
+
+      case "addEvent":
+        return addEvent(data);
+
+      case "updateEvent":
+        return updateEvent(data);
+
+      case "deleteEvent":
+        return deleteEvent(data);
+
+
+      /* SEASONS */
+
+      case "addSeason":
+        return addSeason(data);
+
+      case "updateSeason":
+        return updateSeason(data);
+
+      case "deleteSeason":
+        return deleteSeason(data);
+
+      case "toggleSeason":
+        return toggleSeason(data);
+
+
+      /* PREPARATION */
+
+      case "addPreparation":
+        return addPreparation(data);
+
+      case "updatePreparation":
+        return updatePreparation(data);
+
+      case "deletePreparation":
+        return deletePreparation(data);
+
+
+      /* LINKS */
+
+      case "addLink":
+        return addLink(data);
+
+      case "updateLink":
+        return updateLink(data);
+
+      case "deleteLink":
+        return deleteLink(data);
+
+
+      default:
+
+        return jsonOutput({
+
+          success: false,
+
+          message:
+            "Action tidak dikenali: " +
+            action
 
         });
 
+    }
 
-    seasons.forEach(season => {
 
-        const option =
-            document.createElement("option");
+  } catch (error) {
 
-        option.value =
-            season["Season ID"];
+    return jsonOutput({
 
-        option.textContent =
-            season["Season Name"];
+      success: false,
 
-        filter.appendChild(option);
+      message: error.toString()
 
     });
 
-}
-
-
-/*************************************************
- * RENDER EVENTS
- *************************************************/
-
-function renderEvents(){
-
-    const list =
-        document.getElementById("eventList");
-
-    const search =
-        document.getElementById("searchInput")
-        .value
-        .toLowerCase();
-
-    const status =
-        document.getElementById("statusFilter")
-        .value;
-
-    const season =
-        document.getElementById("seasonFilter")
-        .value;
-
-
-    const filtered =
-        events.filter(event => {
-
-            const name =
-                String(event["Event Name"] || "")
-                .toLowerCase();
-
-            const location =
-                String(event["Location"] || "")
-                .toLowerCase();
-
-            const matchSearch =
-                name.includes(search) ||
-                location.includes(search);
-
-            const matchStatus =
-                !status ||
-                String(event["Status"]) === status;
-
-            const matchSeason =
-                !season ||
-                String(event["Season ID"]) === season;
-
-            return (
-                matchSearch &&
-                matchStatus &&
-                matchSeason
-            );
-
-        });
-
-
-    if(!filtered.length){
-
-        list.innerHTML = `
-            <div class="empty">
-                No events found.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    list.innerHTML =
-        filtered.map(event => {
-
-            const seasonName =
-                getSeasonName(
-                    event["Season ID"]
-                );
-
-
-            const statusBadge =
-                String(event["Status"])
-                === "Published"
-
-                ? `<span class="badge badge-status">
-                    Published
-                   </span>`
-
-                : `<span class="badge badge-draft">
-                    Draft
-                   </span>`;
-
-
-            const seasonBadge =
-                seasonName
-
-                ? `<span class="badge badge-season">
-                    ${escapeHtml(seasonName)}
-                   </span>`
-
-                : "";
-
-
-            return `
-
-                <div class="event-card">
-
-                    <div class="event-main">
-
-                        <div class="event-name">
-                            ${escapeHtml(
-                                event["Event Name"] || ""
-                            )}
-                        </div>
-
-
-                        <div class="event-meta">
-
-                            <span class="badge">
-                                ${formatDate(
-                                    event["Start Date"]
-                                )}
-                            </span>
-
-                            <span class="badge">
-                                ${escapeHtml(
-                                    event["Location"] || "No location"
-                                )}
-                            </span>
-
-                            <span class="badge">
-                                ${escapeHtml(
-                                    event["Category"] || ""
-                                )}
-                            </span>
-
-                            ${statusBadge}
-
-                            ${seasonBadge}
-
-                        </div>
-
-
-                        <div class="short-description">
-
-                            ${escapeHtml(
-                                event["Short Description"]
-                                ||
-                                event["Description"]
-                                ||
-                                "No description."
-                            )}
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="event-actions">
-
-                        <button
-                            class="btn btn-secondary btn-small"
-                            onclick="editEvent('${event["Event ID"]}')">
-
-                            Edit
-
-                        </button>
-
-
-                        <button
-                            class="btn btn-danger btn-small"
-                            onclick="deleteEvent('${event["Event ID"]}')">
-
-                            Delete
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }).join("");
+  }
 
 }
 
 
 /*************************************************
- * FORM
+ * EVENTS
+ *
+ * A Event ID
+ * B Event Name
+ * C Start Date
+ * D End Date
+ * E Category
+ * F Location
+ * G Short Description
+ * H Description
+ * I Season ID
+ * J Image URL
+ * K Official Link
+ * L Status
+ * M Created
+ * N Updated
  *************************************************/
 
-function openAddForm(){
 
-    currentEventId = null;
+function getEvents() {
 
-    document.getElementById("formTitle")
-        .textContent = "Add Event";
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_EVENTS);
 
-    clearForm();
 
-    document.getElementById("dashboardView")
-        .classList.add("hidden");
+  const data =
+    sheet.getDataRange().getValues();
 
-    document.getElementById("formView")
-        .classList.add("active");
 
-}
+  if (data.length <= 1) {
 
+    return jsonOutput([]);
 
-function closeForm(){
+  }
 
-    document.getElementById("formView")
-        .classList.remove("active");
 
-    document.getElementById("dashboardView")
-        .classList.remove("hidden");
+  const headers =
+    data.shift();
 
-    currentEventId = null;
 
-}
+  const events =
+    data.map(row => {
 
+      const event = {};
 
-/*************************************************
- * CLEAR FORM
- *************************************************/
+      headers.forEach(
+        (header, index) => {
 
-function clearForm(){
-
-    document.getElementById("eventName").value = "";
-
-    document.getElementById("startDate").value = "";
-
-    document.getElementById("endDate").value = "";
-
-    document.getElementById("category").value = "";
-
-    document.getElementById("location").value = "";
-
-    document.getElementById("shortDescription").value = "";
-
-    document.getElementById("description").value = "";
-
-    document.getElementById("seasonId").value = "";
-
-    document.getElementById("imageUrl").value = "";
-
-    document.getElementById("officialLink").value = "";
-
-    document.getElementById("status").value = "Draft";
-
-
-    document.getElementById("preparationList").innerHTML = `
-        <div class="empty">
-            No preparation items yet.
-        </div>
-    `;
-
-
-    document.getElementById("linkList").innerHTML = `
-        <div class="empty">
-            No links yet.
-        </div>
-    `;
-
-}
-
-
-/*************************************************
- * EDIT EVENT
- *************************************************/
-
-async function editEvent(eventId){
-
-    const event =
-        events.find(
-            e => String(e["Event ID"])
-            === String(eventId)
-        );
-
-    if(!event) return;
-
-
-    currentEventId =
-        event["Event ID"];
-
-
-    document.getElementById("formTitle")
-        .textContent = "Edit Event";
-
-
-    document.getElementById("eventName").value =
-        event["Event Name"] || "";
-
-
-    document.getElementById("startDate").value =
-        formatDateForInput(
-            event["Start Date"]
-        );
-
-
-    document.getElementById("endDate").value =
-        formatDateForInput(
-            event["End Date"]
-        );
-
-
-    document.getElementById("category").value =
-        event["Category"] || "";
-
-
-    document.getElementById("location").value =
-        event["Location"] || "";
-
-
-    document.getElementById("shortDescription").value =
-        event["Short Description"] || "";
-
-
-    document.getElementById("description").value =
-        event["Description"] || "";
-
-
-    document.getElementById("seasonId").value =
-        event["Season ID"] || "";
-
-
-    document.getElementById("imageUrl").value =
-        event["Image URL"] || "";
-
-
-    document.getElementById("officialLink").value =
-        event["Official Link"] || "";
-
-
-    document.getElementById("status").value =
-        event["Status"] || "Draft";
-
-
-    document.getElementById("dashboardView")
-        .classList.add("hidden");
-
-    document.getElementById("formView")
-        .classList.add("active");
-
-
-    await loadPreparation(eventId);
-
-    await loadLinks(eventId);
-
-}
-
-
-/*************************************************
- * SAVE EVENT
- *************************************************/
-
-async function saveEvent(){
-
-    const data = {
-
-        eventId: currentEventId,
-
-        eventName:
-            document.getElementById("eventName").value,
-
-        startDate:
-            document.getElementById("startDate").value,
-
-        endDate:
-            document.getElementById("endDate").value,
-
-        category:
-            document.getElementById("category").value,
-
-        location:
-            document.getElementById("location").value,
-
-        shortDescription:
-            document.getElementById("shortDescription").value,
-
-        description:
-            document.getElementById("description").value,
-
-        seasonId:
-            document.getElementById("seasonId").value,
-
-        imageUrl:
-            document.getElementById("imageUrl").value,
-
-        officialLink:
-            document.getElementById("officialLink").value,
-
-        status:
-            document.getElementById("status").value
-
-    };
-
-
-    if(!data.eventName.trim()){
-
-        showMessage("Event Name diperlukan.");
-
-        return;
-
-    }
-
-
-    const action =
-        currentEventId
-        ? "updateEvent"
-        : "addEvent";
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:action,
-
-                    data:data
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        if(!result.success){
-
-            showMessage(
-                result.message ||
-                "Failed to save event."
-            );
-
-            return;
+          event[header] =
+            row[index];
 
         }
+      );
+
+      return event;
+
+    });
 
 
-        showMessage(
-            result.message ||
-            "Event saved."
-        );
-
-
-        closeForm();
-
-        await loadEvents();
-
-        await loadSeasons();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Error saving event."
-        );
-
-    }
+  return jsonOutput(events);
 
 }
 
 
-/*************************************************
- * DELETE EVENT
- *************************************************/
+function addEvent(data) {
 
-async function deleteEvent(eventId){
-
-    if(!confirm(
-        "Delete this event?\n\nAll related preparation items and links will also be deleted."
-    )){
-
-        return;
-
-    }
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_EVENTS);
 
 
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:"deleteEvent",
-
-                    data:{
-                        eventId:eventId
-                    }
-
-                })
-
-            });
+  const eventId =
+    "EVT" +
+    new Date().getTime();
 
 
-        const result =
-            await response.json();
+  const now =
+    new Date();
 
 
-        showMessage(
-            result.message ||
-            "Event deleted."
-        );
+  sheet.appendRow([
+
+    eventId,
+
+    data.eventName || "",
+
+    data.startDate || "",
+
+    data.endDate || "",
+
+    data.category || "",
+
+    data.location || "",
+
+    data.shortDescription || "",
+
+    data.description || "",
+
+    data.seasonId || "",
+
+    data.imageUrl || "",
+
+    data.officialLink || "",
+
+    data.status || "Draft",
+
+    now,
+
+    now
+
+  ]);
 
 
-        await loadEvents();
+  return jsonOutput({
 
+    success: true,
 
-    }catch(error){
+    message:
+      "Event berjaya ditambah.",
 
-        console.error(error);
+    eventId:
+      eventId
 
-        showMessage(
-            "Error deleting event."
-        );
-
-    }
-
-}
-
-
-/*************************************************
- * PREPARATION
- *************************************************/
-
-async function loadPreparation(eventId){
-
-    try{
-
-        const response =
-            await fetch(
-                API_URL +
-                "?action=getPreparation&eventId=" +
-                encodeURIComponent(eventId)
-            );
-
-        const data =
-            await response.json();
-
-        renderPreparation(data);
-
-    }catch(error){
-
-        console.error(error);
-
-    }
+  });
 
 }
 
 
-function renderPreparation(items){
+function updateEvent(data) {
 
-    const list =
-        document.getElementById(
-            "preparationList"
-        );
-
-
-    if(!items.length){
-
-        list.innerHTML = `
-            <div class="empty">
-                No preparation items yet.
-            </div>
-        `;
-
-        return;
-
-    }
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_EVENTS);
 
 
-    list.innerHTML =
-        items.map(item => `
-
-            <div class="child-row">
-
-                <div class="child-info">
-
-                    <div class="child-title">
-                        ${escapeHtml(
-                            item["Item"] || ""
-                        )}
-                    </div>
-
-                    <div class="child-sub">
-                        ${escapeHtml(
-                            item["Reason"] || ""
-                        )}
-                    </div>
-
-                </div>
+  const rows =
+    sheet.getDataRange().getValues();
 
 
-                <div class="child-actions">
+  for (
+    let i = 1;
+    i < rows.length;
+    i++
+  ) {
 
-                    <button
-                        class="btn btn-secondary btn-small"
-                        onclick='editPreparation(${JSON.stringify(item)})'>
+    if (
+      String(rows[i][0]) ===
+      String(data.eventId)
+    ) {
 
-                        Edit
-
-                    </button>
-
-
-                    <button
-                        class="btn btn-danger btn-small"
-                        onclick="deletePreparation('${item["Preparation ID"]}')">
-
-                        Delete
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
+      const rowNumber =
+        i + 1;
 
 
-function openPreparationModal(item = null){
-
-    editingPreparationId =
-        item
-        ? item["Preparation ID"]
-        : null;
-
-
-    document.getElementById(
-        "preparationModalTitle"
-    ).textContent =
-        item
-        ? "Edit Preparation"
-        : "Add Preparation";
-
-
-    document.getElementById("prepItem").value =
-        item
-        ? item["Item"] || ""
-        : "";
-
-
-    document.getElementById("prepReason").value =
-        item
-        ? item["Reason"] || ""
-        : "";
+      sheet
+        .getRange(
+          rowNumber,
+          2,
+          1,
+          11
+        )
+        .setValues([[
+          data.eventName || "",
+          data.startDate || "",
+          data.endDate || "",
+          data.category || "",
+          data.location || "",
+          data.shortDescription || "",
+          data.description || "",
+          data.seasonId || "",
+          data.imageUrl || "",
+          data.officialLink || "",
+          data.status || "Draft"
+        ]]);
 
 
-    document.getElementById(
-        "preparationModal"
-    ).classList.add("active");
-
-}
+      sheet
+        .getRange(rowNumber, 14)
+        .setValue(new Date());
 
 
-function editPreparation(item){
+      return jsonOutput({
 
-    openPreparationModal(item);
+        success: true,
 
-}
+        message:
+          "Event berjaya dikemaskini."
 
-
-function closePreparationModal(){
-
-    document.getElementById(
-        "preparationModal"
-    ).classList.remove("active");
-
-    editingPreparationId = null;
-
-}
-
-
-async function savePreparation(){
-
-    if(!currentEventId){
-
-        showMessage(
-            "Save the event first before adding preparation."
-        );
-
-        return;
+      });
 
     }
 
-
-    const item =
-        document.getElementById("prepItem")
-        .value
-        .trim();
-
-    const reason =
-        document.getElementById("prepReason")
-        .value
-        .trim();
+  }
 
 
-    if(!item){
+  return jsonOutput({
 
-        showMessage("Item diperlukan.");
+    success: false,
 
-        return;
+    message:
+      "Event ID tidak dijumpai."
 
-    }
-
-
-    const action =
-        editingPreparationId
-        ? "updatePreparation"
-        : "addPreparation";
-
-
-    const data =
-        editingPreparationId
-
-        ? {
-            preparationId:
-                editingPreparationId,
-            item:item,
-            reason:reason
-          }
-
-        : {
-            eventId:
-                currentEventId,
-            item:item,
-            reason:reason
-          };
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:action,
-
-                    data:data
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        showMessage(
-            result.message ||
-            "Saved."
-        );
-
-
-        closePreparationModal();
-
-        await loadPreparation(
-            currentEventId
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Error saving preparation."
-        );
-
-    }
+  });
 
 }
 
 
-async function deletePreparation(id){
+function deleteEvent(data) {
 
-    if(!confirm(
-        "Delete this preparation item?"
-    )) return;
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:"deletePreparation",
-
-                    data:{
-                        preparationId:id
-                    }
-
-                })
-
-            });
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_EVENTS);
 
 
-        const result =
-            await response.json();
+  const rows =
+    sheet.getDataRange().getValues();
 
 
-        showMessage(
-            result.message ||
-            "Deleted."
-        );
+  for (
+    let i = 1;
+    i < rows.length;
+    i++
+  ) {
+
+    if (
+      String(rows[i][0]) ===
+      String(data.eventId)
+    ) {
+
+      deleteRelatedPreparations(
+        data.eventId
+      );
+
+      deleteRelatedLinks(
+        data.eventId
+      );
 
 
-        await loadPreparation(
-            currentEventId
-        );
+      sheet.deleteRow(i + 1);
 
 
-    }catch(error){
+      return jsonOutput({
 
-        console.error(error);
+        success: true,
+
+        message:
+          "Event berjaya dipadam."
+
+      });
 
     }
 
-}
+  }
 
 
-/*************************************************
- * LINKS
- *************************************************/
+  return jsonOutput({
 
-async function loadLinks(eventId){
+    success: false,
 
-    try{
+    message:
+      "Event ID tidak dijumpai."
 
-        const response =
-            await fetch(
-                API_URL +
-                "?action=getLinks&eventId=" +
-                encodeURIComponent(eventId)
-            );
-
-        const data =
-            await response.json();
-
-        renderLinks(data);
-
-    }catch(error){
-
-        console.error(error);
-
-    }
-
-}
-
-
-function renderLinks(items){
-
-    const list =
-        document.getElementById(
-            "linkList"
-        );
-
-
-    if(!items.length){
-
-        list.innerHTML = `
-            <div class="empty">
-                No links yet.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    list.innerHTML =
-        items.map(item => `
-
-            <div class="child-row">
-
-                <div class="child-info">
-
-                    <div class="child-title">
-
-                        ${escapeHtml(
-                            item["Title"] || ""
-                        )}
-
-                        <span class="badge">
-                            ${escapeHtml(
-                                item["Link Type"] || ""
-                            )}
-                        </span>
-
-                    </div>
-
-
-                    <div class="child-sub">
-
-                        ${escapeHtml(
-                            item["URL"] || ""
-                        )}
-
-                    </div>
-
-                </div>
-
-
-                <div class="child-actions">
-
-                    <button
-                        class="btn btn-secondary btn-small"
-                        onclick='editLink(${JSON.stringify(item)})'>
-
-                        Edit
-
-                    </button>
-
-
-                    <button
-                        class="btn btn-danger btn-small"
-                        onclick="deleteLink('${item["Link ID"]}')">
-
-                        Delete
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-function openLinkModal(item = null){
-
-    editingLinkId =
-        item
-        ? item["Link ID"]
-        : null;
-
-
-    document.getElementById(
-        "linkModalTitle"
-    ).textContent =
-        item
-        ? "Edit Link"
-        : "Add Link";
-
-
-    document.getElementById("linkType").value =
-        item
-        ? item["Link Type"] || ""
-        : "";
-
-
-    document.getElementById("linkTitle").value =
-        item
-        ? item["Title"] || ""
-        : "";
-
-
-    document.getElementById("linkUrl").value =
-        item
-        ? item["URL"] || ""
-        : "";
-
-
-    document.getElementById(
-        "linkModal"
-    ).classList.add("active");
-
-}
-
-
-function editLink(item){
-
-    openLinkModal(item);
-
-}
-
-
-function closeLinkModal(){
-
-    document.getElementById(
-        "linkModal"
-    ).classList.remove("active");
-
-    editingLinkId = null;
-
-}
-
-
-async function saveLink(){
-
-    if(!currentEventId){
-
-        showMessage(
-            "Save the event first before adding a link."
-        );
-
-        return;
-
-    }
-
-
-    const linkType =
-        document.getElementById("linkType")
-        .value;
-
-    const title =
-        document.getElementById("linkTitle")
-        .value
-        .trim();
-
-    const url =
-        document.getElementById("linkUrl")
-        .value
-        .trim();
-
-
-    if(!title || !url){
-
-        showMessage(
-            "Title and URL diperlukan."
-        );
-
-        return;
-
-    }
-
-
-    const action =
-        editingLinkId
-        ? "updateLink"
-        : "addLink";
-
-
-    const data =
-        editingLinkId
-
-        ? {
-            linkId:
-                editingLinkId,
-            linkType:
-                linkType,
-            title:
-                title,
-            url:
-                url
-          }
-
-        : {
-            eventId:
-                currentEventId,
-            linkType:
-                linkType,
-            title:
-                title,
-            url:
-                url
-          };
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:action,
-
-                    data:data
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        showMessage(
-            result.message ||
-            "Saved."
-        );
-
-
-        closeLinkModal();
-
-        await loadLinks(
-            currentEventId
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Error saving link."
-        );
-
-    }
-
-}
-
-
-async function deleteLink(id){
-
-    if(!confirm(
-        "Delete this link?"
-    )) return;
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:"deleteLink",
-
-                    data:{
-                        linkId:id
-                    }
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        showMessage(
-            result.message ||
-            "Deleted."
-        );
-
-
-        await loadLinks(
-            currentEventId
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-    }
+  });
 
 }
 
 
 /*************************************************
  * SEASONS
+ *
+ * A Season ID
+ * B Season Name
+ * C Description
+ * D Status
+ * E Created
+ * F Updated
  *************************************************/
 
-function openSeasons(){
 
-    document.getElementById(
-        "seasonModal"
-    ).classList.add("active");
+function getSeasons() {
 
-    loadSeasons();
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_SEASONS);
+
+
+  const data =
+    sheet.getDataRange().getValues();
+
+
+  if (data.length <= 1) {
+
+    return jsonOutput([]);
+
+  }
+
+
+  const headers =
+    data.shift();
+
+
+  const seasons =
+    data.map(row => {
+
+      const season = {};
+
+      headers.forEach(
+        (header, index) => {
+
+          season[header] =
+            row[index];
+
+        }
+      );
+
+      return season;
+
+    });
+
+
+  return jsonOutput(seasons);
 
 }
 
 
-function closeSeasons(){
+function addSeason(data) {
 
-    document.getElementById(
-        "seasonModal"
-    ).classList.remove("active");
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_SEASONS);
+
+
+  const seasonId =
+    "SEA" +
+    new Date().getTime();
+
+
+  const now =
+    new Date();
+
+
+  sheet.appendRow([
+
+    seasonId,
+
+    data.seasonName || "",
+
+    data.description || "",
+
+    data.status || "Hidden",
+
+    now,
+
+    now
+
+  ]);
+
+
+  return jsonOutput({
+
+    success: true,
+
+    message:
+      "Season berjaya ditambah.",
+
+    seasonId:
+      seasonId
+
+  });
 
 }
 
 
-function renderSeasonList(){
+function updateSeason(data) {
 
-    const list =
-        document.getElementById(
-            "seasonList"
-        );
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_SEASONS);
 
 
-    if(!seasons.length){
+  const rows =
+    sheet.getDataRange().getValues();
 
-        list.innerHTML = `
-            <div class="empty">
-                No seasons yet.
-            </div>
-        `;
 
-        return;
+  for (
+    let i = 1;
+    i < rows.length;
+    i++
+  ) {
+
+    if (
+      String(rows[i][0]) ===
+      String(data.seasonId)
+    ) {
+
+      const rowNumber =
+        i + 1;
+
+
+      sheet
+        .getRange(
+          rowNumber,
+          2,
+          1,
+          3
+        )
+        .setValues([[
+          data.seasonName || "",
+          data.description || "",
+          data.status || "Hidden"
+        ]]);
+
+
+      sheet
+        .getRange(rowNumber, 6)
+        .setValue(new Date());
+
+
+      return jsonOutput({
+
+        success: true,
+
+        message:
+          "Season berjaya dikemaskini."
+
+      });
 
     }
 
+  }
 
-    list.innerHTML =
-        seasons.map(season => {
 
-            const active =
-                String(season.Status)
-                .toLowerCase()
-                === "active";
+  return jsonOutput({
 
+    success: false,
 
-            return `
+    message:
+      "Season ID tidak dijumpai."
 
-                <div class="season-row">
-
-                    <div class="season-left">
-
-                        <div class="season-name">
-
-                            ${escapeHtml(
-                                season["Season Name"] || ""
-                            )}
-
-                        </div>
-
-
-                        <div class="season-description">
-
-                            ${escapeHtml(
-                                season["Description"] || ""
-                            )}
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="season-right">
-
-                        <button
-                            class="toggle ${active ? "active" : "hidden"}"
-                            onclick="toggleSeason('${season["Season ID"]}')">
-
-                            ${active ? "ACTIVE" : "HIDDEN"}
-
-                        </button>
-
-
-                        <button
-                            class="btn btn-secondary btn-small"
-                            onclick='openSeasonEditor(${JSON.stringify(season)})'>
-
-                            Edit
-
-                        </button>
-
-
-                        <button
-                            class="btn btn-danger btn-small"
-                            onclick="deleteSeason('${season["Season ID"]}')">
-
-                            Delete
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }).join("");
-
-}
-
-
-function openSeasonEditor(season = null){
-
-    editingSeasonId =
-        season
-        ? season["Season ID"]
-        : null;
-
-
-    document.getElementById(
-        "seasonEditorTitle"
-    ).textContent =
-        season
-        ? "Edit Season"
-        : "Add Season";
-
-
-    document.getElementById("seasonName").value =
-        season
-        ? season["Season Name"] || ""
-        : "";
-
-
-    document.getElementById("seasonDescription").value =
-        season
-        ? season["Description"] || ""
-        : "";
-
-
-    document.getElementById("seasonStatus").value =
-        season
-        ? season["Status"] || "Hidden"
-        : "Active";
-
-
-    document.getElementById(
-        "seasonEditorModal"
-    ).classList.add("active");
-
-}
-
-
-function closeSeasonEditor(){
-
-    document.getElementById(
-        "seasonEditorModal"
-    ).classList.remove("active");
-
-    editingSeasonId = null;
-
-}
-
-
-async function saveSeason(){
-
-    const seasonName =
-        document.getElementById("seasonName")
-        .value
-        .trim();
-
-    const description =
-        document.getElementById("seasonDescription")
-        .value
-        .trim();
-
-    const status =
-        document.getElementById("seasonStatus")
-        .value;
-
-
-    if(!seasonName){
-
-        showMessage(
-            "Season Name diperlukan."
-        );
-
-        return;
-
-    }
-
-
-    const action =
-        editingSeasonId
-        ? "updateSeason"
-        : "addSeason";
-
-
-    const data =
-        editingSeasonId
-
-        ? {
-            seasonId:
-                editingSeasonId,
-            seasonName:
-                seasonName,
-            description:
-                description,
-            status:
-                status
-          }
-
-        : {
-            seasonName:
-                seasonName,
-            description:
-                description,
-            status:
-                status
-          };
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:action,
-
-                    data:data
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        showMessage(
-            result.message ||
-            "Season saved."
-        );
-
-
-        closeSeasonEditor();
-
-        await loadSeasons();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Error saving season."
-        );
-
-    }
-
-}
-
-
-async function toggleSeason(id){
-
-    const season =
-        seasons.find(
-            s => String(s["Season ID"])
-            === String(id)
-        );
-
-
-    if(!season) return;
-
-
-    const current =
-        String(season.Status)
-        .toLowerCase()
-        === "active";
-
-
-    const newStatus =
-        current
-        ? "Hidden"
-        : "Active";
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:"toggleSeason",
-
-                    data:{
-                        seasonId:id,
-                        status:newStatus
-                    }
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        showMessage(
-            result.message ||
-            "Status updated."
-        );
-
-
-        await loadSeasons();
-
-
-    }catch(error){
-
-        console.error(error);
-
-    }
-
-}
-
-
-async function deleteSeason(id){
-
-    const linkedEvents =
-        events.filter(
-            event =>
-                String(event["Season ID"])
-                === String(id)
-        );
-
-
-    if(linkedEvents.length){
-
-        alert(
-            "Season ini masih digunakan oleh " +
-            linkedEvents.length +
-            " event(s).\n\n" +
-            "Sila tukarkan Season event tersebut dahulu sebelum delete."
-        );
-
-        return;
-
-    }
-
-
-    if(!confirm(
-        "Delete this season?"
-    )) return;
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:"deleteSeason",
-
-                    data:{
-                        seasonId:id
-                    }
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        showMessage(
-            result.message ||
-            "Season deleted."
-        );
-
-
-        await loadSeasons();
-
-
-    }catch(error){
-
-        console.error(error);
-
-    }
+  });
 
 }
 
 
 /*************************************************
- * HELPERS
+ * DELETE SEASON
  *************************************************/
 
-function getSeasonName(id){
+function deleteSeason(data) {
 
-    if(!id) return "";
+  const seasonId =
+    String(data.seasonId || "").trim();
 
-    const season =
-        seasons.find(
-            s =>
-                String(s["Season ID"])
-                === String(id)
-        );
 
-    return season
-        ? season["Season Name"]
-        : "";
+  if (!seasonId) {
+
+    return jsonOutput({
+
+      success: false,
+
+      message:
+        "Season ID kosong."
+
+    });
+
+  }
+
+
+  const eventSheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_EVENTS);
+
+
+  const eventRows =
+    eventSheet
+      .getDataRange()
+      .getValues();
+
+
+  /*
+   * Check whether the season
+   * is actually being used.
+   */
+
+  for (
+    let i = 1;
+    i < eventRows.length;
+    i++
+  ) {
+
+    const eventSeasonId =
+      String(
+        eventRows[i][8] || ""
+      ).trim();
+
+
+    if (
+      eventSeasonId &&
+      eventSeasonId === seasonId
+    ) {
+
+      return jsonOutput({
+
+        success: false,
+
+        message:
+          "Season masih digunakan oleh event. Tukarkan Season event tersebut dahulu."
+
+      });
+
+    }
+
+  }
+
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_SEASONS);
+
+
+  const rows =
+    sheet.getDataRange().getValues();
+
+
+  for (
+    let i = 1;
+    i < rows.length;
+    i++
+  ) {
+
+    if (
+      String(rows[i][0]).trim()
+      === seasonId
+    ) {
+
+      sheet.deleteRow(i + 1);
+
+
+      return jsonOutput({
+
+        success: true,
+
+        message:
+          "Season berjaya dipadam."
+
+      });
+
+    }
+
+  }
+
+
+  return jsonOutput({
+
+    success: false,
+
+    message:
+      "Season ID tidak dijumpai."
+
+  });
 
 }
 
 
-function formatDate(value){
+/*************************************************
+ * TOGGLE SEASON
+ *************************************************/
 
-    if(!value) return "";
+function toggleSeason(data) {
 
-    const date =
-        new Date(value);
+  const seasonId =
+    String(data.seasonId || "").trim();
 
-    if(isNaN(date)) return value;
 
-    return date.toLocaleDateString(
-        "en-GB",
-        {
-            day:"2-digit",
-            month:"short",
-            year:"numeric"
-        }
+  if (!seasonId) {
+
+    return jsonOutput({
+
+      success: false,
+
+      message:
+        "Season ID kosong."
+
+    });
+
+  }
+
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_SEASONS);
+
+
+  const rows =
+    sheet.getDataRange().getValues();
+
+
+  for (
+    let i = 1;
+    i < rows.length;
+    i++
+  ) {
+
+    if (
+      String(rows[i][0]).trim()
+      === seasonId
+    ) {
+
+      const rowNumber =
+        i + 1;
+
+
+      sheet
+        .getRange(rowNumber, 4)
+        .setValue(
+          data.status || "Hidden"
+        );
+
+
+      sheet
+        .getRange(rowNumber, 6)
+        .setValue(new Date());
+
+
+      return jsonOutput({
+
+        success: true,
+
+        message:
+          "Status season berjaya dikemaskini."
+
+      });
+
+    }
+
+  }
+
+
+  return jsonOutput({
+
+    success: false,
+
+    message:
+      "Season ID tidak dijumpai."
+
+  });
+
+}
+
+
+/*************************************************
+ * PREPARATION
+ *
+ * A Preparation ID
+ * B Event ID
+ * C Item
+ * D Reason
+ *************************************************/
+
+
+function getPreparation(eventId) {
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_PREPARATION);
+
+
+  const data =
+    sheet.getDataRange().getValues();
+
+
+  if (data.length <= 1) {
+
+    return jsonOutput([]);
+
+  }
+
+
+  const headers =
+    data.shift();
+
+
+  const results =
+    data
+      .filter(row =>
+        String(row[1]) ===
+        String(eventId)
+      )
+      .map(row => {
+
+        const item = {};
+
+        headers.forEach(
+          (header, index) => {
+
+            item[header] =
+              row[index];
+
+          }
+        );
+
+        return item;
+
+      });
+
+
+  return jsonOutput(results);
+
+}
+
+
+function addPreparation(data) {
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_PREPARATION);
+
+
+  const preparationId =
+    "PREP" +
+    new Date().getTime();
+
+
+  if (!data.eventId) {
+
+    return jsonOutput({
+
+      success: false,
+
+      message:
+        "Event ID diperlukan."
+
+    });
+
+  }
+
+
+  if (!data.item) {
+
+    return jsonOutput({
+
+      success: false,
+
+      message:
+        "Item diperlukan."
+
+    });
+
+  }
+
+
+  sheet.appendRow([
+
+    preparationId,
+
+    data.eventId,
+
+    data.item,
+
+    data.reason || ""
+
+  ]);
+
+
+  return jsonOutput({
+
+    success: true,
+
+    message:
+      "Preparation berjaya ditambah.",
+
+    preparationId:
+      preparationId
+
+  });
+
+}
+
+
+function updatePreparation(data) {
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_PREPARATION);
+
+
+  const rows =
+    sheet.getDataRange().getValues();
+
+
+  for (
+    let i = 1;
+    i < rows.length;
+    i++
+  ) {
+
+    if (
+      String(rows[i][0]) ===
+      String(data.preparationId)
+    ) {
+
+      const rowNumber =
+        i + 1;
+
+
+      sheet
+        .getRange(
+          rowNumber,
+          3,
+          1,
+          2
+        )
+        .setValues([[
+          data.item || "",
+          data.reason || ""
+        ]]);
+
+
+      return jsonOutput({
+
+        success: true,
+
+        message:
+          "Preparation berjaya dikemaskini."
+
+      });
+
+    }
+
+  }
+
+
+  return jsonOutput({
+
+    success: false,
+
+    message:
+      "Preparation ID tidak dijumpai."
+
+  });
+
+}
+
+
+function deletePreparation(data) {
+
+  const id =
+    String(
+      data.preparationId || ""
+    ).trim();
+
+
+  if (!id) {
+
+    return jsonOutput({
+
+      success: false,
+
+      message:
+        "Preparation ID kosong."
+
+    });
+
+  }
+
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_PREPARATION);
+
+
+  const rows =
+    sheet.getDataRange().getValues();
+
+
+  for (
+    let i = 1;
+    i < rows.length;
+    i++
+  ) {
+
+    if (
+      String(rows[i][0]).trim()
+      === id
+    ) {
+
+      sheet.deleteRow(i + 1);
+
+
+      return jsonOutput({
+
+        success: true,
+
+        message:
+          "Preparation berjaya dipadam."
+
+      });
+
+    }
+
+  }
+
+
+  return jsonOutput({
+
+    success: false,
+
+    message:
+      "Preparation ID tidak dijumpai."
+
+  });
+
+}
+
+
+/*************************************************
+ * LINKS
+ *
+ * A Link ID
+ * B Event ID
+ * C Link Type
+ * D Title
+ * E URL
+ *************************************************/
+
+
+function getLinks(eventId) {
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_LINK);
+
+
+  const data =
+    sheet.getDataRange().getValues();
+
+
+  if (data.length <= 1) {
+
+    return jsonOutput([]);
+
+  }
+
+
+  const headers =
+    data.shift();
+
+
+  const results =
+    data
+      .filter(row =>
+        String(row[1]) ===
+        String(eventId)
+      )
+      .map(row => {
+
+        const link = {};
+
+        headers.forEach(
+          (header, index) => {
+
+            link[header] =
+              row[index];
+
+          }
+        );
+
+        return link;
+
+      });
+
+
+  return jsonOutput(results);
+
+}
+
+
+function addLink(data) {
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_LINK);
+
+
+  const linkId =
+    "LNK" +
+    new Date().getTime();
+
+
+  if (!data.eventId) {
+
+    return jsonOutput({
+
+      success: false,
+
+      message:
+        "Event ID diperlukan."
+
+    });
+
+  }
+
+
+  if (!data.title) {
+
+    return jsonOutput({
+
+      success: false,
+
+      message:
+        "Title diperlukan."
+
+    });
+
+  }
+
+
+  if (!data.url) {
+
+    return jsonOutput({
+
+      success: false,
+
+      message:
+        "URL diperlukan."
+
+    });
+
+  }
+
+
+  sheet.appendRow([
+
+    linkId,
+
+    data.eventId,
+
+    data.linkType || "",
+
+    data.title,
+
+    data.url
+
+  ]);
+
+
+  return jsonOutput({
+
+    success: true,
+
+    message:
+      "Link berjaya ditambah.",
+
+    linkId:
+      linkId
+
+  });
+
+}
+
+
+function updateLink(data) {
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_LINK);
+
+
+  const rows =
+    sheet.getDataRange().getValues();
+
+
+  for (
+    let i = 1;
+    i < rows.length;
+    i++
+  ) {
+
+    if (
+      String(rows[i][0]) ===
+      String(data.linkId)
+    ) {
+
+      const rowNumber =
+        i + 1;
+
+
+      sheet
+        .getRange(
+          rowNumber,
+          3,
+          1,
+          3
+        )
+        .setValues([[
+          data.linkType || "",
+          data.title || "",
+          data.url || ""
+        ]]);
+
+
+      return jsonOutput({
+
+        success: true,
+
+        message:
+          "Link berjaya dikemaskini."
+
+      });
+
+    }
+
+  }
+
+
+  return jsonOutput({
+
+    success: false,
+
+    message:
+      "Link ID tidak dijumpai."
+
+  });
+
+}
+
+
+function deleteLink(data) {
+
+  const id =
+    String(
+      data.linkId || ""
+    ).trim();
+
+
+  if (!id) {
+
+    return jsonOutput({
+
+      success: false,
+
+      message:
+        "Link ID kosong."
+
+    });
+
+  }
+
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_LINK);
+
+
+  const rows =
+    sheet.getDataRange().getValues();
+
+
+  for (
+    let i = 1;
+    i < rows.length;
+    i++
+  ) {
+
+    if (
+      String(rows[i][0]).trim()
+      === id
+    ) {
+
+      sheet.deleteRow(i + 1);
+
+
+      return jsonOutput({
+
+        success: true,
+
+        message:
+          "Link berjaya dipadam."
+
+      });
+
+    }
+
+  }
+
+
+  return jsonOutput({
+
+    success: false,
+
+    message:
+      "Link ID tidak dijumpai."
+
+  });
+
+}
+
+
+/*************************************************
+ * DELETE RELATED RECORDS
+ *************************************************/
+
+function deleteRelatedPreparations(eventId) {
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_PREPARATION);
+
+
+  const data =
+    sheet.getDataRange().getValues();
+
+
+  for (
+    let i = data.length - 1;
+    i >= 1;
+    i--
+  ) {
+
+    if (
+      String(data[i][1]) ===
+      String(eventId)
+    ) {
+
+      sheet.deleteRow(i + 1);
+
+    }
+
+  }
+
+}
+
+
+function deleteRelatedLinks(eventId) {
+
+  const sheet =
+    SpreadsheetApp
+      .getActiveSpreadsheet()
+      .getSheetByName(SHEET_LINK);
+
+
+  const data =
+    sheet.getDataRange().getValues();
+
+
+  for (
+    let i = data.length - 1;
+    i >= 1;
+    i--
+  ) {
+
+    if (
+      String(data[i][1]) ===
+      String(eventId)
+    ) {
+
+      sheet.deleteRow(i + 1);
+
+    }
+
+  }
+
+}
+
+
+/*************************************************
+ * JSON
+ *************************************************/
+
+function jsonOutput(data) {
+
+  return ContentService
+    .createTextOutput(
+      JSON.stringify(data)
+    )
+    .setMimeType(
+      ContentService.MimeType.JSON
     );
 
 }
-
-
-function formatDateForInput(value){
-
-    if(!value) return "";
-
-    const date =
-        new Date(value);
-
-    if(isNaN(date)) return "";
-
-    const year =
-        date.getFullYear();
-
-    const month =
-        String(
-            date.getMonth()+1
-        ).padStart(2,"0");
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(2,"0");
-
-
-    return `${year}-${month}-${day}`;
-
-}
-
-
-function escapeHtml(value){
-
-    return String(value || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-/*************************************************
- * INITIAL LOAD
- *************************************************/
-
-loadSeasons();
-
-loadEvents();
-
-</script>
-
-</body>
-</html>
