@@ -459,7 +459,6 @@ let editingSeasonId = null;
 /* =========================
    LOAD SEASONS
 ========================= */
-
 async function loadSeasons() {
 
     const list = document.getElementById("seasonList");
@@ -472,30 +471,26 @@ async function loadSeasons() {
 
     try {
 
-        const response = await fetch(
-            API_URL + "?action=getSeasons"
-        );
+        const response = await fetch(API_URL + "?action=getSeasons");
+        const result = await response.json();
 
-        const data = await response.json();
-
-        seasons = Array.isArray(data)
-            ? data
-            : [];
+        if (result.success) {
+            seasons = result.data || [];
+        } else {
+            seasons = [];
+            showMessage(result.message || "Gagal load Seasons.");
+        }
 
         renderSeasons();
 
     } catch (error) {
-
         console.error(error);
-
         list.innerHTML = `
             <div class="empty">
                 Gagal load Seasons.
             </div>
         `;
-
         showMessage("Gagal load Seasons.");
-
     }
 }
 
