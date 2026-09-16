@@ -335,31 +335,63 @@
 
   }
 
+async function loadEvents(){
 
-  function loadEvents() {
+    try{
 
-    fetch(API_URL)
-      .then(response => response.json())
-      .then(data => {
+        const response = await fetch(API_URL + "?t=" + Date.now());
+        const result = await response.json();
 
-        events = data;
+        if (Array.isArray(result)) {
+            events = result;
+        } else if (result && result.success && Array.isArray(result.data)) {
+            events = result.data;
+        } else {
+            events = [];
+        }
 
-        displayEvents();
+        renderEvents();
 
-      })
-      .catch(error => {
+    }catch(error){
 
         console.error(error);
 
         document.getElementById("eventList").innerHTML = `
-          <div class="empty">
-            Tak dapat load database.
-          </div>
+            <div class="empty">
+                Failed to load events.
+            </div>
         `;
+    }
+}
 
-      });
 
-  }
+  /*************************************************
+ * LOAD SEASONS
+ *************************************************/
+
+async function loadSeasons(){
+
+    try{
+
+        const response =
+            await fetch(
+                API_URL + "?action=getSeasons"
+            );
+
+        seasons =
+            await response.json();
+
+        populateSeasonDropdown();
+
+        renderSeasonList();
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
 
 
   function displayEvents() {
