@@ -1,1474 +1,717 @@
-/*************************************************
- * MUSIMLAB ADMIN API
- * VERSION 4
- *************************************************/
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-const SHEET_EVENTS = "EVENTS";
-const SHEET_SEASONS = "Seasons";
-const SHEET_PREPARATION = "Preparation";
-const SHEET_LINK = "Link";
+  <title>Musim Lab — Admin</title>
 
-
-/*************************************************
- * GET
- *************************************************/
-
-function doGet(e) {
-
-  try {
-
-    const action =
-      e && e.parameter
-        ? e.parameter.action
-        : "";
-
-    if (action === "getSeasons") {
-      return getSeasons();
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    if (action === "getPreparation") {
-      return getPreparation(e.parameter.eventId);
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f3;
+      color: #222;
+      padding: 20px;
     }
 
-    if (action === "getLinks") {
-      return getLinks(e.parameter.eventId);
+    .container {
+      max-width: 900px;
+      margin: auto;
     }
 
-    return getEvents();
-
-  } catch (error) {
-
-    return jsonOutput({
-      success: false,
-      message: error.toString()
-    });
-
-  }
-
-}
-
-
-/*************************************************
- * POST
- *************************************************/
-
-function doPost(e) {
-
-  try {
-
-    if (!e || !e.postData || !e.postData.contents) {
-
-      return jsonOutput({
-        success: false,
-        message: "POST data tidak diterima."
-      });
-
+    header {
+      background: #111;
+      color: white;
+      padding: 22px;
+      border-radius: 14px;
+      margin-bottom: 20px;
     }
 
-
-    const request =
-      JSON.parse(e.postData.contents);
-
-
-    const action =
-      request.action;
-
-
-    const data =
-      request.data || {};
-
-
-    if (!action) {
-
-      return jsonOutput({
-        success: false,
-        message: "Action tidak dihantar."
-      });
-
+    header h1 {
+      font-size: 26px;
+      margin-bottom: 5px;
     }
 
-
-    switch (action) {
-
-      /* EVENTS */
-
-      case "addEvent":
-        return addEvent(data);
-
-      case "updateEvent":
-        return updateEvent(data);
-
-      case "deleteEvent":
-        return deleteEvent(data);
-
-
-      /* SEASONS */
-
-      case "addSeason":
-        return addSeason(data);
-
-      case "updateSeason":
-        return updateSeason(data);
-
-      case "deleteSeason":
-        return deleteSeason(data);
-
-      case "toggleSeason":
-        return toggleSeason(data);
-
-
-      /* PREPARATION */
-
-      case "addPreparation":
-        return addPreparation(data);
-
-      case "updatePreparation":
-        return updatePreparation(data);
-
-      case "deletePreparation":
-        return deletePreparation(data);
-
-
-      /* LINKS */
-
-      case "addLink":
-        return addLink(data);
-
-      case "updateLink":
-        return updateLink(data);
-
-      case "deleteLink":
-        return deleteLink(data);
-
-
-      default:
-
-        return jsonOutput({
-
-          success: false,
-
-          message:
-            "Action tidak dikenali: " +
-            action
-
-        });
-
+    header p {
+      font-size: 13px;
+      opacity: 0.7;
     }
 
-
-  } catch (error) {
-
-    return jsonOutput({
-
-      success: false,
-
-      message: error.toString()
-
-    });
-
-  }
-
-}
-
-
-/*************************************************
- * EVENTS
- *
- * A Event ID
- * B Event Name
- * C Start Date
- * D End Date
- * E Category
- * F Location
- * G Short Description
- * H Description
- * I Season ID
- * J Image URL
- * K Official Link
- * L Status
- * M Created
- * N Updated
- *************************************************/
-
-
-function getEvents() {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_EVENTS);
-
-
-  const data =
-    sheet.getDataRange().getValues();
-
-
-  if (data.length <= 1) {
-
-    return jsonOutput([]);
-
-  }
-
-
-  const headers =
-    data.shift();
-
-
-  const events =
-    data.map(row => {
-
-      const event = {};
-
-      headers.forEach(
-        (header, index) => {
-
-          event[header] =
-            row[index];
-
-        }
-      );
-
-      return event;
-
-    });
-
-
-  return jsonOutput(events);
-
-}
-
-
-function addEvent(data) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_EVENTS);
-
-
-  const eventId =
-    "EVT" +
-    new Date().getTime();
-
-
-  const now =
-    new Date();
-
-
-  sheet.appendRow([
-
-    eventId,
-
-    data.eventName || "",
-
-    data.startDate || "",
-
-    data.endDate || "",
-
-    data.category || "",
-
-    data.location || "",
-
-    data.shortDescription || "",
-
-    data.description || "",
-
-    data.seasonId || "",
-
-    data.imageUrl || "",
-
-    data.officialLink || "",
-
-    data.status || "Draft",
-
-    now,
-
-    now
-
-  ]);
-
-
-  return jsonOutput({
-
-    success: true,
-
-    message:
-      "Event berjaya ditambah.",
-
-    eventId:
-      eventId
-
-  });
-
-}
-
-
-function updateEvent(data) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_EVENTS);
-
-
-  const rows =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = 1;
-    i < rows.length;
-    i++
-  ) {
-
-    if (
-      String(rows[i][0]) ===
-      String(data.eventId)
-    ) {
-
-      const rowNumber =
-        i + 1;
-
-
-      sheet
-        .getRange(
-          rowNumber,
-          2,
-          1,
-          11
-        )
-        .setValues([[
-          data.eventName || "",
-          data.startDate || "",
-          data.endDate || "",
-          data.category || "",
-          data.location || "",
-          data.shortDescription || "",
-          data.description || "",
-          data.seasonId || "",
-          data.imageUrl || "",
-          data.officialLink || "",
-          data.status || "Draft"
-        ]]);
-
-
-      sheet
-        .getRange(rowNumber, 14)
-        .setValue(new Date());
-
-
-      return jsonOutput({
-
-        success: true,
-
-        message:
-          "Event berjaya dikemaskini."
-
-      });
-
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
     }
 
-  }
-
-
-  return jsonOutput({
-
-    success: false,
-
-    message:
-      "Event ID tidak dijumpai."
-
-  });
-
-}
-
-
-function deleteEvent(data) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_EVENTS);
-
-
-  const rows =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = 1;
-    i < rows.length;
-    i++
-  ) {
-
-    if (
-      String(rows[i][0]) ===
-      String(data.eventId)
-    ) {
-
-      deleteRelatedPreparations(
-        data.eventId
-      );
-
-      deleteRelatedLinks(
-        data.eventId
-      );
-
-
-      sheet.deleteRow(i + 1);
-
-
-      return jsonOutput({
-
-        success: true,
-
-        message:
-          "Event berjaya dipadam."
-
-      });
-
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 14px;
     }
 
-  }
-
-
-  return jsonOutput({
-
-    success: false,
-
-    message:
-      "Event ID tidak dijumpai."
-
-  });
-
-}
-
-
-/*************************************************
- * SEASONS
- *
- * A Season ID
- * B Season Name
- * C Description
- * D Status
- * E Created
- * F Updated
- *************************************************/
-
-
-function getSeasons() {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_SEASONS);
-
-
-  const data =
-    sheet.getDataRange().getValues();
-
-
-  if (data.length <= 1) {
-
-    return jsonOutput([]);
-
-  }
-
-
-  const headers =
-    data.shift();
-
-
-  const seasons =
-    data.map(row => {
-
-      const season = {};
-
-      headers.forEach(
-        (header, index) => {
-
-          season[header] =
-            row[index];
-
-        }
-      );
-
-      return season;
-
-    });
-
-
-  return jsonOutput(seasons);
-
-}
-
-
-function addSeason(data) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_SEASONS);
-
-
-  const seasonId =
-    "SEA" +
-    new Date().getTime();
-
-
-  const now =
-    new Date();
-
-
-  sheet.appendRow([
-
-    seasonId,
-
-    data.seasonName || "",
-
-    data.description || "",
-
-    data.status || "Hidden",
-
-    now,
-
-    now
-
-  ]);
-
-
-  return jsonOutput({
-
-    success: true,
-
-    message:
-      "Season berjaya ditambah.",
-
-    seasonId:
-      seasonId
-
-  });
-
-}
-
-
-function updateSeason(data) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_SEASONS);
-
-
-  const rows =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = 1;
-    i < rows.length;
-    i++
-  ) {
-
-    if (
-      String(rows[i][0]) ===
-      String(data.seasonId)
-    ) {
-
-      const rowNumber =
-        i + 1;
-
-
-      sheet
-        .getRange(
-          rowNumber,
-          2,
-          1,
-          3
-        )
-        .setValues([[
-          data.seasonName || "",
-          data.description || "",
-          data.status || "Hidden"
-        ]]);
-
-
-      sheet
-        .getRange(rowNumber, 6)
-        .setValue(new Date());
-
-
-      return jsonOutput({
-
-        success: true,
-
-        message:
-          "Season berjaya dikemaskini."
-
-      });
-
+    .add-btn {
+      background: #111;
+      color: white;
     }
 
-  }
+    .edit-btn {
+      background: #eee;
+    }
+
+    .delete-btn {
+      background: #eee;
+    }
+
+    .event-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .event-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .event-card h3 {
+      margin-bottom: 6px;
+    }
+
+    .event-meta {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .form-box {
+      display: none;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-box.active {
+      display: block;
+    }
+
+    .form-box h2 {
+      margin-bottom: 18px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .save-btn {
+      background: #111;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: #eee;
+    }
+
+    .message {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .empty {
+      background: white;
+      border: 1px dashed #ccc;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      color: #777;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+
+      .top-bar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .add-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Musim Lab — Admin</h1>
+    <p>Manage events</p>
+  </header>
+
+  <div id="message" class="message"></div>
+
+  <div id="formBox" class="form-box">
+
+    <h2 id="formTitle">Add Event</h2>
+
+    <input type="hidden" id="eventId">
+
+    <div class="field">
+      <label>Event Name</label>
+      <input type="text" id="eventName" placeholder="Contoh: MIHAS">
+    </div>
+
+    <div class="field">
+      <label>Start Date</label>
+      <input type="date" id="startDate">
+    </div>
+
+    <div class="field">
+      <label>End Date</label>
+      <input type="date" id="endDate">
+    </div>
+
+    <div class="field">
+      <label>Category</label>
+
+      <select id="category">
+        <option value="">Pilih kategori</option>
+        <option>Muzik & Konsert</option>
+        <option>Sukan & Outdoor</option>
+        <option>Budaya & Agama</option>
+        <option>Teknologi & Perniagaan</option>
+        <option>Gaya Hidup</option>
+        <option>Local</option>
+        <option>Cuti Sekolah</option>
+        <option>Musim</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Location</label>
+      <input type="text" id="location" placeholder="Contoh: MITEC, Kuala Lumpur">
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <textarea id="description"
+        placeholder="Penerangan ringkas event..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Image URL</label>
+      <input type="url" id="imageUrl"
+        placeholder="https://...">
+    </div>
+
+    <div class="field">
+      <label>Official Link</label>
+      <input type="url" id="officialLink"
+        placeholder="https://...">
+    </div>
+
+    <div class="field">
+      <label>Status</label>
+
+      <select id="status">
+        <option value="Draft">Draft</option>
+        <option value="Published">Published</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+
+      <button class="save-btn" onclick="saveEvent()">
+        Save Event
+      </button>
+
+      <button class="cancel-btn" onclick="closeForm()">
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="top-bar">
+
+    <h2>Events</h2>
+
+    <button class="add-btn" onclick="openAddForm()">
+      + Add Event
+    </button>
+
+  </div>
+
+  <div id="eventList" class="event-list">
+
+    <div class="empty">
+      Loading events...
+    </div>
+
+  </div>
+
+</div>
 
 
-  return jsonOutput({
-
-    success: false,
-
-    message:
-      "Season ID tidak dijumpai."
-
-  });
-
-}
-
-
-/*************************************************
- * DELETE SEASON
- *************************************************/
-
-function deleteSeason(data) {
-
-  const seasonId =
-    String(data.seasonId || "").trim();
-
-
-  if (!seasonId) {
-
-    return jsonOutput({
-
-      success: false,
-
-      message:
-        "Season ID kosong."
-
-    });
-
-  }
-
-
-  const eventSheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_EVENTS);
-
-
-  const eventRows =
-    eventSheet
-      .getDataRange()
-      .getValues();
-
+<script>
 
   /*
-   * Check whether the season
-   * is actually being used.
-   */
+    URL Apps Script kau.
+    Gantikan bahagian ini dengan URL Web App kau.
+  */
 
-  for (
-    let i = 1;
-    i < eventRows.length;
-    i++
-  ) {
-
-    const eventSeasonId =
-      String(
-        eventRows[i][8] || ""
-      ).trim();
+  const API_URL =
+    "PASTE_APPS_SCRIPT_URL_HERE";
 
 
-    if (
-      eventSeasonId &&
-      eventSeasonId === seasonId
-    ) {
+  let events = [];
 
-      return jsonOutput({
 
-        success: false,
+  function showMessage(text) {
 
-        message:
-          "Season masih digunakan oleh event. Tukarkan Season event tersebut dahulu."
+    const box = document.getElementById("message");
+
+    box.textContent = text;
+    box.style.display = "block";
+
+    setTimeout(() => {
+      box.style.display = "none";
+    }, 3000);
+
+  }
+
+
+  function loadEvents() {
+
+    fetch(API_URL)
+      .then(response => response.json())
+      .then(data => {
+
+        events = data;
+
+        displayEvents();
+
+      })
+      .catch(error => {
+
+        console.error(error);
+
+        document.getElementById("eventList").innerHTML = `
+          <div class="empty">
+            Tak dapat load database.
+          </div>
+        `;
 
       });
 
-    }
-
   }
 
 
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_SEASONS);
+  function displayEvents() {
 
+    const list = document.getElementById("eventList");
 
-  const rows =
-    sheet.getDataRange().getValues();
+    if (!events.length) {
 
+      list.innerHTML = `
+        <div class="empty">
+          Belum ada event.
+        </div>
+      `;
 
-  for (
-    let i = 1;
-    i < rows.length;
-    i++
-  ) {
-
-    if (
-      String(rows[i][0]).trim()
-      === seasonId
-    ) {
-
-      sheet.deleteRow(i + 1);
-
-
-      return jsonOutput({
-
-        success: true,
-
-        message:
-          "Season berjaya dipadam."
-
-      });
+      return;
 
     }
 
-  }
 
+    list.innerHTML = events.map(event => `
 
-  return jsonOutput({
+      <div class="event-card">
 
-    success: false,
+        <h3>${event["Event Name"] || ""}</h3>
 
-    message:
-      "Season ID tidak dijumpai."
+        <div class="event-meta">
 
-  });
+          ${event["Start Date"] || ""}
+          ${event["End Date"] ? " — " + event["End Date"] : ""}
 
-}
+          <br>
 
+          ${event["Location"] || ""}
 
-/*************************************************
- * TOGGLE SEASON
- *************************************************/
+          <br>
 
-function toggleSeason(data) {
+          ${event["Category"] || ""}
 
-  const seasonId =
-    String(data.seasonId || "").trim();
+        </div>
 
+        <div class="actions">
 
-  if (!seasonId) {
+          <button
+            class="edit-btn"
+            onclick="editEvent('${event["Event ID"]}')">
+            Edit
+          </button>
 
-    return jsonOutput({
+          <button
+            class="delete-btn"
+            onclick="deleteEvent('${event["Event ID"]}')">
+            Delete
+          </button>
 
-      success: false,
+        </div>
 
-      message:
-        "Season ID kosong."
+      </div>
 
-    });
-
-  }
-
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_SEASONS);
-
-
-  const rows =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = 1;
-    i < rows.length;
-    i++
-  ) {
-
-    if (
-      String(rows[i][0]).trim()
-      === seasonId
-    ) {
-
-      const rowNumber =
-        i + 1;
-
-
-      sheet
-        .getRange(rowNumber, 4)
-        .setValue(
-          data.status || "Hidden"
-        );
-
-
-      sheet
-        .getRange(rowNumber, 6)
-        .setValue(new Date());
-
-
-      return jsonOutput({
-
-        success: true,
-
-        message:
-          "Status season berjaya dikemaskini."
-
-      });
-
-    }
+    `).join("");
 
   }
 
 
-  return jsonOutput({
+  function openAddForm() {
 
-    success: false,
+    document.getElementById("formBox")
+      .classList.add("active");
 
-    message:
-      "Season ID tidak dijumpai."
+    document.getElementById("formTitle")
+      .textContent = "Add Event";
 
-  });
-
-}
-
-
-/*************************************************
- * PREPARATION
- *
- * A Preparation ID
- * B Event ID
- * C Item
- * D Reason
- *************************************************/
-
-
-function getPreparation(eventId) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_PREPARATION);
-
-
-  const data =
-    sheet.getDataRange().getValues();
-
-
-  if (data.length <= 1) {
-
-    return jsonOutput([]);
+    clearForm();
 
   }
 
 
-  const headers =
-    data.shift();
+  function closeForm() {
 
+    document.getElementById("formBox")
+      .classList.remove("active");
 
-  const results =
-    data
-      .filter(row =>
-        String(row[1]) ===
-        String(eventId)
-      )
-      .map(row => {
-
-        const item = {};
-
-        headers.forEach(
-          (header, index) => {
-
-            item[header] =
-              row[index];
-
-          }
-        );
-
-        return item;
-
-      });
-
-
-  return jsonOutput(results);
-
-}
-
-
-function addPreparation(data) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_PREPARATION);
-
-
-  const preparationId =
-    "PREP" +
-    new Date().getTime();
-
-
-  if (!data.eventId) {
-
-    return jsonOutput({
-
-      success: false,
-
-      message:
-        "Event ID diperlukan."
-
-    });
+    clearForm();
 
   }
 
 
-  if (!data.item) {
+  function clearForm() {
 
-    return jsonOutput({
-
-      success: false,
-
-      message:
-        "Item diperlukan."
-
-    });
-
-  }
-
-
-  sheet.appendRow([
-
-    preparationId,
-
-    data.eventId,
-
-    data.item,
-
-    data.reason || ""
-
-  ]);
-
-
-  return jsonOutput({
-
-    success: true,
-
-    message:
-      "Preparation berjaya ditambah.",
-
-    preparationId:
-      preparationId
-
-  });
-
-}
-
-
-function updatePreparation(data) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_PREPARATION);
-
-
-  const rows =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = 1;
-    i < rows.length;
-    i++
-  ) {
-
-    if (
-      String(rows[i][0]) ===
-      String(data.preparationId)
-    ) {
-
-      const rowNumber =
-        i + 1;
-
-
-      sheet
-        .getRange(
-          rowNumber,
-          3,
-          1,
-          2
-        )
-        .setValues([[
-          data.item || "",
-          data.reason || ""
-        ]]);
-
-
-      return jsonOutput({
-
-        success: true,
-
-        message:
-          "Preparation berjaya dikemaskini."
-
-      });
-
-    }
+    document.getElementById("eventId").value = "";
+    document.getElementById("eventName").value = "";
+    document.getElementById("startDate").value = "";
+    document.getElementById("endDate").value = "";
+    document.getElementById("category").value = "";
+    document.getElementById("location").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("imageUrl").value = "";
+    document.getElementById("officialLink").value = "";
+    document.getElementById("status").value = "Draft";
 
   }
 
 
-  return jsonOutput({
+  function editEvent(id) {
 
-    success: false,
-
-    message:
-      "Preparation ID tidak dijumpai."
-
-  });
-
-}
-
-
-function deletePreparation(data) {
-
-  const id =
-    String(
-      data.preparationId || ""
-    ).trim();
-
-
-  if (!id) {
-
-    return jsonOutput({
-
-      success: false,
-
-      message:
-        "Preparation ID kosong."
-
-    });
-
-  }
-
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_PREPARATION);
-
-
-  const rows =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = 1;
-    i < rows.length;
-    i++
-  ) {
-
-    if (
-      String(rows[i][0]).trim()
-      === id
-    ) {
-
-      sheet.deleteRow(i + 1);
-
-
-      return jsonOutput({
-
-        success: true,
-
-        message:
-          "Preparation berjaya dipadam."
-
-      });
-
-    }
-
-  }
-
-
-  return jsonOutput({
-
-    success: false,
-
-    message:
-      "Preparation ID tidak dijumpai."
-
-  });
-
-}
-
-
-/*************************************************
- * LINKS
- *
- * A Link ID
- * B Event ID
- * C Link Type
- * D Title
- * E URL
- *************************************************/
-
-
-function getLinks(eventId) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_LINK);
-
-
-  const data =
-    sheet.getDataRange().getValues();
-
-
-  if (data.length <= 1) {
-
-    return jsonOutput([]);
-
-  }
-
-
-  const headers =
-    data.shift();
-
-
-  const results =
-    data
-      .filter(row =>
-        String(row[1]) ===
-        String(eventId)
-      )
-      .map(row => {
-
-        const link = {};
-
-        headers.forEach(
-          (header, index) => {
-
-            link[header] =
-              row[index];
-
-          }
-        );
-
-        return link;
-
-      });
-
-
-  return jsonOutput(results);
-
-}
-
-
-function addLink(data) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_LINK);
-
-
-  const linkId =
-    "LNK" +
-    new Date().getTime();
-
-
-  if (!data.eventId) {
-
-    return jsonOutput({
-
-      success: false,
-
-      message:
-        "Event ID diperlukan."
-
-    });
-
-  }
-
-
-  if (!data.title) {
-
-    return jsonOutput({
-
-      success: false,
-
-      message:
-        "Title diperlukan."
-
-    });
-
-  }
-
-
-  if (!data.url) {
-
-    return jsonOutput({
-
-      success: false,
-
-      message:
-        "URL diperlukan."
-
-    });
-
-  }
-
-
-  sheet.appendRow([
-
-    linkId,
-
-    data.eventId,
-
-    data.linkType || "",
-
-    data.title,
-
-    data.url
-
-  ]);
-
-
-  return jsonOutput({
-
-    success: true,
-
-    message:
-      "Link berjaya ditambah.",
-
-    linkId:
-      linkId
-
-  });
-
-}
-
-
-function updateLink(data) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_LINK);
-
-
-  const rows =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = 1;
-    i < rows.length;
-    i++
-  ) {
-
-    if (
-      String(rows[i][0]) ===
-      String(data.linkId)
-    ) {
-
-      const rowNumber =
-        i + 1;
-
-
-      sheet
-        .getRange(
-          rowNumber,
-          3,
-          1,
-          3
-        )
-        .setValues([[
-          data.linkType || "",
-          data.title || "",
-          data.url || ""
-        ]]);
-
-
-      return jsonOutput({
-
-        success: true,
-
-        message:
-          "Link berjaya dikemaskini."
-
-      });
-
-    }
-
-  }
-
-
-  return jsonOutput({
-
-    success: false,
-
-    message:
-      "Link ID tidak dijumpai."
-
-  });
-
-}
-
-
-function deleteLink(data) {
-
-  const id =
-    String(
-      data.linkId || ""
-    ).trim();
-
-
-  if (!id) {
-
-    return jsonOutput({
-
-      success: false,
-
-      message:
-        "Link ID kosong."
-
-    });
-
-  }
-
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_LINK);
-
-
-  const rows =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = 1;
-    i < rows.length;
-    i++
-  ) {
-
-    if (
-      String(rows[i][0]).trim()
-      === id
-    ) {
-
-      sheet.deleteRow(i + 1);
-
-
-      return jsonOutput({
-
-        success: true,
-
-        message:
-          "Link berjaya dipadam."
-
-      });
-
-    }
-
-  }
-
-
-  return jsonOutput({
-
-    success: false,
-
-    message:
-      "Link ID tidak dijumpai."
-
-  });
-
-}
-
-
-/*************************************************
- * DELETE RELATED RECORDS
- *************************************************/
-
-function deleteRelatedPreparations(eventId) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_PREPARATION);
-
-
-  const data =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = data.length - 1;
-    i >= 1;
-    i--
-  ) {
-
-    if (
-      String(data[i][1]) ===
-      String(eventId)
-    ) {
-
-      sheet.deleteRow(i + 1);
-
-    }
-
-  }
-
-}
-
-
-function deleteRelatedLinks(eventId) {
-
-  const sheet =
-    SpreadsheetApp
-      .getActiveSpreadsheet()
-      .getSheetByName(SHEET_LINK);
-
-
-  const data =
-    sheet.getDataRange().getValues();
-
-
-  for (
-    let i = data.length - 1;
-    i >= 1;
-    i--
-  ) {
-
-    if (
-      String(data[i][1]) ===
-      String(eventId)
-    ) {
-
-      sheet.deleteRow(i + 1);
-
-    }
-
-  }
-
-}
-
-
-/*************************************************
- * JSON
- *************************************************/
-
-function jsonOutput(data) {
-
-  return ContentService
-    .createTextOutput(
-      JSON.stringify(data)
-    )
-    .setMimeType(
-      ContentService.MimeType.JSON
+    const event = events.find(
+      item => String(item["Event ID"]) === String(id)
     );
 
-}
+    if (!event) return;
+
+
+    document.getElementById("formBox")
+      .classList.add("active");
+
+    document.getElementById("formTitle")
+      .textContent = "Edit Event";
+
+
+    document.getElementById("eventId").value =
+      event["Event ID"] || "";
+
+    document.getElementById("eventName").value =
+      event["Event Name"] || "";
+
+    document.getElementById("startDate").value =
+      formatDateForInput(event["Start Date"]);
+
+    document.getElementById("endDate").value =
+      formatDateForInput(event["End Date"]);
+
+    document.getElementById("category").value =
+      event["Category"] || "";
+
+    document.getElementById("location").value =
+      event["Location"] || "";
+
+    document.getElementById("description").value =
+      event["Description"] || "";
+
+    document.getElementById("imageUrl").value =
+      event["Image URL"] || "";
+
+    document.getElementById("officialLink").value =
+      event["Official Link"] || "";
+
+    document.getElementById("status").value =
+      event["Status"] || "Draft";
+
+
+    document.getElementById("formBox")
+      .scrollIntoView({
+        behavior: "smooth"
+      });
+
+  }
+
+
+  function formatDateForInput(value) {
+
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (isNaN(date)) return "";
+
+    return date.toISOString().split("T")[0];
+
+  }
+
+
+  function saveEvent() {
+
+    const id =
+      document.getElementById("eventId").value;
+
+    const eventData = {
+
+      eventId: id,
+
+      eventName:
+        document.getElementById("eventName").value,
+
+      startDate:
+        document.getElementById("startDate").value,
+
+      endDate:
+        document.getElementById("endDate").value,
+
+      category:
+        document.getElementById("category").value,
+
+      location:
+        document.getElementById("location").value,
+
+      description:
+        document.getElementById("description").value,
+
+      imageUrl:
+        document.getElementById("imageUrl").value,
+
+      officialLink:
+        document.getElementById("officialLink").value,
+
+      status:
+        document.getElementById("status").value
+
+    };
+
+
+    if (!eventData.eventName ||
+        !eventData.startDate) {
+
+      alert("Event Name dan Start Date wajib diisi.");
+
+      return;
+
+    }
+
+
+    const action = id ? "updateEvent" : "addEvent";
+
+
+    fetch(API_URL, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+
+      body: JSON.stringify({
+
+        action: action,
+
+        data: eventData
+
+      })
+
+    })
+
+    .then(response => response.json())
+
+    .then(result => {
+
+      if (result.success) {
+
+        showMessage("Event berjaya disimpan.");
+
+        closeForm();
+
+        loadEvents();
+
+      } else {
+
+        alert(
+          result.message ||
+          "Ada masalah semasa menyimpan."
+        );
+
+      }
+
+    })
+
+    .catch(error => {
+
+      console.error(error);
+
+      alert(
+        "Tak dapat connect dengan database."
+      );
+
+    });
+
+  }
+
+
+  function deleteEvent(id) {
+
+    const event = events.find(
+      item => String(item["Event ID"]) === String(id)
+    );
+
+    const name =
+      event ? event["Event Name"] : "event ini";
+
+
+    const confirmDelete =
+      confirm(
+        `Delete "${name}"?\n\nTindakan ini tidak boleh diundur.`
+      );
+
+
+    if (!confirmDelete) return;
+
+
+    fetch(API_URL, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+
+      body: JSON.stringify({
+
+        action: "deleteEvent",
+
+        data: {
+          eventId: id
+        }
+
+      })
+
+    })
+
+    .then(response => response.json())
+
+    .then(result => {
+
+      if (result.success) {
+
+        showMessage("Event telah dipadam.");
+
+        loadEvents();
+
+      } else {
+
+        alert(
+          result.message ||
+          "Gagal delete event."
+        );
+
+      }
+
+    })
+
+    .catch(error => {
+
+      console.error(error);
+
+      alert(
+        "Tak dapat connect dengan database."
+      );
+
+    });
+
+  }
+
+
+  loadEvents();
+
+</script>
+
+</body>
+</html>
