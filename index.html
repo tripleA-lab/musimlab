@@ -2767,72 +2767,41 @@
        LOAD EVENTS FROM GOOGLE APPS SCRIPT
     ===================================================== */
 
+async function loadEvents() {
 
-    async function loadEvents() {
+  try {
 
-      try {
+    const response = await fetch(
+      API_URL + "?t=" + Date.now()
+    );
 
-        const response =
-          await fetch(
-            API_URL +
-            "?t=" +
-            Date.now()
-          );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "API response error"
-          );
-
-        }
-
-
-        const data =
-          await response.json();
-
-
-        if (
-          Array.isArray(data)
-        ) {
-
-          allEvents =
-            data;
-
-        } else {
-
-          allEvents =
-            [];
-
-        }
-
-
-        renderCalendar();
-
-
-      } catch (error) {
-
-        console.error(
-          "Load events error:",
-          error
-        );
-
-
-        allEvents =
-          [];
-
-
-        renderCalendar();
-
-
-        showToast(
-          "Tak dapat baca data event."
-        );
-
-      }
-
+    if (!response.ok) {
+      throw new Error("API response error");
     }
+
+    const result = await response.json();
+
+    if (Array.isArray(result)) {
+      // Support format lama (V4)
+      allEvents = result;
+    } else if (result && result.success && Array.isArray(result.data)) {
+      // Support format baru (V5)
+      allEvents = result.data;
+    } else {
+      allEvents = [];
+    }
+
+    renderCalendar();
+
+  } catch (error) {
+    console.error("Load events error:", error);
+    allEvents = [];
+    renderCalendar();
+    showToast("Tak dapat baca data event.");
+  }
+}
+    
+
 
 
     /* =====================================================
