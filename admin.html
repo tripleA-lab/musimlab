@@ -3,2198 +3,805 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>MusimLab — Admin</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    background:#f5f7fb;
-    color:#1f2937;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.header{
-    height:64px;
-    background:#fff;
-    border-bottom:1px solid #e5e7eb;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 24px;
-    position:sticky;
-    top:0;
-    z-index:50;
-}
-
-.logo{
-    font-size:21px;
-    font-weight:800;
-    letter-spacing:-.5px;
-}
-
-.logo span{
-    font-weight:400;
-    color:#9ca3af;
-}
-
-.header-right{
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-
-.btn{
-    border:none;
-    border-radius:9px;
-    padding:10px 15px;
-    font-size:13px;
-    font-weight:650;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.btn:hover{
-    transform:translateY(-1px);
-}
-
-.btn-primary{
-    background:#111827;
-    color:#fff;
-}
-
-.btn-secondary{
-    background:#fff;
-    border:1px solid #d1d5db;
-    color:#374151;
-}
-
-.btn-danger{
-    background:#fee2e2;
-    color:#b91c1c;
-}
-
-.btn-small{
-    padding:7px 11px;
-    font-size:12px;
-}
-
-/* =========================
-   CONTAINER
-========================= */
-
-.container{
-    max-width:1100px;
-    margin:auto;
-    padding:28px 18px 60px;
-}
-
-/* =========================
-   DASHBOARD
-========================= */
-
-.page-title{
-    margin-bottom:18px;
-}
-
-.page-title h1{
-    font-size:25px;
-    letter-spacing:-.4px;
-}
-
-.page-title p{
-    color:#6b7280;
-    font-size:13px;
-    margin-top:5px;
-}
-
-/* =========================
-   TOOLBAR
-========================= */
-
-.toolbar{
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:12px;
-    padding:10px;
-    display:grid;
-    grid-template-columns:1fr 150px 150px;
-    gap:8px;
-    margin-bottom:16px;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-    border:1px solid #d1d5db;
-    border-radius:8px;
-    padding:10px 11px;
-    font-size:13px;
-    outline:none;
-    background:#fff;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-    border-color:#6b7280;
-}
-
-textarea{
-    min-height:110px;
-    resize:vertical;
-}
-
-/* =========================
-   EVENT LIST
-========================= */
-
-.event-list{
-    display:grid;
-    gap:10px;
-}
-
-.event-card{
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:12px;
-    padding:16px;
-    display:flex;
-    justify-content:space-between;
-    gap:16px;
-}
-
-.event-main{
-    min-width:0;
-    flex:1;
-}
-
-.event-name{
-    font-size:16px;
-    font-weight:700;
-    margin-bottom:7px;
-}
-
-.event-meta{
-    display:flex;
-    flex-wrap:wrap;
-    gap:5px;
-    margin-bottom:8px;
-}
-
-.badge{
-    display:inline-flex;
-    align-items:center;
-    padding:4px 8px;
-    border-radius:999px;
-    font-size:10px;
-    font-weight:700;
-    background:#f3f4f6;
-    color:#374151;
-}
-
-.badge-status{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.badge-draft{
-    background:#fef3c7;
-    color:#92400e;
-}
-
-.badge-season{
-    background:#ede9fe;
-    color:#6d28d9;
-}
-
-.short-description{
-    color:#6b7280;
-    font-size:13px;
-    line-height:1.45;
-}
-
-.event-actions{
-    display:flex;
-    align-items:center;
-    gap:6px;
-}
-
-/* =========================
-   FORM
-========================= */
-
-.form-view{
-    display:none;
-}
-
-.form-view.active{
-    display:block;
-}
-
-.dashboard-view.hidden{
-    display:none;
-}
-
-.form-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:16px;
-}
-
-.form-header-left{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.back-btn{
-    border:1px solid #d1d5db;
-    background:#fff;
-    border-radius:8px;
-    padding:8px 11px;
-    cursor:pointer;
-}
-
-.form-header h2{
-    font-size:20px;
-}
-
-/* =========================
-   SECTIONS
-========================= */
-
-.form-section{
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:12px;
-    padding:18px;
-    margin-bottom:12px;
-}
-
-.section-title{
-    font-size:14px;
-    font-weight:750;
-    margin-bottom:15px;
-}
-
-.grid-2{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-}
-
-.field{
-    margin-bottom:13px;
-}
-
-.field:last-child{
-    margin-bottom:0;
-}
-
-.field label{
-    display:block;
-    font-size:12px;
-    font-weight:650;
-    color:#374151;
-    margin-bottom:6px;
-}
-
-.field small{
-    display:block;
-    color:#9ca3af;
-    font-size:10px;
-    margin-top:4px;
-}
-
-.full{
-    grid-column:1/-1;
-}
-
-/* =========================
-   SHOW HOME
-========================= */
-
-.home-option{
-    margin-top:3px;
-    padding:12px;
-    background:#f9fafb;
-    border-radius:9px;
-    border:1px solid #e5e7eb;
-}
-
-.home-option label{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin:0;
-    cursor:pointer;
-}
-
-.home-option input{
-    width:auto;
-}
-
-/* =========================
-   AFFILIATE LINKS
-========================= */
-
-.link-list{
-    display:grid;
-    gap:8px;
-    margin-bottom:10px;
-}
-
-.link-card{
-    border:1px solid #e5e7eb;
-    border-radius:10px;
-    padding:12px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-}
-
-.link-info{
-    min-width:0;
-    flex:1;
-}
-
-.link-title{
-    font-size:13px;
-    font-weight:700;
-}
-
-.link-url{
-    color:#6b7280;
-    font-size:11px;
-    margin-top:3px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-.link-actions{
-    display:flex;
-    gap:5px;
-}
-
-.add-link{
-    width:100%;
-    border:1px dashed #9ca3af;
-    background:#fafafa;
-    padding:10px;
-    border-radius:9px;
-    cursor:pointer;
-    font-size:12px;
-    font-weight:650;
-    color:#374151;
-}
-
-/* =========================
-   FORM ACTIONS
-========================= */
-
-.form-actions{
-    display:flex;
-    justify-content:flex-end;
-    gap:8px;
-    margin-top:5px;
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(15,23,42,.45);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:18px;
-    z-index:100;
-}
-
-.modal.active{
-    display:flex;
-}
-
-.modal-box{
-    width:100%;
-    max-width:470px;
-    background:#fff;
-    border-radius:14px;
-    padding:20px;
-    box-shadow:0 20px 50px rgba(0,0,0,.15);
-}
-
-.modal-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:18px;
-}
-
-.modal-header h3{
-    font-size:17px;
-}
-
-.close{
-    border:none;
-    background:#f3f4f6;
-    width:30px;
-    height:30px;
-    border-radius:7px;
-    cursor:pointer;
-}
-
-.modal-actions{
-    display:flex;
-    justify-content:flex-end;
-    gap:8px;
-    margin-top:16px;
-}
-
-/* =========================
-   EMPTY
-========================= */
-
-.empty{
-    padding:24px;
-    text-align:center;
-    color:#9ca3af;
-    font-size:13px;
-    border:1px dashed #d1d5db;
-    border-radius:10px;
-    background:#fff;
-}
-
-/* =========================
-   MESSAGE
-========================= */
-
-.message{
-    position:fixed;
-    right:16px;
-    bottom:16px;
-    background:#111827;
-    color:#fff;
-    padding:12px 15px;
-    border-radius:9px;
-    font-size:12px;
-    display:none;
-    z-index:200;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-}
-
-.message.show{
-    display:block;
-}
-
-/* =========================
-   MOBILE
-========================= */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f5f7fb;color:#1f2937}
+
+.header{height:64px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.5px}
+.logo span{font-weight:400;color:#9ca3af}
+.header-right{display:flex;align-items:center;gap:8px}
+
+.btn{border:none;border-radius:9px;padding:10px 15px;font-size:13px;font-weight:650;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:#111827;color:#fff}
+.btn-secondary{background:#fff;border:1px solid #d1d5db;color:#374151}
+.btn-danger{background:#fee2e2;color:#b91c1c}
+.btn-small{padding:7px 11px;font-size:12px}
+
+.container{max-width:1100px;margin:auto;padding:28px 18px 60px}
+.page-title{margin-bottom:18px}
+.page-title h1{font-size:25px;letter-spacing:-.4px}
+.page-title p{color:#6b7280;font-size:13px;margin-top:5px}
+
+.toolbar{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:10px;display:grid;grid-template-columns:1fr 150px 150px;gap:8px;margin-bottom:16px}
+input,textarea,select{width:100%;border:1px solid #d1d5db;border-radius:8px;padding:10px 11px;font-size:13px;outline:none;background:#fff}
+input:focus,textarea:focus,select:focus{border-color:#6b7280}
+textarea{min-height:110px;resize:vertical}
+
+.event-list{display:grid;gap:10px}
+.event-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;display:flex;justify-content:space-between;gap:16px}
+.event-main{min-width:0;flex:1}
+.event-name{font-size:16px;font-weight:700;margin-bottom:7px}
+.event-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:700;background:#f3f4f6;color:#374151}
+.badge-status{background:#dcfce7;color:#166534}
+.badge-draft{background:#fef3c7;color:#92400e}
+.badge-season{background:#ede9fe;color:#6d28d9}
+.short-description{color:#6b7280;font-size:13px;line-height:1.45}
+.event-actions{display:flex;align-items:center;gap:6px}
+
+.form-view{display:none}
+.form-view.active{display:block}
+.dashboard-view.hidden{display:none}
+.form-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.form-header-left{display:flex;align-items:center;gap:10px}
+.back-btn{border:1px solid #d1d5db;background:#fff;border-radius:8px;padding:8px 11px;cursor:pointer}
+.form-header h2{font-size:20px}
+
+.form-section{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;margin-bottom:12px}
+.section-title{font-size:14px;font-weight:750;margin-bottom:15px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:13px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:12px;font-weight:650;color:#374151;margin-bottom:6px}
+.field small{display:block;color:#9ca3af;font-size:10px;margin-top:4px}
+.full{grid-column:1/-1}
+
+.home-option{margin-top:3px;padding:12px;background:#f9fafb;border-radius:9px;border:1px solid #e5e7eb}
+.home-option label{display:flex;align-items:center;gap:8px;margin:0;cursor:pointer}
+.home-option input{width:auto}
+
+.link-list{display:grid;gap:8px;margin-bottom:10px}
+.link-card{border:1px solid #e5e7eb;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.link-info{min-width:0;flex:1}
+.link-title{font-size:13px;font-weight:700}
+.link-url{color:#6b7280;font-size:11px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.link-actions{display:flex;gap:5px}
+.add-link{width:100%;border:1px dashed #9ca3af;background:#fafafa;padding:10px;border-radius:9px;cursor:pointer;font-size:12px;font-weight:650;color:#374151}
+
+.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:5px}
+
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
+.modal.active{display:flex}
+.modal-box{width:100%;max-width:470px;background:#fff;border-radius:14px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.15)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modal-header h3{font-size:17px}
+.close{border:none;background:#f3f4f6;width:30px;height:30px;border-radius:7px;cursor:pointer}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+
+.empty{padding:24px;text-align:center;color:#9ca3af;font-size:13px;border:1px dashed #d1d5db;border-radius:10px;background:#fff}
+.message{position:fixed;right:16px;bottom:16px;background:#111827;color:#fff;padding:12px 15px;border-radius:9px;font-size:12px;display:none;z-index:200;box-shadow:0 10px 25px rgba(0,0,0,.15)}
+.message.show{display:block}
 
 @media(max-width:700px){
-
-    .header{
-        padding:0 14px;
-    }
-
-    .header .btn{
-        padding:8px 11px;
-    }
-
-    .container{
-        padding:20px 12px 40px;
-    }
-
-    .toolbar{
-        grid-template-columns:1fr;
-    }
-
-    .grid-2{
-        grid-template-columns:1fr;
-    }
-
-    .event-card{
-        flex-direction:column;
-        gap:12px;
-    }
-
-    .event-actions{
-        width:100%;
-    }
-
-    .event-actions button{
-        flex:1;
-    }
-
-    .form-header{
-        align-items:flex-start;
-    }
-
-    .form-header-right{
-        display:none;
-    }
-
-    .form-section{
-        padding:15px;
-    }
-
-    .link-card{
-        align-items:flex-start;
-    }
-
-    .link-actions{
-        flex-shrink:0;
-    }
-
+  .header{padding:0 14px}
+  .header .btn{padding:8px 11px}
+  .container{padding:20px 12px 40px}
+  .toolbar{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .event-card{flex-direction:column;gap:12px}
+  .event-actions{width:100%}
+  .event-actions button{flex:1}
+  .form-header{align-items:flex-start}
+  .form-header-right{display:none}
+  .form-section{padding:15px}
+  .link-card{align-items:flex-start}
+  .link-actions{flex-shrink:0}
 }
 </style>
 </head>
-
 <body>
 
-<!-- =========================
-     HEADER
-========================= -->
-
 <header class="header">
-
-    <div class="logo">
-        MUSIM<span>LAB</span>
-    </div>
-
-    <div class="header-right">
-
-        <button class="btn btn-primary"
-                onclick="openAddForm()">
-            + Add Event
-        </button>
-
-    </div>
-
+  <div class="logo">MUSIM<span>LAB</span></div>
+  <div class="header-right">
+    <button class="btn btn-primary" onclick="openAddForm()">+ Add Event</button>
+  </div>
 </header>
-
 
 <main class="container">
 
-<!-- =========================
-     DASHBOARD
-========================= -->
-
-<section id="dashboardView"
-         class="dashboard-view">
-
+  <!-- DASHBOARD -->
+  <section id="dashboardView" class="dashboard-view">
     <div class="page-title">
-
-        <h1>Events</h1>
-
-        <p>
-            Manage events and affiliate links.
-        </p>
-
+      <h1>Events</h1>
+      <p>Manage events and affiliate links.</p>
     </div>
-
 
     <div class="toolbar">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search events..."
-            oninput="renderEvents()">
-
-
-        <select id="statusFilter"
-                onchange="renderEvents()">
-
-            <option value="">All Status</option>
-            <option value="Published">Published</option>
-            <option value="Draft">Draft</option>
-
-        </select>
-
-
-        <select id="seasonFilter"
-                onchange="renderEvents()">
-
-            <option value="">All Seasons</option>
-
-        </select>
-
+      <input type="text" id="searchInput" placeholder="Search events..." oninput="renderEvents()">
+      <select id="statusFilter" onchange="renderEvents()">
+        <option value="">All Status</option>
+        <option value="Published">Published</option>
+        <option value="Draft">Draft</option>
+      </select>
+      <select id="seasonFilter" onchange="renderEvents()">
+        <option value="">All Seasons</option>
+      </select>
     </div>
 
-
-    <div id="eventList"
-         class="event-list">
-
-        <div class="empty">
-            Loading events...
-        </div>
-
+    <div id="eventList" class="event-list">
+      <div class="empty">Loading events...</div>
     </div>
+  </section>
 
-</section>
-
-
-<!-- =========================
-     EVENT FORM
-========================= -->
-
-<section id="formView"
-         class="form-view">
-
+  <!-- FORM -->
+  <section id="formView" class="form-view">
     <div class="form-header">
-
-        <div class="form-header-left">
-
-            <button class="back-btn"
-                    onclick="closeForm()">
-                ←
-            </button>
-
-            <h2 id="formTitle">
-                Add Event
-            </h2>
-
-        </div>
-
-
-        <div class="form-header-right">
-
-            <button class="btn btn-primary"
-                    onclick="saveEvent()">
-                Save
-            </button>
-
-        </div>
-
+      <div class="form-header-left">
+        <button class="back-btn" onclick="closeForm()">←</button>
+        <h2 id="formTitle">Add Event</h2>
+      </div>
+      <div class="form-header-right">
+        <button class="btn btn-primary" onclick="saveEvent()">Save</button>
+      </div>
     </div>
 
-
-    <!-- EVENT INFORMATION -->
-
+    <!-- Event Information -->
     <div class="form-section">
-
-        <div class="section-title">
-            Event Information
+      <div class="section-title">Event Information</div>
+      <div class="grid-2">
+        <div class="field full">
+          <label>Event Name</label>
+          <input type="text" id="eventName" placeholder="Example: Le Tour de Langkawi">
         </div>
-
-
-        <div class="grid-2">
-
-            <div class="field full">
-
-                <label>Event Name</label>
-
-                <input
-                    type="text"
-                    id="eventName"
-                    placeholder="Example: Le Tour de Langkawi">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>Start Date</label>
-
-                <input
-                    type="date"
-                    id="startDate">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>End Date</label>
-
-                <input
-                    type="date"
-                    id="endDate">
-
-            </div>
-
-
-            <div class="field">
-
-                <label>Category</label>
-
-                <select id="category">
-
-                    <option value="">
-                        Select Category
-                    </option>
-
-                    <option>Muzik & Konsert</option>
-                    <option>Sukan & Outdoor</option>
-                    <option>Budaya & Agama</option>
-                    <option>Teknologi & Perniagaan</option>
-                    <option>Gaya Hidup</option>
-                    <option>Local</option>
-                    <option>Cuti Sekolah</option>
-                    <option>Musim</option>
-
-                </select>
-
-            </div>
-
-
-            <div class="field">
-
-                <label>Season</label>
-
-                <select id="seasonId">
-
-                    <option value="">
-                        No Season
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="field full">
-
-                <label>Location</label>
-
-                <input
-                    type="text"
-                    id="location"
-                    placeholder="Example: Kuala Lumpur">
-
-            </div>
-
-
-            <div class="field full">
-
-                <label>Short Description</label>
-
-                <textarea
-                    id="shortDescription"
-                    style="min-height:75px"
-                    placeholder="Short summary shown on the event card..."></textarea>
-
-            </div>
-
+        <div class="field">
+          <label>Start Date</label>
+          <input type="date" id="startDate">
         </div>
-
+        <div class="field">
+          <label>End Date</label>
+          <input type="date" id="endDate">
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="category">
+            <option value="">Select Category</option>
+            <option>Muzik & Konsert</option>
+            <option>Sukan & Outdoor</option>
+            <option>Budaya & Agama</option>
+            <option>Teknologi & Perniagaan</option>
+            <option>Gaya Hidup</option>
+            <option>Local</option>
+            <option>Cuti Sekolah</option>
+            <option>Musim</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Season</label>
+          <select id="seasonId">
+            <option value="">No Season</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Location</label>
+          <input type="text" id="location" placeholder="Example: Kuala Lumpur">
+        </div>
+        <div class="field full">
+          <label>Short Description</label>
+          <textarea id="shortDescription" style="min-height:75px" placeholder="Short summary shown on the event card..."></textarea>
+        </div>
+      </div>
     </div>
 
-
-    <!-- DETAILS -->
-
+    <!-- Details -->
     <div class="form-section">
-
-        <div class="section-title">
-            Details
-        </div>
-
-
+      <div class="section-title">Details</div>
+      <div class="field">
+        <label>Google Drive Image URL</label>
+        <input type="url" id="imageUrl" placeholder="https://drive.google.com/...">
+      </div>
+      <div class="field">
+        <label>Full Description</label>
+        <textarea id="description" placeholder="Full event description..."></textarea>
+      </div>
+      <div class="field">
+        <label>Official Link</label>
+        <input type="url" id="officialLink" placeholder="https://...">
+      </div>
+      <div class="grid-2">
         <div class="field">
-
-            <label>Google Drive Image URL</label>
-
-            <input
-                type="url"
-                id="imageUrl"
-                placeholder="https://drive.google.com/...">
-
+          <label>Status</label>
+          <select id="status">
+            <option value="Draft">Draft</option>
+            <option value="Published">Published</option>
+          </select>
         </div>
-
-
-        <div class="field">
-
-            <label>Full Description</label>
-
-            <textarea
-                id="description"
-                placeholder="Full event description..."></textarea>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Official Link</label>
-
-            <input
-                type="url"
-                id="officialLink"
-                placeholder="https://...">
-
-        </div>
-
-
-        <div class="grid-2">
-
-            <div class="field">
-
-                <label>Status</label>
-
-                <select id="status">
-
-                    <option value="Draft">
-                        Draft
-                    </option>
-
-                    <option value="Published">
-                        Published
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-
-        <div class="home-option">
-
-            <label>
-
-                <input
-                    type="checkbox"
-                    id="showOnHome">
-
-                Show this event on Home
-
-            </label>
-
-        </div>
-
+      </div>
+      <div class="home-option">
+        <label>
+          <input type="checkbox" id="showOnHome">
+          Show this event on Home
+        </label>
+      </div>
     </div>
 
-
-    <!-- AFFILIATE LINKS -->
-
+    <!-- Affiliate Links -->
     <div class="form-section">
-
-        <div class="section-title">
-            Affiliate Links
-        </div>
-
-
-        <div id="linkList"
-             class="link-list">
-
-            <div class="empty">
-                No affiliate links yet.
-            </div>
-
-        </div>
-
-
-        <button class="add-link"
-                onclick="openLinkModal()">
-
-            + Add Affiliate Link
-
-        </button>
-
+      <div class="section-title">Affiliate Links</div>
+      <div id="linkList" class="link-list">
+        <div class="empty">No affiliate links yet.</div>
+      </div>
+      <button class="add-link" onclick="openLinkModal()">+ Add Affiliate Link</button>
     </div>
-
 
     <div class="form-actions">
-
-        <button class="btn btn-secondary"
-                onclick="closeForm()">
-
-            Cancel
-
-        </button>
-
-
-        <button class="btn btn-primary"
-                onclick="saveEvent()">
-
-            Save Event
-
-        </button>
-
+      <button class="btn btn-secondary" onclick="closeForm()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEvent()">Save Event</button>
     </div>
-
-</section>
+  </section>
 
 </main>
 
-
-<!-- =========================
-     LINK MODAL
-========================= -->
-
-<div id="linkModal"
-     class="modal">
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-
-            <h3 id="linkModalTitle">
-                Add Affiliate Link
-            </h3>
-
-            <button class="close"
-                    onclick="closeLinkModal()">
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Name</label>
-
-            <input
-                id="linkTitle"
-                placeholder="Example: Raincoat Lelaki">
-
-        </div>
-
-
-        <div class="field">
-
-            <label>Description / Link</label>
-
-            <textarea
-                id="linkUrl"
-                style="min-height:110px"
-                placeholder="Tulis penerangan produk dan letakkan link affiliate di sini..."></textarea>
-
-        </div>
-
-
-        <div class="modal-actions">
-
-            <button class="btn btn-secondary"
-                    onclick="closeLinkModal()">
-
-                Cancel
-
-            </button>
-
-
-            <button class="btn btn-primary"
-                    onclick="saveLink()">
-
-                Save Link
-
-            </button>
-
-        </div>
-
+<!-- LINK MODAL -->
+<div id="linkModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="linkModalTitle">Add Affiliate Link</h3>
+      <button class="close" onclick="closeLinkModal()">×</button>
     </div>
-
+    <div class="field">
+      <label>Name</label>
+      <input id="linkTitle" placeholder="Example: Raincoat Lelaki">
+    </div>
+    <div class="field">
+      <label>Description / Link</label>
+      <textarea id="linkUrl" style="min-height:110px" placeholder="Tulis penerangan produk dan letakkan link affiliate di sini..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeLinkModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLink()">Save Link</button>
+    </div>
+  </div>
 </div>
 
-
-<!-- =========================
-     MESSAGE
-========================= -->
-
-<div id="message"
-     class="message">
-</div>
-
+<div id="message" class="message"></div>
 
 <script>
-
 /*************************************************
  * API
  *************************************************/
-
-const API_URL =
-"https://script.google.com/macros/s/AKfycbxEGV5ZfShKK0gsALDr48ENe4uzYuY4Qqdv0ob64EFwF5QZ2PUNqDHUQCJIWrOwwzCp/exec";
-
+const API_URL = "https://script.google.com/macros/s/AKfycbxEGV5ZfShKK0gsALDr48ENe4uzYuY4Qqdv0ob64EFwF5QZ2PUNqDHUQCJIWrOwwzCp/exec";
 
 /*************************************************
  * STATE
  *************************************************/
-
 let events = [];
 let seasons = [];
 let currentEventId = null;
 let editingLinkId = null;
-
+let tempLinks = [];          // Temporary links for NEW event
 
 /*************************************************
  * MESSAGE
  *************************************************/
-
 function showMessage(text){
-
-    const el =
-        document.getElementById("message");
-
-    el.textContent = text;
-
-    el.classList.add("show");
-
-    setTimeout(() => {
-        el.classList.remove("show");
-    },2500);
-
+  const el = document.getElementById("message");
+  el.textContent = text;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2500);
 }
 
-
 /*************************************************
- * LOAD EVENTS
+ * LOAD DATA
  *************************************************/
-
 async function loadEvents(){
+  try{
+    const response = await fetch(API_URL + "?t=" + Date.now());
+    const result = await response.json();
 
-    try{
-
-        const response =
-            await fetch(
-                API_URL + "?t=" + Date.now()
-            );
-
-        const result =
-            await response.json();
-
-        if(Array.isArray(result)){
-
-            events = result;
-
-        }else if(
-            result &&
-            result.success &&
-            Array.isArray(result.data)
-        ){
-
-            events = result.data;
-
-        }else{
-
-            events = [];
-
-        }
-
-        renderEvents();
-
-    }catch(error){
-
-        console.error(error);
-
-        document.getElementById("eventList")
-            .innerHTML = `
-                <div class="empty">
-                    Failed to load events.
-                </div>
-            `;
-
+    if(Array.isArray(result)){
+      events = result;
+    }else if(result && result.success && Array.isArray(result.data)){
+      events = result.data;
+    }else{
+      events = [];
     }
-
+    renderEvents();
+  }catch(error){
+    console.error(error);
+    document.getElementById("eventList").innerHTML = `<div class="empty">Failed to load events.</div>`;
+  }
 }
-
-
-/*************************************************
- * LOAD SEASONS
- *************************************************/
 
 async function loadSeasons(){
+  try{
+    const response = await fetch(API_URL + "?action=getSeasons&t=" + Date.now());
+    const result = await response.json();
 
-    try{
-
-        const response =
-            await fetch(
-                API_URL +
-                "?action=getSeasons&t=" +
-                Date.now()
-            );
-
-        const result =
-            await response.json();
-
-        if(Array.isArray(result)){
-
-            seasons = result;
-
-        }else if(
-            result &&
-            result.success &&
-            Array.isArray(result.data)
-        ){
-
-            seasons = result.data;
-
-        }else{
-
-            seasons = [];
-
-        }
-
-        populateSeasonDropdown();
-
-    }catch(error){
-
-        console.error(error);
-
+    if(Array.isArray(result)){
+      seasons = result;
+    }else if(result && result.success && Array.isArray(result.data)){
+      seasons = result.data;
+    }else{
+      seasons = [];
     }
-
+    populateSeasonDropdown();
+  }catch(error){
+    console.error(error);
+  }
 }
-
-
-/*************************************************
- * SEASON DROPDOWN
- *************************************************/
 
 function populateSeasonDropdown(){
+  const select = document.getElementById("seasonId");
+  const filter = document.getElementById("seasonFilter");
 
-    const select =
-        document.getElementById("seasonId");
+  select.innerHTML = `<option value="">No Season</option>`;
+  filter.innerHTML = `<option value="">All Seasons</option>`;
 
-    const filter =
-        document.getElementById("seasonFilter");
-
-
-    select.innerHTML =
-        `<option value="">No Season</option>`;
-
-    filter.innerHTML =
-        `<option value="">All Seasons</option>`;
-
-
-    seasons
-        .filter(season =>
-            String(season.Status)
-                .toLowerCase() === "active"
-        )
-        .forEach(season => {
-
-            const option =
-                document.createElement("option");
-
-            option.value =
-                season["Season ID"];
-
-            option.textContent =
-                season["Season Name"];
-
-            select.appendChild(option);
-
-        });
-
-
-    seasons.forEach(season => {
-
-        const option =
-            document.createElement("option");
-
-        option.value =
-            season["Season ID"];
-
-        option.textContent =
-            season["Season Name"];
-
-        filter.appendChild(option);
-
+  seasons
+    .filter(s => String(s.Status || "").toLowerCase() === "active")
+    .forEach(season => {
+      const option = document.createElement("option");
+      option.value = season["Season ID"];
+      option.textContent = season["Season Name"];
+      select.appendChild(option);
     });
 
+  seasons.forEach(season => {
+    const option = document.createElement("option");
+    option.value = season["Season ID"];
+    option.textContent = season["Season Name"];
+    filter.appendChild(option);
+  });
 }
-
 
 /*************************************************
  * RENDER EVENTS
  *************************************************/
-
 function renderEvents(){
+  const list = document.getElementById("eventList");
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const status = document.getElementById("statusFilter").value;
+  const season = document.getElementById("seasonFilter").value;
 
-    const list =
-        document.getElementById("eventList");
+  const filtered = events.filter(event => {
+    const name = String(event["Event Name"] || "").toLowerCase();
+    const location = String(event["Location"] || "").toLowerCase();
+    const matchSearch = name.includes(search) || location.includes(search);
+    const matchStatus = !status || String(event["Status"]) === status;
+    const matchSeason = !season || String(event["Season ID"]) === season;
+    return matchSearch && matchStatus && matchSeason;
+  });
 
-    const search =
-        document.getElementById("searchInput")
-            .value
-            .toLowerCase();
+  if(!filtered.length){
+    list.innerHTML = `<div class="empty">No events found.</div>`;
+    return;
+  }
 
-    const status =
-        document.getElementById("statusFilter")
-            .value;
+  list.innerHTML = filtered.map(event => {
+    const seasonName = getSeasonName(event["Season ID"]);
+    const statusBadge = String(event["Status"]) === "Published"
+      ? `<span class="badge badge-status">Published</span>`
+      : `<span class="badge badge-draft">Draft</span>`;
+    const seasonBadge = seasonName
+      ? `<span class="badge badge-season">${escapeHtml(seasonName)}</span>`
+      : "";
 
-    const season =
-        document.getElementById("seasonFilter")
-            .value;
-
-
-    const filtered =
-        events.filter(event => {
-
-            const name =
-                String(event["Event Name"] || "")
-                    .toLowerCase();
-
-            const location =
-                String(event["Location"] || "")
-                    .toLowerCase();
-
-            const matchSearch =
-                name.includes(search) ||
-                location.includes(search);
-
-            const matchStatus =
-                !status ||
-                String(event["Status"]) === status;
-
-            const matchSeason =
-                !season ||
-                String(event["Season ID"]) === season;
-
-            return (
-                matchSearch &&
-                matchStatus &&
-                matchSeason
-            );
-
-        });
-
-
-    if(!filtered.length){
-
-        list.innerHTML = `
-            <div class="empty">
-                No events found.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    list.innerHTML =
-        filtered.map(event => {
-
-            const seasonName =
-                getSeasonName(
-                    event["Season ID"]
-                );
-
-
-            const statusBadge =
-                String(event["Status"]) === "Published"
-
-                ? `<span class="badge badge-status">
-                    Published
-                   </span>`
-
-                : `<span class="badge badge-draft">
-                    Draft
-                   </span>`;
-
-
-            const seasonBadge =
-                seasonName
-
-                ? `<span class="badge badge-season">
-                    ${escapeHtml(seasonName)}
-                   </span>`
-
-                : "";
-
-
-            return `
-
-                <div class="event-card">
-
-                    <div class="event-main">
-
-                        <div class="event-name">
-                            ${escapeHtml(
-                                event["Event Name"] || ""
-                            )}
-                        </div>
-
-
-                        <div class="event-meta">
-
-                            <span class="badge">
-                                ${formatDate(
-                                    event["Start Date"]
-                                )}
-                            </span>
-
-                            <span class="badge">
-                                📍 ${escapeHtml(
-                                    event["Location"] ||
-                                    "No location"
-                                )}
-                            </span>
-
-                            <span class="badge">
-                                ${escapeHtml(
-                                    event["Category"] || ""
-                                )}
-                            </span>
-
-                            ${statusBadge}
-
-                            ${seasonBadge}
-
-                        </div>
-
-
-                        <div class="short-description">
-
-                            ${escapeHtml(
-                                event["Short Description"] ||
-                                event["Description"] ||
-                                "No description."
-                            )}
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="event-actions">
-
-                        <button
-                            class="btn btn-secondary btn-small"
-                            onclick="editEvent('${event["Event ID"]}')">
-
-                            Edit
-
-                        </button>
-
-
-                        <button
-                            class="btn btn-danger btn-small"
-                            onclick="deleteEvent('${event["Event ID"]}')">
-
-                            Delete
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }).join("");
-
+    return `
+      <div class="event-card">
+        <div class="event-main">
+          <div class="event-name">${escapeHtml(event["Event Name"] || "")}</div>
+          <div class="event-meta">
+            <span class="badge">${formatDate(event["Start Date"])}</span>
+            <span class="badge">📍 ${escapeHtml(event["Location"] || "No location")}</span>
+            <span class="badge">${escapeHtml(event["Category"] || "")}</span>
+            ${statusBadge}
+            ${seasonBadge}
+          </div>
+          <div class="short-description">
+            ${escapeHtml(event["Short Description"] || event["Description"] || "No description.")}
+          </div>
+        </div>
+        <div class="event-actions">
+          <button class="btn btn-secondary btn-small" onclick="editEvent('${event["Event ID"]}')">Edit</button>
+          <button class="btn btn-danger btn-small" onclick="deleteEvent('${event["Event ID"]}')">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
-
 
 /*************************************************
  * FORM
  *************************************************/
-
 function openAddForm(){
-
-    currentEventId = null;
-
-    document.getElementById("formTitle")
-        .textContent = "Add Event";
-
-    clearForm();
-
-    document.getElementById("dashboardView")
-        .classList.add("hidden");
-
-    document.getElementById("formView")
-        .classList.add("active");
-
+  currentEventId = null;
+  tempLinks = [];
+  document.getElementById("formTitle").textContent = "Add Event";
+  clearForm();
+  document.getElementById("dashboardView").classList.add("hidden");
+  document.getElementById("formView").classList.add("active");
 }
-
 
 function closeForm(){
-
-    document.getElementById("formView")
-        .classList.remove("active");
-
-    document.getElementById("dashboardView")
-        .classList.remove("hidden");
-
-    currentEventId = null;
-
+  document.getElementById("formView").classList.remove("active");
+  document.getElementById("dashboardView").classList.remove("hidden");
+  currentEventId = null;
+  tempLinks = [];
+  editingLinkId = null;
 }
-
-
-/*************************************************
- * CLEAR FORM
- *************************************************/
 
 function clearForm(){
-
-    document.getElementById("eventName").value = "";
-    document.getElementById("startDate").value = "";
-    document.getElementById("endDate").value = "";
-    document.getElementById("category").value = "";
-    document.getElementById("location").value = "";
-    document.getElementById("shortDescription").value = "";
-    document.getElementById("description").value = "";
-    document.getElementById("seasonId").value = "";
-    document.getElementById("imageUrl").value = "";
-    document.getElementById("officialLink").value = "";
-    document.getElementById("status").value = "Draft";
-    document.getElementById("showOnHome").checked = false;
-
-
-    document.getElementById("linkList").innerHTML = `
-        <div class="empty">
-            No affiliate links yet.
-        </div>
-    `;
-
+  document.getElementById("eventName").value = "";
+  document.getElementById("startDate").value = "";
+  document.getElementById("endDate").value = "";
+  document.getElementById("category").value = "";
+  document.getElementById("location").value = "";
+  document.getElementById("shortDescription").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("seasonId").value = "";
+  document.getElementById("imageUrl").value = "";
+  document.getElementById("officialLink").value = "";
+  document.getElementById("status").value = "Draft";
+  document.getElementById("showOnHome").checked = false;
+  document.getElementById("linkList").innerHTML = `<div class="empty">No affiliate links yet.</div>`;
 }
-
 
 /*************************************************
  * EDIT EVENT
  *************************************************/
-
 async function editEvent(eventId){
+  const event = events.find(e => String(e["Event ID"]) === String(eventId));
+  if(!event) return;
 
-    const event =
-        events.find(
-            e =>
-                String(e["Event ID"]) ===
-                String(eventId)
-        );
+  currentEventId = event["Event ID"];
+  tempLinks = [];
+  document.getElementById("formTitle").textContent = "Edit Event";
 
-    if(!event) return;
+  document.getElementById("eventName").value = event["Event Name"] || "";
+  document.getElementById("startDate").value = formatDateForInput(event["Start Date"]);
+  document.getElementById("endDate").value = formatDateForInput(event["End Date"]);
+  document.getElementById("category").value = event["Category"] || "";
+  document.getElementById("location").value = event["Location"] || "";
+  document.getElementById("shortDescription").value = event["Short Description"] || "";
+  document.getElementById("description").value = event["Description"] || "";
+  document.getElementById("seasonId").value = event["Season ID"] || "";
+  document.getElementById("imageUrl").value = event["Image URL"] || "";
+  document.getElementById("officialLink").value = event["Official Link"] || "";
+  document.getElementById("status").value = event["Status"] || "Draft";
+  document.getElementById("showOnHome").checked =
+    String(event["Show on Home"]).toLowerCase() === "true" ||
+    String(event["Show on Home"]).toLowerCase() === "yes" ||
+    String(event["Show on Home"]) === "1";
 
+  document.getElementById("dashboardView").classList.add("hidden");
+  document.getElementById("formView").classList.add("active");
 
-    currentEventId =
-        event["Event ID"];
-
-
-    document.getElementById("formTitle")
-        .textContent = "Edit Event";
-
-
-    document.getElementById("eventName").value =
-        event["Event Name"] || "";
-
-
-    document.getElementById("startDate").value =
-        formatDateForInput(
-            event["Start Date"]
-        );
-
-
-    document.getElementById("endDate").value =
-        formatDateForInput(
-            event["End Date"]
-        );
-
-
-    document.getElementById("category").value =
-        event["Category"] || "";
-
-
-    document.getElementById("location").value =
-        event["Location"] || "";
-
-
-    document.getElementById("shortDescription").value =
-        event["Short Description"] || "";
-
-
-    document.getElementById("description").value =
-        event["Description"] || "";
-
-
-    document.getElementById("seasonId").value =
-        event["Season ID"] || "";
-
-
-    document.getElementById("imageUrl").value =
-        event["Image URL"] || "";
-
-
-    document.getElementById("officialLink").value =
-        event["Official Link"] || "";
-
-
-    document.getElementById("status").value =
-        event["Status"] || "Draft";
-
-
-    document.getElementById("showOnHome").checked =
-        String(event["Show on Home"])
-            .toLowerCase() === "true" ||
-        String(event["Show on Home"])
-            .toLowerCase() === "yes" ||
-        String(event["Show on Home"]) === "1";
-
-
-    document.getElementById("dashboardView")
-        .classList.add("hidden");
-
-    document.getElementById("formView")
-        .classList.add("active");
-
-
-    await loadLinks(eventId);
-
+  await loadLinks(eventId);
 }
-
 
 /*************************************************
  * SAVE EVENT
  *************************************************/
-/*****
-* SAVE EVENT
-*****/
-
 async function saveEvent(){
+  const data = {
+    eventId: currentEventId,
+    eventName: document.getElementById("eventName").value,
+    startDate: document.getElementById("startDate").value,
+    endDate: document.getElementById("endDate").value,
+    category: document.getElementById("category").value,
+    location: document.getElementById("location").value,
+    shortDescription: document.getElementById("shortDescription").value,
+    description: document.getElementById("description").value,
+    seasonId: document.getElementById("seasonId").value,
+    imageUrl: document.getElementById("imageUrl").value,
+    officialLink: document.getElementById("officialLink").value,
+    status: document.getElementById("status").value,
+    showOnHome: document.getElementById("showOnHome").checked
+  };
 
-    const data = {
+  if(!data.eventName.trim()){
+    showMessage("Event Name diperlukan.");
+    return;
+  }
 
-        eventId: currentEventId,
+  const action = currentEventId ? "updateEvent" : "addEvent";
 
-        eventName:
-            document.getElementById("eventName").value,
+  try{
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action, data })
+    });
 
-        startDate:
-            document.getElementById("startDate").value,
+    const result = await response.json();
 
-        endDate:
-            document.getElementById("endDate").value,
-
-        category:
-            document.getElementById("category").value,
-
-        location:
-            document.getElementById("location").value,
-
-        shortDescription:
-            document.getElementById("shortDescription").value,
-
-        description:
-            document.getElementById("description").value,
-
-        seasonId:
-            document.getElementById("seasonId").value,
-
-        imageUrl:
-            document.getElementById("imageUrl").value,
-
-        officialLink:
-            document.getElementById("officialLink").value,
-
-        status:
-            document.getElementById("status").value,
-
-        showOnHome:
-            document.getElementById("showOnHome").checked
-
-    };
-
-
-    if(!data.eventName.trim()){
-        showMessage("Event Name diperlukan.");
-        return;
+    if(!result.success){
+      showMessage(result.message || "Failed to save event.");
+      return;
     }
 
+    // Dapatkan Event ID (penting untuk event baru)
+    let newEventId = currentEventId;
 
-    const action =
-        currentEventId
-        ? "updateEvent"
-        : "addEvent";
+    if(!currentEventId){
+      newEventId = result.eventId || result.data?.eventId || result.data?.["Event ID"] || result.id || null;
 
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                        "text/plain;charset=utf-8"
-                },
-
-                body:JSON.stringify({
-                    action: action,
-                    data: data
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        if(!result.success){
-            showMessage(
-                result.message ||
-                "Failed to save event."
-            );
-            return;
-        }
-
-
-        // ===== DAPATKAN EVENT ID =====
-        let newEventId = currentEventId;
-
-        // Cuba ambil ID baru dari response (untuk event baru)
-        if(!currentEventId){
-            newEventId = 
-                result.eventId || 
-                result.data?.["Event ID"] || 
-                result.data?.eventId || 
-                result.id ||
-                null;
-
-            if(!newEventId){
-                showMessage("Event berjaya disimpan, tapi tidak dapat Event ID. Sila refresh dan edit semula untuk tambah Affiliate Links.");
-                closeForm();
-                await loadEvents();
-                await loadSeasons();
-                return;
-            }
-        }
-
-
-        // ===== SIMPAN TEMPORARY AFFILIATE LINKS =====
-        if(tempLinks.length > 0){
-
-            for(const link of tempLinks){
-
-                await fetch(API_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "text/plain;charset=utf-8"
-                    },
-                    body: JSON.stringify({
-                        action: "addLink",
-                        data: {
-                            eventId: newEventId,
-                            linkType: "Affiliate",
-                            title: link.Title,
-                            url: link.URL
-                        }
-                    })
-                });
-
-            }
-
-            // Clear temporary
-            tempLinks = [];
-        }
-
-
-        showMessage(
-            result.message ||
-            "Event + Affiliate Links berjaya disimpan."
-        );
-
-
+      if(!newEventId){
+        showMessage("Event berjaya disimpan, tapi tidak dapat Event ID. Sila refresh dan edit semula untuk tambah Affiliate Links.");
         closeForm();
-
         await loadEvents();
         await loadSeasons();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Error saving event."
-        );
-
+        return;
+      }
     }
 
+    // Simpan temporary links (jika ada)
+    if(tempLinks.length > 0){
+      for(const link of tempLinks){
+        await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "addLink",
+            data: {
+              eventId: newEventId,
+              linkType: "Affiliate",
+              title: link.Title,
+              url: link.URL
+            }
+          })
+        });
+      }
+      tempLinks = [];
+    }
+
+    showMessage(result.message || "Event + Affiliate Links berjaya disimpan.");
+    closeForm();
+    await loadEvents();
+    await loadSeasons();
+
+  }catch(error){
+    console.error(error);
+    showMessage("Error saving event.");
+  }
 }
-
-
-        
-
 
 /*************************************************
  * DELETE EVENT
  *************************************************/
-
 async function deleteEvent(eventId){
+  if(!confirm("Delete this event?\n\nRelated links will also be deleted.")) return;
 
-    if(!confirm(
-        "Delete this event?\n\n" +
-        "Related links will also be deleted."
-    )){
+  try{
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "deleteEvent",
+        data: { eventId }
+      })
+    });
 
-        return;
-
-    }
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:"deleteEvent",
-
-                    data:{
-                        eventId:eventId
-                    }
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        showMessage(
-            result.message ||
-            "Event deleted."
-        );
-
-
-        await loadEvents();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Error deleting event."
-        );
-
-    }
-
+    const result = await response.json();
+    showMessage(result.message || "Event deleted.");
+    await loadEvents();
+  }catch(error){
+    console.error(error);
+    showMessage("Error deleting event.");
+  }
 }
-
 
 /*************************************************
  * LINKS
  *************************************************/
 async function loadLinks(eventId){
+  try{
+    const response = await fetch(
+      API_URL + "?action=getLinks&eventId=" + encodeURIComponent(eventId) + "&t=" + Date.now()
+    );
+    const result = await response.json();
 
-    try{
-
-        const response =
-            await fetch(
-                API_URL +
-                "?action=getLinks&eventId=" +
-                encodeURIComponent(eventId) +
-                "&t=" + Date.now()
-            );
-
-        const result =
-            await response.json();
-
-        console.log("GET LINKS:", result);
-
-        if(
-            result &&
-            result.success &&
-            Array.isArray(result.data)
-        ){
-
-            renderLinks(result.data);
-
-        }else if(Array.isArray(result)){
-
-            // Backwards compatibility
-            renderLinks(result);
-
-        }else{
-
-            renderLinks([]);
-
-        }
-
-    }catch(error){
-
-        console.error("Load links error:", error);
-
-        document.getElementById("linkList").innerHTML = `
-            <div class="empty">
-                Failed to load affiliate links.
-            </div>
-        `;
-
+    if(result && result.success && Array.isArray(result.data)){
+      renderLinks(result.data);
+    }else if(Array.isArray(result)){
+      renderLinks(result);
+    }else{
+      renderLinks([]);
     }
-
+  }catch(error){
+    console.error("Load links error:", error);
+    document.getElementById("linkList").innerHTML = `<div class="empty">Failed to load affiliate links.</div>`;
+  }
 }
-
 
 function renderLinks(items){
+  const list = document.getElementById("linkList");
 
-    const list =
-        document.getElementById("linkList");
+  // Kalau masih dalam mode temporary (event baru)
+  if(!currentEventId && tempLinks.length > 0){
+    items = tempLinks;
+  }
 
+  if(!Array.isArray(items) || !items.length){
+    list.innerHTML = `<div class="empty">No affiliate links yet.</div>`;
+    return;
+  }
 
-    if(!Array.isArray(items) || !items.length){
+  list.innerHTML = items.map((item, index) => {
+    const isTemp = !item["Link ID"];
+    const id = item["Link ID"] || index;
 
-        list.innerHTML = `
-            <div class="empty">
-                No affiliate links yet.
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    list.innerHTML =
-        items.map(item => `
-
-            <div class="link-card">
-
-                <div class="link-info">
-
-                    <div class="link-title">
-                        🛍 ${escapeHtml(
-                            item["Title"] || ""
-                        )}
-                    </div>
-
-                    <div class="link-url">
-                        ${escapeHtml(
-                            item["URL"] || ""
-                        )}
-                    </div>
-
-                </div>
-
-
-                <div class="link-actions">
-
-                    <button
-                        class="btn btn-secondary btn-small"
-                        onclick='editLink(${JSON.stringify(item)})'>
-
-                        Edit
-
-                    </button>
-
-
-                    <button
-                        class="btn btn-danger btn-small"
-                        onclick="deleteLink('${item["Link ID"]}')">
-
-                        Delete
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
+    return `
+      <div class="link-card">
+        <div class="link-info">
+          <div class="link-title">🛍 ${escapeHtml(item["Title"] || item.Title || "")}</div>
+          <div class="link-url">${escapeHtml(item["URL"] || item.URL || "")}</div>
+        </div>
+        <div class="link-actions">
+          <button class="btn btn-secondary btn-small" onclick='editLink(${JSON.stringify(item)}, ${isTemp ? index : null})'>Edit</button>
+          <button class="btn btn-danger btn-small" onclick="\( {isTemp ? `deleteTempLink( \){index})` : `deleteLink('${item["Link ID"]}')`}">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
+function openLinkModal(){
+  editingLinkId = null;
+  document.getElementById("linkModalTitle").textContent = "Add Affiliate Link";
+  document.getElementById("linkTitle").value = "";
+  document.getElementById("linkUrl").value = "";
+  document.getElementById("linkModal").classList.add("active");
+}
+
+function closeLinkModal(){
+  document.getElementById("linkModal").classList.remove("active");
+  editingLinkId = null;
+}
+
+function editLink(item, tempIndex = null){
+  editingLinkId = item["Link ID"] || null;
+
+  // Kalau temporary
+  if(tempIndex !== null){
+    editingLinkId = "temp-" + tempIndex;
+  }
+
+  document.getElementById("linkModalTitle").textContent = "Edit Affiliate Link";
+  document.getElementById("linkTitle").value = item["Title"] || item.Title || "";
+  document.getElementById("linkUrl").value = item["URL"] || item.URL || "";
+  document.getElementById("linkModal").classList.add("active");
+}
 
 async function saveLink(){
+  const title = document.getElementById("linkTitle").value.trim();
+  const url = document.getElementById("linkUrl").value.trim();
 
-    if(!currentEventId){
+  if(!title || !url){
+    showMessage("Name and Affiliate Link diperlukan.");
+    return;
+  }
 
-        showMessage(
-            "Save the event first before adding a link."
-        );
+  // ===== MODE TEMPORARY (Event belum disimpan) =====
+  if(!currentEventId){
+    if(editingLinkId && String(editingLinkId).startsWith("temp-")){
+      const idx = parseInt(editingLinkId.replace("temp-", ""));
+      tempLinks[idx] = { Title: title, URL: url };
+    }else{
+      tempLinks.push({ Title: title, URL: url });
+    }
+    renderLinks(tempLinks);
+    closeLinkModal();
+    showMessage("Affiliate link ditambah (sementara).");
+    return;
+  }
 
-        return;
+  // ===== MODE NORMAL (Event sudah wujud) =====
+  const action = editingLinkId && !String(editingLinkId).startsWith("temp-") ? "updateLink" : "addLink";
 
+  const data = editingLinkId && !String(editingLinkId).startsWith("temp-")
+    ? { linkId: editingLinkId, linkType: "Affiliate", title, url }
+    : { eventId: currentEventId, linkType: "Affiliate", title, url };
+
+  try{
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action, data })
+    });
+
+    const result = await response.json();
+    console.log("SAVE LINK:", result);
+
+    if(!result.success){
+      showMessage(result.message || "Failed to save affiliate link.");
+      return;
     }
 
+    showMessage(result.message || "Affiliate link berjaya disimpan.");
+    closeLinkModal();
+    await loadLinks(currentEventId);
 
-    const title =
-        document.getElementById("linkTitle")
-            .value
-            .trim();
-
-    const url =
-        document.getElementById("linkUrl")
-            .value
-            .trim();
-
-
-    if(!title || !url){
-
-        showMessage(
-            "Name and Affiliate Link diperlukan."
-        );
-
-        return;
-
-    }
-
-
-    const action =
-        editingLinkId
-        ? "updateLink"
-        : "addLink";
-
-
-    const data =
-        editingLinkId
-
-        ? {
-            linkId: editingLinkId,
-            linkType: "Affiliate",
-            title: title,
-            url: url
-          }
-
-        : {
-            eventId: currentEventId,
-            linkType: "Affiliate",
-            title: title,
-            url: url
-          };
-
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                        "text/plain;charset=utf-8"
-                },
-
-                body:JSON.stringify({
-
-                    action: action,
-                    data: data
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-        console.log("SAVE LINK:", result);
-
-
-        if(!result.success){
-
-            showMessage(
-                result.message ||
-                "Failed to save affiliate link."
-            );
-
-            return;
-
-        }
-
-
-        showMessage(
-            result.message ||
-            "Affiliate link berjaya disimpan."
-        );
-
-
-        closeLinkModal();
-
-
-        await loadLinks(
-            currentEventId
-        );
-
-
-    }catch(error){
-
-        console.error(
-            "Save link error:",
-            error
-        );
-
-        showMessage(
-            "Error saving affiliate link."
-        );
-
-    }
-
+  }catch(error){
+    console.error("Save link error:", error);
+    showMessage("Error saving affiliate link.");
+  }
 }
 
-
-
-/*************************************************
- * DELETE LINK
- *************************************************/
+function deleteTempLink(index){
+  if(!confirm("Delete this affiliate link?")) return;
+  tempLinks.splice(index, 1);
+  renderLinks(tempLinks);
+  showMessage("Deleted.");
+}
 
 async function deleteLink(id){
+  if(!confirm("Delete this affiliate link?")) return;
 
-    if(!confirm(
-        "Delete this affiliate link?"
-    )) return;
+  try{
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "deleteLink",
+        data: { linkId: id }
+      })
+    });
 
-
-    try{
-
-        const response =
-            await fetch(API_URL,{
-
-                method:"POST",
-
-                body:JSON.stringify({
-
-                    action:"deleteLink",
-
-                    data:{
-                        linkId:id
-                    }
-
-                })
-
-            });
-
-
-        const result =
-            await response.json();
-
-
-        showMessage(
-            result.message ||
-            "Deleted."
-        );
-
-
-        await loadLinks(
-            currentEventId
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        showMessage(
-            "Error deleting link."
-        );
-
-    }
-
+    const result = await response.json();
+    showMessage(result.message || "Deleted.");
+    await loadLinks(currentEventId);
+  }catch(error){
+    console.error(error);
+    showMessage("Error deleting link.");
+  }
 }
-
 
 /*************************************************
  * HELPERS
  *************************************************/
-
 function getSeasonName(id){
-
-    if(!id) return "";
-
-    const season =
-        seasons.find(
-            s =>
-                String(s["Season ID"]) ===
-                String(id)
-        );
-
-    return season
-        ? season["Season Name"]
-        : "";
-
+  if(!id) return "";
+  const season = seasons.find(s => String(s["Season ID"]) === String(id));
+  return season ? season["Season Name"] : "";
 }
-
 
 function formatDate(value){
-
-    if(!value) return "";
-
-    const date =
-        new Date(value);
-
-    if(isNaN(date)) return value;
-
-    return date.toLocaleDateString(
-        "en-GB",
-        {
-            day:"2-digit",
-            month:"short",
-            year:"numeric"
-        }
-    );
-
+  if(!value) return "";
+  const date = new Date(value);
+  if(isNaN(date)) return value;
+  return date.toLocaleDateString("en-GB", { day:"2-digit", month:"short", year:"numeric" });
 }
-
 
 function formatDateForInput(value){
-
-    if(!value) return "";
-
-    const date =
-        new Date(value);
-
-    if(isNaN(date)) return "";
-
-    const year =
-        date.getFullYear();
-
-    const month =
-        String(
-            date.getMonth()+1
-        ).padStart(2,"0");
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(2,"0");
-
-    return `${year}-${month}-${day}`;
-
+  if(!value) return "";
+  const date = new Date(value);
+  if(isNaN(date)) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth()+1).padStart(2,"0");
+  const day = String(date.getDate()).padStart(2,"0");
+  return `\( {year}- \){month}-${day}`;
 }
-
 
 function escapeHtml(value){
-
-    return String(value || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
-
 
 /*************************************************
  * INITIAL LOAD
  *************************************************/
-
 loadSeasons();
 loadEvents();
-
 </script>
-
 </body>
 </html>
