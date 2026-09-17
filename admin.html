@@ -1751,7 +1751,6 @@ async function deleteEvent(eventId){
 /*************************************************
  * LINKS
  *************************************************/
-
 async function loadLinks(eventId){
 
     try{
@@ -1760,17 +1759,43 @@ async function loadLinks(eventId){
             await fetch(
                 API_URL +
                 "?action=getLinks&eventId=" +
-                encodeURIComponent(eventId)
+                encodeURIComponent(eventId) +
+                "&t=" + Date.now()
             );
 
-        const data =
+        const result =
             await response.json();
 
-        renderLinks(data);
+        console.log("GET LINKS:", result);
+
+        if(
+            result &&
+            result.success &&
+            Array.isArray(result.data)
+        ){
+
+            renderLinks(result.data);
+
+        }else if(Array.isArray(result)){
+
+            // Backwards compatibility
+            renderLinks(result);
+
+        }else{
+
+            renderLinks([]);
+
+        }
 
     }catch(error){
 
-        console.error(error);
+        console.error("Load links error:", error);
+
+        document.getElementById("linkList").innerHTML = `
+            <div class="empty">
+                Failed to load affiliate links.
+            </div>
+        `;
 
     }
 
@@ -1783,7 +1808,7 @@ function renderLinks(items){
         document.getElementById("linkList");
 
 
-    if(!items || !items.length){
+    if(!Array.isArray(items) || !items.length){
 
         list.innerHTML = `
             <div class="empty">
@@ -1846,63 +1871,6 @@ function renderLinks(items){
 }
 
 
-function openLinkModal(item = null){
-
-    editingLinkId =
-        item
-        ? item["Link ID"]
-        : null;
-
-
-    document.getElementById("linkModalTitle")
-        .textContent =
-            item
-            ? "Edit Affiliate Link"
-            : "Add Affiliate Link";
-
-
-    document.getElementById("linkTitle").value =
-        item
-        ? item["Title"] || ""
-        : "";
-
-
-    document.getElementById("linkUrl").value =
-        item
-        ? item["URL"] || ""
-        : "";
-
-
-    document.getElementById("linkModal")
-        .classList.add("active");
-
-}
-
-
-function editLink(item){
-
-    openLinkModal(item);
-
-}
-
-
-function closeLinkModal(){
-
-    document.getElementById("linkModal")
-        .classList.remove("active");
-
-    editingLinkId = null;
-
-}
-
-
-/*************************************************
- * SAVE LINK
- *
- * Backend structure remains:
- * Link Type / Title / URL
- *************************************************/
-
 async function saveLink(){
 
     if(!currentEventId){
@@ -1930,7 +1898,7 @@ async function saveLink(){
     if(!title || !url){
 
         showMessage(
-            "Name and Description/Link diperlukan."
+            "Name and Affiliate Link diperlukan."
         );
 
         return;
@@ -1948,31 +1916,17 @@ async function saveLink(){
         editingLinkId
 
         ? {
-            linkId:
-                editingLinkId,
-
-            linkType:
-                "Affiliate",
-
-            title:
-                title,
-
-            url:
-                url
+            linkId: editingLinkId,
+            linkType: "Affiliate",
+            title: title,
+            url: url
           }
 
         : {
-            eventId:
-                currentEventId,
-
-            linkType:
-                "Affiliate",
-
-            title:
-                title,
-
-            url:
-                url
+            eventId: currentEventId,
+            linkType: "Affiliate",
+            title: title,
+            url: url
           };
 
 
@@ -1983,10 +1937,15 @@ async function saveLink(){
 
                 method:"POST",
 
+                headers:{
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
                 body:JSON.stringify({
 
-                    action:action,
-                    data:data
+                    action: action,
+                    data: data
 
                 })
 
@@ -1996,14 +1955,29 @@ async function saveLink(){
         const result =
             await response.json();
 
+        console.log("SAVE LINK:", result);
+
+
+        if(!result.success){
+
+            showMessage(
+                result.message ||
+                "Failed to save affiliate link."
+            );
+
+            return;
+
+        }
+
 
         showMessage(
             result.message ||
-            "Saved."
+            "Affiliate link berjaya disimpan."
         );
 
 
         closeLinkModal();
+
 
         await loadLinks(
             currentEventId
@@ -2012,15 +1986,19 @@ async function saveLink(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Save link error:",
+            error
+        );
 
         showMessage(
-            "Error saving link."
+            "Error saving affiliate link."
         );
 
     }
 
 }
+
 
 
 /*************************************************
