@@ -1559,6 +1559,9 @@ async function editEvent(eventId){
 /*************************************************
  * SAVE EVENT
  *************************************************/
+/*****
+* SAVE EVENT
+*****/
 
 async function saveEvent(){
 
@@ -1606,13 +1609,8 @@ async function saveEvent(){
 
 
     if(!data.eventName.trim()){
-
-        showMessage(
-            "Event Name diperlukan."
-        );
-
+        showMessage("Event Name diperlukan.");
         return;
-
     }
 
 
@@ -1635,10 +1633,8 @@ async function saveEvent(){
                 },
 
                 body:JSON.stringify({
-
-                    action:action,
-                    data:data
-
+                    action: action,
+                    data: data
                 })
 
             });
@@ -1649,27 +1645,73 @@ async function saveEvent(){
 
 
         if(!result.success){
-
             showMessage(
                 result.message ||
                 "Failed to save event."
             );
-
             return;
+        }
 
+
+        // ===== DAPATKAN EVENT ID =====
+        let newEventId = currentEventId;
+
+        // Cuba ambil ID baru dari response (untuk event baru)
+        if(!currentEventId){
+            newEventId = 
+                result.eventId || 
+                result.data?.["Event ID"] || 
+                result.data?.eventId || 
+                result.id ||
+                null;
+
+            if(!newEventId){
+                showMessage("Event berjaya disimpan, tapi tidak dapat Event ID. Sila refresh dan edit semula untuk tambah Affiliate Links.");
+                closeForm();
+                await loadEvents();
+                await loadSeasons();
+                return;
+            }
+        }
+
+
+        // ===== SIMPAN TEMPORARY AFFILIATE LINKS =====
+        if(tempLinks.length > 0){
+
+            for(const link of tempLinks){
+
+                await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
+                    body: JSON.stringify({
+                        action: "addLink",
+                        data: {
+                            eventId: newEventId,
+                            linkType: "Affiliate",
+                            title: link.Title,
+                            url: link.URL
+                        }
+                    })
+                });
+
+            }
+
+            // Clear temporary
+            tempLinks = [];
         }
 
 
         showMessage(
             result.message ||
-            "Event saved."
+            "Event + Affiliate Links berjaya disimpan."
         );
 
 
         closeForm();
 
         await loadEvents();
-
         await loadSeasons();
 
 
@@ -1684,6 +1726,9 @@ async function saveEvent(){
     }
 
 }
+
+
+        
 
 
 /*************************************************
