@@ -631,24 +631,47 @@ function renderLinks(items){
     return;
   }
 
+  // Simpan items dalam variable global untuk akses dari onclick
+  window.__currentLinks = items;
+
   list.innerHTML = items.map((item, index) => {
     const isTemp = !item["Link ID"];
-    const id = item["Link ID"] || index;
+    const title = item["Title"] || item.Title || "";
+    const url = item["URL"] || item.URL || "";
+
+    const editFn   = `editLinkByIndex(${index}, ${isTemp})`;
+    const deleteFn = isTemp ? `deleteTempLink(${index})` : `deleteLinkByIndex(${index})`;
 
     return `
       <div class="link-card">
         <div class="link-info">
-          <div class="link-title">🛍 ${escapeHtml(item["Title"] || item.Title || "")}</div>
-          <div class="link-url">${escapeHtml(item["URL"] || item.URL || "")}</div>
+          <div class="link-title">🛍 ${escapeHtml(title)}</div>
+          <div class="link-url">${escapeHtml(url)}</div>
         </div>
         <div class="link-actions">
-          <button class="btn btn-secondary btn-small" onclick='editLink(${JSON.stringify(item)}, ${isTemp ? index : null})'>Edit</button>
-          <button class="btn btn-danger btn-small" onclick="\( {isTemp ? `deleteTempLink( \){index})` : `deleteLink('${item["Link ID"]}')`}">Delete</button>
+          <button class="btn btn-secondary btn-small" onclick="${editFn}">Edit</button>
+          <button class="btn btn-danger btn-small" onclick="${deleteFn}">Delete</button>
         </div>
       </div>
     `;
   }).join("");
 }
+
+// Wrapper baru — panggil dari onclick
+function editLinkByIndex(index, isTemp){
+  const item = window.__currentLinks[index];
+  if(!item) return;
+  editLink(item, isTemp ? index : null);
+}
+
+function deleteLinkByIndex(index){
+  const item = window.__currentLinks[index];
+  if(!item || !item["Link ID"]) return;
+  deleteLink(item["Link ID"]);
+}
+
+  
+          
 
 function openLinkModal(){
   editingLinkId = null;
@@ -776,7 +799,7 @@ function formatDate(value){
   if(isNaN(date)) return value;
   return date.toLocaleDateString("en-GB", { day:"2-digit", month:"short", year:"numeric" });
 }
-
+  
 function formatDateForInput(value){
   if(!value) return "";
   const date = new Date(value);
@@ -784,8 +807,9 @@ function formatDateForInput(value){
   const year = date.getFullYear();
   const month = String(date.getMonth()+1).padStart(2,"0");
   const day = String(date.getDate()).padStart(2,"0");
-  return `\( {year}- \){month}-${day}`;
+  return `${year}-${month}-${day}`;
 }
+
 
 function escapeHtml(value){
   return String(value || "")
