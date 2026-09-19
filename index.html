@@ -1,718 +1,202 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-  <title>Musim Lab</title>
-  <meta name="description" content="Musim Lab - tahu apa yang akan datang, bersedia sebelum tiba.">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      padding: 0 0 95px 0;
-      background: #f7f7f8;
-      color: #171717;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    /* =========================
-       HEADER
-    ========================= */
-
-    .top-header {
-      background: #ffffff;
-      padding: 18px 16px 14px;
-      border-bottom: 1px solid #eeeeee;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-
-    .brand {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .brand-sub {
-      margin-top: 3px;
-      font-size: 12px;
-      color: #777;
-    }
-
-    /* =========================
-       MAIN
-    ========================= */
-
-    main {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 14px 12px 30px;
-    }
-
-    .calendar-title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin: 8px 4px 12px;
-    }
-
-    .calendar-title {
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .active-filter {
-      font-size: 12px;
-      color: #666;
-      background: #eeeeee;
-      padding: 5px 9px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-
-    /* =========================
-       CALENDAR CARD
-    ========================= */
-
-    .calendar-card {
-      background: #ffffff;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid #ededed;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-    }
-
-    .month-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 14px;
-      border-bottom: 1px solid #eeeeee;
-    }
-
-    .month-name {
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .month-buttons {
-      display: flex;
-      gap: 6px;
-    }
-
-    .month-btn {
-      width: 38px;
-      height: 38px;
-      border: 0;
-      border-radius: 12px;
-      background: #f1f1f2;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    .month-btn:active {
-      transform: scale(0.95);
-    }
-
-    .weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      border-bottom: 1px solid #eeeeee;
-    }
-
-    .weekday {
-      text-align: center;
-      padding: 10px 2px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #888;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-    }
-
-    .day-cell {
-      min-height: 72px;
-      border-right: 1px solid #eeeeee;
-      border-bottom: 1px solid #eeeeee;
-      padding: 7px 5px;
-      position: relative;
-      background: #fff;
-      cursor: pointer;
-      overflow: hidden;
-    }
-
-    .day-cell:nth-child(7n) {
-      border-right: 0;
-    }
-
-    .day-cell.empty {
-      cursor: default;
-      background: #fafafa;
-    }
-
-    .day-cell.today {
-      background: #f7f4ff;
-    }
-
-    .day-number {
-      font-size: 12px;
-      font-weight: 700;
-      color: #555;
-      position: relative;
-      z-index: 3;
-    }
-
-    .day-cell.today .day-number {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #171717;
-      color: #fff;
-    }
-
-    /* =========================
-       HOLIDAY BACKGROUND
-    ========================= */
-
-    .holiday-label {
-      position: absolute;
-      left: 2px;
-      right: 2px;
-      bottom: 3px;
-      font-size: 7px;
-      line-height: 9px;
-      color: #c7c7c7;
-      text-align: center;
-      text-transform: uppercase;
-      pointer-events: none;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
-
-    /* =========================
-       CATEGORY DOTS
-    ========================= */
-
-    .dots {
-      position: relative;
-      z-index: 4;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 7px;
-      min-height: 8px;
-    }
-
-    .category-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex: 0 0 auto;
-    }
-
-    .dot-muzik {
-      background: #3182ce;
-    }
-
-    .dot-sukan {
-      background: #eab308;
-    }
-
-    .dot-budaya {
-      background: #22a06b;
-    }
-
-    .dot-teknologi {
-      background: #e5533d;
-    }
-
-    .dot-gaya {
-      background: #f28c28;
-    }
-
-    .dot-local {
-      background: #8b5e3c;
-    }
-
-    .dot-musim {
-      background: #8b5cf6;
-    }
-
-    /* =========================
-       EVENTS PANEL
-    ========================= */
-
-    .date-panel {
-      margin-top: 14px;
-    }
-
-    .date-panel.hidden {
-      display: none;
-    }
-
-    .date-panel-header {
-      padding: 4px 4px 10px;
-    }
-
-    .date-panel-date {
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .date-panel-sub {
-      margin-top: 3px;
-      font-size: 12px;
-      color: #777;
-    }
-
-    .event-card {
-      background: #fff;
-      border: 1px solid #e9e9e9;
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 9px;
-      cursor: pointer;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.03);
-    }
-
-    .event-card:active {
-      transform: scale(0.99);
-    }
-
-    .event-category {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 11px;
-      color: #777;
-      margin-bottom: 7px;
-    }
-
-    .event-category .category-dot {
-      width: 8px;
-      height: 8px;
-    }
-
-    .event-name {
-      font-size: 16px;
-      font-weight: 800;
-      line-height: 1.3;
-    }
-
-    .event-meta {
-      margin-top: 7px;
-      color: #666;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .event-more {
-      margin-top: 11px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #6d4aff;
-    }
-
-    /* =========================
-       DETAIL PANEL
-    ========================= */
-
-    .detail-panel {
-      margin-top: 14px;
-      background: #fff;
-      border-radius: 18px;
-      border: 1px solid #e9e9e9;
-      overflow: hidden;
-    }
-
-    .detail-panel.hidden {
-      display: none;
-    }
-
-    .detail-image {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      display: block;
-      background: #eee;
-    }
-
-    .detail-content {
-      padding: 18px;
-    }
-
-    .back-button {
-      border: 0;
-      background: #f0f0f1;
-      border-radius: 10px;
-      padding: 8px 11px;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 14px;
-      cursor: pointer;
-    }
-
-    .detail-category {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      color: #777;
-      margin-bottom: 8px;
-    }
-
-    .detail-title {
-      font-size: 24px;
-      line-height: 1.2;
-      font-weight: 800;
-      margin: 0;
-    }
-
-    .detail-meta {
-      margin-top: 12px;
-      color: #666;
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    .detail-description {
-      margin-top: 18px;
-      font-size: 14px;
-      line-height: 1.7;
-      color: #333;
-      white-space: pre-line;
-    }
-
-    .official-link {
-      display: inline-block;
-      margin-top: 18px;
-      text-decoration: none;
-      background: #171717;
-      color: #fff;
-      padding: 11px 15px;
-      border-radius: 11px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    /* =========================
-       LOADING
-    ========================= */
-
-    .loading {
-      text-align: center;
-      padding: 35px 15px;
-      color: #888;
-      font-size: 13px;
-    }
-
-    /* =========================
-       TOAST
-    ========================= */
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 92px;
-      transform: translate(-50%, 20px);
-      background: #171717;
-      color: #fff;
-      padding: 11px 16px;
-      border-radius: 12px;
-      font-size: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.25s ease;
-      z-index: 200;
-      white-space: nowrap;
-      max-width: calc(100vw - 30px);
-      text-align: center;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
-
-    /* =========================
-       BOTTOM SHEET
-    ========================= */
-
-    .sheet-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.35);
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-
-    .sheet-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .bottom-sheet {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #fff;
-      border-radius: 22px 22px 0 0;
-      z-index: 110;
-      padding: 10px 16px calc(18px + env(safe-area-inset-bottom));
-      transform: translateY(105%);
-      transition: transform 0.28s ease;
-      max-height: 82vh;
-      overflow-y: auto;
-    }
-
-    .bottom-sheet.open {
-      transform: translateY(0);
-    }
-
-    .sheet-handle {
-      width: 42px;
-      height: 4px;
-      border-radius: 999px;
-      background: #d6d6d6;
-      margin: 2px auto 16px;
-    }
-
-    .sheet-title {
-      font-size: 20px;
-      font-weight: 800;
-    }
-
-    .sheet-subtitle {
-      margin-top: 4px;
-      color: #777;
-      font-size: 12px;
-      margin-bottom: 17px;
-    }
-
-    .explore-list {
-      display: grid;
-      gap: 8px;
-    }
-
-    .explore-option {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      border: 1px solid #ededed;
-      background: #fafafa;
-      border-radius: 14px;
-      padding: 13px;
-      text-align: left;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 13px;
-    }
-
-    .explore-option:active {
-      transform: scale(0.98);
-    }
-
-    .explore-option .category-dot {
-      width: 10px;
-      height: 10px;
-    }
-
-    .explore-option.all-option {
-      justify-content: center;
-      background: #171717;
-      color: #fff;
-      border-color: #171717;
-    }
-
-    /* =========================
-       BOTTOM NAV
-    ========================= */
-
-    .bottom-nav {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 90;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-top: 1px solid #e9e9e9;
-      padding: 7px 8px calc(7px + env(safe-area-inset-bottom));
-    }
-
-    .nav-inner {
-      max-width: 760px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      align-items: end;
-    }
-
-    .nav-button {
-      border: 0;
-      background: transparent;
-      padding: 5px 2px;
-      cursor: pointer;
-      color: #777;
-      min-height: 54px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-    }
-
-    .nav-icon {
-      font-size: 19px;
-      line-height: 20px;
-    }
-
-    .nav-label {
-      font-size: 9px;
-      font-weight: 700;
-    }
-
-    .nav-button.active {
-      color: #171717;
-    }
-
-    .nav-button.musim-button {
-      position: relative;
-      margin-top: -18px;
-    }
-
-    .nav-button.musim-button .nav-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #8b5cf6;
-      color: #fff;
-      box-shadow: 0 7px 18px rgba(139,92,246,0.28);
-      border: 4px solid #fff;
-      font-size: 20px;
-    }
-
-    /* =========================
-       DESKTOP
-    ========================= */
-
-    @media (min-width: 700px) {
-      body {
-        padding-bottom: 90px;
-      }
-
-      .top-header {
-        padding-left: calc((100% - 760px) / 2 + 4px);
-        padding-right: calc((100% - 760px) / 2 + 4px);
-      }
-
-      .bottom-nav {
-        border-radius: 18px 18px 0 0;
-      }
-
-      .day-cell {
-        min-height: 92px;
-      }
-
-      .bottom-sheet {
-        left: 50%;
-        right: auto;
-        width: 520px;
-        transform: translate(-50%, 105%);
-      }
-
-      .bottom-sheet.open {
-        transform: translate(-50%, 0);
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+
+<title>Musim Lab — Tahu musim. Tahu keperluan.</title>
+<meta name="description" content="Tahu apa yang akan datang. Bersedia sebelum tiba.">
+<meta name="theme-color" content="#ffffff">
+
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;padding:0;background:#f7f7f8;color:#171717;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:hidden}
+button{font:inherit}
+img{max-width:100%;display:block}
+
+/* ============ HEADER ============ */
+.top-header{background:#fff;padding:14px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand-wrap{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0;box-shadow:0 3px 10px rgba(139,92,246,.3)}
+.brand-text{min-width:0}
+.brand{font-size:17px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
+.brand-sub{font-size:10px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.today-btn{background:#f1f1f3;border:0;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;color:#171717;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.today-btn:active{transform:scale(.95)}
+
+/* ============ MAIN ============ */
+main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
+.view{display:none}
+.view.active{display:block}
+
+.section-title{font-size:19px;font-weight:800;margin:6px 4px 12px;letter-spacing:-.3px}
+.section-sub{font-size:12px;color:#888;margin:-8px 4px 14px}
+
+/* ============ FILTER CHIP ============ */
+.filter-chip{display:none;align-items:center;gap:6px;background:#ede9fe;color:#6d28d9;padding:6px 10px 6px 12px;border-radius:999px;font-size:12px;font-weight:700;margin:0 4px 12px;width:fit-content;cursor:pointer}
+.filter-chip.show{display:flex}
+.filter-chip .x{width:18px;height:18px;border-radius:50%;background:#ddd6fe;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1}
+
+/* ============ CALENDAR ============ */
+.calendar-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid #ededed;box-shadow:0 4px 20px rgba(0,0,0,.04);touch-action:pan-y}
+.month-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px;border-bottom:1px solid #f0f0f0}
+.month-name{font-size:18px;font-weight:800}
+.month-buttons{display:flex;gap:4px}
+.month-btn{width:34px;height:34px;border:0;border-radius:10px;background:#f1f1f2;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.month-btn:active{transform:scale(.92)}
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid #f0f0f0;background:#fafafa}
+.weekday{text-align:center;padding:8px 2px;font-size:10px;font-weight:700;color:#999;text-transform:uppercase}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:4px}
+.day-cell{aspect-ratio:1;min-height:44px;border-radius:12px;padding:4px 3px;position:relative;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:2px;transition:background .15s}
+.day-cell.empty{background:transparent;cursor:default;pointer-events:none}
+.day-cell:active{background:#f5f3ff}
+.day-cell.today .day-number{background:#171717;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+.day-cell.selected{background:#ede9fe;outline:2px solid #8b5cf6;outline-offset:-2px}
+.day-cell.has-event .day-number{font-weight:900;color:#171717}
+.day-number{font-size:13px;font-weight:600;color:#333;line-height:1;padding:2px 0}
+.day-cell.weekend .day-number{color:#dc2626}
+.day-count{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;background:#8b5cf6;color:#fff;padding:1px 5px;border-radius:999px;line-height:1.2}
+.day-cell.has-holiday{background:#fef3c7}
+.day-cell.has-holiday:active{background:#fde68a}
+
+/* ============ BOTTOM SHEET ============ */
+.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s ease;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.sheet-overlay.open{opacity:1;pointer-events:auto}
+
+.bottom-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;z-index:110;padding:8px 16px calc(20px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 -10px 40px rgba(0,0,0,.1)}
+.bottom-sheet.open{transform:translateY(0)}
+.sheet-handle{width:40px;height:4px;border-radius:999px;background:#d6d6d6;margin:4px auto 14px;cursor:grab}
+.sheet-title{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
+.sheet-subtitle{color:#888;font-size:13px;margin-bottom:16px}
+
+/* Event list dalam sheet */
+.sheet-event{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:.15s}
+.sheet-event:active{transform:scale(.985);background:#f5f5f7}
+.sheet-event-cat{display:flex;align-items:center;gap:7px;font-size:11px;color:#888;font-weight:700;margin-bottom:6px}
+.cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sheet-event-name{font-size:15px;font-weight:800;line-height:1.3;margin-bottom:5px}
+.sheet-event-meta{font-size:12px;color:#666;line-height:1.5}
+.sheet-event-actions{margin-top:10px;display:flex;gap:6px}
+.mini-btn{border:1px solid #ddd;background:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.mini-btn:active{transform:scale(.95)}
+.mini-btn.active{background:#fee2e2;color:#b91c1c;border-color:#fecaca}
+.mini-btn.saved{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+
+/* Empty state */
+.empty-state{text-align:center;padding:40px 20px;color:#999}
+.empty-state .emoji{font-size:44px;margin-bottom:10px;opacity:.6}
+.empty-state .msg{font-size:14px;font-weight:600;color:#666;margin-bottom:6px}
+.empty-state .sub{font-size:12px;color:#aaa}
+
+/* Detail dalam sheet */
+.detail-hero{width:100%;height:180px;object-fit:cover;border-radius:16px;background:#eee;margin-bottom:14px}
+.detail-hero-fallback{width:100%;height:120px;border-radius:16px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:14px}
+.detail-title{font-size:22px;font-weight:800;line-height:1.2;margin:0 0 8px;letter-spacing:-.4px}
+.detail-meta{font-size:12px;color:#666;line-height:1.6;margin-bottom:14px}
+.detail-synopsis{font-size:14px;line-height:1.7;color:#333;margin-bottom:16px}
+.detail-actions{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.action-btn{flex:1;min-width:calc(50% - 4px);padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
+.action-btn:active{transform:scale(.96)}
+.action-btn.primary{background:#171717;color:#fff}
+.action-btn.secondary{background:#f1f1f3;color:#171717}
+.action-btn.danger{background:#fee2e2;color:#b91c1c}
+.action-btn.success{background:#dcfce7;color:#166534}
+
+/* Affiliate */
+.affiliate-section{margin-top:20px;padding-top:18px;border-top:1px solid #f0f0f0}
+.affiliate-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.affiliate-card{background:linear-gradient(135deg,#faf5ff,#f3e8ff);border:1px solid #e9d5ff;border-radius:14px;padding:14px;margin-bottom:9px}
+.affiliate-name{font-size:14px;font-weight:800;margin-bottom:5px;color:#6d28d9}
+.affiliate-desc{font-size:12px;color:#555;line-height:1.6;white-space:pre-line;margin-bottom:10px}
+.affiliate-link{display:inline-block;background:#8b5cf6;color:#fff;text-decoration:none;padding:8px 14px;border-radius:9px;font-size:12px;font-weight:700}
+.affiliate-link:active{transform:scale(.96)}
+
+/* ============ EXPLORE ============ */
+.explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px}
+.explore-card{background:#fff;border:1px solid #ededed;border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:8px;min-height:110px}
+.explore-card:active{transform:scale(.97);background:#fafafa}
+.explore-icon{font-size:26px;line-height:1}
+.explore-name{font-size:14px;font-weight:800;line-height:1.25}
+.explore-count{font-size:11px;color:#888;margin-top:auto}
+
+/* ============ MUSIM ============ */
+.season-card{background:#fff;border:1px solid #ededed;border-radius:18px;padding:18px;margin-bottom:11px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+.season-card:active{transform:scale(.985)}
+.season-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#8b5cf6,#6366f1)}
+.season-name{font-size:18px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.season-badge{font-size:10px;font-weight:800;background:#dcfce7;color:#166534;padding:3px 8px;border-radius:999px}
+.season-synopsis{font-size:13px;color:#666;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
+.season-cta{font-size:12px;font-weight:700;color:#6d28d9}
+
+/* ============ MORE ============ */
+.more-list{display:grid;gap:8px}
+.more-item{background:#fff;border:1px solid #ededed;border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.more-item:active{transform:scale(.99);background:#fafafa}
+.more-icon{width:40px;height:40px;border-radius:11px;background:#f5f3ff;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.more-text{flex:1;min-width:0}
+.more-text-title{font-size:14px;font-weight:800}
+.more-text-sub{font-size:11px;color:#888;margin-top:2px}
+.more-chev{color:#ccc;font-size:18px}
+
+/* ============ BOTTOM NAV ============ */
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:90;background:#fff;border-top:1px solid #eee;padding:0 8px env(safe-area-inset-bottom);box-shadow:0 -2px 20px rgba(0,0,0,.04)}
+.nav-inner{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);align-items:end;height:64px;position:relative}
+.nav-button{border:0;background:transparent;padding:6px 2px 8px;cursor:pointer;color:#999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;position:relative;transition:color .2s}
+.nav-button .nav-icon{font-size:22px;line-height:1;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.nav-button .nav-label{font-size:10px;font-weight:700;transition:opacity .2s}
+.nav-button.active{color:#8b5cf6}
+.nav-button.active .nav-icon{transform:translateY(-24px);background:#8b5cf6;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(139,92,246,.4);border:4px solid #f7f7f8;font-size:22px;position:absolute;bottom:calc(100% - 22px);left:50%;margin-left:-26px}
+.nav-button.active .nav-label{transform:translateY(-2px);font-weight:800}
+
+/* ============ TOAST ============ */
+.toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,20px);background:#171717;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s ease;z-index:200;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ============ LOADING ============ */
+.loading{text-align:center;padding:40px 15px;color:#888;font-size:13px}
+
+/* ============ DESKTOP ============ */
+@media (min-width:700px){
+  .day-cell{min-height:60px}
+  .bottom-sheet{left:50%;right:auto;width:520px;border-radius:24px 24px 0 0;transform:translate(-50%,110%)}
+  .bottom-sheet.open{transform:translate(-50%,0)}
+  .day-count{bottom:6px}
+}
+</style>
 </head>
-
 <body>
 
-  <!-- =========================
-       HEADER
-  ========================= -->
+<!-- ============ HEADER ============ -->
+<header class="top-header">
+  <div class="brand-wrap">
+    <div class="brand-logo">ML</div>
+    <div class="brand-text">
+      <div class="brand">Musim Lab</div>
+      <div class="brand-sub">Tahu musim. Tahu keperluan.</div>
+    </div>
+  </div>
+  <button class="today-btn" id="todayBtn">📍 Hari Ini</button>
+</header>
 
-  <header class="top-header">
-    <div class="brand">Musim Lab</div>
-    <div class="brand-sub">Tahu musim. Tahu keperluan.</div>
-  </header>
+<main>
 
+  <!-- ============ VIEW: CALENDAR ============ -->
+  <section class="view active" id="viewCalendar">
 
-  <!-- =========================
-       MAIN
-  ========================= -->
-
-  <main>
-
-    <div class="calendar-title-row">
-      <div class="calendar-title" id="calendarTitle">
-        Calendar
-      </div>
-
-      <div class="active-filter" id="filterLabel">
-        Semua
-      </div>
+    <div class="filter-chip" id="filterChip" onclick="clearFilter()">
+      <span id="filterChipText">Semua</span>
+      <span class="x">×</span>
     </div>
 
-
-    <section class="calendar-card">
-
+    <div class="calendar-card" id="calendarCard">
       <div class="month-header">
-
-        <div class="month-name" id="monthName">
-          September 2026
-        </div>
-
+        <div class="month-name" id="monthName">Januari 2026</div>
         <div class="month-buttons">
-          <button
-            class="month-btn"
-            id="prevMonth"
-            aria-label="Bulan sebelumnya">
-            ‹
-          </button>
-
-          <button
-            class="month-btn"
-            id="nextMonth"
-            aria-label="Bulan seterusnya">
-            ›
-          </button>
+          <button class="month-btn" id="prevMonth" aria-label="Sebelum">‹</button>
+          <button class="month-btn" id="nextMonth" aria-label="Seterusnya">›</button>
         </div>
-
       </div>
-
 
       <div class="weekdays">
         <div class="weekday">Isn</div>
@@ -724,2181 +208,849 @@
         <div class="weekday">Aha</div>
       </div>
 
-
       <div class="calendar-grid" id="calendarGrid">
-        <div class="loading">
-          Sedang baca musim...
+        <div class="loading" style="grid-column:1/-1">Memuatkan kalendar...</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============ VIEW: EXPLORE ============ -->
+  <section class="view" id="viewExplore">
+    <h2 class="section-title">Explore</h2>
+    <p class="section-sub">Pilih kategori untuk tapis kalendar.</p>
+    <div class="explore-grid" id="exploreGrid"></div>
+  </section>
+
+  <!-- ============ VIEW: MUSIM ============ -->
+  <section class="view" id="viewMusim">
+    <h2 class="section-title">Musim Aktif</h2>
+    <p class="section-sub">Musim yang sedang berlaku di Malaysia.</p>
+    <div id="seasonList">
+      <div class="loading">Memuatkan musim...</div>
+    </div>
+  </section>
+
+  <!-- ============ VIEW: MORE ============ -->
+  <section class="view" id="viewMore">
+    <h2 class="section-title">More</h2>
+
+    <div class="more-list">
+      <div class="more-item" onclick="openSavedEvents()">
+        <div class="more-icon">❤️</div>
+        <div class="more-text">
+          <div class="more-text-title">Event Disimpan</div>
+          <div class="more-text-sub" id="savedCountText">0 event</div>
         </div>
+        <div class="more-chev">›</div>
       </div>
 
-    </section>
-
-
-    <!-- DATE EVENTS -->
-
-    <section
-      class="date-panel hidden"
-      id="datePanel">
-
-      <div class="date-panel-header">
-
-        <div
-          class="date-panel-date"
-          id="datePanelDate">
+      <div class="more-item" onclick="showAbout()">
+        <div class="more-icon">ℹ️</div>
+        <div class="more-text">
+          <div class="more-text-title">Tentang Musim Lab</div>
+          <div class="more-text-sub">Apa itu Musim Lab?</div>
         </div>
-
-        <div
-          class="date-panel-sub"
-          id="datePanelSub">
-        </div>
-
+        <div class="more-chev">›</div>
       </div>
 
-      <div id="dateEvents"></div>
-
-    </section>
-
-
-    <!-- EVENT DETAIL -->
-
-    <section
-      class="detail-panel hidden"
-      id="detailPanel">
-
-      <div id="detailImageContainer"></div>
-
-      <div class="detail-content">
-
-        <button
-          class="back-button"
-          id="backToDate">
-          ← Kembali
-        </button>
-
-        <div
-          class="detail-category"
-          id="detailCategory">
+      <div class="more-item" onclick="showToast('Brochure akan datang!')">
+        <div class="more-icon">📄</div>
+        <div class="more-text">
+          <div class="more-text-title">Download Brochure</div>
+          <div class="more-text-sub">Panduan musim (akan datang)</div>
         </div>
-
-        <h1
-          class="detail-title"
-          id="detailTitle">
-        </h1>
-
-        <div
-          class="detail-meta"
-          id="detailMeta">
-        </div>
-
-        <div
-          class="detail-description"
-          id="detailDescription">
-        </div>
-
-        <div id="detailLink"></div>
-
+        <div class="more-chev">›</div>
       </div>
 
-    </section>
+      <div class="more-item" onclick="showToast('Affiliate disclosure akan datang!')">
+        <div class="more-icon">🛍️</div>
+        <div class="more-text">
+          <div class="more-text-title">Affiliate Disclosure</div>
+          <div class="more-text-sub">Kami mungkin dapat komisen</div>
+        </div>
+        <div class="more-chev">›</div>
+      </div>
+    </div>
+  </section>
 
-  </main>
+</main>
 
+<!-- ============ OVERLAY ============ -->
+<div class="sheet-overlay" id="sheetOverlay"></div>
 
-  <!-- =========================
-       TOAST
-  ========================= -->
+<!-- ============ SHEET: DATE EVENTS ============ -->
+<div class="bottom-sheet" id="dateSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title" id="dateSheetTitle">15 Januari 2026</div>
+  <div class="sheet-subtitle" id="dateSheetSub">0 event</div>
+  <div id="dateSheetContent"></div>
+</div>
 
-  <div
-    class="toast"
-    id="toast">
+<!-- ============ SHEET: EVENT DETAIL ============ -->
+<div class="bottom-sheet" id="detailSheet">
+  <div class="sheet-handle"></div>
+  <div id="detailSheetContent"></div>
+</div>
+
+<!-- ============ SHEET: SEASON DETAIL ============ -->
+<div class="bottom-sheet" id="seasonSheet">
+  <div class="sheet-handle"></div>
+  <div id="seasonSheetContent"></div>
+</div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<nav class="bottom-nav">
+  <div class="nav-inner">
+    <button class="nav-button active" data-tab="calendar">
+      <span class="nav-icon">📅</span>
+      <span class="nav-label">Calendar</span>
+    </button>
+    <button class="nav-button" data-tab="explore">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-label">Explore</span>
+    </button>
+    <button class="nav-button" data-tab="musim">
+      <span class="nav-icon">🌧️</span>
+      <span class="nav-label">Musim</span>
+    </button>
+    <button class="nav-button" data-tab="more">
+      <span class="nav-icon">⋯</span>
+      <span class="nav-label">More</span>
+    </button>
   </div>
-
-
-  <!-- =========================
-       EXPLORE OVERLAY
-  ========================= -->
-
-  <div
-    class="sheet-overlay"
-    id="sheetOverlay">
-  </div>
-
-
-  <!-- =========================
-       EXPLORE BOTTOM SHEET
-  ========================= -->
-
-  <div
-    class="bottom-sheet"
-    id="exploreSheet">
-
-    <div class="sheet-handle"></div>
-
-    <div class="sheet-title">
-      Explore
-    </div>
-
-    <div class="sheet-subtitle">
-      Apa yang kau nak tengok?
-    </div>
-
-    <div class="explore-list">
-
-      <button
-        class="explore-option all-option"
-        data-category="ALL">
-        Lihat Semua
-      </button>
-
-      <button
-        class="explore-option"
-        data-category="Muzik & Konsert">
-
-        <span class="category-dot dot-muzik"></span>
-
-        <span>
-          Muzik & Konsert
-        </span>
-
-      </button>
-
-
-      <button
-        class="explore-option"
-        data-category="Sukan & Outdoor">
-
-        <span class="category-dot dot-sukan"></span>
-
-        <span>
-          Sukan & Outdoor
-        </span>
-
-      </button>
-
-
-      <button
-        class="explore-option"
-        data-category="Budaya & Agama">
-
-        <span class="category-dot dot-budaya"></span>
-
-        <span>
-          Budaya & Agama
-        </span>
-
-      </button>
-
-
-      <button
-        class="explore-option"
-        data-category="Teknologi & Perniagaan">
-
-        <span class="category-dot dot-teknologi"></span>
-
-        <span>
-          Teknologi & Perniagaan
-        </span>
-
-      </button>
-
-
-      <button
-        class="explore-option"
-        data-category="Gaya Hidup">
-
-        <span class="category-dot dot-gaya"></span>
-
-        <span>
-          Gaya Hidup
-        </span>
-
-      </button>
-
-
-      <button
-        class="explore-option"
-        data-category="Local">
-
-        <span class="category-dot dot-local"></span>
-
-        <span>
-          Local
-        </span>
-
-      </button>
-
-
-      <button
-        class="explore-option"
-        data-category="Musim">
-
-        <span class="category-dot dot-musim"></span>
-
-        <span>
-          Musim
-        </span>
-
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- =========================
-       BOTTOM NAV
-  ========================= -->
-
-  <nav class="bottom-nav">
-
-    <div class="nav-inner">
-
-      <button
-        class="nav-button active"
-        id="navHome">
-
-        <div class="nav-icon">⌂</div>
-        <div class="nav-label">Home</div>
-
-      </button>
-
-
-      <button
-        class="nav-button"
-        id="navExplore">
-
-        <div class="nav-icon">⌕</div>
-        <div class="nav-label">Explore</div>
-
-      </button>
-
-
-      <button
-        class="nav-button musim-button"
-        id="navMusim">
-
-        <div class="nav-icon">✦</div>
-        <div class="nav-label">Musim</div>
-
-      </button>
-
-
-      <button
-        class="nav-button"
-        id="navCheck">
-
-        <div class="nav-icon">✓</div>
-        <div class="nav-label">Check</div>
-
-      </button>
-
-
-      <button
-        class="nav-button"
-        id="navMore">
-
-        <div class="nav-icon">☰</div>
-        <div class="nav-label">More</div>
-
-      </button>
-
-    </div>
-
-  </nav>
-
-
-  <script>
-
-    /* =====================================================
-       MUSIM LAB
-       CALENDAR V3 MOBILE
-    ===================================================== */
-
-
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbxyvyOYNCWWQcqcPOuceNHEzSBCWn7BaSFCC_gyFFnRaCkQAKIHYDhB_30db1qmmi85/exec";
-
-
-    const HOLIDAY_URL =
-      "public-holidayMalaysia.json";
-
-
-    let allEvents = [];
-
-    let holidayData = [];
-
-    let currentDate = new Date(2026, 8, 1);
-
-    let selectedDate = null;
-
-    let selectedEvent = null;
-
-    let activeCategory = "ALL";
-
-
-    const monthNames = [
-      "Januari",
-      "Februari",
-      "Mac",
-      "April",
-      "Mei",
-      "Jun",
-      "Julai",
-      "Ogos",
-      "September",
-      "Oktober",
-      "November",
-      "Disember"
-    ];
-
-
-    const categoryClassMap = {
-
-      "Muzik & Konsert": "dot-muzik",
-
-      "Sukan & Outdoor": "dot-sukan",
-
-      "Budaya & Agama": "dot-budaya",
-
-      "Teknologi & Perniagaan": "dot-teknologi",
-
-      "Gaya Hidup": "dot-gaya",
-
-      "Local": "dot-local",
-
-      "Musim": "dot-musim"
-
-    };
-
-
-    /* =====================================================
-       HELPERS
-    ===================================================== */
-
-
-    function normalise(value) {
-
-      return String(value || "")
-        .trim()
-        .toLowerCase();
-
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   MUSIM LAB — INDEX v4
+===================================================== */
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxyvyOYNCWWQcqcPOuceNHEzSBCWn7BaSFCC_gyFFnRaCkQAKIHYDhB_30db1qmmi85/exec";
+const API_TOKEN = "ml-2025-a7b3c9d1e5f6";
+const HOLIDAY_URL = "public-holidayMalaysia.json";
+
+let allEvents = [];
+let allSeasons = [];
+let holidayData = [];
+let currentDate = new Date();
+let selectedDate = null;
+let selectedEvent = null;
+let selectedSeason = null;
+let activeCategory = "ALL";
+let savedIds = JSON.parse(localStorage.getItem("ml_saved") || "[]");
+
+const monthNames = ["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
+const dayNames = ["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"];
+
+const CATEGORIES = [
+  { name: "Muzik & Konsert", icon: "🎵", color: "#3182ce" },
+  { name: "Sukan & Outdoor", icon: "⚽", color: "#eab308" },
+  { name: "Budaya & Agama", icon: "🕌", color: "#22a06b" },
+  { name: "Teknologi & Perniagaan", icon: "💼", color: "#e5533d" },
+  { name: "Gaya Hidup", icon: "✨", color: "#f28c28" },
+  { name: "Local", icon: "🏘️", color: "#8b5e3c" },
+  { name: "Musim", icon: "🌦️", color: "#8b5cf6" }
+];
+
+/* ============ HELPERS ============ */
+function normalise(v){return String(v||"").trim().toLowerCase()}
+function $(id){return document.getElementById(id)}
+
+function getCatColor(cat){
+  const c = CATEGORIES.find(x => normalise(x.name) === normalise(cat));
+  return c ? c.color : "#8b5e3c";
+}
+function getCatIcon(cat){
+  const c = CATEGORIES.find(x => normalise(x.name) === normalise(cat));
+  return c ? c.icon : "📍";
+}
+
+function parseDate(value){
+  if(!value) return null;
+  if(value instanceof Date) return new Date(value.getFullYear(),value.getMonth(),value.getDate());
+  const text = String(value).trim();
+  let m = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(m) return new Date(+m[3],+m[2]-1,+m[1]);
+  m = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m) return new Date(+m[1],+m[2]-1,+m[3]);
+  const d = new Date(text);
+  if(!isNaN(d)) return new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  return null;
+}
+function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
+function sameDate(a,b){return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function formatDate(d){
+  if(!d) return "";
+  return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+}
+function formatDateShort(d){
+  if(!d) return "";
+  return `${d.getDate()} ${monthNames[d.getMonth()].slice(0,3)}`;
+}
+
+function getEventStart(e){return parseDate(e["Start Date"]||e.startDate)}
+function getEventEnd(e){return parseDate(e["End Date"]||e.endDate)}
+function getEventCat(e){return String(e["Category"]||e.category||"").trim()}
+function getEventName(e){return String(e["Event Name"]||e.eventName||"Event").trim()}
+function getEventLoc(e){return String(e["Location"]||e.location||"").trim()}
+function getEventDesc(e){return String(e["Description"]||e.description||"").trim()}
+function getEventShort(e){return String(e["Short Description"]||e.shortDescription||"").trim()}
+function getEventImg(e){return String(e["Image URL"]||e.imageUrl||"").trim()}
+function getEventLink(e){return String(e["Official Link"]||e.officialLink||"").trim()}
+function getEventId(e){return String(e["Event ID"]||e.eventId||"").trim()}
+function getEventStatus(e){return String(e["Status"]||"").trim()}
+
+function eventMatchesFilter(e){
+  if(activeCategory === "ALL") return true;
+  return normalise(getEventCat(e)) === normalise(activeCategory);
+}
+
+function getEventsForDate(date){
+  const target = new Date(date.getFullYear(),date.getMonth(),date.getDate());
+  return allEvents.filter(e => {
+    if(!eventMatchesFilter(e)) return false;
+    if(normalise(getEventStatus(e)) !== "published") return false;
+    let s = getEventStart(e), en = getEventEnd(e);
+    if(!s) return false;
+    if(!en) en = s;
+    if(en < s){const t=s;s=en;en=t;}
+    return target >= s && target <= en;
+  });
+}
+
+function getHolidayForDate(date){
+  if(!Array.isArray(holidayData)) return [];
+  const target = dateKey(date);
+  return holidayData.filter(h => {
+    if(!h) return false;
+    const s = parseDate(h.start);
+    const en = parseDate(h.end || h.start);
+    if(!s) return false;
+    const fe = en || s;
+    return target >= dateKey(s) && target <= dateKey(fe);
+  });
+}
+
+/* ============ TOAST ============ */
+let toastTimer = null;
+function showToast(msg){
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove("show"), 2400);
+}
+
+/* ============ TABS ============ */
+document.querySelectorAll(".nav-button").forEach(btn => {
+  btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+});
+
+function switchTab(tab){
+  document.querySelectorAll(".nav-button").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  const viewId = {calendar:"viewCalendar",explore:"viewExplore",musim:"viewMusim",more:"viewMore"}[tab];
+  $(viewId).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+
+  if(tab === "explore") renderExplore();
+  if(tab === "musim") renderSeasons();
+  if(tab === "more") updateSavedCount();
+}
+
+/* ============ RENDER CALENDAR ============ */
+function renderCalendar(){
+  const grid = $("calendarGrid");
+  grid.innerHTML = "";
+
+  const y = currentDate.getFullYear();
+  const m = currentDate.getMonth();
+  $("monthName").textContent = `${monthNames[m]} ${y}`;
+
+  const first = new Date(y,m,1);
+  const offset = (first.getDay() + 6) % 7;
+  const days = new Date(y,m+1,0).getDate();
+  const today = new Date();
+
+  for(let i=0;i<offset;i++){
+    const b = document.createElement("div");
+    b.className = "day-cell empty";
+    grid.appendChild(b);
+  }
+
+  for(let d=1;d<=days;d++){
+    const date = new Date(y,m,d);
+    const cell = document.createElement("div");
+    cell.className = "day-cell";
+    const dow = date.getDay();
+    if(dow === 0 || dow === 6) cell.classList.add("weekend");
+    if(sameDate(date,today)) cell.classList.add("today");
+    if(selectedDate && sameDate(date,selectedDate)) cell.classList.add("selected");
+
+    const holidays = getHolidayForDate(date);
+    if(holidays.length > 0) cell.classList.add("has-holiday");
+
+    const events = getEventsForDate(date);
+    if(events.length > 0) cell.classList.add("has-event");
+
+    const num = document.createElement("div");
+    num.className = "day-number";
+    num.textContent = d;
+    cell.appendChild(num);
+
+    if(events.length > 0){
+      const count = document.createElement("div");
+      count.className = "day-count";
+      count.textContent = events.length;
+      cell.appendChild(count);
     }
 
-
-    function getCategoryClass(category) {
-
-      const clean =
-        normalise(category);
-
-      for (const key in categoryClassMap) {
-
-        if (
-          normalise(key) === clean
-        ) {
-
-          return categoryClassMap[key];
-
-        }
-
-      }
-
-      return "dot-local";
-
-    }
-
-
-    function parseDate(value) {
-
-      if (!value) return null;
-
-
-      if (value instanceof Date) {
-
-        return new Date(
-          value.getFullYear(),
-          value.getMonth(),
-          value.getDate()
-        );
-
-      }
-
-
-      const text =
-        String(value).trim();
-
-
-      /* DD/MM/YYYY */
-
-      const slashMatch =
-        text.match(
-          /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
-        );
-
-
-      if (slashMatch) {
-
-        return new Date(
-          Number(slashMatch[3]),
-          Number(slashMatch[2]) - 1,
-          Number(slashMatch[1])
-        );
-
-      }
-
-
-      /* YYYY-MM-DD */
-
-      const dateMatch =
-        text.match(
-          /^(\d{4})-(\d{1,2})-(\d{1,2})/
-        );
-
-
-      if (dateMatch) {
-
-        return new Date(
-          Number(dateMatch[1]),
-          Number(dateMatch[2]) - 1,
-          Number(dateMatch[3])
-        );
-
-      }
-
-
-      /* ISO */
-
-      const parsed =
-        new Date(text);
-
-
-      if (!isNaN(parsed.getTime())) {
-
-        return new Date(
-          parsed.getFullYear(),
-          parsed.getMonth(),
-          parsed.getDate()
-        );
-
-      }
-
-
-      return null;
-
-    }
-
-
-    function dateKey(date) {
-
-      return [
-        date.getFullYear(),
-        String(date.getMonth() + 1).padStart(2, "0"),
-        String(date.getDate()).padStart(2, "0")
-      ].join("-");
-
-    }
-
-
-    function sameDate(a, b) {
-
-      if (!a || !b) return false;
-
-      return (
-        a.getFullYear() === b.getFullYear() &&
-        a.getMonth() === b.getMonth() &&
-        a.getDate() === b.getDate()
-      );
-
-    }
-
-
-    function formatDate(date) {
-
-      if (!date) return "";
-
-      return (
-        date.getDate() +
-        " " +
-        monthNames[date.getMonth()] +
-        " " +
-        date.getFullYear()
-      );
-
-    }
-
-
-    function getEventStart(event) {
-
-      return parseDate(
-        event["Start Date"] ||
-        event.startDate ||
-        event.start
-      );
-
-    }
-
-
-    function getEventEnd(event) {
-
-      return parseDate(
-        event["End Date"] ||
-        event.endDate ||
-        event.end
-      );
-
-    }
-
-
-    function getEventCategory(event) {
-
-      return String(
-        event["Category"] ||
-        event.category ||
-        ""
-      ).trim();
-
-    }
-
-
-    function getEventName(event) {
-
-      return String(
-        event["Event Name"] ||
-        event.eventName ||
-        event.name ||
-        "Event"
-      ).trim();
-
-    }
-
-
-    function getEventLocation(event) {
-
-      return String(
-        event["Location"] ||
-        event.location ||
-        ""
-      ).trim();
-
-    }
-
-
-    function getEventDescription(event) {
-
-      return String(
-        event["Description"] ||
-        event.description ||
-        ""
-      ).trim();
-
-    }
-
-
-    function getEventImage(event) {
-
-      return String(
-        event["Image URL"] ||
-        event.imageUrl ||
-        event.image ||
-        ""
-      ).trim();
-
-    }
-
-
-    function getEventLink(event) {
-
-      return String(
-        event["Official Link"] ||
-        event.officialLink ||
-        event.link ||
-        ""
-      ).trim();
-
-    }
-
-
-    function getEventId(event) {
-
-      return String(
-        event["Event ID"] ||
-        event.eventId ||
-        event.id ||
-        ""
-      ).trim();
-
-    }
-
-
-    function eventMatchesFilter(event) {
-
-      if (activeCategory === "ALL") {
-
-        return true;
-
-      }
-
-      return (
-        normalise(
-          getEventCategory(event)
-        ) === normalise(activeCategory)
-      );
-
-    }
-
-
-    /* =====================================================
-       EVENTS FOR DATE
-    ===================================================== */
-
-
-    function getEventsForDate(date) {
-
-      const target =
-        new Date(
-          date.getFullYear(),
-          date.getMonth(),
-          date.getDate()
-        );
-
-
-      return allEvents.filter(event => {
-
-        if (!eventMatchesFilter(event)) {
-          return false;
-        }
-
-
-        let start =
-          getEventStart(event);
-
-        let end =
-          getEventEnd(event);
-
-
-        if (!start) return false;
-
-        if (!end) {
-          end = start;
-        }
-
-
-        /* Kalau tarikh terbalik, swap */
-
-        if (end < start) {
-
-          const temp = start;
-
-          start = end;
-
-          end = temp;
-
-        }
-
-
-        const startOnly =
-          new Date(
-            start.getFullYear(),
-            start.getMonth(),
-            start.getDate()
-          );
-
-
-        const endOnly =
-          new Date(
-            end.getFullYear(),
-            end.getMonth(),
-            end.getDate()
-          );
-
-
-        return (
-          target >= startOnly &&
-          target <= endOnly
-        );
-
-      });
-
-    }
-
-
-    /* =====================================================
-       CATEGORY DOTS FOR DATE
-    ===================================================== */
-
-
-    function getCategoriesForDate(date) {
-
-      const events =
-        allEvents.filter(event => {
-
-          if (!eventMatchesFilter(event)) {
-            return false;
-          }
-
-
-          let start =
-            getEventStart(event);
-
-          let end =
-            getEventEnd(event);
-
-
-          if (!start) return false;
-
-          if (!end) end = start;
-
-
-          if (end < start) {
-
-            const temp = start;
-
-            start = end;
-
-            end = temp;
-
-          }
-
-
-          const targetKey =
-            dateKey(date);
-
-
-          const startKey =
-            dateKey(start);
-
-          const endKey =
-            dateKey(end);
-
-
-          return (
-            targetKey >= startKey &&
-            targetKey <= endKey
-          );
-
-        });
-
-
-      const categories = [];
-
-
-      events.forEach(event => {
-
-        const category =
-          getEventCategory(event);
-
-
-        if (!category) return;
-
-
-        const already =
-          categories.some(
-            item =>
-              normalise(item) ===
-              normalise(category)
-          );
-
-
-        if (!already) {
-
-          categories.push(category);
-
-        }
-
-      });
-
-
-      return categories;
-
-    }
-
-
-    /* =====================================================
-       HOLIDAY
-    ===================================================== */
-
-
-    function getHolidayForDate(date) {
-
-      if (!Array.isArray(holidayData)) {
-        return [];
-      }
-
-
-      const target =
-        dateKey(date);
-
-
-      return holidayData.filter(item => {
-
-        if (!item) return false;
-
-
-        const start =
-          parseDate(item.start);
-
-        const end =
-          parseDate(item.end || item.start);
-
-
-        if (!start) return false;
-
-
-        const finalEnd =
-          end || start;
-
-
-        return (
-          target >= dateKey(start) &&
-          target <= dateKey(finalEnd)
-        );
-
-      });
-
-    }
-
-
-    /* =====================================================
-       RENDER CALENDAR
-    ===================================================== */
-
-
-    function renderCalendar() {
-
-      const grid =
-        document.getElementById(
-          "calendarGrid"
-        );
-
-
-      grid.innerHTML = "";
-
-
-      const year =
-        currentDate.getFullYear();
-
-
-      const month =
-        currentDate.getMonth();
-
-
-      document.getElementById(
-        "monthName"
-      ).textContent =
-        monthNames[month] +
-        " " +
-        year;
-
-
-      const firstDay =
-        new Date(
-          year,
-          month,
-          1
-        );
-
-
-      /*
-        JS Sunday = 0
-        Kita nak Monday = 0
-      */
-
-      const startOffset =
-        (firstDay.getDay() + 6) % 7;
-
-
-      const daysInMonth =
-        new Date(
-          year,
-          month + 1,
-          0
-        ).getDate();
-
-
-      for (
-        let i = 0;
-        i < startOffset;
-        i++
-      ) {
-
-        const blank =
-          document.createElement(
-            "div"
-          );
-
-        blank.className =
-          "day-cell empty";
-
-        grid.appendChild(blank);
-
-      }
-
-
-      const today =
-        new Date();
-
-
-      for (
-        let day = 1;
-        day <= daysInMonth;
-        day++
-      ) {
-
-        const date =
-          new Date(
-            year,
-            month,
-            day
-          );
-
-
-        const cell =
-          document.createElement(
-            "div"
-          );
-
-        cell.className =
-          "day-cell";
-
-
-        if (
-          sameDate(
-            date,
-            today
-          )
-        ) {
-
-          cell.classList.add(
-            "today"
-          );
-
-        }
-
-
-        const number =
-          document.createElement(
-            "div"
-          );
-
-        number.className =
-          "day-number";
-
-        number.textContent =
-          day;
-
-
-        cell.appendChild(
-          number
-        );
-
-
-        /*
-          Holiday layer
-        */
-
-        const holidays =
-          getHolidayForDate(date);
-
-
-        if (
-          holidays.length > 0
-        ) {
-
-          const holidayNames =
-            holidays.map(
-              item =>
-                item.name ||
-                "Cuti"
-            );
-
-
-          const holidayLabel =
-            document.createElement(
-              "div"
-            );
-
-          holidayLabel.className =
-            "holiday-label";
-
-          holidayLabel.textContent =
-            holidayNames.join(" • ");
-
-
-          cell.appendChild(
-            holidayLabel
-          );
-
-        }
-
-
-        /*
-          Category dots
-        */
-
-        const categories =
-          getCategoriesForDate(
-            date
-          );
-
-
-        const dots =
-          document.createElement(
-            "div"
-          );
-
-        dots.className =
-          "dots";
-
-
-        categories.forEach(
-          category => {
-
-            const dot =
-              document.createElement(
-                "span"
-              );
-
-            dot.className =
-              "category-dot " +
-              getCategoryClass(
-                category
-              );
-
-
-            dot.title =
-              category;
-
-
-            dots.appendChild(
-              dot
-            );
-
-          }
-        );
-
-
-        cell.appendChild(
-          dots
-        );
-
-
-        cell.addEventListener(
-          "click",
-          () => {
-
-            selectDate(date);
-
-          }
-        );
-
-
-        grid.appendChild(
-          cell
-        );
-
-      }
-
-
-      updateCalendarTitle();
-
-    }
-
-
-    /* =====================================================
-       TITLE / FILTER
-    ===================================================== */
-
-
-    function updateCalendarTitle() {
-
-      const title =
-        document.getElementById(
-          "calendarTitle"
-        );
-
-      const label =
-        document.getElementById(
-          "filterLabel"
-        );
-
-
-      if (
-        activeCategory === "ALL"
-      ) {
-
-        title.textContent =
-          "Calendar";
-
-        label.textContent =
-          "Semua";
-
-      } else {
-
-        title.textContent =
-          activeCategory;
-
-        label.textContent =
-          "Filter aktif";
-
-      }
-
-    }
-
-
-    /* =====================================================
-       SELECT DATE
-    ===================================================== */
-
-
-    function selectDate(date) {
-
-      selectedDate =
-        new Date(date);
-
-
-      selectedEvent = null;
-
-
-      hideDetail();
-
-
-      const events =
-        getEventsForDate(date);
-
-
-      const panel =
-        document.getElementById(
-          "datePanel"
-        );
-
-
-      const dateTitle =
-        document.getElementById(
-          "datePanelDate"
-        );
-
-
-      const dateSub =
-        document.getElementById(
-          "datePanelSub"
-        );
-
-
-      const container =
-        document.getElementById(
-          "dateEvents"
-        );
-
-
-      if (
-        events.length === 0
-      ) {
-
-        panel.classList.add(
-          "hidden"
-        );
-
-
-        const holidays =
-          getHolidayForDate(
-            date
-          );
-
-
-        if (
-          holidays.length > 0
-        ) {
-
-          showToast(
-            holidays
-              .map(
-                item =>
-                  item.name ||
-                  "Tarikh penting"
-              )
-              .join(" • ")
-          );
-
-        } else {
-
-          showToast(
-            "Tiada event untuk setakat ini."
-          );
-
-        }
-
-
-        return;
-
-      }
-
-
-      panel.classList.remove(
-        "hidden"
-      );
-
-
-      dateTitle.textContent =
-        formatDate(date);
-
-
-      dateSub.textContent =
-        events.length +
-        (
-          events.length === 1
-            ? " event"
-            : " events"
-        );
-
-
-      container.innerHTML = "";
-
-
-      events.forEach(
-        event => {
-
-          const card =
-            document.createElement(
-              "div"
-            );
-
-          card.className =
-            "event-card";
-
-
-          const category =
-            getEventCategory(event);
-
-
-          const categoryRow =
-            document.createElement(
-              "div"
-            );
-
-          categoryRow.className =
-            "event-category";
-
-
-          const dot =
-            document.createElement(
-              "span"
-            );
-
-          dot.className =
-            "category-dot " +
-            getCategoryClass(
-              category
-            );
-
-
-          const categoryText =
-            document.createElement(
-              "span"
-            );
-
-          categoryText.textContent =
-            category ||
-            "Local";
-
-
-          categoryRow.appendChild(
-            dot
-          );
-
-          categoryRow.appendChild(
-            categoryText
-          );
-
-
-          const title =
-            document.createElement(
-              "div"
-            );
-
-          title.className =
-            "event-name";
-
-          title.textContent =
-            getEventName(event);
-
-
-          const meta =
-            document.createElement(
-              "div"
-            );
-
-          meta.className =
-            "event-meta";
-
-
-          const start =
-            getEventStart(event);
-
-          const end =
-            getEventEnd(event);
-
-
-          let dateText = "";
-
-
-          if (start) {
-
-            dateText =
-              formatDate(start);
-
-          }
-
-
-          if (
-            end &&
-            start &&
-            !sameDate(
-              start,
-              end
-            )
-          ) {
-
-            dateText +=
-              " → " +
-              formatDate(end);
-
-          }
-
-
-          const location =
-            getEventLocation(event);
-
-
-          if (dateText) {
-
-            meta.textContent =
-              dateText;
-
-          }
-
-
-          if (location) {
-
-            if (meta.textContent) {
-
-              meta.textContent +=
-                " • ";
-
-            }
-
-            meta.textContent +=
-              location;
-
-          }
-
-
-          const more =
-            document.createElement(
-              "div"
-            );
-
-          more.className =
-            "event-more";
-
-          more.textContent =
-            "See more detail →";
-
-
-          card.appendChild(
-            categoryRow
-          );
-
-          card.appendChild(
-            title
-          );
-
-          card.appendChild(
-            meta
-          );
-
-          card.appendChild(
-            more
-          );
-
-
-          card.addEventListener(
-            "click",
-            () => {
-
-              showEventDetail(
-                event
-              );
-
-            }
-          );
-
-
-          container.appendChild(
-            card
-          );
-
-        }
-      );
-
-
-      /*
-        Mobile: scroll sikit ke panel
-      */
-
-      setTimeout(() => {
-
-        panel.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-      }, 80);
-
-    }
-
-
-    /* =====================================================
-       EVENT DETAIL
-    ===================================================== */
-
-
-    function showEventDetail(event) {
-
-      selectedEvent =
-        event;
-
-
-      const datePanel =
-        document.getElementById(
-          "datePanel"
-        );
-
-
-      const detailPanel =
-        document.getElementById(
-          "detailPanel"
-        );
-
-
-      datePanel.classList.add(
-        "hidden"
-      );
-
-
-      detailPanel.classList.remove(
-        "hidden"
-      );
-
-
-      const category =
-        getEventCategory(event);
-
-
-      const categoryContainer =
-        document.getElementById(
-          "detailCategory"
-        );
-
-
-      categoryContainer.innerHTML = "";
-
-
-      const dot =
-        document.createElement(
-          "span"
-        );
-
-      dot.className =
-        "category-dot " +
-        getCategoryClass(
-          category
-        );
-
-
-      const categoryText =
-        document.createElement(
-          "span"
-        );
-
-      categoryText.textContent =
-        category ||
-        "Local";
-
-
-      categoryContainer.appendChild(
-        dot
-      );
-
-      categoryContainer.appendChild(
-        categoryText
-      );
-
-
-      document.getElementById(
-        "detailTitle"
-      ).textContent =
-        getEventName(event);
-
-
-      const start =
-        getEventStart(event);
-
-      const end =
-        getEventEnd(event);
-
-
-      let metaText = "";
-
-
-      if (start) {
-
-        metaText =
-          formatDate(start);
-
-      }
-
-
-      if (
-        end &&
-        start &&
-        !sameDate(
-          start,
-          end
-        )
-      ) {
-
-        metaText +=
-          " → " +
-          formatDate(end);
-
-      }
-
-
-      const location =
-        getEventLocation(event);
-
-
-      if (location) {
-
-        if (metaText) {
-
-          metaText +=
-            " • ";
-
-        }
-
-        metaText +=
-          location;
-
-      }
-
-
-      document.getElementById(
-        "detailMeta"
-      ).textContent =
-        metaText;
-
-
-      document.getElementById(
-        "detailDescription"
-      ).textContent =
-        getEventDescription(event);
-
-
-      /*
-        Image
-      */
-
-      const imageContainer =
-        document.getElementById(
-          "detailImageContainer"
-        );
-
-
-      imageContainer.innerHTML = "";
-
-
-      const imageUrl =
-        getEventImage(event);
-
-
-      if (imageUrl) {
-
-        const image =
-          document.createElement(
-            "img"
-          );
-
-        image.className =
-          "detail-image";
-
-        image.src =
-          imageUrl;
-
-        image.alt =
-          getEventName(event);
-
-
-        image.onerror =
-          () => {
-
-            image.remove();
-
-          };
-
-
-        imageContainer.appendChild(
-          image
-        );
-
-      }
-
-
-      /*
-        Official link
-      */
-
-      const linkContainer =
-        document.getElementById(
-          "detailLink"
-        );
-
-
-      linkContainer.innerHTML = "";
-
-
-      const officialLink =
-        getEventLink(event);
-
-
-      if (officialLink) {
-
-        const link =
-          document.createElement(
-            "a"
-          );
-
-        link.className =
-          "official-link";
-
-        link.href =
-          officialLink;
-
-        link.target =
-          "_blank";
-
-        link.rel =
-          "noopener noreferrer";
-
-        link.textContent =
-          "Official Link →";
-
-
-        linkContainer.appendChild(
-          link
-        );
-
-      }
-
-
-      setTimeout(() => {
-
-        detailPanel.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-      }, 80);
-
-    }
-
-
-    function hideDetail() {
-
-      document.getElementById(
-        "detailPanel"
-      ).classList.add(
-        "hidden"
-      );
-
-    }
-
-
-    /* =====================================================
-       FILTER
-    ===================================================== */
-
-
-    function setCategory(category) {
-
-      activeCategory =
-        category;
-
-
-      selectedDate =
-        null;
-
-
-      selectedEvent =
-        null;
-
-
-      document.getElementById(
-        "datePanel"
-      ).classList.add(
-        "hidden"
-      );
-
-
-      document.getElementById(
-        "detailPanel"
-      ).classList.add(
-        "hidden"
-      );
-
-
-      renderCalendar();
-
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-    }
-
-
-    /* =====================================================
-       EXPLORE SHEET
-    ===================================================== */
-
-
-    function openExplore() {
-
-      document.getElementById(
-        "sheetOverlay"
-      ).classList.add(
-        "open"
-      );
-
-
-      document.getElementById(
-        "exploreSheet"
-      ).classList.add(
-        "open"
-      );
-
-    }
-
-
-    function closeExplore() {
-
-      document.getElementById(
-        "sheetOverlay"
-      ).classList.remove(
-        "open"
-      );
-
-
-      document.getElementById(
-        "exploreSheet"
-      ).classList.remove(
-        "open"
-      );
-
-    }
-
-
-    document
-      .getElementById(
-        "sheetOverlay"
-      )
-      .addEventListener(
-        "click",
-        closeExplore
-      );
-
-
-    document
-      .querySelectorAll(
-        ".explore-option"
-      )
-      .forEach(
-        button => {
-
-          button.addEventListener(
-            "click",
-            () => {
-
-              const category =
-                button.dataset.category;
-
-
-              if (
-                category === "ALL"
-              ) {
-
-                setCategory(
-                  "ALL"
-                );
-
-              } else {
-
-                setCategory(
-                  category
-                );
-
-              }
-
-
-              closeExplore();
-
-            }
-          );
-
-        }
-      );
-
-
-    /* =====================================================
-       TOAST
-    ===================================================== */
-
-
-    let toastTimer = null;
-
-
-    function showToast(message) {
-
-      const toast =
-        document.getElementById(
-          "toast"
-        );
-
-
-      toast.textContent =
-        message;
-
-
-      toast.classList.add(
-        "show"
-      );
-
-
-      clearTimeout(
-        toastTimer
-      );
-
-
-      toastTimer =
-        setTimeout(
-          () => {
-
-            toast.classList.remove(
-              "show"
-            );
-
-          },
-          2600
-        );
-
-    }
-
-
-    /* =====================================================
-       BOTTOM NAV
-    ===================================================== */
-
-
-    document
-      .getElementById(
-        "navHome"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          setCategory(
-            "ALL"
-          );
-
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-          });
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "navExplore"
-      )
-      .addEventListener(
-        "click",
-        openExplore
-      );
-
-
-    document
-      .getElementById(
-        "navMusim"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          setCategory(
-            "Musim"
-          );
-
-          showToast(
-            "Paparan Musim"
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "navCheck"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          showToast(
-            "Musim Lab Check belum dibuka lagi."
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "navMore"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          showToast(
-            "Menu tambahan akan datang."
-          );
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "prevMonth"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          currentDate =
-            new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth() - 1,
-              1
-            );
-
-
-          renderCalendar();
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "nextMonth"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          currentDate =
-            new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth() + 1,
-              1
-            );
-
-
-          renderCalendar();
-
-        }
-      );
-
-
-    document
-      .getElementById(
-        "backToDate"
-      )
-      .addEventListener(
-        "click",
-        () => {
-
-          hideDetail();
-
-
-          if (selectedDate) {
-
-            document
-              .getElementById(
-                "datePanel"
-              )
-              .classList.remove(
-                "hidden"
-              );
-
-          }
-
-        }
-      );
-
-
-    /* =====================================================
-       LOAD EVENTS FROM GOOGLE APPS SCRIPT
-    ===================================================== */
-
-async function loadEvents() {
-
-  try {
-
-    const response = await fetch(
-      API_URL + "?t=" + Date.now()
-    );
-
-    if (!response.ok) {
-      throw new Error("API response error");
-    }
-
-    const result = await response.json();
-
-    if (Array.isArray(result)) {
-      // Support format lama (V4)
-      allEvents = result;
-    } else if (result && result.success && Array.isArray(result.data)) {
-      // Support format baru (V5)
-      allEvents = result.data;
-    } else {
-      allEvents = [];
-    }
-
-    renderCalendar();
-
-  } catch (error) {
-    console.error("Load events error:", error);
-    allEvents = [];
-    renderCalendar();
-    showToast("Tak dapat baca data event.");
+    cell.addEventListener("click", () => selectDate(date, events, holidays));
+    grid.appendChild(cell);
   }
 }
-    
 
+function updateFilterChip(){
+  const chip = $("filterChip");
+  const txt = $("filterChipText");
+  if(activeCategory === "ALL"){
+    chip.classList.remove("show");
+  }else{
+    chip.classList.add("show");
+    txt.textContent = activeCategory;
+  }
+}
 
+function clearFilter(){
+  activeCategory = "ALL";
+  updateFilterChip();
+  renderCalendar();
+  switchTab("calendar");
+}
 
-    /* =====================================================
-       LOAD PUBLIC HOLIDAY JSON
-       OPTIONAL
-       Kalau file belum ada, website
-       tetap jalan macam biasa.
-    ===================================================== */
+/* ============ SELECT DATE ============ */
+function selectDate(date, events, holidays){
+  selectedDate = date;
+  renderCalendar();
 
+  $("dateSheetTitle").textContent = `${dayNames[date.getDay()]}, ${formatDate(date)}`;
+  const container = $("dateSheetContent");
 
-    async function loadHolidays() {
+  let html = "";
 
-      try {
+  if(holidays.length > 0){
+    html += `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:12px;margin-bottom:12px;font-size:12px;font-weight:700;color:#92400e">
+      🎉 ${holidays.map(h=>h.name||"Cuti").join(" • ")}
+    </div>`;
+  }
 
-        const response =
-          await fetch(
-            HOLIDAY_URL +
-            "?t=" +
-            Date.now()
-          );
+  if(events.length === 0){
+    html += `<div class="empty-state">
+      <div class="emoji">🌿</div>
+      <div class="msg">Takde event</div>
+      <div class="sub">Bulan ni tenang je.</div>
+    </div>`;
+    $("dateSheetSub").textContent = "";
+  }else{
+    $("dateSheetSub").textContent = `${events.length} event`;
+    html += events.map(e => {
+      const cat = getEventCat(e);
+      const color = getCatColor(cat);
+      const icon = getCatIcon(cat);
+      const id = getEventId(e);
+      const isSaved = savedIds.includes(id);
+      const loc = getEventLoc(e);
+      return `
+        <div class="sheet-event" onclick="openEventDetail('${id}')">
+          <div class="sheet-event-cat">
+            <span class="cat-dot" style="background:${color}"></span>
+            <span>${icon} ${escapeHtml(cat||"Lain-lain")}</span>
+          </div>
+          <div class="sheet-event-name">${escapeHtml(getEventName(e))}</div>
+          ${loc ? `<div class="sheet-event-meta">📍 ${escapeHtml(loc)}</div>` : ""}
+          <div class="sheet-event-actions" onclick="event.stopPropagation()">
+            <button class="mini-btn ${isSaved?"saved":""}" onclick="toggleSave('${id}', this)">
+              ${isSaved?"✓ Disimpan":"❤ Simpan"}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
 
+  container.innerHTML = html;
+  openSheet("dateSheet");
+}
 
-        if (!response.ok) {
+/* ============ EVENT DETAIL ============ */
+function openEventDetail(id){
+  const e = allEvents.find(x => getEventId(x) === id);
+  if(!e) return;
+  selectedEvent = e;
 
-          return;
+  const cat = getEventCat(e);
+  const color = getCatColor(cat);
+  const icon = getCatIcon(cat);
+  const start = getEventStart(e);
+  const end = getEventEnd(e);
+  const loc = getEventLoc(e);
+  const img = getEventImg(e);
+  const link = getEventLink(e);
+  const syn = getEventShort(e) || getEventDesc(e);
+  const fullDesc = getEventDesc(e);
+  const isSaved = savedIds.includes(id);
 
-        }
+  let metaParts = [];
+  if(start) metaParts.push(formatDate(start));
+  if(end && start && !sameDate(start,end)) metaParts.push("→ " + formatDate(end));
+  if(loc) metaParts.push("📍 " + loc);
 
+  const heroHtml = img
+    ? `<img class="detail-hero" src="${escapeHtml(img)}" alt="" onerror="this.outerHTML='<div class=\\'detail-hero-fallback\\'>${icon}</div>'">`
+    : `<div class="detail-hero-fallback">${icon}</div>`;
 
-        const data =
-          await response.json();
+  let html = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:6px">
+      <button class="mini-btn" onclick="closeSheet('detailSheet')">✕ Tutup</button>
+    </div>
+    ${heroHtml}
+    <div class="sheet-event-cat">
+      <span class="cat-dot" style="background:${color}"></span>
+      <span>${icon} ${escapeHtml(cat||"Lain-lain")}</span>
+    </div>
+    <h2 class="detail-title">${escapeHtml(getEventName(e))}</h2>
+    <div class="detail-meta">${metaParts.join(" • ")}</div>
+    <div class="detail-synopsis">${escapeHtml(syn)}</div>
 
+    <div class="detail-actions">
+      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this, true)">
+        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
+      </button>
+      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
+    </div>
+  `;
 
-        /*
-          Support:
+  if(fullDesc && fullDesc !== syn){
+    html += `<button class="action-btn primary" style="width:100%" onclick="openFullDetail('${id}')">📖 Baca penuh</button>`;
+  }
 
-          {
-            "holidays": [...]
-          }
+  if(link){
+    html += `<div style="margin-top:14px"><a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary" style="text-decoration:none;width:100%;display:flex">🔗 Official Link</a></div>`;
+  }
 
-          atau terus:
+  html += `<div id="affiliateContainer_${id}"></div>`;
 
-          [...]
-        */
+  $("detailSheetContent").innerHTML = html;
+  openSheet("detailSheet");
 
-        if (
-          Array.isArray(data)
-        ) {
+  loadAffiliates(id, "affiliateContainer_" + id);
+}
 
-          holidayData =
-            data;
+async function loadAffiliates(eventId, containerId){
+  const container = $(containerId);
+  if(!container) return;
+  try{
+    const r = await fetch(`${API_URL}?action=getLinks&eventId=${encodeURIComponent(eventId)}&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const items = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    if(!items.length) return;
 
-        } else if (
-          Array.isArray(
-            data.holidays
-          )
-        ) {
+    container.innerHTML = `
+      <div class="affiliate-section">
+        <div class="affiliate-title">🛍️ Persediaan & Beli</div>
+        ${items.map(it => `
+          <div class="affiliate-card">
+            <div class="affiliate-name">${escapeHtml(it.Title||"")}</div>
+            <div class="affiliate-desc">${escapeHtml(it.URL||"")}</div>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }catch(e){console.error("affiliate err", e)}
+}
 
-          holidayData =
-            data.holidays;
+function openFullDetail(id){
+  const e = allEvents.find(x => getEventId(x) === id);
+  if(!e) return;
 
-        } else {
+  const cat = getEventCat(e);
+  const color = getCatColor(cat);
+  const icon = getCatIcon(cat);
+  const start = getEventStart(e);
+  const end = getEventEnd(e);
+  const loc = getEventLoc(e);
+  const img = getEventImg(e);
+  const link = getEventLink(e);
+  const fullDesc = getEventDesc(e);
+  const isSaved = savedIds.includes(id);
 
-          holidayData =
-            [];
+  let metaParts = [];
+  if(start) metaParts.push(formatDate(start));
+  if(end && start && !sameDate(start,end)) metaParts.push("→ " + formatDate(end));
+  if(loc) metaParts.push("📍 " + loc);
 
-        }
+  const heroHtml = img
+    ? `<img class="detail-hero" src="${escapeHtml(img)}" alt="">`
+    : `<div class="detail-hero-fallback">${icon}</div>`;
 
+  let html = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <button class="mini-btn" onclick="openEventDetail('${id}')">← Kembali</button>
+      <button class="mini-btn" onclick="closeSheet('detailSheet')">✕</button>
+    </div>
+    ${heroHtml}
+    <div class="sheet-event-cat">
+      <span class="cat-dot" style="background:${color}"></span>
+      <span>${icon} ${escapeHtml(cat||"Lain-lain")}</span>
+    </div>
+    <h2 class="detail-title">${escapeHtml(getEventName(e))}</h2>
+    <div class="detail-meta">${metaParts.join(" • ")}</div>
+    <div class="detail-synopsis" style="white-space:pre-line">${escapeHtml(fullDesc)}</div>
 
-        renderCalendar();
+    <div class="detail-actions">
+      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this, true)">
+        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
+      </button>
+      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
+    </div>
+  `;
 
+  if(link){
+    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary" style="text-decoration:none;width:100%;display:flex;margin-top:10px">🔗 Official Link</a>`;
+  }
 
-      } catch (error) {
+  html += `<div id="affiliateFull_${id}"></div>`;
 
-        /*
-          File belum wujud pun tak apa.
-          Calendar masih boleh jalan.
-        */
+  $("detailSheetContent").innerHTML = html;
+  loadAffiliates(id, "affiliateFull_" + id);
+}
 
-        holidayData =
-          [];
+/* ============ SAVE EVENT ============ */
+function toggleSave(id, btn, keepSheet){
+  const idx = savedIds.indexOf(id);
+  if(idx >= 0){
+    savedIds.splice(idx,1);
+    showToast("Dibuang dari simpanan");
+  }else{
+    savedIds.push(id);
+    showToast("❤ Disimpan!");
+  }
+  localStorage.setItem("ml_saved", JSON.stringify(savedIds));
 
-      }
+  if(btn){
+    const isSaved = savedIds.includes(id);
+    btn.classList.toggle("saved", isSaved);
+    btn.classList.toggle("success", isSaved);
+    btn.innerHTML = isSaved ? "✓ Disimpan" : "❤ Simpan";
+  }
+}
 
+/* ============ REMINDER (.ics) ============ */
+function downloadICS(id){
+  const e = allEvents.find(x => getEventId(x) === id);
+  if(!e) return;
+  const start = getEventStart(e);
+  if(!start){showToast("Tarikh tak dijumpai");return;}
+  const end = getEventEnd(e) || start;
+
+  function fmt(d){
+    return d.getFullYear() + String(d.getMonth()+1).padStart(2,"0") + String(d.getDate()).padStart(2,"0");
+  }
+
+  const title = getEventName(e);
+  const desc = (getEventShort(e) || getEventDesc(e)).replace(/\n/g,"\\n");
+  const loc = getEventLoc(e);
+
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Musim Lab//EN",
+    "BEGIN:VEVENT",
+    `UID:${id}@musimlab`,
+    `DTSTAMP:${fmt(new Date())}T000000Z`,
+    `DTSTART;VALUE=DATE:${fmt(start)}`,
+    `DTEND;VALUE=DATE:${fmt(new Date(end.getTime()+86400000))}`,
+    `SUMMARY:${title}`,
+    `DESCRIPTION:${desc}`,
+    loc ? `LOCATION:${loc}` : "",
+    "BEGIN:VALARM",
+    "TRIGGER:-P1D",
+    "ACTION:DISPLAY",
+    "DESCRIPTION:Esok: " + title,
+    "END:VALARM",
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ].filter(Boolean).join("\r\n");
+
+  const blob = new Blob([ics], {type:"text/calendar"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = title.replace(/[^a-z0-9]/gi,"_") + ".ics";
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("🔔 Fail kalendar dimuat turun");
+}
+
+/* ============ EXPLORE ============ */
+function renderExplore(){
+  const grid = $("exploreGrid");
+  grid.innerHTML = CATEGORIES.map(c => {
+    const count = allEvents.filter(e => normalise(getEventCat(e)) === normalise(c.name) && normalise(getEventStatus(e)) === "published").length;
+    return `
+      <button class="explore-card" onclick="pickCategory('${escapeHtml(c.name)}')">
+        <div class="explore-icon">${c.icon}</div>
+        <div class="explore-name">${escapeHtml(c.name)}</div>
+        <div class="explore-count">${count} event</div>
+      </button>
+    `;
+  }).join("");
+}
+
+function pickCategory(cat){
+  activeCategory = cat;
+  updateFilterChip();
+  renderCalendar();
+  switchTab("calendar");
+}
+
+/* ============ MUSIM ============ */
+async function loadSeasons(){
+  try{
+    const r = await fetch(`${API_URL}?action=getSeasons&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    allSeasons = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    renderSeasons();
+  }catch(e){
+    console.error("seasons err", e);
+    $("seasonList").innerHTML = `<div class="empty-state"><div class="emoji">🌧️</div><div class="msg">Tak dapat muat musim</div></div>`;
+  }
+}
+
+function renderSeasons(){
+  const list = $("seasonList");
+  const active = allSeasons.filter(s => String(s.Status||"").toLowerCase() === "active");
+
+  if(!active.length){
+    list.innerHTML = `<div class="empty-state"><div class="emoji">🌤️</div><div class="msg">Takde musim aktif</div><div class="sub">Check balik nanti!</div></div>`;
+    return;
+  }
+
+  list.innerHTML = active.map(s => {
+    const id = s["Season ID"];
+    return `
+      <div class="season-card" onclick="openSeasonDetail('${id}')">
+        <div class="season-name">
+          🌧️ ${escapeHtml(s["Season Name"]||"")}
+          <span class="season-badge">Aktif</span>
+        </div>
+        <div class="season-synopsis">${escapeHtml(s["Description"]||"")}</div>
+        <div class="season-cta">Baca penuh →</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openSeasonDetail(id){
+  const s = allSeasons.find(x => String(x["Season ID"]) === id);
+  if(!s) return;
+  selectedSeason = s;
+
+  let html = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+      <button class="mini-btn" onclick="closeSheet('seasonSheet')">✕ Tutup</button>
+    </div>
+    <div class="detail-hero-fallback">🌧️</div>
+    <h2 class="detail-title">${escapeHtml(s["Season Name"]||"")}</h2>
+    <div class="detail-meta">Musim aktif</div>
+    <div class="detail-synopsis" style="white-space:pre-line">${escapeHtml(s["Description"]||"")}</div>
+  `;
+
+  if(!currentEventIdForSeason){
+    // placeholder
+  }
+
+  html += `<div id="seasonAffiliateContainer"></div>`;
+
+  $("seasonSheetContent").innerHTML = html;
+  openSheet("seasonSheet");
+
+  loadAffiliates(id, "seasonAffiliateContainer");
+}
+
+/* ============ SHEET CONTROL ============ */
+let openSheetId = null;
+function openSheet(id){
+  closeSheet(openSheetId);
+  openSheetId = id;
+  $("sheetOverlay").classList.add("open");
+  $(id).classList.add("open");
+}
+
+function closeSheet(id){
+  if(id) $(id).classList.remove("open");
+  else{
+    document.querySelectorAll(".bottom-sheet").forEach(s => s.classList.remove("open"));
+  }
+  if(!document.querySelector(".bottom-sheet.open")){
+    $("sheetOverlay").classList.remove("open");
+    openSheetId = null;
+  }
+}
+
+$("sheetOverlay").addEventListener("click", () => closeSheet());
+
+// Swipe down to close
+document.querySelectorAll(".bottom-sheet").forEach(sheet => {
+  let startY = 0, curY = 0;
+  sheet.addEventListener("touchstart", e => {
+    if(sheet.scrollTop > 0) return;
+    startY = e.touches[0].clientY;
+  });
+  sheet.addEventListener("touchmove", e => {
+    if(sheet.scrollTop > 0) return;
+    curY = e.touches[0].clientY - startY;
+    if(curY > 0) sheet.style.transform = `translateY(${curY}px)`;
+  });
+  sheet.addEventListener("touchend", () => {
+    sheet.style.transform = "";
+    if(curY > 100) closeSheet(sheet.id);
+    curY = 0;
+  });
+});
+
+/* ============ MONTH NAV ============ */
+$("prevMonth").addEventListener("click", () => {
+  currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 1);
+  renderCalendar();
+});
+$("nextMonth").addEventListener("click", () => {
+  currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 1);
+  renderCalendar();
+});
+
+/* ============ SWIPE CALENDAR ============ */
+(function(){
+  const card = $("calendarCard");
+  let sx=0, sy=0;
+  card.addEventListener("touchstart", e => {
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+  }, {passive:true});
+  card.addEventListener("touchend", e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)*1.5){
+      if(dx < 0) currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 1);
+      else currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 1);
+      renderCalendar();
     }
+  }, {passive:true});
+})();
 
+/* ============ TODAY BUTTON ============ */
+$("todayBtn").addEventListener("click", () => {
+  currentDate = new Date();
+  renderCalendar();
+  switchTab("calendar");
+  setTimeout(() => {
+    const today = new Date();
+    const events = getEventsForDate(today);
+    const holidays = getHolidayForDate(today);
+    selectDate(today, events, holidays);
+  }, 100);
+});
 
-    /* =====================================================
-       START
-    ===================================================== */
+/* ============ SAVED EVENTS ============ */
+function openSavedEvents(){
+  const container = $("dateSheetContent");
+  $("dateSheetTitle").textContent = "❤️ Event Disimpan";
+  $("dateSheetSub").textContent = savedIds.length + " event";
 
+  if(!savedIds.length){
+    container.innerHTML = `<div class="empty-state">
+      <div class="emoji">💔</div>
+      <div class="msg">Belum ada simpanan</div>
+      <div class="sub">Tap ❤ pada event untuk simpan.</div>
+    </div>`;
+  }else{
+    const list = savedIds.map(id => allEvents.find(e => getEventId(e) === id)).filter(Boolean);
+    container.innerHTML = list.map(e => {
+      const cat = getEventCat(e);
+      const color = getCatColor(cat);
+      const icon = getCatIcon(cat);
+      return `
+        <div class="sheet-event" onclick="closeSheet();switchTab('calendar');setTimeout(()=>openEventDetail('${getEventId(e)}'),200)">
+          <div class="sheet-event-cat">
+            <span class="cat-dot" style="background:${color}"></span>
+            <span>${icon} ${escapeHtml(cat||"")}</span>
+          </div>
+          <div class="sheet-event-name">${escapeHtml(getEventName(e))}</div>
+          <div class="sheet-event-meta">${formatDate(getEventStart(e))}</div>
+        </div>
+      `;
+    }).join("");
+  }
+  openSheet("dateSheet");
+}
 
-    loadEvents();
+function updateSavedCount(){
+  $("savedCountText").textContent = savedIds.length + " event";
+}
 
-    loadHolidays();
+function showAbout(){
+  $("dateSheetTitle").textContent = "Tentang Musim Lab";
+  $("dateSheetSub").textContent = "";
+  $("dateSheetContent").innerHTML = `
+    <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
+      <p style="margin-bottom:12px"><strong>Musim Lab</strong> bantu anda tahu apa yang akan datang di Malaysia — musim, cuti, event — dan bersedia sebelum tiba.</p>
+      <p style="margin-bottom:12px">Kami kumpul info dari pelbagai sumber dan susun dalam satu kalendar mudah.</p>
+      <p style="color:#888;font-size:12px">Musim Lab mungkin terima komisen dari link affiliate tanpa kos tambahan kepada anda.</p>
+    </div>
+    <button class="action-btn secondary" style="width:100%;margin-top:14px" onclick="closeSheet('dateSheet')">Tutup</button>
+  `;
+  openSheet("dateSheet");
+}
 
-  </script>
+/* ============ ESCAPE ============ */
+function escapeHtml(v){
+  return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+/* ============ LOAD ============ */
+async function loadEvents(){
+  try{
+    const r = await fetch(`${API_URL}?action=getEvents&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    allEvents = (res && res.success && Array.isArray(res.data)) ? res.data : (Array.isArray(res) ? res : []);
+    renderCalendar();
+  }catch(e){
+    console.error("events err", e);
+    allEvents = [];
+    renderCalendar();
+    showToast("Tak dapat muat event.");
+  }
+}
+
+async function loadHolidays(){
+  try{
+    const r = await fetch(HOLIDAY_URL + "?t=" + Date.now());
+    if(!r.ok) return;
+    const data = await r.json();
+    holidayData = Array.isArray(data) ? data : (Array.isArray(data.holidays) ? data.holidays : []);
+    renderCalendar();
+  }catch(e){holidayData = []}
+}
+
+/* ============ INIT ============ */
+loadEvents();
+loadHolidays();
+loadSeasons();
+updateSavedCount();
+</script>
 
 </body>
 </html>
