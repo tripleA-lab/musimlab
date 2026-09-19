@@ -9,10 +9,16 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f5f7fb;color:#1f2937}
 
-.header{height:64px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50}
-.logo{font-size:21px;font-weight:800;letter-spacing:-.5px}
+.header{height:64px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50;gap:20px}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.5px;flex-shrink:0}
 .logo span{font-weight:400;color:#9ca3af}
-.header-right{display:flex;align-items:center;gap:8px}
+
+.tabs{display:flex;gap:4px;background:#f3f4f6;padding:4px;border-radius:10px}
+.tab{padding:8px 18px;border-radius:7px;font-size:13px;font-weight:650;cursor:pointer;border:none;background:transparent;color:#6b7280;transition:.15s}
+.tab:hover{color:#111827}
+.tab.active{background:#fff;color:#111827;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
 
 .btn{border:none;border-radius:9px;padding:10px 15px;font-size:13px;font-weight:650;cursor:pointer;transition:.2s}
 .btn:hover{transform:translateY(-1px)}
@@ -40,8 +46,26 @@ textarea{min-height:110px;resize:vertical}
 .badge-status{background:#dcfce7;color:#166534}
 .badge-draft{background:#fef3c7;color:#92400e}
 .badge-season{background:#ede9fe;color:#6d28d9}
+.badge-off{background:#fee2e2;color:#991b1b}
 .short-description{color:#6b7280;font-size:13px;line-height:1.45}
 .event-actions{display:flex;align-items:center;gap:6px}
+
+/* SEASON CARD */
+.season-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.season-card.inactive{opacity:.65;background:#fafafa}
+.season-left{min-width:0;flex:1}
+.season-title{font-size:17px;font-weight:750;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.season-desc{color:#6b7280;font-size:13px;line-height:1.5;margin-bottom:10px;max-width:600px}
+.season-links-count{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:650;color:#6d28d9;background:#ede9fe;padding:4px 9px;border-radius:999px}
+.season-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+
+/* SWITCH */
+.switch{position:relative;display:inline-block;width:46px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;inset:0;background:#d1d5db;transition:.25s;border-radius:26px}
+.slider:before{content:"";position:absolute;height:20px;width:20px;left:3px;bottom:3px;background:white;transition:.25s;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked + .slider{background:#10b981}
+.switch input:checked + .slider:before{transform:translateX(20px)}
 
 .form-view{display:none}
 .form-view.active{display:block}
@@ -79,18 +103,22 @@ textarea{min-height:110px;resize:vertical}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 
 .empty{padding:24px;text-align:center;color:#9ca3af;font-size:13px;border:1px dashed #d1d5db;border-radius:10px;background:#fff}
-.message{position:fixed;right:16px;bottom:16px;background:#111827;color:#fff;padding:12px 15px;border-radius:9px;font-size:12px;display:none;z-index:200;box-shadow:0 10px 25px rgba(0,0,0,.15)}
+.message{position:fixed;right:16px;bottom:16px;background:#111827;color:#fff;padding:12px 15px;border-radius:9px;font-size:12px;display:none;z-index:200;box-shadow:0 10px 25px rgba(0,0,0,.15);max-width:320px}
 .message.show{display:block}
 
 @media(max-width:700px){
-  .header{padding:0 14px}
+  .header{padding:0 14px;gap:10px}
   .header .btn{padding:8px 11px}
+  .logo{font-size:18px}
+  .tab{padding:7px 12px;font-size:12px}
   .container{padding:20px 12px 40px}
   .toolbar{grid-template-columns:1fr}
   .grid-2{grid-template-columns:1fr}
   .event-card{flex-direction:column;gap:12px}
   .event-actions{width:100%}
   .event-actions button{flex:1}
+  .season-card{flex-direction:column}
+  .season-right{width:100%;justify-content:space-between}
   .form-header{align-items:flex-start}
   .form-header-right{display:none}
   .form-section{padding:15px}
@@ -103,140 +131,202 @@ textarea{min-height:110px;resize:vertical}
 
 <header class="header">
   <div class="logo">MUSIM<span>LAB</span></div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabEvents" onclick="switchTab('events')">Events</button>
+    <button class="tab" id="tabSeasons" onclick="switchTab('seasons')">Seasons</button>
+  </div>
+
   <div class="header-right">
-    <button class="btn btn-primary" onclick="openAddForm()">+ Add Event</button>
+    <button class="btn btn-primary" id="addBtn" onclick="handleAddClick()">+ Add Event</button>
   </div>
 </header>
 
 <main class="container">
 
-  <!-- DASHBOARD -->
-  <section id="dashboardView" class="dashboard-view">
-    <div class="page-title">
-      <h1>Events</h1>
-      <p>Manage events and affiliate links.</p>
+  <!-- ============ EVENTS VIEW ============ -->
+  <section id="eventsView">
+    <div id="dashboardView" class="dashboard-view">
+      <div class="page-title">
+        <h1>Events</h1>
+        <p>Manage events and affiliate links.</p>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="Search events..." oninput="renderEvents()">
+        <select id="statusFilter" onchange="renderEvents()">
+          <option value="">All Status</option>
+          <option value="Published">Published</option>
+          <option value="Draft">Draft</option>
+        </select>
+        <select id="seasonFilter" onchange="renderEvents()">
+          <option value="">All Seasons</option>
+        </select>
+      </div>
+
+      <div id="eventList" class="event-list">
+        <div class="empty">Loading events...</div>
+      </div>
     </div>
 
-    <div class="toolbar">
-      <input type="text" id="searchInput" placeholder="Search events..." oninput="renderEvents()">
-      <select id="statusFilter" onchange="renderEvents()">
-        <option value="">All Status</option>
-        <option value="Published">Published</option>
-        <option value="Draft">Draft</option>
-      </select>
-      <select id="seasonFilter" onchange="renderEvents()">
-        <option value="">All Seasons</option>
-      </select>
-    </div>
+    <div id="formView" class="form-view">
+      <div class="form-header">
+        <div class="form-header-left">
+          <button class="back-btn" onclick="closeForm()">←</button>
+          <h2 id="formTitle">Add Event</h2>
+        </div>
+        <div class="form-header-right">
+          <button class="btn btn-primary" onclick="saveEvent()">Save</button>
+        </div>
+      </div>
 
-    <div id="eventList" class="event-list">
-      <div class="empty">Loading events...</div>
+      <div class="form-section">
+        <div class="section-title">Event Information</div>
+        <div class="grid-2">
+          <div class="field full">
+            <label>Event Name</label>
+            <input type="text" id="eventName" placeholder="Example: Le Tour de Langkawi">
+          </div>
+          <div class="field">
+            <label>Start Date</label>
+            <input type="date" id="startDate">
+          </div>
+          <div class="field">
+            <label>End Date</label>
+            <input type="date" id="endDate">
+          </div>
+          <div class="field">
+            <label>Category</label>
+            <select id="category">
+              <option value="">Select Category</option>
+              <option>Muzik & Konsert</option>
+              <option>Sukan & Outdoor</option>
+              <option>Budaya & Agama</option>
+              <option>Teknologi & Perniagaan</option>
+              <option>Gaya Hidup</option>
+              <option>Local</option>
+              <option>Cuti Sekolah</option>
+              <option>Musim</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Season</label>
+            <select id="seasonId">
+              <option value="">No Season</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label>Location</label>
+            <input type="text" id="location" placeholder="Example: Kuala Lumpur">
+          </div>
+          <div class="field full">
+            <label>Short Description</label>
+            <textarea id="shortDescription" style="min-height:75px" placeholder="Short summary shown on the event card..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-title">Details</div>
+        <div class="field">
+          <label>Google Drive Image URL</label>
+          <input type="url" id="imageUrl" placeholder="https://drive.google.com/...">
+        </div>
+        <div class="field">
+          <label>Full Description</label>
+          <textarea id="description" placeholder="Full event description..."></textarea>
+        </div>
+        <div class="field">
+          <label>Official Link</label>
+          <input type="url" id="officialLink" placeholder="https://...">
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Status</label>
+            <select id="status">
+              <option value="Draft">Draft</option>
+              <option value="Published">Published</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-title">Affiliate Links</div>
+        <div id="linkList" class="link-list">
+          <div class="empty">No affiliate links yet.</div>
+        </div>
+        <button class="add-link" onclick="openLinkModal()">+ Add Affiliate Link</button>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeForm()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveEvent()">Save Event</button>
+      </div>
     </div>
   </section>
 
-  <!-- FORM -->
-  <section id="formView" class="form-view">
-    <div class="form-header">
-      <div class="form-header-left">
-        <button class="back-btn" onclick="closeForm()">←</button>
-        <h2 id="formTitle">Add Event</h2>
+  <!-- ============ SEASONS VIEW ============ -->
+  <section id="seasonsView" style="display:none">
+    <div id="seasonsDashboard" class="dashboard-view">
+      <div class="page-title">
+        <h1>Seasons</h1>
+        <p>Toggle ON bila musim bermula, OFF bila tamat.</p>
       </div>
-      <div class="form-header-right">
-        <button class="btn btn-primary" onclick="saveEvent()">Save</button>
+
+      <div id="seasonList" class="event-list">
+        <div class="empty">Loading seasons...</div>
       </div>
     </div>
 
-    <!-- Event Information -->
-    <div class="form-section">
-      <div class="section-title">Event Information</div>
-      <div class="grid-2">
-        <div class="field full">
-          <label>Event Name</label>
-          <input type="text" id="eventName" placeholder="Example: Le Tour de Langkawi">
+    <div id="seasonFormView" class="form-view">
+      <div class="form-header">
+        <div class="form-header-left">
+          <button class="back-btn" onclick="closeSeasonForm()">←</button>
+          <h2 id="seasonFormTitle">Add Season</h2>
         </div>
-        <div class="field">
-          <label>Start Date</label>
-          <input type="date" id="startDate">
-        </div>
-        <div class="field">
-          <label>End Date</label>
-          <input type="date" id="endDate">
-        </div>
-        <div class="field">
-          <label>Category</label>
-          <select id="category">
-            <option value="">Select Category</option>
-            <option>Muzik & Konsert</option>
-            <option>Sukan & Outdoor</option>
-            <option>Budaya & Agama</option>
-            <option>Teknologi & Perniagaan</option>
-            <option>Gaya Hidup</option>
-            <option>Local</option>
-            <option>Cuti Sekolah</option>
-            <option>Musim</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>Season</label>
-          <select id="seasonId">
-            <option value="">No Season</option>
-          </select>
-        </div>
-        <div class="field full">
-          <label>Location</label>
-          <input type="text" id="location" placeholder="Example: Kuala Lumpur">
-        </div>
-        <div class="field full">
-          <label>Short Description</label>
-          <textarea id="shortDescription" style="min-height:75px" placeholder="Short summary shown on the event card..."></textarea>
+        <div class="form-header-right">
+          <button class="btn btn-primary" onclick="saveSeason()">Save</button>
         </div>
       </div>
-    </div>
 
-    <!-- Details -->
-    <div class="form-section">
-      <div class="section-title">Details</div>
-      <div class="field">
-        <label>Google Drive Image URL</label>
-        <input type="url" id="imageUrl" placeholder="https://drive.google.com/...">
-      </div>
-      <div class="field">
-        <label>Full Description</label>
-        <textarea id="description" placeholder="Full event description..."></textarea>
-      </div>
-      <div class="field">
-        <label>Official Link</label>
-        <input type="url" id="officialLink" placeholder="https://...">
-      </div>
-      <div class="grid-2">
+      <div class="form-section">
+        <div class="section-title">Season Information</div>
+        <div class="field">
+          <label>Season Name</label>
+          <input type="text" id="seasonName" placeholder="Example: Musim Hujan">
+        </div>
+        <div class="field">
+          <label>Sinopsis</label>
+          <textarea id="seasonDescription" style="min-height:140px" placeholder="Tulis penerangan musim di sini..."></textarea>
+        </div>
         <div class="field">
           <label>Status</label>
-          <select id="status">
-            <option value="Draft">Draft</option>
-            <option value="Published">Published</option>
+          <select id="seasonStatus">
+            <option value="Active">Active (ON — dipaparkan di index)</option>
+            <option value="Inactive">Inactive (OFF — disembunyikan)</option>
           </select>
         </div>
       </div>
-    </div>
 
-    <!-- Affiliate Links -->
-    <div class="form-section">
-      <div class="section-title">Affiliate Links</div>
-      <div id="linkList" class="link-list">
-        <div class="empty">No affiliate links yet.</div>
+      <div class="form-section">
+        <div class="section-title">Affiliate Links</div>
+        <div id="seasonLinkList" class="link-list">
+          <div class="empty">No affiliate links yet.</div>
+        </div>
+        <button class="add-link" onclick="openSeasonLinkModal()">+ Add Affiliate Link</button>
       </div>
-      <button class="add-link" onclick="openLinkModal()">+ Add Affiliate Link</button>
-    </div>
 
-    <div class="form-actions">
-      <button class="btn btn-secondary" onclick="closeForm()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveEvent()">Save Event</button>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeSeasonForm()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveSeason()">Save Season</button>
+      </div>
     </div>
   </section>
 
 </main>
 
-<!-- LINK MODAL -->
+<!-- LINK MODAL (shared) -->
 <div id="linkModal" class="modal">
   <div class="modal-box">
     <div class="modal-header">
@@ -248,7 +338,7 @@ textarea{min-height:110px;resize:vertical}
       <input id="linkTitle" placeholder="Example: Raincoat Lelaki">
     </div>
     <div class="field">
-      <label>Description / Link</label>
+      <label>Penerangan / Link</label>
       <textarea id="linkUrl" style="min-height:110px" placeholder="Tulis penerangan produk dan letakkan link affiliate di sini..."></textarea>
     </div>
     <div class="modal-actions">
@@ -265,8 +355,6 @@ textarea{min-height:110px;resize:vertical}
  * CONFIG
  *************************************************/
 const API_URL = "https://script.google.com/macros/s/AKfycbwMD2R7T8HmE-0O4pihjEckJvCQ-UQPtT_vdWVXIThiuy_NrSNLrgZa31K_eM6AbMbN/exec";
-
-// ⚠️ TUKAR INI — mesti sama dengan Code.gs
 const API_TOKEN = "ml-2025-a7b3c9d1e5f6";
 
 /*************************************************
@@ -274,10 +362,22 @@ const API_TOKEN = "ml-2025-a7b3c9d1e5f6";
  *************************************************/
 let events = [];
 let seasons = [];
+let currentTab = "events";
+
+// Event state
 let currentEventId = null;
-let editingLinkId = null;
 let tempLinks = [];
 let __currentLinks = [];
+
+// Season state
+let currentSeasonId = null;
+let tempSeasonLinks = [];
+let __currentSeasonLinks = [];
+let editingSeasonLinkId = null;
+
+// Shared editing
+let editingLinkId = null;
+let linkContext = "event"; // "event" or "season"
 
 /*************************************************
  * MESSAGE
@@ -287,6 +387,46 @@ function showMessage(text){
   el.textContent = text;
   el.classList.add("show");
   setTimeout(() => el.classList.remove("show"), 2500);
+}
+
+/*************************************************
+ * TABS
+ *************************************************/
+function switchTab(tab){
+  currentTab = tab;
+
+  document.getElementById("tabEvents").classList.toggle("active", tab === "events");
+  document.getElementById("tabSeasons").classList.toggle("active", tab === "seasons");
+
+  document.getElementById("eventsView").style.display = tab === "events" ? "block" : "none";
+  document.getElementById("seasonsView").style.display = tab === "seasons" ? "block" : "none";
+
+  // Reset views
+  closeForm();
+  closeSeasonForm();
+
+  updateAddButton();
+
+  if(tab === "seasons"){
+    renderSeasons();
+  }
+}
+
+function handleAddClick(){
+  if(currentTab === "events"){
+    openAddForm();
+  }else{
+    openAddSeasonForm();
+  }
+}
+
+function updateAddButton(){
+  const btn = document.getElementById("addBtn");
+  if(currentTab === "events"){
+    btn.textContent = "+ Add Event";
+  }else{
+    btn.textContent = "+ Add Season";
+  }
 }
 
 /*************************************************
@@ -313,14 +453,7 @@ async function apiPost(action, data){
 async function loadEvents(){
   try{
     const result = await apiGet({ action: "getEvents" });
-
-    if(result && result.success && Array.isArray(result.data)){
-      events = result.data;
-    }else if(Array.isArray(result)){
-      events = result;
-    }else{
-      events = [];
-    }
+    events = (result && result.success && Array.isArray(result.data)) ? result.data : (Array.isArray(result) ? result : []);
     renderEvents();
   }catch(error){
     console.error(error);
@@ -331,15 +464,9 @@ async function loadEvents(){
 async function loadSeasons(){
   try{
     const result = await apiGet({ action: "getSeasons" });
-
-    if(result && result.success && Array.isArray(result.data)){
-      seasons = result.data;
-    }else if(Array.isArray(result)){
-      seasons = result;
-    }else{
-      seasons = [];
-    }
+    seasons = (result && result.success && Array.isArray(result.data)) ? result.data : (Array.isArray(result) ? result : []);
     populateSeasonDropdown();
+    renderSeasons();
   }catch(error){
     console.error(error);
   }
@@ -426,7 +553,185 @@ function renderEvents(){
 }
 
 /*************************************************
- * FORM
+ * RENDER SEASONS
+ *************************************************/
+function renderSeasons(){
+  const list = document.getElementById("seasonList");
+  if(!list) return;
+
+  if(!seasons.length){
+    list.innerHTML = `<div class="empty">No seasons yet. Klik "+ Add Season" untuk mula.</div>`;
+    return;
+  }
+
+  list.innerHTML = seasons.map(season => {
+    const id = season["Season ID"];
+    const isActive = String(season.Status || "").toLowerCase() === "active";
+    const desc = season["Description"] || "";
+    const preview = desc.length > 150 ? desc.slice(0, 150) + "..." : desc;
+
+    return `
+      <div class="season-card ${isActive ? "" : "inactive"}">
+        <div class="season-left">
+          <div class="season-title">
+            ${isActive ? "🌤" : "💤"} ${escapeHtml(season["Season Name"] || "")}
+            ${isActive
+              ? `<span class="badge badge-status">Active</span>`
+              : `<span class="badge badge-off">Inactive</span>`}
+          </div>
+          <div class="season-desc">${escapeHtml(preview) || "<em>Tiada sinopsis.</em>"}</div>
+        </div>
+        <div class="season-right">
+          <label class="switch" title="${isActive ? "Klik untuk OFF" : "Klik untuk ON"}">
+            <input type="checkbox" ${isActive ? "checked" : ""} onchange="toggleSeasonStatus('${id}', this)">
+            <span class="slider"></span>
+          </label>
+          <button class="btn btn-secondary btn-small" onclick="editSeason('${id}')">Edit</button>
+          <button class="btn btn-danger btn-small" onclick="deleteSeason('${id}')">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+async function toggleSeasonStatus(seasonId, checkbox){
+  const newState = checkbox.checked;
+
+  try{
+    const result = await apiPost("toggleSeasonStatus", { seasonId });
+
+    if(!result.success){
+      showMessage(result.message || "Gagal tukar status.");
+      checkbox.checked = !newState; // rollback
+      return;
+    }
+
+    showMessage(result.message || "Status dikemaskini.");
+    await loadSeasons();
+
+  }catch(error){
+    console.error(error);
+    showMessage("Error tukar status.");
+    checkbox.checked = !newState;
+  }
+}
+
+/*************************************************
+ * SEASON FORM
+ *************************************************/
+function openAddSeasonForm(){
+  currentSeasonId = null;
+  tempSeasonLinks = [];
+  document.getElementById("seasonFormTitle").textContent = "Add Season";
+  clearSeasonForm();
+  document.getElementById("seasonsDashboard").classList.add("hidden");
+  document.getElementById("seasonFormView").classList.add("active");
+}
+
+function closeSeasonForm(){
+  document.getElementById("seasonFormView").classList.remove("active");
+  document.getElementById("seasonsDashboard").classList.remove("hidden");
+  currentSeasonId = null;
+  tempSeasonLinks = [];
+  editingSeasonLinkId = null;
+}
+
+function clearSeasonForm(){
+  document.getElementById("seasonName").value = "";
+  document.getElementById("seasonDescription").value = "";
+  document.getElementById("seasonStatus").value = "Active";
+  document.getElementById("seasonLinkList").innerHTML = `<div class="empty">No affiliate links yet.</div>`;
+}
+
+async function editSeason(seasonId){
+  const season = seasons.find(s => String(s["Season ID"]) === String(seasonId));
+  if(!season) return;
+
+  currentSeasonId = season["Season ID"];
+  tempSeasonLinks = [];
+  document.getElementById("seasonFormTitle").textContent = "Edit Season";
+
+  document.getElementById("seasonName").value = season["Season Name"] || "";
+  document.getElementById("seasonDescription").value = season["Description"] || "";
+  document.getElementById("seasonStatus").value = season.Status || "Active";
+
+  document.getElementById("seasonsDashboard").classList.add("hidden");
+  document.getElementById("seasonFormView").classList.add("active");
+
+  await loadSeasonLinks(seasonId);
+}
+
+async function saveSeason(){
+  const name = document.getElementById("seasonName").value.trim();
+  if(!name){
+    showMessage("Season Name diperlukan.");
+    return;
+  }
+
+  const data = {
+    seasonId: currentSeasonId,
+    seasonName: name,
+    description: document.getElementById("seasonDescription").value,
+    status: document.getElementById("seasonStatus").value
+  };
+
+  const action = currentSeasonId ? "updateSeason" : "addSeason";
+
+  try{
+    const result = await apiPost(action, data);
+
+    if(!result.success){
+      showMessage(result.message || "Gagal simpan season.");
+      return;
+    }
+
+    let newSeasonId = currentSeasonId || (result.data && result.data.seasonId) || null;
+
+    if(!currentSeasonId && !newSeasonId){
+      showMessage("Season disimpan, tapi ID tak diterima. Refresh & edit semula untuk tambah links.");
+      closeSeasonForm();
+      await loadSeasons();
+      return;
+    }
+
+    // Simpan temporary links
+    if(tempSeasonLinks.length > 0){
+      for(const link of tempSeasonLinks){
+        await apiPost("addLink", {
+          eventId: newSeasonId, // guna field eventId untuk season ID juga
+          linkType: "Season",
+          title: link.Title,
+          url: link.URL
+        });
+      }
+      tempSeasonLinks = [];
+    }
+
+    showMessage(result.message || "Season berjaya disimpan.");
+    closeSeasonForm();
+    await loadSeasons();
+
+  }catch(error){
+    console.error(error);
+    showMessage("Error simpan season.");
+  }
+}
+
+async function deleteSeason(seasonId){
+  if(!confirm("Padam season ini?\n\nAffiliate links untuk season ini juga akan dipadam.")) return;
+
+  try{
+    const result = await apiPost("deleteSeason", { seasonId });
+    showMessage(result.message || "Season dipadam.");
+    await loadSeasons();
+  }catch(error){
+    console.error(error);
+    showMessage("Error padam season.");
+  }
+}
+
+/*************************************************
+ * EVENT FORM
  *************************************************/
 function openAddForm(){
   currentEventId = null;
@@ -460,9 +765,6 @@ function clearForm(){
   document.getElementById("linkList").innerHTML = `<div class="empty">No affiliate links yet.</div>`;
 }
 
-/*************************************************
- * EDIT EVENT
- *************************************************/
 async function editEvent(eventId){
   const event = events.find(e => String(e["Event ID"]) === String(eventId));
   if(!event) return;
@@ -489,9 +791,6 @@ async function editEvent(eventId){
   await loadLinks(eventId);
 }
 
-/*************************************************
- * SAVE EVENT
- *************************************************/
 async function saveEvent(){
   const data = {
     eventId: currentEventId,
@@ -523,18 +822,16 @@ async function saveEvent(){
       return;
     }
 
-    // Dapatkan Event ID (event baru)
     let newEventId = currentEventId || (result.data && result.data.eventId) || null;
 
     if(!currentEventId && !newEventId){
-      showMessage("Event disimpan, tapi Event ID tak diterima. Refresh dan edit semula untuk tambah links.");
+      showMessage("Event disimpan, tapi Event ID tak diterima.");
       closeForm();
       await loadEvents();
       await loadSeasons();
       return;
     }
 
-    // Simpan temporary links (jika ada)
     if(tempLinks.length > 0){
       for(const link of tempLinks){
         await apiPost("addLink", {
@@ -558,9 +855,6 @@ async function saveEvent(){
   }
 }
 
-/*************************************************
- * DELETE EVENT
- *************************************************/
 async function deleteEvent(eventId){
   if(!confirm("Delete this event?\n\nRelated links will also be deleted.")) return;
 
@@ -575,29 +869,40 @@ async function deleteEvent(eventId){
 }
 
 /*************************************************
- * LINKS
+ * LINKS (shared logic for event + season)
  *************************************************/
 async function loadLinks(eventId){
+  linkContext = "event";
   try{
     const result = await apiGet({ action: "getLinks", eventId });
-
-    if(result && result.success && Array.isArray(result.data)){
-      renderLinks(result.data);
-    }else if(Array.isArray(result)){
-      renderLinks(result);
-    }else{
-      renderLinks([]);
-    }
+    const items = (result && result.success && Array.isArray(result.data)) ? result.data : (Array.isArray(result) ? result : []);
+    renderLinkList("linkList", items, false);
   }catch(error){
     console.error("Load links error:", error);
-    document.getElementById("linkList").innerHTML = `<div class="empty">Failed to load affiliate links.</div>`;
+    document.getElementById("linkList").innerHTML = `<div class="empty">Failed to load links.</div>`;
   }
 }
 
-function renderLinks(items){
-  const list = document.getElementById("linkList");
+async function loadSeasonLinks(seasonId){
+  linkContext = "season";
+  try{
+    const result = await apiGet({ action: "getLinks", eventId: seasonId });
+    const items = (result && result.success && Array.isArray(result.data)) ? result.data : (Array.isArray(result) ? result : []);
+    renderLinkList("seasonLinkList", items, true);
+  }catch(error){
+    console.error("Load season links error:", error);
+    document.getElementById("seasonLinkList").innerHTML = `<div class="empty">Failed to load links.</div>`;
+  }
+}
 
-  if(!currentEventId && tempLinks.length > 0){
+function renderLinkList(containerId, items, isSeason){
+  const list = document.getElementById(containerId);
+
+  // Guna tempLinks kalau event/season baru
+  if(isSeason && !currentSeasonId && tempSeasonLinks.length > 0){
+    items = tempSeasonLinks;
+  }
+  if(!isSeason && !currentEventId && tempLinks.length > 0){
     items = tempLinks;
   }
 
@@ -606,16 +911,24 @@ function renderLinks(items){
     return;
   }
 
-  // Simpan untuk akses dari onclick
-  window.__currentLinks = items;
+  // Simpan untuk onclick
+  if(isSeason){
+    window.__currentSeasonLinks = items;
+  }else{
+    window.__currentLinks = items;
+  }
+
+  const prefix = isSeason ? "Season" : "Event";
 
   list.innerHTML = items.map((item, index) => {
     const isTemp = !item["Link ID"];
     const title = item["Title"] || item.Title || "";
     const url = item["URL"] || item.URL || "";
 
-    const editFn   = `editLinkByIndex(${index}, ${isTemp})`;
-    const deleteFn = isTemp ? `deleteTempLink(${index})` : `deleteLinkByIndex(${index})`;
+    const editFn   = `editLinkByIndex('${prefix}', ${index}, ${isTemp})`;
+    const deleteFn = isTemp 
+      ? `deleteTempLink('${prefix}', ${index})` 
+      : `deleteLinkByIndex('${prefix}', ${index})`;
 
     return `
       <div class="link-card">
@@ -632,18 +945,6 @@ function renderLinks(items){
   }).join("");
 }
 
-function editLinkByIndex(index, isTemp){
-  const item = window.__currentLinks[index];
-  if(!item) return;
-  editLink(item, isTemp ? index : null);
-}
-
-function deleteLinkByIndex(index){
-  const item = window.__currentLinks[index];
-  if(!item || !item["Link ID"]) return;
-  deleteLink(item["Link ID"]);
-}
-
 function openLinkModal(){
   editingLinkId = null;
   document.getElementById("linkModalTitle").textContent = "Add Affiliate Link";
@@ -652,19 +953,33 @@ function openLinkModal(){
   document.getElementById("linkModal").classList.add("active");
 }
 
+function openSeasonLinkModal(){
+  editingSeasonLinkId = null;
+  document.getElementById("linkModalTitle").textContent = "Add Affiliate Link (Season)";
+  document.getElementById("linkTitle").value = "";
+  document.getElementById("linkUrl").value = "";
+  document.getElementById("linkModal").classList.add("active");
+}
+
 function closeLinkModal(){
   document.getElementById("linkModal").classList.remove("active");
   editingLinkId = null;
+  editingSeasonLinkId = null;
 }
 
-function editLink(item, tempIndex = null){
-  editingLinkId = item["Link ID"] || null;
+function editLinkByIndex(prefix, index, isTemp){
+  const arr = prefix === "Season" ? window.__currentSeasonLinks : window.__currentLinks;
+  const item = arr[index];
+  if(!item) return;
 
-  if(tempIndex !== null){
-    editingLinkId = "temp-" + tempIndex;
+  if(prefix === "Season"){
+    editingSeasonLinkId = isTemp ? "temp-" + index : item["Link ID"];
+    document.getElementById("linkModalTitle").textContent = "Edit Affiliate Link (Season)";
+  }else{
+    editingLinkId = isTemp ? "temp-" + index : item["Link ID"];
+    document.getElementById("linkModalTitle").textContent = "Edit Affiliate Link";
   }
 
-  document.getElementById("linkModalTitle").textContent = "Edit Affiliate Link";
   document.getElementById("linkTitle").value = item["Title"] || item.Title || "";
   document.getElementById("linkUrl").value = item["URL"] || item.URL || "";
   document.getElementById("linkModal").classList.add("active");
@@ -679,64 +994,106 @@ async function saveLink(){
     return;
   }
 
-  // MODE TEMPORARY (Event belum disimpan)
-  if(!currentEventId){
+  const isSeason = currentTab === "seasons";
+
+  // ===== TEMP MODE =====
+  if(isSeason && !currentSeasonId){
+    if(editingSeasonLinkId && String(editingSeasonLinkId).startsWith("temp-")){
+      const idx = parseInt(editingSeasonLinkId.replace("temp-", ""));
+      tempSeasonLinks[idx] = { Title: title, URL: url };
+    }else{
+      tempSeasonLinks.push({ Title: title, URL: url });
+    }
+    renderLinkList("seasonLinkList", tempSeasonLinks, true);
+    closeLinkModal();
+    showMessage("Link ditambah (sementara).");
+    return;
+  }
+
+  if(!isSeason && !currentEventId){
     if(editingLinkId && String(editingLinkId).startsWith("temp-")){
       const idx = parseInt(editingLinkId.replace("temp-", ""));
       tempLinks[idx] = { Title: title, URL: url };
     }else{
       tempLinks.push({ Title: title, URL: url });
     }
-    renderLinks(tempLinks);
+    renderLinkList("linkList", tempLinks, false);
     closeLinkModal();
-    showMessage("Affiliate link ditambah (sementara).");
+    showMessage("Link ditambah (sementara).");
     return;
   }
 
-  // MODE NORMAL (Event sudah wujud)
-  const isEdit = editingLinkId && !String(editingLinkId).startsWith("temp-");
+  // ===== NORMAL MODE =====
+  const activeEditId = isSeason ? editingSeasonLinkId : editingLinkId;
+  const isEdit = activeEditId && !String(activeEditId).startsWith("temp-");
   const action = isEdit ? "updateLink" : "addLink";
 
   const data = isEdit
-    ? { linkId: editingLinkId, linkType: "Affiliate", title, url }
-    : { eventId: currentEventId, linkType: "Affiliate", title, url };
+    ? { linkId: activeEditId, linkType: isSeason ? "Season" : "Affiliate", title, url }
+    : {
+        eventId: isSeason ? currentSeasonId : currentEventId,
+        linkType: isSeason ? "Season" : "Affiliate",
+        title, url
+      };
 
   try{
     const result = await apiPost(action, data);
-    console.log("SAVE LINK:", result);
 
     if(!result.success){
-      showMessage(result.message || "Failed to save affiliate link.");
+      showMessage(result.message || "Gagal simpan link.");
       return;
     }
 
-    showMessage(result.message || "Affiliate link berjaya disimpan.");
+    showMessage(result.message || "Link berjaya disimpan.");
     closeLinkModal();
-    await loadLinks(currentEventId);
+
+    if(isSeason){
+      await loadSeasonLinks(currentSeasonId);
+    }else{
+      await loadLinks(currentEventId);
+    }
 
   }catch(error){
     console.error("Save link error:", error);
-    showMessage("Error saving affiliate link.");
+    showMessage("Error saving link.");
   }
 }
 
-function deleteTempLink(index){
-  if(!confirm("Delete this affiliate link?")) return;
-  tempLinks.splice(index, 1);
-  renderLinks(tempLinks);
-  showMessage("Deleted.");
+function deleteTempLink(prefix, index){
+  if(!confirm("Padam link ini?")) return;
+
+  if(prefix === "Season"){
+    tempSeasonLinks.splice(index, 1);
+    renderLinkList("seasonLinkList", tempSeasonLinks, true);
+  }else{
+    tempLinks.splice(index, 1);
+    renderLinkList("linkList", tempLinks, false);
+  }
+  showMessage("Dipadam.");
 }
 
-async function deleteLink(id){
-  if(!confirm("Delete this affiliate link?")) return;
+function deleteLinkByIndex(prefix, index){
+  const arr = prefix === "Season" ? window.__currentSeasonLinks : window.__currentLinks;
+  const item = arr[index];
+  if(!item || !item["Link ID"]) return;
+  deleteLink(item["Link ID"], prefix);
+}
+
+async function deleteLink(id, prefix){
+  if(!confirm("Padam link ini?")) return;
 
   try{
     const result = await apiPost("deleteLink", { linkId: id });
-    showMessage(result.message || "Deleted.");
-    await loadLinks(currentEventId);
+    showMessage(result.message || "Dipadam.");
+
+    if(prefix === "Season"){
+      await loadSeasonLinks(currentSeasonId);
+    }else{
+      await loadLinks(currentEventId);
+    }
   }catch(error){
     console.error(error);
-    showMessage("Error deleting link.");
+    showMessage("Error padam link.");
   }
 }
 
