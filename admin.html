@@ -60,10 +60,6 @@ textarea{min-height:110px;resize:vertical}
 .field small{display:block;color:#9ca3af;font-size:10px;margin-top:4px}
 .full{grid-column:1/-1}
 
-.home-option{margin-top:3px;padding:12px;background:#f9fafb;border-radius:9px;border:1px solid #e5e7eb}
-.home-option label{display:flex;align-items:center;gap:8px;margin:0;cursor:pointer}
-.home-option input{width:auto}
-
 .link-list{display:grid;gap:8px;margin-bottom:10px}
 .link-card{border:1px solid #e5e7eb;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .link-info{min-width:0;flex:1}
@@ -221,12 +217,6 @@ textarea{min-height:110px;resize:vertical}
           </select>
         </div>
       </div>
-      <div class="home-option">
-        <label>
-          <input type="checkbox" id="showOnHome">
-          Show this event on Home
-        </label>
-      </div>
     </div>
 
     <!-- Affiliate Links -->
@@ -272,9 +262,13 @@ textarea{min-height:110px;resize:vertical}
 
 <script>
 /*************************************************
- * API
+ * CONFIG
  *************************************************/
 const API_URL = "https://script.google.com/macros/s/AKfycbwMD2R7T8HmE-0O4pihjEckJvCQ-UQPtT_vdWVXIThiuy_NrSNLrgZa31K_eM6AbMbN/exec";
+
+// ⚠️ TUKAR INI — mesti sama dengan Code.gs
+const API_TOKEN = "ml-2025-a7b3c9d1e5f6";
+
 /*************************************************
  * STATE
  *************************************************/
@@ -282,7 +276,8 @@ let events = [];
 let seasons = [];
 let currentEventId = null;
 let editingLinkId = null;
-let tempLinks = [];          // Temporary links for NEW event
+let tempLinks = [];
+let __currentLinks = [];
 
 /*************************************************
  * MESSAGE
@@ -295,17 +290,34 @@ function showMessage(text){
 }
 
 /*************************************************
+ * API HELPER
+ *************************************************/
+async function apiGet(params){
+  const query = new URLSearchParams({ ...params, token: API_TOKEN, t: Date.now() });
+  const response = await fetch(API_URL + "?" + query.toString());
+  return response.json();
+}
+
+async function apiPost(action, data){
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ token: API_TOKEN, action, data })
+  });
+  return response.json();
+}
+
+/*************************************************
  * LOAD DATA
  *************************************************/
 async function loadEvents(){
   try{
-    const response = await fetch(API_URL + "?t=" + Date.now());
-    const result = await response.json();
+    const result = await apiGet({ action: "getEvents" });
 
-    if(Array.isArray(result)){
-      events = result;
-    }else if(result && result.success && Array.isArray(result.data)){
+    if(result && result.success && Array.isArray(result.data)){
       events = result.data;
+    }else if(Array.isArray(result)){
+      events = result;
     }else{
       events = [];
     }
@@ -318,13 +330,12 @@ async function loadEvents(){
 
 async function loadSeasons(){
   try{
-    const response = await fetch(API_URL + "?action=getSeasons&t=" + Date.now());
-    const result = await response.json();
+    const result = await apiGet({ action: "getSeasons" });
 
-    if(Array.isArray(result)){
-      seasons = result;
-    }else if(result && result.success && Array.isArray(result.data)){
+    if(result && result.success && Array.isArray(result.data)){
       seasons = result.data;
+    }else if(Array.isArray(result)){
+      seasons = result;
     }else{
       seasons = [];
     }
@@ -446,7 +457,6 @@ function clearForm(){
   document.getElementById("imageUrl").value = "";
   document.getElementById("officialLink").value = "";
   document.getElementById("status").value = "Draft";
-  document.getElementById("showOnHome").checked = false;
   document.getElementById("linkList").innerHTML = `<div class="empty">No affiliate links yet.</div>`;
 }
 
@@ -472,10 +482,6 @@ async function editEvent(eventId){
   document.getElementById("imageUrl").value = event["Image URL"] || "";
   document.getElementById("officialLink").value = event["Official Link"] || "";
   document.getElementById("status").value = event["Status"] || "Draft";
-  document.getElementById("showOnHome").checked =
-    String(event["Show on Home"]).toLowerCase() === "true" ||
-    String(event["Show on Home"]).toLowerCase() === "yes" ||
-    String(event["Show on Home"]) === "1";
 
   document.getElementById("dashboardView").classList.add("hidden");
   document.getElementById("formView").classList.add("active");
@@ -499,8 +505,7 @@ async function saveEvent(){
     seasonId: document.getElementById("seasonId").value,
     imageUrl: document.getElementById("imageUrl").value,
     officialLink: document.getElementById("officialLink").value,
-    status: document.getElementById("status").value,
-    showOnHome: document.getElementById("showOnHome").checked
+    status: document.getElementById("status").value
   };
 
   if(!data.eventName.trim()){
@@ -511,55 +516,38 @@ async function saveEvent(){
   const action = currentEventId ? "updateEvent" : "addEvent";
 
   try{
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action, data })
-    });
-
-    const result = await response.json();
+    const result = await apiPost(action, data);
 
     if(!result.success){
       showMessage(result.message || "Failed to save event.");
       return;
     }
 
-    // Dapatkan Event ID (penting untuk event baru)
-    let newEventId = currentEventId;
+    // Dapatkan Event ID (event baru)
+    let newEventId = currentEventId || (result.data && result.data.eventId) || null;
 
-    if(!currentEventId){
-      newEventId = result.eventId || result.data?.eventId || result.data?.["Event ID"] || result.id || null;
-
-      if(!newEventId){
-        showMessage("Event berjaya disimpan, tapi tidak dapat Event ID. Sila refresh dan edit semula untuk tambah Affiliate Links.");
-        closeForm();
-        await loadEvents();
-        await loadSeasons();
-        return;
-      }
+    if(!currentEventId && !newEventId){
+      showMessage("Event disimpan, tapi Event ID tak diterima. Refresh dan edit semula untuk tambah links.");
+      closeForm();
+      await loadEvents();
+      await loadSeasons();
+      return;
     }
 
     // Simpan temporary links (jika ada)
     if(tempLinks.length > 0){
       for(const link of tempLinks){
-        await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            action: "addLink",
-            data: {
-              eventId: newEventId,
-              linkType: "Affiliate",
-              title: link.Title,
-              url: link.URL
-            }
-          })
+        await apiPost("addLink", {
+          eventId: newEventId,
+          linkType: "Affiliate",
+          title: link.Title,
+          url: link.URL
         });
       }
       tempLinks = [];
     }
 
-    showMessage(result.message || "Event + Affiliate Links berjaya disimpan.");
+    showMessage(result.message || "Event berjaya disimpan.");
     closeForm();
     await loadEvents();
     await loadSeasons();
@@ -577,16 +565,7 @@ async function deleteEvent(eventId){
   if(!confirm("Delete this event?\n\nRelated links will also be deleted.")) return;
 
   try{
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        action: "deleteEvent",
-        data: { eventId }
-      })
-    });
-
-    const result = await response.json();
+    const result = await apiPost("deleteEvent", { eventId });
     showMessage(result.message || "Event deleted.");
     await loadEvents();
   }catch(error){
@@ -600,10 +579,7 @@ async function deleteEvent(eventId){
  *************************************************/
 async function loadLinks(eventId){
   try{
-    const response = await fetch(
-      API_URL + "?action=getLinks&eventId=" + encodeURIComponent(eventId) + "&t=" + Date.now()
-    );
-    const result = await response.json();
+    const result = await apiGet({ action: "getLinks", eventId });
 
     if(result && result.success && Array.isArray(result.data)){
       renderLinks(result.data);
@@ -621,7 +597,6 @@ async function loadLinks(eventId){
 function renderLinks(items){
   const list = document.getElementById("linkList");
 
-  // Kalau masih dalam mode temporary (event baru)
   if(!currentEventId && tempLinks.length > 0){
     items = tempLinks;
   }
@@ -631,7 +606,7 @@ function renderLinks(items){
     return;
   }
 
-  // Simpan items dalam variable global untuk akses dari onclick
+  // Simpan untuk akses dari onclick
   window.__currentLinks = items;
 
   list.innerHTML = items.map((item, index) => {
@@ -657,7 +632,6 @@ function renderLinks(items){
   }).join("");
 }
 
-// Wrapper baru — panggil dari onclick
 function editLinkByIndex(index, isTemp){
   const item = window.__currentLinks[index];
   if(!item) return;
@@ -669,9 +643,6 @@ function deleteLinkByIndex(index){
   if(!item || !item["Link ID"]) return;
   deleteLink(item["Link ID"]);
 }
-
-  
-          
 
 function openLinkModal(){
   editingLinkId = null;
@@ -689,7 +660,6 @@ function closeLinkModal(){
 function editLink(item, tempIndex = null){
   editingLinkId = item["Link ID"] || null;
 
-  // Kalau temporary
   if(tempIndex !== null){
     editingLinkId = "temp-" + tempIndex;
   }
@@ -709,7 +679,7 @@ async function saveLink(){
     return;
   }
 
-  // ===== MODE TEMPORARY (Event belum disimpan) =====
+  // MODE TEMPORARY (Event belum disimpan)
   if(!currentEventId){
     if(editingLinkId && String(editingLinkId).startsWith("temp-")){
       const idx = parseInt(editingLinkId.replace("temp-", ""));
@@ -723,21 +693,16 @@ async function saveLink(){
     return;
   }
 
-  // ===== MODE NORMAL (Event sudah wujud) =====
-  const action = editingLinkId && !String(editingLinkId).startsWith("temp-") ? "updateLink" : "addLink";
+  // MODE NORMAL (Event sudah wujud)
+  const isEdit = editingLinkId && !String(editingLinkId).startsWith("temp-");
+  const action = isEdit ? "updateLink" : "addLink";
 
-  const data = editingLinkId && !String(editingLinkId).startsWith("temp-")
+  const data = isEdit
     ? { linkId: editingLinkId, linkType: "Affiliate", title, url }
     : { eventId: currentEventId, linkType: "Affiliate", title, url };
 
   try{
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action, data })
-    });
-
-    const result = await response.json();
+    const result = await apiPost(action, data);
     console.log("SAVE LINK:", result);
 
     if(!result.success){
@@ -766,16 +731,7 @@ async function deleteLink(id){
   if(!confirm("Delete this affiliate link?")) return;
 
   try{
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        action: "deleteLink",
-        data: { linkId: id }
-      })
-    });
-
-    const result = await response.json();
+    const result = await apiPost("deleteLink", { linkId: id });
     showMessage(result.message || "Deleted.");
     await loadLinks(currentEventId);
   }catch(error){
@@ -799,7 +755,7 @@ function formatDate(value){
   if(isNaN(date)) return value;
   return date.toLocaleDateString("en-GB", { day:"2-digit", month:"short", year:"numeric" });
 }
-  
+
 function formatDateForInput(value){
   if(!value) return "";
   const date = new Date(value);
@@ -809,7 +765,6 @@ function formatDateForInput(value){
   const day = String(date.getDate()).padStart(2,"0");
   return `${year}-${month}-${day}`;
 }
-
 
 function escapeHtml(value){
   return String(value || "")
