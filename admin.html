@@ -152,6 +152,11 @@ textarea{min-height:110px;resize:vertical}
   .form-header{align-items:flex-start}
   .form-header-right{display:none}
   .form-section{padding:15px}
+  .btn.loading{pointer-events:none;opacity:.7;position:relative;color:transparent!important}
+.btn.loading::after{content:"";position:absolute;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;left:50%;top:50%;margin:-7px 0 0 -7px;border-color:rgba(255,255,255,.3);border-top-color:#fff}
+.btn-secondary.loading::after{border-color:rgba(0,0,0,.2);border-top-color:#333}
+@keyframes spin{to{transform:rotate(360deg)}}
+  
 }
 </style>
 </head>
@@ -435,6 +440,22 @@ const COLOR_PRESETS = [
   { name: "Teal",   hex: "#14b8a6" },{ name: "Hitam",  hex: "#171717" }
 ];
 
+/*************************************************
+ * SAVE LOCK — prevent double-submit
+ *************************************************/
+let isSaving = false;
+
+function setSaving(state, btnEl){
+  isSaving = state;
+  // Disable semua save button utama
+  document.querySelectorAll(".btn-primary").forEach(b => {
+    if(b.textContent.includes("Save") || b.classList.contains("loading")){
+      b.classList.toggle("loading", state);
+      b.disabled = state;
+    }
+  });
+}
+  
 const NEGERI_KEYWORDS = {
   "Kuala Lumpur": ["kuala lumpur","kl","bukit jalil","klcc","cheras","kepong","wangsa maju","setapak","ampang"],
   "Selangor": ["selangor","shah alam","petaling jaya","pj","subang","klang","kajang","puchong","cyberjaya","putrajaya","bangi","semenyih","sepang"],
@@ -709,10 +730,12 @@ async function editNews(newsId){
 
   await loadNewsLinks(newsId);
 }
-
 async function saveNews(){
+  if(isSaving) return;
+  setSaving(true);
+
   const title = document.getElementById("newsTitle").value.trim();
-  if(!title){showMessage("Title diperlukan.");return;}
+  if(!title){showMessage("Title diperlukan.");setSaving(false);return;}
 
   const data = {
     newsId: currentNewsId,
@@ -729,13 +752,14 @@ async function saveNews(){
 
   try{
     const result = await apiPost(action, data);
-    if(!result.success){showMessage(result.message || "Gagal simpan news.");return;}
+    if(!result.success){showMessage(result.message || "Gagal simpan news.");setSaving(false);return;}
 
     let newNewsId = currentNewsId || (result.data && result.data.newsId) || null;
     if(!currentNewsId && !newNewsId){
       showMessage("News disimpan, tapi ID tak diterima.");
       closeNewsForm();
       await loadNews();
+      setSaving(false);
       return;
     }
 
@@ -758,7 +782,9 @@ async function saveNews(){
     console.error(e);
     showMessage("Error simpan news.");
   }
+  setSaving(false);
 }
+
 
 async function deleteNews(newsId){
   if(!confirm("Padam news ini?\n\nAffiliate links juga akan dipadam.")) return;
@@ -922,8 +948,11 @@ async function editSeason(seasonId){
   await loadSeasonLinks(seasonId);
 }
 async function saveSeason(){
+  if(isSaving) return;
+  setSaving(true);
+
   const name = document.getElementById("seasonName").value.trim();
-  if(!name){showMessage("Season Name diperlukan.");return;}
+  if(!name){showMessage("Season Name diperlukan.");setSaving(false);return;}
   const data = {
     seasonId: currentSeasonId, seasonName: name,
     description: document.getElementById("seasonDescription").value,
@@ -933,9 +962,9 @@ async function saveSeason(){
   const action = currentSeasonId ? "updateSeason" : "addSeason";
   try{
     const result = await apiPost(action, data);
-    if(!result.success){showMessage(result.message || "Gagal.");return;}
+    if(!result.success){showMessage(result.message || "Gagal.");setSaving(false);return;}
     let newId = currentSeasonId || (result.data && result.data.seasonId) || null;
-    if(!currentSeasonId && !newId){closeSeasonForm(); await loadSeasons(); return;}
+    if(!currentSeasonId && !newId){closeSeasonForm(); await loadSeasons(); setSaving(false); return;}
     if(tempSeasonLinks.length > 0){
       for(const link of tempSeasonLinks){
         await apiPost("addLink", { eventId: newId, linkType: "Season", title: link.Title, url: link.URL });
@@ -946,14 +975,7 @@ async function saveSeason(){
     closeSeasonForm();
     await loadSeasons();
   }catch(e){showMessage("Error simpan season.");}
-}
-async function deleteSeason(seasonId){
-  if(!confirm("Padam season ini?")) return;
-  try{
-    const result = await apiPost("deleteSeason", { seasonId });
-    showMessage(result.message || "Season dipadam.");
-    await loadSeasons();
-  }catch(e){showMessage("Error padam season.");}
+  setSaving(false);
 }
 
 /*************************************************
@@ -999,6 +1021,9 @@ async function editEvent(eventId){
   await loadLinks(eventId);
 }
 async function saveEvent(){
+  if(isSaving) return;
+  setSaving(true);
+
   const data = {
     eventId: currentEventId,
     eventName: document.getElementById("eventName").value,
@@ -1014,13 +1039,25 @@ async function saveEvent(){
     status: document.getElementById("status").value,
     negeri: document.getElementById("negeri").value
   };
-  if(!data.eventName.trim()){showMessage("Event Name diperlukan.");return;}
+  if(!data.eventName.trim()){
+    showMessage("Event Name diperlukan.");
+    setSaving(false);
+    return;
+  }
   const action = currentEventId ? "updateEvent" : "addEvent";
   try{
     const result = await apiPost(action, data);
-    if(!result.success){showMessage(result.message || "Gagal.");return;}
+    if(!result.success){
+      showMessage(result.message || "Gagal.");
+      setSaving(false);
+      return;
+    }
     let newId = currentEventId || (result.data && result.data.eventId) || null;
-    if(!currentEventId && !newId){closeForm(); await loadEvents(); await loadSeasons(); return;}
+    if(!currentEventId && !newId){
+      closeForm(); await loadEvents(); await loadSeasons();
+      setSaving(false);
+      return;
+    }
     if(tempLinks.length > 0){
       for(const link of tempLinks){
         await apiPost("addLink", { eventId: newId, linkType: "Affiliate", title: link.Title, url: link.URL });
@@ -1031,15 +1068,10 @@ async function saveEvent(){
     closeForm();
     await loadEvents();
     await loadSeasons();
-  }catch(e){showMessage("Error saving event.");}
-}
-async function deleteEvent(eventId){
-  if(!confirm("Delete this event?")) return;
-  try{
-    const result = await apiPost("deleteEvent", { eventId });
-    showMessage(result.message || "Event deleted.");
-    await loadEvents();
-  }catch(e){showMessage("Error deleting event.");}
+  }catch(e){
+    showMessage("Error saving event.");
+  }
+  setSaving(false);
 }
 
 /*************************************************
