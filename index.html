@@ -34,21 +34,19 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .section-sub{font-size:12px;color:#888;margin:-8px 4px 14px}
 
 /* ============ FILTER CHIP ============ */
-.filter-chip{display:none;align-items:center;gap:6px;background:#ede9fe;color:#6d28d9;padding:6px 10px 6px 12px;border-radius:999px;font-size:12px;font-weight:700;margin:0 4px 12px;width:fit-content;cursor:pointer}
+.filter-chip{display:none;align-items:center;gap:6px;background:#ede9fe;color:#6d28d9;padding:6px 10px 6px 12px;border-radius:999px;font-size:12px;font-weight:700;margin:0 4px 12px;width:fit-content;cursor:pointer;max-width:100%}
 .filter-chip.show{display:flex}
-.filter-chip .x{width:18px;height:18px;border-radius:50%;background:#ddd6fe;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1}
+.filter-chip .x{width:18px;height:18px;border-radius:50%;background:#ddd6fe;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;flex-shrink:0}
 
-/* ============ CALENDAR (clean style) ============ */
+/* ============ CALENDAR ============ */
 .calendar-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid #ededed;box-shadow:0 4px 20px rgba(0,0,0,.04);touch-action:pan-y}
 .month-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px}
 .month-name{font-size:17px;font-weight:800}
 .month-buttons{display:flex;gap:4px}
 .month-btn{width:34px;height:34px;border:0;border-radius:10px;background:#f1f1f2;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 .month-btn:active{transform:scale(.92)}
-
 .weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 6px 4px;border-bottom:1px solid #f0f0f0}
 .weekday{text-align:center;padding:6px 2px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.4px}
-
 .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:6px}
 .day-cell{aspect-ratio:1;border-radius:50%;position:relative;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:background .15s;padding:2px}
 .day-cell.empty{pointer-events:none}
@@ -63,87 +61,16 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .day-dots{display:flex;gap:2px;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);min-height:4px}
 .day-dot{width:4px;height:4px;border-radius:50%}
 
-/* ============ BOTTOM SHEET ============ */
-.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s ease;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
-.sheet-overlay.open{opacity:1;pointer-events:auto}
-
-.bottom-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;z-index:110;padding:0;transform:translateY(110%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(0,0,0,.12);overscroll-behavior:contain}
-.bottom-sheet.open{transform:translateY(0)}
-
-.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1;padding:8px 16px 20px}
-
-.sheet-handle{width:40px;height:4px;border-radius:999px;background:#d6d6d6;margin:8px auto 4px;cursor:grab;flex-shrink:0}
-
-/* Sheet: header */
-.sheet-heading{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
-.sheet-heading-sub{color:#888;font-size:13px;margin-bottom:16px}
-
-/* ============ CAROUSEL ============ */
-.carousel-wrap{position:relative;margin:-8px -16px 16px;background:#f5f5f7}
-.carousel-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.carousel-track::-webkit-scrollbar{display:none}
-.carousel-slide{flex:0 0 100%;scroll-snap-align:start;position:relative;aspect-ratio:16/10;background:#f0f0f3;overflow:hidden}
-.carousel-slide img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
-.carousel-slide img[data-failed="1"]{display:none}
-.carousel-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
-.carousel-dots{display:flex;justify-content:center;gap:6px;padding:10px 0;background:#f5f5f7}
-.carousel-dot{width:6px;height:6px;border-radius:50%;background:#d4d4d8;transition:.2s}
-.carousel-dot.active{background:#171717;width:20px;border-radius:999px}
-
-/* ============ SHEET: detail content ============ */
-.cat-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:14px}
-.cat-pill .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-.big-date-block{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
-.big-date-day{font-size:44px;font-weight:900;letter-spacing:-2px;line-height:.9}
-.big-date-month{font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-.big-date-sub{font-size:12px;color:#888;font-weight:600;margin-bottom:16px}
-
-.detail-title{font-size:22px;font-weight:800;line-height:1.2;letter-spacing:-.5px;margin:0 0 8px}
-.detail-meta{font-size:13px;color:#666;line-height:1.6;margin-bottom:16px}
-.detail-synopsis{font-size:14px;line-height:1.7;color:#333;margin-bottom:20px;white-space:pre-line}
-
-.detail-actions{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.action-btn{flex:1;min-width:calc(50% - 4px);padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
-.action-btn:active{transform:scale(.96)}
-.action-btn.primary{background:#171717;color:#fff}
-.action-btn.secondary{background:#f1f1f3;color:#171717}
-.action-btn.success{background:#dcfce7;color:#166534}
-.action-btn.full{min-width:100%}
-.action-btn.link{text-decoration:none;color:#fff;background:#171717}
-
-/* ============ AFFILIATE ============ */
-.affiliate-section{margin-top:8px;padding-top:20px;border-top:1px solid #f0f0f0}
-.affiliate-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.affiliate-card{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;transition:.15s}
-.affiliate-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
-.affiliate-name{font-size:14px;font-weight:800;color:#171717;flex:1}
-.affiliate-desc{font-size:12px;color:#555;line-height:1.6;white-space:pre-line;margin-bottom:12px}
-.affiliate-buy{display:inline-flex;align-items:center;gap:6px;background:#8b5cf6;color:#fff;text-decoration:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800}
-.affiliate-buy:active{transform:scale(.96)}
-
-/* ============ STICKY BOTTOM ============ */
-.sheet-bottom{flex-shrink:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #f0f0f0;background:#fff;border-radius:0 0 0 0}
-.sheet-close{width:100%;padding:14px;border-radius:14px;border:0;background:#f1f1f3;color:#171717;font-size:14px;font-weight:800;cursor:pointer;transition:.15s}
-.sheet-close:active{transform:scale(.98);background:#e5e5e7}
-
-/* ============ EMPTY STATE ============ */
-.empty-state{text-align:center;padding:40px 20px;color:#999}
-.empty-state .emoji{font-size:44px;margin-bottom:10px;opacity:.6}
-.empty-state .msg{font-size:14px;font-weight:600;color:#666;margin-bottom:6px}
-.empty-state .sub{font-size:12px;color:#aaa}
-
-/* ============ SHEET EVENT LIST ============ */
-.sheet-event{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:.15s}
-.sheet-event:active{transform:scale(.985);background:#f5f5f7}
-.sheet-event-cat{display:flex;align-items:center;gap:7px;font-size:11px;color:#888;font-weight:700;margin-bottom:6px}
-.sheet-event-cat .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sheet-event-name{font-size:15px;font-weight:800;line-height:1.3;margin-bottom:5px}
-.sheet-event-meta{font-size:12px;color:#666;line-height:1.5}
-.sheet-event-actions{margin-top:10px;display:flex;gap:6px}
-.mini-btn{border:1px solid #ddd;background:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
-.mini-btn:active{transform:scale(.95)}
-.mini-btn.saved{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+/* ============ NEGERI GRID ============ */
+.negeri-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px}
+.negeri-card{background:#fff;border:1px solid #ededed;border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:8px;min-height:90px;position:relative;overflow:hidden}
+.negeri-card:active{transform:scale(.97);background:#fafafa}
+.negeri-card.has-event{border-color:#c7d2fe;background:linear-gradient(135deg,#fff,#f5f3ff)}
+.negeri-card.has-event::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8b5cf6,#6366f1)}
+.negeri-emoji{font-size:24px;line-height:1}
+.negeri-name{font-size:14px;font-weight:800;line-height:1.25}
+.negeri-count{font-size:11px;color:#888;margin-top:auto}
+.negeri-card.has-event .negeri-count{color:#6d28d9;font-weight:700}
 
 /* ============ EXPLORE ============ */
 .explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px}
@@ -153,14 +80,17 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .explore-name{font-size:14px;font-weight:800;line-height:1.25}
 .explore-count{font-size:11px;color:#888;margin-top:auto}
 
-/* ============ MUSIM ============ */
-.season-card{background:#fff;border:1px solid #ededed;border-radius:18px;padding:18px;margin-bottom:11px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+/* ============ SEASON CARD ============ */
+.season-card{background:#fff;border:1px solid #ededed;border-radius:20px;margin-bottom:12px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
 .season-card:active{transform:scale(.985)}
-.season-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6366f1,#8b5cf6)}
-.season-name{font-size:18px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.season-hero{height:100px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--season-color-soft,#ede9fe),var(--season-color-lighter,#f5f3ff));position:relative;overflow:hidden}
+.season-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,var(--season-color-soft,#ede9fe),transparent 60%)}
+.season-icon-big{font-size:52px;line-height:1;position:relative;z-index:2;filter:drop-shadow(0 4px 10px rgba(0,0,0,.08))}
+.season-body{padding:16px}
+.season-name{font-size:17px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .season-badge{font-size:10px;font-weight:800;background:#dcfce7;color:#166534;padding:3px 8px;border-radius:999px}
 .season-synopsis{font-size:13px;color:#666;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
-.season-cta{font-size:12px;font-weight:700;color:#6366f1}
+.season-cta{font-size:12px;font-weight:800;color:var(--season-color,#6366f1)}
 
 /* ============ MORE ============ */
 .more-list{display:grid;gap:8px}
@@ -172,25 +102,101 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .more-text-sub{font-size:11px;color:#888;margin-top:2px}
 .more-chev{color:#ccc;font-size:18px}
 
-/* ============ BOTTOM NAV ============ */
-.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:90;background:#fff;border-top:1px solid #eee;padding:0 8px env(safe-area-inset-bottom);box-shadow:0 -2px 20px rgba(0,0,0,.04)}
-.nav-inner{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);align-items:end;height:64px;position:relative}
-.nav-button{border:0;background:transparent;padding:6px 2px 8px;cursor:pointer;color:#999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;position:relative;transition:color .2s}
-.nav-button .nav-icon{font-size:22px;line-height:1;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
-.nav-button .nav-label{font-size:10px;font-weight:700;transition:opacity .2s}
+/* ============ BOTTOM NAV (Floating Pill) ============ */
+.bottom-nav{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:rgba(255,255,255,.94);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:24px;padding:6px;box-shadow:0 10px 40px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);max-width:520px;margin:0 auto;overflow:visible}
+.nav-inner{display:grid;grid-template-columns:repeat(5,1fr);align-items:center;height:56px;position:relative;overflow:visible}
+.nav-button{border:0;background:transparent;padding:4px 2px;cursor:pointer;color:#999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;transition:color .25s;overflow:visible}
+.nav-button .nav-icon{font-size:20px;line-height:1;transition:all .3s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%}
+.nav-button .nav-label{font-size:9px;font-weight:700;transition:all .25s;white-space:nowrap}
 .nav-button.active{color:#8b5cf6}
-.nav-button.active .nav-icon{background:#8b5cf6;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(139,92,246,.4);border:4px solid #f7f7f8;font-size:22px;position:absolute;bottom:calc(100% - 22px);left:50%;margin-left:-26px}
-.nav-button.active .nav-label{transform:translateY(-2px);font-weight:800}
+.nav-button.active .nav-icon{background:#8b5cf6;color:#fff;font-size:19px;box-shadow:0 6px 18px rgba(139,92,246,.4);transform:translateY(-14px);border:3px solid #fff}
+.nav-button.active .nav-label{transform:translateY(-8px);font-weight:800;color:#6d28d9}
 
-/* ============ TOAST ============ */
-.toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,20px);background:#171717;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s ease;z-index:200;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+/* ============ BOTTOM SHEET ============ */
+.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.sheet-overlay.open{opacity:1;pointer-events:auto}
+.bottom-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;z-index:110;padding:0;transform:translateY(110%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(0,0,0,.12);overscroll-behavior:contain}
+.bottom-sheet.open{transform:translateY(0)}
+.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1;padding:8px 16px 20px}
+.sheet-handle{width:40px;height:4px;border-radius:999px;background:#d6d6d6;margin:8px auto 4px;cursor:grab;flex-shrink:0}
+.sheet-heading{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
+.sheet-heading-sub{color:#888;font-size:13px;margin-bottom:16px}
+
+/* Sheet: event */
+.sheet-event{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:.15s}
+.sheet-event:active{transform:scale(.985);background:#f5f5f7}
+.sheet-event-cat{display:flex;align-items:center;gap:7px;font-size:11px;color:#888;font-weight:700;margin-bottom:6px}
+.sheet-event-cat .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sheet-event-name{font-size:15px;font-weight:800;line-height:1.3;margin-bottom:5px}
+.sheet-event-meta{font-size:12px;color:#666;line-height:1.5}
+.sheet-event-actions{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.mini-btn{border:1px solid #ddd;background:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;color:#333}
+.mini-btn:active{transform:scale(.95)}
+.mini-btn.saved{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+
+/* ============ CAROUSEL ============ */
+.carousel-wrap{position:relative;margin:-8px -16px 16px;background:#f5f5f7}
+.carousel-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-slide{flex:0 0 100%;scroll-snap-align:start;position:relative;aspect-ratio:16/10;background:#f0f0f3;overflow:hidden}
+.carousel-slide img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.carousel-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
+.carousel-dots{display:flex;justify-content:center;gap:6px;padding:10px 0;background:#f5f5f7}
+.carousel-dot{width:6px;height:6px;border-radius:50%;background:#d4d4d8;transition:.2s}
+.carousel-dot.active{background:#171717;width:20px;border-radius:999px}
+
+/* ============ DETAIL ============ */
+.cat-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:14px}
+.cat-pill .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.big-date-block{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.big-date-day{font-size:44px;font-weight:900;letter-spacing:-2px;line-height:.9}
+.big-date-month{font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.big-date-sub{font-size:12px;color:#888;font-weight:600;margin-bottom:16px}
+.detail-title{font-size:22px;font-weight:800;line-height:1.2;letter-spacing:-.5px;margin:0 0 8px}
+.detail-meta{font-size:13px;color:#666;line-height:1.6;margin-bottom:16px}
+.detail-synopsis{font-size:14px;line-height:1.7;color:#333;margin-bottom:20px;white-space:pre-line}
+.detail-actions{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.action-btn{flex:1;min-width:calc(50% - 4px);padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s;text-decoration:none;font-family:inherit}
+.action-btn:active{transform:scale(.96)}
+.action-btn.primary{background:#171717;color:#fff}
+.action-btn.secondary{background:#f1f1f3;color:#171717}
+.action-btn.success{background:#dcfce7;color:#166534}
+.action-btn.full{min-width:100%}
+
+/* ============ AFFILIATE ============ */
+.affiliate-section{margin-top:8px;padding-top:20px;border-top:1px solid #f0f0f0}
+.affiliate-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.affiliate-card{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px}
+.affiliate-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.affiliate-name{font-size:14px;font-weight:800;color:#171717;flex:1}
+.affiliate-desc{font-size:12px;color:#555;line-height:1.6;white-space:pre-line;margin-bottom:12px}
+.affiliate-buy{display:inline-flex;align-items:center;gap:6px;background:#8b5cf6;color:#fff;text-decoration:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800}
+.affiliate-buy:active{transform:scale(.96)}
+
+/* ============ STICKY BOTTOM ============ */
+.sheet-bottom{flex-shrink:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #f0f0f0;background:#fff;display:flex;gap:8px}
+.sheet-close{flex:1;padding:14px;border-radius:14px;border:0;background:#f1f1f3;color:#171717;font-size:14px;font-weight:800;cursor:pointer;transition:.15s}
+.sheet-close:active{transform:scale(.98);background:#e5e5e7}
+.sheet-share{flex:1;padding:14px;border-radius:14px;border:0;background:#8b5cf6;color:#fff;font-size:14px;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.sheet-share:active{transform:scale(.98);background:#7c3aed}
+
+/* ============ EMPTY STATE ============ */
+.empty-state{text-align:center;padding:40px 20px;color:#999}
+.empty-state .emoji{font-size:44px;margin-bottom:10px;opacity:.6}
+.empty-state .msg{font-size:14px;font-weight:600;color:#666;margin-bottom:6px}
+.empty-state .sub{font-size:12px;color:#aaa}
 
 /* ============ LIGHTBOX ============ */
-.lightbox{position:fixed;inset:0;background:#000;z-index:300;display:none;align-items:center;justify-content:center;padding:0}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:300;display:none;align-items:center;justify-content:center;padding:0;touch-action:none}
 .lightbox.open{display:flex}
-.lightbox img{max-width:100%;max-height:100vh;object-fit:contain}
-.lightbox-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px)}
+.lightbox img{max-width:100%;max-height:100vh;object-fit:contain;user-select:none;-webkit-user-drag:none;transition:transform .2s}
+.lightbox-close{position:absolute;top:calc(16px + env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:0;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);z-index:2}
+.lightbox-counter{position:absolute;top:calc(22px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);color:#fff;font-size:13px;font-weight:700;background:rgba(255,255,255,.15);padding:6px 14px;border-radius:999px;backdrop-filter:blur(10px);z-index:2}
+.lightbox-hint{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:11px;font-weight:600;white-space:nowrap}
+
+/* ============ TOAST ============ */
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:#171717;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s;z-index:400;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ============ LOADING ============ */
 .loading{text-align:center;padding:40px 15px;color:#888;font-size:13px}
@@ -201,6 +207,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   .bottom-sheet{left:50%;right:auto;width:560px;transform:translate(-50%,110%)}
   .bottom-sheet.open{transform:translate(-50%,0)}
   .carousel-slide{aspect-ratio:16/9}
+  .bottom-nav{left:50%;right:auto;width:520px;transform:translateX(-50%)}
 }
 </style>
 </head>
@@ -219,6 +226,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 <main>
 
+  <!-- CALENDAR -->
   <section class="view active" id="viewCalendar">
     <div class="filter-chip" id="filterChip" onclick="clearFilter()">
       <span id="filterChipText">Semua</span>
@@ -250,12 +258,21 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
     </div>
   </section>
 
+  <!-- EXPLORE -->
   <section class="view" id="viewExplore">
     <h2 class="section-title">Explore</h2>
     <p class="section-sub">Pilih kategori untuk tapis kalendar.</p>
     <div class="explore-grid" id="exploreGrid"></div>
   </section>
 
+  <!-- NEGERI -->
+  <section class="view" id="viewNegeri">
+    <h2 class="section-title">Negeri</h2>
+    <p class="section-sub">Cari event ikut negeri.</p>
+    <div class="negeri-grid" id="negeriGrid"></div>
+  </section>
+
+  <!-- MUSIM -->
   <section class="view" id="viewMusim">
     <h2 class="section-title">Musim Aktif</h2>
     <p class="section-sub">Musim yang sedang berlaku di Malaysia.</p>
@@ -264,9 +281,9 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
     </div>
   </section>
 
+  <!-- MORE -->
   <section class="view" id="viewMore">
     <h2 class="section-title">More</h2>
-
     <div class="more-list">
       <div class="more-item" onclick="openSavedEvents()">
         <div class="more-icon">❤️</div>
@@ -328,6 +345,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   <div class="sheet-handle"></div>
   <div class="sheet-scroll" id="detailSheetContent"></div>
   <div class="sheet-bottom">
+    <button class="sheet-share" id="shareBtn">📤 Kongsi</button>
     <button class="sheet-close" onclick="closeSheet('detailSheet')">✕ Tutup</button>
   </div>
 </div>
@@ -341,18 +359,23 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   </div>
 </div>
 
+<!-- NAV: FLOATING PILL -->
 <nav class="bottom-nav">
   <div class="nav-inner">
-    <button class="nav-button active" data-tab="calendar">
-      <span class="nav-icon">📅</span>
-      <span class="nav-label">Calendar</span>
-    </button>
     <button class="nav-button" data-tab="explore">
       <span class="nav-icon">🔍</span>
       <span class="nav-label">Explore</span>
     </button>
+    <button class="nav-button" data-tab="negeri">
+      <span class="nav-icon">📍</span>
+      <span class="nav-label">Negeri</span>
+    </button>
+    <button class="nav-button active" data-tab="calendar">
+      <span class="nav-icon">📅</span>
+      <span class="nav-label">Calendar</span>
+    </button>
     <button class="nav-button" data-tab="musim">
-      <span class="nav-icon">🌧️</span>
+      <span class="nav-icon">🌦️</span>
       <span class="nav-label">Musim</span>
     </button>
     <button class="nav-button" data-tab="more">
@@ -363,16 +386,18 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 </nav>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-hint" id="lightboxHint">Swipe kiri/kanan • Swipe bawah untuk tutup</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
 /* =====================================================
-   MUSIM LAB — INDEX v5 (Hybrid Design)
+   MUSIM LAB — INDEX v6 (Negeri + Pill Nav + Lightbox Swipe)
 ===================================================== */
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxyvyOYNCWWQcqcPOuceNHEzSBCWn7BaSFCC_gyFFnRaCkQAKIHYDhB_30db1qmmi85/exec";
@@ -385,14 +410,34 @@ let holidayData = [];
 let currentDate = new Date();
 let selectedDate = null;
 let selectedEvent = null;
+let selectedSeason = null;
 let activeCategory = "ALL";
+let activeNegeri = "ALL";
 let savedIds = JSON.parse(localStorage.getItem("ml_saved") || "[]");
 
 const monthNames = ["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
 const monthShort = ["JAN","FEB","MAC","APR","MEI","JUN","JUL","OGO","SEP","OKT","NOV","DIS"];
 const dayNames = ["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"];
 
-/* ============ CATEGORIES + COLORS ============ */
+const NEGERI_LIST = [
+  { name: "Johor", emoji: "🏝️" },
+  { name: "Kedah", emoji: "🌾" },
+  { name: "Kelantan", emoji: "🎨" },
+  { name: "Melaka", emoji: "🏛️" },
+  { name: "Negeri Sembilan", emoji: "🐂" },
+  { name: "Pahang", emoji: "🌴" },
+  { name: "Perak", emoji: "⛰️" },
+  { name: "Perlis", emoji: "🌾" },
+  { name: "Pulau Pinang", emoji: "🌉" },
+  { name: "Sabah", emoji: "🏔️" },
+  { name: "Sarawak", emoji: "🦧" },
+  { name: "Selangor", emoji: "🏙️" },
+  { name: "Terengganu", emoji: "🐢" },
+  { name: "Kuala Lumpur", emoji: "🌆" },
+  { name: "Putrajaya", emoji: "🏛️" },
+  { name: "Labuan", emoji: "⚓" }
+];
+
 const CATEGORIES = [
   { name: "Muzik & Konsert", icon: "🎵", color: "#8b5cf6" },
   { name: "Sukan & Outdoor", icon: "⚽", color: "#f59e0b" },
@@ -407,7 +452,6 @@ const CATEGORIES = [
 /* ============ HELPERS ============ */
 function normalise(v){return String(v||"").trim().toLowerCase()}
 function $(id){return document.getElementById(id)}
-
 function getCatInfo(cat){
   const c = CATEGORIES.find(x => normalise(x.name) === normalise(cat));
   return c || { name: cat || "Lain-lain", icon: "📍", color: "#8b5e3c" };
@@ -427,38 +471,31 @@ function parseDate(value){
 }
 function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
 function sameDate(a,b){return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
-function formatDate(d){
-  if(!d) return "";
-  return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
-}
+function formatDate(d){if(!d) return "";return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;}
 
-/* ============ GOOGLE DRIVE URL CONVERTER ============ */
 function driveToDirect(url){
   if(!url) return "";
   url = String(url).trim();
   if(url.includes("lh3.googleusercontent.com")) return url;
   if(url.includes("drive.google.com/thumbnail")) return url;
-
   let id = null, m;
   if((m = url.match(/\/file\/d\/([^\/\?]+)/))) id = m[1];
   else if((m = url.match(/[?&]id=([^&]+)/))) id = m[1];
   else if((m = url.match(/\/d\/([^\/\?]+)/))) id = m[1];
-
   if(id) return `https://lh3.googleusercontent.com/d/${id}=w1200`;
   return url;
 }
-
 function parseImages(raw){
   if(!raw) return [];
-  return String(raw).split("|").map(s => s.trim()).filter(Boolean).map(driveToDirect);
+  return String(raw).split(/[\n|]/).map(s => s.trim()).filter(Boolean).map(driveToDirect);
 }
 
-/* ============ EVENT GETTERS ============ */
 function getEventStart(e){return parseDate(e["Start Date"]||e.startDate)}
 function getEventEnd(e){return parseDate(e["End Date"]||e.endDate)}
 function getEventCat(e){return String(e["Category"]||e.category||"").trim()}
 function getEventName(e){return String(e["Event Name"]||e.eventName||"Event").trim()}
 function getEventLoc(e){return String(e["Location"]||e.location||"").trim()}
+function getEventNegeri(e){return String(e["Negeri"]||e.negeri||"").trim()}
 function getEventDesc(e){return String(e["Description"]||e.description||"").trim()}
 function getEventShort(e){return String(e["Short Description"]||e.shortDescription||"").trim()}
 function getEventImg(e){return String(e["Image URL"]||e.imageUrl||"").trim()}
@@ -466,15 +503,15 @@ function getEventLink(e){return String(e["Official Link"]||e.officialLink||"").t
 function getEventId(e){return String(e["Event ID"]||e.eventId||"").trim()}
 
 function eventMatchesFilter(e){
-  if(activeCategory === "ALL") return true;
-  return normalise(getEventCat(e)) === normalise(activeCategory);
+  if(activeCategory !== "ALL" && normalise(getEventCat(e)) !== normalise(activeCategory)) return false;
+  if(activeNegeri !== "ALL" && getEventNegeri(e) !== activeNegeri) return false;
+  return true;
 }
 
 function getEventsForDate(date){
   const target = new Date(date.getFullYear(),date.getMonth(),date.getDate());
   return allEvents.filter(e => {
     if(!eventMatchesFilter(e)) return false;
-    // NO status filter — tunjuk semua
     let s = getEventStart(e), en = getEventEnd(e);
     if(!s) return false;
     if(!en) en = s;
@@ -496,14 +533,12 @@ function getHolidayForDate(date){
   });
 }
 
-/* ============ TOAST ============ */
-let toastTimer = null;
 function showToast(msg){
   const t = $("toast");
   t.textContent = msg;
   t.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove("show"), 2400);
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(()=>t.classList.remove("show"), 2400);
 }
 
 /* ============ TABS ============ */
@@ -514,10 +549,11 @@ document.querySelectorAll(".nav-button").forEach(btn => {
 function switchTab(tab){
   document.querySelectorAll(".nav-button").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-  const map = {calendar:"viewCalendar",explore:"viewExplore",musim:"viewMusim",more:"viewMore"};
+  const map = {calendar:"viewCalendar",explore:"viewExplore",negeri:"viewNegeri",musim:"viewMusim",more:"viewMore"};
   $(map[tab]).classList.add("active");
   window.scrollTo({top:0,behavior:"smooth"});
   if(tab === "explore") renderExplore();
+  if(tab === "negeri") renderNegeri();
   if(tab === "musim") renderSeasons();
   if(tab === "more") updateSavedCount();
 }
@@ -526,7 +562,6 @@ function switchTab(tab){
 function renderCalendar(){
   const grid = $("calendarGrid");
   grid.innerHTML = "";
-
   const y = currentDate.getFullYear();
   const m = currentDate.getMonth();
   $("monthName").textContent = `${monthNames[m]} ${y}`;
@@ -560,7 +595,6 @@ function renderCalendar(){
     if(events.length > 0){
       const dotsWrap = document.createElement("div");
       dotsWrap.className = "day-dots";
-      // Show up to 3 dots, satu per kategori unik
       const seenCats = new Set();
       const dots = [];
       for(const e of events){
@@ -587,16 +621,16 @@ function renderCalendar(){
 function updateFilterChip(){
   const chip = $("filterChip");
   const txt = $("filterChipText");
-  if(activeCategory === "ALL"){
-    chip.classList.remove("show");
-  }else{
-    chip.classList.add("show");
-    txt.textContent = activeCategory;
-  }
+  const parts = [];
+  if(activeCategory !== "ALL") parts.push(activeCategory);
+  if(activeNegeri !== "ALL") parts.push("📍 " + activeNegeri);
+  if(parts.length === 0){ chip.classList.remove("show"); }
+  else { chip.classList.add("show"); txt.textContent = parts.join(" • "); }
 }
 
 function clearFilter(){
   activeCategory = "ALL";
+  activeNegeri = "ALL";
   updateFilterChip();
   renderCalendar();
   switchTab("calendar");
@@ -606,7 +640,6 @@ function clearFilter(){
 function selectDate(date){
   selectedDate = date;
   renderCalendar();
-
   const events = getEventsForDate(date);
   const holidays = getHolidayForDate(date);
 
@@ -614,7 +647,6 @@ function selectDate(date){
   const container = $("dateSheetContent");
 
   let html = "";
-
   if(holidays.length > 0){
     html += `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:12px;margin-bottom:12px;font-size:12px;font-weight:700;color:#92400e">
       🎉 ${holidays.map(h=>h.name||"Cuti").join(" • ")}
@@ -636,6 +668,8 @@ function selectDate(date){
       const id = getEventId(e);
       const isSaved = savedIds.includes(id);
       const loc = getEventLoc(e);
+      const negeri = getEventNegeri(e);
+      const locLine = [loc, negeri].filter(Boolean).join(", ");
       return `
         <div class="sheet-event" onclick="openEventDetail('${id}')">
           <div class="sheet-event-cat">
@@ -643,7 +677,7 @@ function selectDate(date){
             <span>${info.icon} ${escapeHtml(cat||"Lain-lain")}</span>
           </div>
           <div class="sheet-event-name">${escapeHtml(getEventName(e))}</div>
-          ${loc ? `<div class="sheet-event-meta">📍 ${escapeHtml(loc)}</div>` : ""}
+          ${locLine ? `<div class="sheet-event-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
           <div class="sheet-event-actions" onclick="event.stopPropagation()">
             <button class="mini-btn ${isSaved?"saved":""}" onclick="toggleSave('${id}', this)">
               ${isSaved?"✓ Disimpan":"❤ Simpan"}
@@ -653,15 +687,12 @@ function selectDate(date){
       `;
     }).join("");
   }
-
   container.innerHTML = html;
   openSheet("dateSheet");
 }
 
 /* ============ CAROUSEL ============ */
-let carouselState = {};
-
-function buildCarousel(images, icon){
+function buildCarousel(images, icon, eventId){
   if(!images.length){
     return `<div class="carousel-wrap"><div class="carousel-slide"><div class="carousel-fallback">${icon}</div></div></div>`;
   }
@@ -669,44 +700,33 @@ function buildCarousel(images, icon){
   const slides = images.map((src, i) => `
     <div class="carousel-slide">
       <img src="${escapeHtml(src)}" alt="" loading="${i===0?"eager":"lazy"}"
-           onclick="openLightbox('${escapeHtml(src)}')"
+           onclick="openLightbox(${JSON.stringify(images).replace(/"/g,'&quot;')}, ${i})"
            onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'carousel-fallback\\'>${icon}</div>'">
     </div>
   `).join("");
 
   const dots = images.length > 1
-    ? `<div class="carousel-dots" id="carouselDots">${images.map((_,i)=>`<div class="carousel-dot ${i===0?"active":""}"></div>`).join("")}</div>`
+    ? `<div class="carousel-dots">${images.map((_,i)=>`<div class="carousel-dot ${i===0?"active":""}"></div>`).join("")}</div>`
     : "";
 
   return `
-    <div class="carousel-wrap">
-      <div class="carousel-track" id="carouselTrack">${slides}</div>
+    <div class="carousel-wrap" data-carousel="${eventId}">
+      <div class="carousel-track">${slides}</div>
       ${dots}
     </div>
   `;
 }
 
-function attachCarouselScroll(){
-  const track = $("carouselTrack");
-  if(!track) return;
-  const dots = document.querySelectorAll("#carouselDots .carousel-dot");
+function attachCarouselScroll(eventId){
+  const wrap = document.querySelector(`[data-carousel="${eventId}"]`);
+  if(!wrap) return;
+  const track = wrap.querySelector(".carousel-track");
+  const dots = wrap.querySelectorAll(".carousel-dot");
   if(!dots.length) return;
-
   track.addEventListener("scroll", () => {
     const idx = Math.round(track.scrollLeft / track.clientWidth);
     dots.forEach((d,i) => d.classList.toggle("active", i === idx));
   }, {passive:true});
-}
-
-function openLightbox(src){
-  $("lightboxImg").src = src;
-  $("lightbox").classList.add("open");
-  document.body.classList.add("no-scroll");
-}
-function closeLightbox(){
-  $("lightbox").classList.remove("open");
-  $("lightboxImg").src = "";
-  document.body.classList.remove("no-scroll");
 }
 
 /* ============ EVENT DETAIL ============ */
@@ -714,33 +734,31 @@ function openEventDetail(id){
   const e = allEvents.find(x => getEventId(x) === id);
   if(!e) return;
   selectedEvent = e;
+  $("shareBtn").dataset.eventId = id;
 
   const cat = getEventCat(e);
   const info = getCatInfo(cat);
   const start = getEventStart(e);
   const end = getEventEnd(e);
   const loc = getEventLoc(e);
+  const negeri = getEventNegeri(e);
   const link = getEventLink(e);
   const syn = getEventShort(e) || getEventDesc(e);
   const fullDesc = getEventDesc(e);
   const isSaved = savedIds.includes(id);
   const images = parseImages(getEventImg(e));
 
-  // Big date
   const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
   const bigMonth = start ? monthShort[start.getMonth()] : "";
   const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
 
-  // End date note
   let endNote = "";
-  if(end && start && !sameDate(start,end)){
-    endNote = ` • hingga ${formatDate(end)}`;
-  }
+  if(end && start && !sameDate(start,end)) endNote = ` • hingga ${formatDate(end)}`;
 
-  const carouselHtml = buildCarousel(images, info.icon);
+  const locLine = [loc, negeri].filter(Boolean).join(", ");
 
   let html = `
-    ${carouselHtml}
+    ${buildCarousel(images, info.icon, id)}
 
     <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
       <span class="cat-dot" style="background:${info.color}"></span>
@@ -754,7 +772,7 @@ function openEventDetail(id){
     <div class="big-date-sub">${bigSub}${endNote}</div>
 
     <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
-    ${loc ? `<div class="detail-meta">📍 ${escapeHtml(loc)}</div>` : ""}
+    ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
     <div class="detail-synopsis">${escapeHtml(syn)}</div>
 
     <div class="detail-actions">
@@ -770,25 +788,27 @@ function openEventDetail(id){
   }
 
   if(link){
-    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn link full" style="margin-bottom:10px">🔗 Official Website</a>`;
+    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary full" style="margin-bottom:10px">🔗 Official Website</a>`;
   }
 
   html += `<div id="affiliateContainer_${id}"></div>`;
 
   $("detailSheetContent").innerHTML = html;
   openSheet("detailSheet");
-  attachCarouselScroll();
+  setTimeout(() => attachCarouselScroll(id), 60);
   loadAffiliates(id, "affiliateContainer_" + id);
 }
 
 function openFullDetail(id){
   const e = allEvents.find(x => getEventId(x) === id);
   if(!e) return;
+  $("shareBtn").dataset.eventId = id;
 
   const cat = getEventCat(e);
   const info = getCatInfo(cat);
   const start = getEventStart(e);
   const loc = getEventLoc(e);
+  const negeri = getEventNegeri(e);
   const link = getEventLink(e);
   const fullDesc = getEventDesc(e);
   const isSaved = savedIds.includes(id);
@@ -796,6 +816,7 @@ function openFullDetail(id){
   const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
   const bigMonth = start ? monthShort[start.getMonth()] : "";
   const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
+  const locLine = [loc, negeri].filter(Boolean).join(", ");
 
   let html = `
     <div style="display:flex;justify-content:flex-start;margin-bottom:12px">
@@ -814,7 +835,7 @@ function openFullDetail(id){
     <div class="big-date-sub">${bigSub}</div>
 
     <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
-    ${loc ? `<div class="detail-meta">📍 ${escapeHtml(loc)}</div>` : ""}
+    ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
     <div class="detail-synopsis">${escapeHtml(fullDesc)}</div>
 
     <div class="detail-actions">
@@ -826,7 +847,7 @@ function openFullDetail(id){
   `;
 
   if(link){
-    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn link full" style="margin-bottom:10px">🔗 Official Website</a>`;
+    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary full" style="margin-bottom:10px">🔗 Official Website</a>`;
   }
 
   html += `<div id="affiliateFull_${id}"></div>`;
@@ -836,7 +857,7 @@ function openFullDetail(id){
   loadAffiliates(id, "affiliateFull_" + id);
 }
 
-/* ============ AFFILIATE LOADER ============ */
+/* ============ AFFILIATE ============ */
 async function loadAffiliates(eventId, containerId){
   const container = $(containerId);
   if(!container) return;
@@ -852,7 +873,6 @@ async function loadAffiliates(eventId, containerId){
         ${items.map(it => {
           const title = it.Title || "";
           const body = it.URL || "";
-          // Cari URL dalam body
           const urlMatch = body.match(/https?:\/\/[^\s]+/);
           const url = urlMatch ? urlMatch[0] : "";
           const desc = url ? body.replace(url, "").trim() : body;
@@ -871,18 +891,12 @@ async function loadAffiliates(eventId, containerId){
   }catch(e){console.error("affiliate err", e)}
 }
 
-/* ============ SAVE EVENT ============ */
+/* ============ SAVE ============ */
 function toggleSave(id, btn){
   const idx = savedIds.indexOf(id);
-  if(idx >= 0){
-    savedIds.splice(idx,1);
-    showToast("Dibuang dari simpanan");
-  }else{
-    savedIds.push(id);
-    showToast("❤ Disimpan!");
-  }
+  if(idx >= 0){savedIds.splice(idx,1);showToast("Dibuang dari simpanan");}
+  else{savedIds.push(id);showToast("❤ Disimpan!");}
   localStorage.setItem("ml_saved", JSON.stringify(savedIds));
-
   if(btn){
     const isSaved = savedIds.includes(id);
     btn.classList.toggle("saved", isSaved);
@@ -892,27 +906,19 @@ function toggleSave(id, btn){
   updateSavedCount();
 }
 
-/* ============ REMINDER (.ics) ============ */
+/* ============ REMINDER ============ */
 function downloadICS(id){
   const e = allEvents.find(x => getEventId(x) === id);
   if(!e) return;
   const start = getEventStart(e);
   if(!start){showToast("Tarikh tak dijumpai");return;}
   const end = getEventEnd(e) || start;
-
-  function fmt(d){
-    return d.getFullYear() + String(d.getMonth()+1).padStart(2,"0") + String(d.getDate()).padStart(2,"0");
-  }
-
+  function fmt(d){return d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");}
   const title = getEventName(e);
   const desc = (getEventShort(e) || getEventDesc(e)).replace(/\n/g,"\\n");
-  const loc = getEventLoc(e);
-
+  const loc = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
   const ics = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Musim Lab//EN",
-    "BEGIN:VEVENT",
+    "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Musim Lab//EN","BEGIN:VEVENT",
     `UID:${id}@musimlab`,
     `DTSTAMP:${fmt(new Date())}T000000Z`,
     `DTSTART;VALUE=DATE:${fmt(start)}`,
@@ -920,15 +926,9 @@ function downloadICS(id){
     `SUMMARY:${title}`,
     desc ? `DESCRIPTION:${desc}` : "",
     loc ? `LOCATION:${loc}` : "",
-    "BEGIN:VALARM",
-    "TRIGGER:-P1D",
-    "ACTION:DISPLAY",
-    "DESCRIPTION:Esok: " + title,
-    "END:VALARM",
-    "END:VEVENT",
-    "END:VCALENDAR"
+    "BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:Esok: " + title,"END:VALARM",
+    "END:VEVENT","END:VCALENDAR"
   ].filter(Boolean).join("\r\n");
-
   const blob = new Blob([ics], {type:"text/calendar"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -938,6 +938,108 @@ function downloadICS(id){
   URL.revokeObjectURL(url);
   showToast("🔔 Fail kalendar dimuat turun");
 }
+
+/* ============ SHARE ============ */
+$("shareBtn").addEventListener("click", shareCurrentEvent);
+
+async function shareCurrentEvent(){
+  const id = $("shareBtn").dataset.eventId;
+  if(!id) return;
+  const e = allEvents.find(x => getEventId(x) === id);
+  if(!e){showToast("Event tak dijumpai");return;}
+
+  const name = getEventName(e);
+  const start = getEventStart(e);
+  const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
+  const text = `${name} — ${formatDate(start)}${locLine ? ` • ${locLine}` : ""}`;
+  const url = window.location.origin + window.location.pathname + "#event=" + id;
+
+  if(navigator.share){
+    try{
+      await navigator.share({ title: name, text: text, url: url });
+    }catch(err){
+      if(err.name !== "AbortError") console.error(err);
+    }
+  } else {
+    try{
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      showToast("📋 Link disalin!");
+    }catch(err){
+      showToast("Tak dapat copy link");
+    }
+  }
+}
+
+/* ============ LIGHTBOX (Swipe) ============ */
+let lbImages = [];
+let lbIndex = 0;
+let lbSX = 0, lbSY = 0, lbCX = 0, lbCY = 0, lbActive = false;
+
+function openLightbox(images, startIndex = 0){
+  lbImages = images;
+  lbIndex = startIndex;
+  updateLightbox();
+  $("lightbox").classList.add("open");
+  document.body.classList.add("no-scroll");
+}
+
+function updateLightbox(){
+  $("lightboxImg").src = lbImages[lbIndex] || "";
+  $("lightboxCounter").textContent = `${lbIndex + 1} / ${lbImages.length}`;
+  $("lightboxHint").style.display = lbImages.length > 1 ? "block" : "none";
+}
+
+function closeLightbox(){
+  $("lightbox").classList.remove("open");
+  $("lightboxImg").src = "";
+  document.body.classList.remove("no-scroll");
+}
+
+(function(){
+  const lb = $("lightbox");
+  lb.addEventListener("touchstart", e => {
+    lbSX = e.touches[0].clientX;
+    lbSY = e.touches[0].clientY;
+    lbCX = 0; lbCY = 0;
+    lbActive = true;
+  }, {passive:true});
+  lb.addEventListener("touchmove", e => {
+    if(!lbActive) return;
+    lbCX = e.touches[0].clientX - lbSX;
+    lbCY = e.touches[0].clientY - lbSY;
+    const img = $("lightboxImg");
+    if(Math.abs(lbCX) > Math.abs(lbCY)){
+      img.style.transform = `translateX(${lbCX}px)`;
+    } else if(lbCY > 0){
+      img.style.transform = `translateY(${lbCY}px) scale(${Math.max(0.7, 1 - lbCY/800)})`;
+      img.style.opacity = String(Math.max(0.3, 1 - lbCY/500));
+    }
+  }, {passive:true});
+  lb.addEventListener("touchend", () => {
+    if(!lbActive) return;
+    lbActive = false;
+    const img = $("lightboxImg");
+    img.style.transform = "";
+    img.style.opacity = "";
+
+    const dx = lbCX, dy = lbCY;
+
+    if(dy > 100 && Math.abs(dy) > Math.abs(dx)){
+      closeLightbox();
+    } else if(dx < -60 && Math.abs(dx) > Math.abs(dy)){
+      if(lbIndex < lbImages.length - 1){ lbIndex++; updateLightbox(); }
+    } else if(dx > 60 && Math.abs(dx) > Math.abs(dy)){
+      if(lbIndex > 0){ lbIndex--; updateLightbox(); }
+    }
+    lbCX = 0; lbCY = 0;
+  }, {passive:true});
+})();
+
+$("lightbox").addEventListener("click", e => {
+  if(e.target.id === "lightbox" || e.target.id === "lightboxImg"){
+    if(Math.abs(lbCX) < 5 && Math.abs(lbCY) < 5) closeLightbox();
+  }
+});
 
 /* ============ EXPLORE ============ */
 function renderExplore(){
@@ -953,9 +1055,31 @@ function renderExplore(){
     `;
   }).join("");
 }
-
 function pickCategory(cat){
   activeCategory = cat;
+  activeNegeri = "ALL";
+  updateFilterChip();
+  renderCalendar();
+  switchTab("calendar");
+}
+
+/* ============ NEGERI ============ */
+function renderNegeri(){
+  const grid = $("negeriGrid");
+  grid.innerHTML = NEGERI_LIST.map(n => {
+    const count = allEvents.filter(e => getEventNegeri(e) === n.name).length;
+    return `
+      <button class="negeri-card ${count > 0 ? "has-event" : ""}" onclick="pickNegeri('${escapeHtml(n.name)}')">
+        <div class="negeri-emoji">${n.emoji}</div>
+        <div class="negeri-name">${escapeHtml(n.name)}</div>
+        <div class="negeri-count">${count} event</div>
+      </button>
+    `;
+  }).join("");
+}
+function pickNegeri(name){
+  activeNegeri = name;
+  activeCategory = "ALL";
   updateFilterChip();
   renderCalendar();
   switchTab("calendar");
@@ -985,27 +1109,54 @@ function renderSeasons(){
 
   list.innerHTML = active.map(s => {
     const id = s["Season ID"];
+    const icon = s["Icon"] || "🌧️";
+    const color = s["Color"] || "#6366f1";
+    const colorSoft = hexWithAlpha(color, 0.25);
+    const colorLighter = hexWithAlpha(color, 0.08);
+
     return `
-      <div class="season-card" onclick="openSeasonDetail('${id}')">
-        <div class="season-name">
-          🌧️ ${escapeHtml(s["Season Name"]||"")}
-          <span class="season-badge">Aktif</span>
+      <div class="season-card" onclick="openSeasonDetail('${id}')"
+           style="--season-color:${escapeHtml(color)};--season-color-soft:${colorSoft};--season-color-lighter:${colorLighter}">
+        <div class="season-hero">
+          <div class="season-icon-big">${escapeHtml(icon)}</div>
         </div>
-        <div class="season-synopsis">${escapeHtml(s["Description"]||"")}</div>
-        <div class="season-cta">Baca penuh →</div>
+        <div class="season-body">
+          <div class="season-name">
+            ${escapeHtml(s["Season Name"]||"")}
+            <span class="season-badge">Aktif</span>
+          </div>
+          <div class="season-synopsis">${escapeHtml(s["Description"]||"")}</div>
+          <div class="season-cta">Baca penuh →</div>
+        </div>
       </div>
     `;
   }).join("");
 }
 
+function hexWithAlpha(hex, alpha){
+  const h = String(hex).replace("#","");
+  const r = parseInt(h.substring(0,2),16);
+  const g = parseInt(h.substring(2,4),16);
+  const b = parseInt(h.substring(4,6),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 function openSeasonDetail(id){
   const s = allSeasons.find(x => String(x["Season ID"]) === id);
   if(!s) return;
+  selectedSeason = s;
+
+  const icon = s["Icon"] || "🌧️";
+  const color = s["Color"] || "#6366f1";
+  const colorSoft = hexWithAlpha(color, 0.25);
+  const colorLighter = hexWithAlpha(color, 0.08);
 
   let html = `
-    <div class="detail-hero-fallback" style="width:100%;height:140px;border-radius:16px;background:linear-gradient(135deg,#e0e7ff,#c7d2fe);display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:16px">🌧️</div>
+    <div style="margin:-8px -16px 16px;padding:32px 16px;background:linear-gradient(135deg,${colorSoft},${colorLighter});display:flex;align-items:center;justify-content:center">
+      <div style="font-size:72px;line-height:1;filter:drop-shadow(0 6px 16px rgba(0,0,0,.1))">${escapeHtml(icon)}</div>
+    </div>
     <h2 class="detail-title">${escapeHtml(s["Season Name"]||"")}</h2>
-    <div class="detail-meta">Musim aktif</div>
+    <div class="detail-meta" style="color:${color};font-weight:700">● Musim aktif</div>
     <div class="detail-synopsis" style="white-space:pre-line">${escapeHtml(s["Description"]||"")}</div>
     <div id="seasonAffiliateContainer"></div>
   `;
@@ -1015,7 +1166,7 @@ function openSeasonDetail(id){
   loadAffiliates(id, "seasonAffiliateContainer");
 }
 
-/* ============ SHEET CONTROL ============ */
+/* ============ SHEET ============ */
 let openSheetId = null;
 function openSheet(id){
   if(openSheetId && openSheetId !== id) closeSheet(openSheetId);
@@ -1023,24 +1174,21 @@ function openSheet(id){
   $("sheetOverlay").classList.add("open");
   $(id).classList.add("open");
   document.body.classList.add("no-scroll");
-  $(id).querySelector(".sheet-scroll").scrollTop = 0;
+  const sc = $(id).querySelector(".sheet-scroll");
+  if(sc) sc.scrollTop = 0;
 }
-
 function closeSheet(id){
   if(id) $(id).classList.remove("open");
-  else{
-    document.querySelectorAll(".bottom-sheet").forEach(s => s.classList.remove("open"));
-  }
+  else document.querySelectorAll(".bottom-sheet").forEach(s => s.classList.remove("open"));
   if(!document.querySelector(".bottom-sheet.open")){
     $("sheetOverlay").classList.remove("open");
     document.body.classList.remove("no-scroll");
     openSheetId = null;
   }
 }
-
 $("sheetOverlay").addEventListener("click", () => closeSheet());
 
-// Swipe down to close
+// Swipe down to close sheet
 document.querySelectorAll(".bottom-sheet").forEach(sheet => {
   let startY = 0, curY = 0, dragging = false;
   const scroll = sheet.querySelector(".sheet-scroll");
@@ -1078,7 +1226,7 @@ $("nextMonth").addEventListener("click", () => {
   renderCalendar();
 });
 
-/* ============ SWIPE CALENDAR ============ */
+/* Swipe calendar */
 (function(){
   const card = $("calendarCard");
   let sx=0, sy=0;
@@ -1105,7 +1253,7 @@ $("todayBtn").addEventListener("click", () => {
   setTimeout(() => selectDate(new Date()), 100);
 });
 
-/* ============ SAVED EVENTS ============ */
+/* ============ SAVED ============ */
 function openSavedEvents(){
   const container = $("dateSheetContent");
   $("dateSheetTitle").textContent = "❤️ Event Disimpan";
@@ -1123,7 +1271,7 @@ function openSavedEvents(){
       const cat = getEventCat(e);
       const info = getCatInfo(cat);
       return `
-        <div class="sheet-event" onclick="closeSheet('dateSheet');switchTab('calendar');setTimeout(()=>openEventDetail('${getEventId(e)}'),250)">
+        <div class="sheet-event" onclick="closeSheet('dateSheet');setTimeout(()=>openEventDetail('${getEventId(e)}'),200)">
           <div class="sheet-event-cat">
             <span class="cat-dot" style="background:${info.color}"></span>
             <span>${info.icon} ${escapeHtml(cat||"")}</span>
@@ -1136,7 +1284,6 @@ function openSavedEvents(){
   }
   openSheet("dateSheet");
 }
-
 function updateSavedCount(){
   const el = $("savedCountText");
   if(el) el.textContent = savedIds.length + " event";
@@ -1165,7 +1312,7 @@ async function loadEvents(){
   try{
     const r = await fetch(`${API_URL}?action=getEvents&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
-    allEvents = (res && res.success && Array.isArray(res.data)) ? res.data : (Array.isArray(res) ? res : []);
+    allEvents = (res && res.success && Array.isArray(res.data)) ? res.data : [];
     renderCalendar();
   }catch(e){
     console.error("events err", e);
@@ -1174,7 +1321,6 @@ async function loadEvents(){
     showToast("Tak dapat muat event.");
   }
 }
-
 async function loadHolidays(){
   try{
     const r = await fetch(HOLIDAY_URL + "?t=" + Date.now());
@@ -1185,11 +1331,22 @@ async function loadHolidays(){
   }catch(e){holidayData = []}
 }
 
+/* ============ DEEP LINK (#event=xxx) ============ */
+function checkDeepLink(){
+  const hash = window.location.hash;
+  const m = hash.match(/^#event=(.+)$/);
+  if(m){
+    const id = decodeURIComponent(m[1]);
+    setTimeout(() => openEventDetail(id), 500);
+  }
+}
+
 /* ============ INIT ============ */
 loadEvents();
 loadHolidays();
 loadSeasons();
 updateSavedCount();
+checkDeepLink();
 </script>
 
 </body>
