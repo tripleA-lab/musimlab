@@ -12,6 +12,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{margin:0;padding:0;background:#f7f7f8;color:#171717;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:hidden}
+body.no-scroll{overflow:hidden}
 button{font:inherit}
 img{max-width:100%;display:block}
 
@@ -29,7 +30,6 @@ img{max-width:100%;display:block}
 main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .view{display:none}
 .view.active{display:block}
-
 .section-title{font-size:19px;font-weight:800;margin:6px 4px 12px;letter-spacing:-.3px}
 .section-sub{font-size:12px;color:#888;margin:-8px 4px 14px}
 
@@ -38,79 +38,112 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .filter-chip.show{display:flex}
 .filter-chip .x{width:18px;height:18px;border-radius:50%;background:#ddd6fe;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1}
 
-/* ============ CALENDAR ============ */
+/* ============ CALENDAR (clean style) ============ */
 .calendar-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid #ededed;box-shadow:0 4px 20px rgba(0,0,0,.04);touch-action:pan-y}
-.month-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px;border-bottom:1px solid #f0f0f0}
-.month-name{font-size:18px;font-weight:800}
+.month-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px}
+.month-name{font-size:17px;font-weight:800}
 .month-buttons{display:flex;gap:4px}
 .month-btn{width:34px;height:34px;border:0;border-radius:10px;background:#f1f1f2;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 .month-btn:active{transform:scale(.92)}
-.weekdays{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid #f0f0f0;background:#fafafa}
-.weekday{text-align:center;padding:8px 2px;font-size:10px;font-weight:700;color:#999;text-transform:uppercase}
-.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:4px}
-.day-cell{aspect-ratio:1;min-height:44px;border-radius:12px;padding:4px 3px;position:relative;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:2px;transition:background .15s}
-.day-cell.empty{background:transparent;cursor:default;pointer-events:none}
+
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 6px 4px;border-bottom:1px solid #f0f0f0}
+.weekday{text-align:center;padding:6px 2px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.4px}
+
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:6px}
+.day-cell{aspect-ratio:1;border-radius:50%;position:relative;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:background .15s;padding:2px}
+.day-cell.empty{pointer-events:none}
 .day-cell:active{background:#f5f3ff}
-.day-cell.today .day-number{background:#171717;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+.day-number{font-size:14px;font-weight:600;color:#333;line-height:1}
+.day-cell.weekend .day-number{color:#999}
+.day-cell.today{background:#171717}
+.day-cell.today .day-number{color:#fff;font-weight:800}
+.day-cell.today .day-dot{background:#fff !important}
 .day-cell.selected{background:#ede9fe;outline:2px solid #8b5cf6;outline-offset:-2px}
-.day-cell.has-event .day-number{font-weight:900;color:#171717}
-.day-number{font-size:13px;font-weight:600;color:#333;line-height:1;padding:2px 0}
-.day-cell.weekend .day-number{color:#dc2626}
-.day-count{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;background:#8b5cf6;color:#fff;padding:1px 5px;border-radius:999px;line-height:1.2}
-.day-cell.has-holiday{background:#fef3c7}
-.day-cell.has-holiday:active{background:#fde68a}
+.day-cell.selected .day-number{color:#6d28d9;font-weight:800}
+.day-dots{display:flex;gap:2px;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);min-height:4px}
+.day-dot{width:4px;height:4px;border-radius:50%}
 
 /* ============ BOTTOM SHEET ============ */
-.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s ease;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s ease;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 .sheet-overlay.open{opacity:1;pointer-events:auto}
 
-.bottom-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;z-index:110;padding:8px 16px calc(20px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:0 -10px 40px rgba(0,0,0,.1)}
+.bottom-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;z-index:110;padding:0;transform:translateY(110%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(0,0,0,.12);overscroll-behavior:contain}
 .bottom-sheet.open{transform:translateY(0)}
-.sheet-handle{width:40px;height:4px;border-radius:999px;background:#d6d6d6;margin:4px auto 14px;cursor:grab}
-.sheet-title{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
-.sheet-subtitle{color:#888;font-size:13px;margin-bottom:16px}
 
-/* Event list dalam sheet */
-.sheet-event{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:.15s}
-.sheet-event:active{transform:scale(.985);background:#f5f5f7}
-.sheet-event-cat{display:flex;align-items:center;gap:7px;font-size:11px;color:#888;font-weight:700;margin-bottom:6px}
-.cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sheet-event-name{font-size:15px;font-weight:800;line-height:1.3;margin-bottom:5px}
-.sheet-event-meta{font-size:12px;color:#666;line-height:1.5}
-.sheet-event-actions{margin-top:10px;display:flex;gap:6px}
-.mini-btn{border:1px solid #ddd;background:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
-.mini-btn:active{transform:scale(.95)}
-.mini-btn.active{background:#fee2e2;color:#b91c1c;border-color:#fecaca}
-.mini-btn.saved{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1;padding:8px 16px 20px}
 
-/* Empty state */
+.sheet-handle{width:40px;height:4px;border-radius:999px;background:#d6d6d6;margin:8px auto 4px;cursor:grab;flex-shrink:0}
+
+/* Sheet: header */
+.sheet-heading{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
+.sheet-heading-sub{color:#888;font-size:13px;margin-bottom:16px}
+
+/* ============ CAROUSEL ============ */
+.carousel-wrap{position:relative;margin:-8px -16px 16px;background:#f5f5f7}
+.carousel-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-slide{flex:0 0 100%;scroll-snap-align:start;position:relative;aspect-ratio:16/10;background:#f0f0f3;overflow:hidden}
+.carousel-slide img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.carousel-slide img[data-failed="1"]{display:none}
+.carousel-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
+.carousel-dots{display:flex;justify-content:center;gap:6px;padding:10px 0;background:#f5f5f7}
+.carousel-dot{width:6px;height:6px;border-radius:50%;background:#d4d4d8;transition:.2s}
+.carousel-dot.active{background:#171717;width:20px;border-radius:999px}
+
+/* ============ SHEET: detail content ============ */
+.cat-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:14px}
+.cat-pill .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.big-date-block{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.big-date-day{font-size:44px;font-weight:900;letter-spacing:-2px;line-height:.9}
+.big-date-month{font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.big-date-sub{font-size:12px;color:#888;font-weight:600;margin-bottom:16px}
+
+.detail-title{font-size:22px;font-weight:800;line-height:1.2;letter-spacing:-.5px;margin:0 0 8px}
+.detail-meta{font-size:13px;color:#666;line-height:1.6;margin-bottom:16px}
+.detail-synopsis{font-size:14px;line-height:1.7;color:#333;margin-bottom:20px;white-space:pre-line}
+
+.detail-actions{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.action-btn{flex:1;min-width:calc(50% - 4px);padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
+.action-btn:active{transform:scale(.96)}
+.action-btn.primary{background:#171717;color:#fff}
+.action-btn.secondary{background:#f1f1f3;color:#171717}
+.action-btn.success{background:#dcfce7;color:#166534}
+.action-btn.full{min-width:100%}
+.action-btn.link{text-decoration:none;color:#fff;background:#171717}
+
+/* ============ AFFILIATE ============ */
+.affiliate-section{margin-top:8px;padding-top:20px;border-top:1px solid #f0f0f0}
+.affiliate-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.affiliate-card{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;transition:.15s}
+.affiliate-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.affiliate-name{font-size:14px;font-weight:800;color:#171717;flex:1}
+.affiliate-desc{font-size:12px;color:#555;line-height:1.6;white-space:pre-line;margin-bottom:12px}
+.affiliate-buy{display:inline-flex;align-items:center;gap:6px;background:#8b5cf6;color:#fff;text-decoration:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800}
+.affiliate-buy:active{transform:scale(.96)}
+
+/* ============ STICKY BOTTOM ============ */
+.sheet-bottom{flex-shrink:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #f0f0f0;background:#fff;border-radius:0 0 0 0}
+.sheet-close{width:100%;padding:14px;border-radius:14px;border:0;background:#f1f1f3;color:#171717;font-size:14px;font-weight:800;cursor:pointer;transition:.15s}
+.sheet-close:active{transform:scale(.98);background:#e5e5e7}
+
+/* ============ EMPTY STATE ============ */
 .empty-state{text-align:center;padding:40px 20px;color:#999}
 .empty-state .emoji{font-size:44px;margin-bottom:10px;opacity:.6}
 .empty-state .msg{font-size:14px;font-weight:600;color:#666;margin-bottom:6px}
 .empty-state .sub{font-size:12px;color:#aaa}
 
-/* Detail dalam sheet */
-.detail-hero{width:100%;height:180px;object-fit:cover;border-radius:16px;background:#eee;margin-bottom:14px}
-.detail-hero-fallback{width:100%;height:120px;border-radius:16px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:14px}
-.detail-title{font-size:22px;font-weight:800;line-height:1.2;margin:0 0 8px;letter-spacing:-.4px}
-.detail-meta{font-size:12px;color:#666;line-height:1.6;margin-bottom:14px}
-.detail-synopsis{font-size:14px;line-height:1.7;color:#333;margin-bottom:16px}
-.detail-actions{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.action-btn{flex:1;min-width:calc(50% - 4px);padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
-.action-btn:active{transform:scale(.96)}
-.action-btn.primary{background:#171717;color:#fff}
-.action-btn.secondary{background:#f1f1f3;color:#171717}
-.action-btn.danger{background:#fee2e2;color:#b91c1c}
-.action-btn.success{background:#dcfce7;color:#166534}
-
-/* Affiliate */
-.affiliate-section{margin-top:20px;padding-top:18px;border-top:1px solid #f0f0f0}
-.affiliate-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.affiliate-card{background:linear-gradient(135deg,#faf5ff,#f3e8ff);border:1px solid #e9d5ff;border-radius:14px;padding:14px;margin-bottom:9px}
-.affiliate-name{font-size:14px;font-weight:800;margin-bottom:5px;color:#6d28d9}
-.affiliate-desc{font-size:12px;color:#555;line-height:1.6;white-space:pre-line;margin-bottom:10px}
-.affiliate-link{display:inline-block;background:#8b5cf6;color:#fff;text-decoration:none;padding:8px 14px;border-radius:9px;font-size:12px;font-weight:700}
-.affiliate-link:active{transform:scale(.96)}
+/* ============ SHEET EVENT LIST ============ */
+.sheet-event{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:.15s}
+.sheet-event:active{transform:scale(.985);background:#f5f5f7}
+.sheet-event-cat{display:flex;align-items:center;gap:7px;font-size:11px;color:#888;font-weight:700;margin-bottom:6px}
+.sheet-event-cat .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sheet-event-name{font-size:15px;font-weight:800;line-height:1.3;margin-bottom:5px}
+.sheet-event-meta{font-size:12px;color:#666;line-height:1.5}
+.sheet-event-actions{margin-top:10px;display:flex;gap:6px}
+.mini-btn{border:1px solid #ddd;background:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.mini-btn:active{transform:scale(.95)}
+.mini-btn.saved{background:#dcfce7;color:#166534;border-color:#bbf7d0}
 
 /* ============ EXPLORE ============ */
 .explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px}
@@ -123,11 +156,11 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 /* ============ MUSIM ============ */
 .season-card{background:#fff;border:1px solid #ededed;border-radius:18px;padding:18px;margin-bottom:11px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
 .season-card:active{transform:scale(.985)}
-.season-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#8b5cf6,#6366f1)}
+.season-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6366f1,#8b5cf6)}
 .season-name{font-size:18px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
 .season-badge{font-size:10px;font-weight:800;background:#dcfce7;color:#166534;padding:3px 8px;border-radius:999px}
 .season-synopsis{font-size:13px;color:#666;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
-.season-cta{font-size:12px;font-weight:700;color:#6d28d9}
+.season-cta{font-size:12px;font-weight:700;color:#6366f1}
 
 /* ============ MORE ============ */
 .more-list{display:grid;gap:8px}
@@ -146,28 +179,33 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .nav-button .nav-icon{font-size:22px;line-height:1;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
 .nav-button .nav-label{font-size:10px;font-weight:700;transition:opacity .2s}
 .nav-button.active{color:#8b5cf6}
-.nav-button.active .nav-icon{transform:translateY(-24px);background:#8b5cf6;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(139,92,246,.4);border:4px solid #f7f7f8;font-size:22px;position:absolute;bottom:calc(100% - 22px);left:50%;margin-left:-26px}
+.nav-button.active .nav-icon{background:#8b5cf6;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(139,92,246,.4);border:4px solid #f7f7f8;font-size:22px;position:absolute;bottom:calc(100% - 22px);left:50%;margin-left:-26px}
 .nav-button.active .nav-label{transform:translateY(-2px);font-weight:800}
 
 /* ============ TOAST ============ */
 .toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,20px);background:#171717;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s ease;z-index:200;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
+/* ============ LIGHTBOX ============ */
+.lightbox{position:fixed;inset:0;background:#000;z-index:300;display:none;align-items:center;justify-content:center;padding:0}
+.lightbox.open{display:flex}
+.lightbox img{max-width:100%;max-height:100vh;object-fit:contain}
+.lightbox-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px)}
+
 /* ============ LOADING ============ */
 .loading{text-align:center;padding:40px 15px;color:#888;font-size:13px}
 
 /* ============ DESKTOP ============ */
 @media (min-width:700px){
-  .day-cell{min-height:60px}
-  .bottom-sheet{left:50%;right:auto;width:520px;border-radius:24px 24px 0 0;transform:translate(-50%,110%)}
+  .day-number{font-size:15px}
+  .bottom-sheet{left:50%;right:auto;width:560px;transform:translate(-50%,110%)}
   .bottom-sheet.open{transform:translate(-50%,0)}
-  .day-count{bottom:6px}
+  .carousel-slide{aspect-ratio:16/9}
 }
 </style>
 </head>
 <body>
 
-<!-- ============ HEADER ============ -->
 <header class="top-header">
   <div class="brand-wrap">
     <div class="brand-logo">ML</div>
@@ -181,9 +219,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 <main>
 
-  <!-- ============ VIEW: CALENDAR ============ -->
   <section class="view active" id="viewCalendar">
-
     <div class="filter-chip" id="filterChip" onclick="clearFilter()">
       <span id="filterChipText">Semua</span>
       <span class="x">×</span>
@@ -212,17 +248,14 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
         <div class="loading" style="grid-column:1/-1">Memuatkan kalendar...</div>
       </div>
     </div>
-
   </section>
 
-  <!-- ============ VIEW: EXPLORE ============ -->
   <section class="view" id="viewExplore">
     <h2 class="section-title">Explore</h2>
     <p class="section-sub">Pilih kategori untuk tapis kalendar.</p>
     <div class="explore-grid" id="exploreGrid"></div>
   </section>
 
-  <!-- ============ VIEW: MUSIM ============ -->
   <section class="view" id="viewMusim">
     <h2 class="section-title">Musim Aktif</h2>
     <p class="section-sub">Musim yang sedang berlaku di Malaysia.</p>
@@ -231,7 +264,6 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
     </div>
   </section>
 
-  <!-- ============ VIEW: MORE ============ -->
   <section class="view" id="viewMore">
     <h2 class="section-title">More</h2>
 
@@ -263,7 +295,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
         <div class="more-chev">›</div>
       </div>
 
-      <div class="more-item" onclick="showToast('Affiliate disclosure akan datang!')">
+      <div class="more-item" onclick="showAbout()">
         <div class="more-icon">🛍️</div>
         <div class="more-text">
           <div class="more-text-title">Affiliate Disclosure</div>
@@ -276,30 +308,39 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 </main>
 
-<!-- ============ OVERLAY ============ -->
 <div class="sheet-overlay" id="sheetOverlay"></div>
 
-<!-- ============ SHEET: DATE EVENTS ============ -->
+<!-- SHEET: DATE EVENTS -->
 <div class="bottom-sheet" id="dateSheet">
   <div class="sheet-handle"></div>
-  <div class="sheet-title" id="dateSheetTitle">15 Januari 2026</div>
-  <div class="sheet-subtitle" id="dateSheetSub">0 event</div>
-  <div id="dateSheetContent"></div>
+  <div class="sheet-scroll">
+    <div class="sheet-heading" id="dateSheetTitle">15 Januari 2026</div>
+    <div class="sheet-heading-sub" id="dateSheetSub">0 event</div>
+    <div id="dateSheetContent"></div>
+  </div>
+  <div class="sheet-bottom">
+    <button class="sheet-close" onclick="closeSheet('dateSheet')">✕ Tutup</button>
+  </div>
 </div>
 
-<!-- ============ SHEET: EVENT DETAIL ============ -->
+<!-- SHEET: EVENT DETAIL -->
 <div class="bottom-sheet" id="detailSheet">
   <div class="sheet-handle"></div>
-  <div id="detailSheetContent"></div>
+  <div class="sheet-scroll" id="detailSheetContent"></div>
+  <div class="sheet-bottom">
+    <button class="sheet-close" onclick="closeSheet('detailSheet')">✕ Tutup</button>
+  </div>
 </div>
 
-<!-- ============ SHEET: SEASON DETAIL ============ -->
+<!-- SHEET: SEASON DETAIL -->
 <div class="bottom-sheet" id="seasonSheet">
   <div class="sheet-handle"></div>
-  <div id="seasonSheetContent"></div>
+  <div class="sheet-scroll" id="seasonSheetContent"></div>
+  <div class="sheet-bottom">
+    <button class="sheet-close" onclick="closeSheet('seasonSheet')">✕ Tutup</button>
+  </div>
 </div>
 
-<!-- ============ BOTTOM NAV ============ -->
 <nav class="bottom-nav">
   <div class="nav-inner">
     <button class="nav-button active" data-tab="calendar">
@@ -321,11 +362,17 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   </div>
 </nav>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 /* =====================================================
-   MUSIM LAB — INDEX v4
+   MUSIM LAB — INDEX v5 (Hybrid Design)
 ===================================================== */
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxyvyOYNCWWQcqcPOuceNHEzSBCWn7BaSFCC_gyFFnRaCkQAKIHYDhB_30db1qmmi85/exec";
@@ -338,34 +385,32 @@ let holidayData = [];
 let currentDate = new Date();
 let selectedDate = null;
 let selectedEvent = null;
-let selectedSeason = null;
 let activeCategory = "ALL";
 let savedIds = JSON.parse(localStorage.getItem("ml_saved") || "[]");
 
 const monthNames = ["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
+const monthShort = ["JAN","FEB","MAC","APR","MEI","JUN","JUL","OGO","SEP","OKT","NOV","DIS"];
 const dayNames = ["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"];
 
+/* ============ CATEGORIES + COLORS ============ */
 const CATEGORIES = [
-  { name: "Muzik & Konsert", icon: "🎵", color: "#3182ce" },
-  { name: "Sukan & Outdoor", icon: "⚽", color: "#eab308" },
-  { name: "Budaya & Agama", icon: "🕌", color: "#22a06b" },
-  { name: "Teknologi & Perniagaan", icon: "💼", color: "#e5533d" },
-  { name: "Gaya Hidup", icon: "✨", color: "#f28c28" },
-  { name: "Local", icon: "🏘️", color: "#8b5e3c" },
-  { name: "Musim", icon: "🌦️", color: "#8b5cf6" }
+  { name: "Muzik & Konsert", icon: "🎵", color: "#8b5cf6" },
+  { name: "Sukan & Outdoor", icon: "⚽", color: "#f59e0b" },
+  { name: "Budaya & Agama", icon: "🕌", color: "#10b981" },
+  { name: "Teknologi & Perniagaan", icon: "💼", color: "#3b82f6" },
+  { name: "Gaya Hidup", icon: "✨", color: "#f43f5e" },
+  { name: "Local", icon: "🏘️", color: "#a16207" },
+  { name: "Cuti Sekolah", icon: "🎒", color: "#06b6d4" },
+  { name: "Musim", icon: "🌦️", color: "#6366f1" }
 ];
 
 /* ============ HELPERS ============ */
 function normalise(v){return String(v||"").trim().toLowerCase()}
 function $(id){return document.getElementById(id)}
 
-function getCatColor(cat){
+function getCatInfo(cat){
   const c = CATEGORIES.find(x => normalise(x.name) === normalise(cat));
-  return c ? c.color : "#8b5e3c";
-}
-function getCatIcon(cat){
-  const c = CATEGORIES.find(x => normalise(x.name) === normalise(cat));
-  return c ? c.icon : "📍";
+  return c || { name: cat || "Lain-lain", icon: "📍", color: "#8b5e3c" };
 }
 
 function parseDate(value){
@@ -386,11 +431,29 @@ function formatDate(d){
   if(!d) return "";
   return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
 }
-function formatDateShort(d){
-  if(!d) return "";
-  return `${d.getDate()} ${monthNames[d.getMonth()].slice(0,3)}`;
+
+/* ============ GOOGLE DRIVE URL CONVERTER ============ */
+function driveToDirect(url){
+  if(!url) return "";
+  url = String(url).trim();
+  if(url.includes("lh3.googleusercontent.com")) return url;
+  if(url.includes("drive.google.com/thumbnail")) return url;
+
+  let id = null, m;
+  if((m = url.match(/\/file\/d\/([^\/\?]+)/))) id = m[1];
+  else if((m = url.match(/[?&]id=([^&]+)/))) id = m[1];
+  else if((m = url.match(/\/d\/([^\/\?]+)/))) id = m[1];
+
+  if(id) return `https://lh3.googleusercontent.com/d/${id}=w1200`;
+  return url;
 }
 
+function parseImages(raw){
+  if(!raw) return [];
+  return String(raw).split("|").map(s => s.trim()).filter(Boolean).map(driveToDirect);
+}
+
+/* ============ EVENT GETTERS ============ */
 function getEventStart(e){return parseDate(e["Start Date"]||e.startDate)}
 function getEventEnd(e){return parseDate(e["End Date"]||e.endDate)}
 function getEventCat(e){return String(e["Category"]||e.category||"").trim()}
@@ -401,7 +464,6 @@ function getEventShort(e){return String(e["Short Description"]||e.shortDescripti
 function getEventImg(e){return String(e["Image URL"]||e.imageUrl||"").trim()}
 function getEventLink(e){return String(e["Official Link"]||e.officialLink||"").trim()}
 function getEventId(e){return String(e["Event ID"]||e.eventId||"").trim()}
-function getEventStatus(e){return String(e["Status"]||"").trim()}
 
 function eventMatchesFilter(e){
   if(activeCategory === "ALL") return true;
@@ -412,7 +474,7 @@ function getEventsForDate(date){
   const target = new Date(date.getFullYear(),date.getMonth(),date.getDate());
   return allEvents.filter(e => {
     if(!eventMatchesFilter(e)) return false;
-    if(normalise(getEventStatus(e)) !== "published") return false;
+    // NO status filter — tunjuk semua
     let s = getEventStart(e), en = getEventEnd(e);
     if(!s) return false;
     if(!en) en = s;
@@ -452,10 +514,9 @@ document.querySelectorAll(".nav-button").forEach(btn => {
 function switchTab(tab){
   document.querySelectorAll(".nav-button").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
   document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-  const viewId = {calendar:"viewCalendar",explore:"viewExplore",musim:"viewMusim",more:"viewMore"}[tab];
-  $(viewId).classList.add("active");
+  const map = {calendar:"viewCalendar",explore:"viewExplore",musim:"viewMusim",more:"viewMore"};
+  $(map[tab]).classList.add("active");
   window.scrollTo({top:0,behavior:"smooth"});
-
   if(tab === "explore") renderExplore();
   if(tab === "musim") renderSeasons();
   if(tab === "more") updateSavedCount();
@@ -490,25 +551,35 @@ function renderCalendar(){
     if(sameDate(date,today)) cell.classList.add("today");
     if(selectedDate && sameDate(date,selectedDate)) cell.classList.add("selected");
 
-    const holidays = getHolidayForDate(date);
-    if(holidays.length > 0) cell.classList.add("has-holiday");
-
-    const events = getEventsForDate(date);
-    if(events.length > 0) cell.classList.add("has-event");
-
     const num = document.createElement("div");
     num.className = "day-number";
     num.textContent = d;
     cell.appendChild(num);
 
+    const events = getEventsForDate(date);
     if(events.length > 0){
-      const count = document.createElement("div");
-      count.className = "day-count";
-      count.textContent = events.length;
-      cell.appendChild(count);
+      const dotsWrap = document.createElement("div");
+      dotsWrap.className = "day-dots";
+      // Show up to 3 dots, satu per kategori unik
+      const seenCats = new Set();
+      const dots = [];
+      for(const e of events){
+        const cat = normalise(getEventCat(e));
+        if(seenCats.has(cat)) continue;
+        seenCats.add(cat);
+        dots.push(getCatInfo(getEventCat(e)).color);
+        if(dots.length >= 3) break;
+      }
+      dots.forEach(color => {
+        const dot = document.createElement("span");
+        dot.className = "day-dot";
+        dot.style.background = color;
+        dotsWrap.appendChild(dot);
+      });
+      cell.appendChild(dotsWrap);
     }
 
-    cell.addEventListener("click", () => selectDate(date, events, holidays));
+    cell.addEventListener("click", () => selectDate(date));
     grid.appendChild(cell);
   }
 }
@@ -532,9 +603,12 @@ function clearFilter(){
 }
 
 /* ============ SELECT DATE ============ */
-function selectDate(date, events, holidays){
+function selectDate(date){
   selectedDate = date;
   renderCalendar();
+
+  const events = getEventsForDate(date);
+  const holidays = getHolidayForDate(date);
 
   $("dateSheetTitle").textContent = `${dayNames[date.getDay()]}, ${formatDate(date)}`;
   const container = $("dateSheetContent");
@@ -551,23 +625,22 @@ function selectDate(date, events, holidays){
     html += `<div class="empty-state">
       <div class="emoji">🌿</div>
       <div class="msg">Takde event</div>
-      <div class="sub">Bulan ni tenang je.</div>
+      <div class="sub">Hari ni tenang je.</div>
     </div>`;
     $("dateSheetSub").textContent = "";
   }else{
     $("dateSheetSub").textContent = `${events.length} event`;
     html += events.map(e => {
       const cat = getEventCat(e);
-      const color = getCatColor(cat);
-      const icon = getCatIcon(cat);
+      const info = getCatInfo(cat);
       const id = getEventId(e);
       const isSaved = savedIds.includes(id);
       const loc = getEventLoc(e);
       return `
         <div class="sheet-event" onclick="openEventDetail('${id}')">
           <div class="sheet-event-cat">
-            <span class="cat-dot" style="background:${color}"></span>
-            <span>${icon} ${escapeHtml(cat||"Lain-lain")}</span>
+            <span class="cat-dot" style="background:${info.color}"></span>
+            <span>${info.icon} ${escapeHtml(cat||"Lain-lain")}</span>
           </div>
           <div class="sheet-event-name">${escapeHtml(getEventName(e))}</div>
           ${loc ? `<div class="sheet-event-meta">📍 ${escapeHtml(loc)}</div>` : ""}
@@ -585,6 +658,57 @@ function selectDate(date, events, holidays){
   openSheet("dateSheet");
 }
 
+/* ============ CAROUSEL ============ */
+let carouselState = {};
+
+function buildCarousel(images, icon){
+  if(!images.length){
+    return `<div class="carousel-wrap"><div class="carousel-slide"><div class="carousel-fallback">${icon}</div></div></div>`;
+  }
+
+  const slides = images.map((src, i) => `
+    <div class="carousel-slide">
+      <img src="${escapeHtml(src)}" alt="" loading="${i===0?"eager":"lazy"}"
+           onclick="openLightbox('${escapeHtml(src)}')"
+           onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'carousel-fallback\\'>${icon}</div>'">
+    </div>
+  `).join("");
+
+  const dots = images.length > 1
+    ? `<div class="carousel-dots" id="carouselDots">${images.map((_,i)=>`<div class="carousel-dot ${i===0?"active":""}"></div>`).join("")}</div>`
+    : "";
+
+  return `
+    <div class="carousel-wrap">
+      <div class="carousel-track" id="carouselTrack">${slides}</div>
+      ${dots}
+    </div>
+  `;
+}
+
+function attachCarouselScroll(){
+  const track = $("carouselTrack");
+  if(!track) return;
+  const dots = document.querySelectorAll("#carouselDots .carousel-dot");
+  if(!dots.length) return;
+
+  track.addEventListener("scroll", () => {
+    const idx = Math.round(track.scrollLeft / track.clientWidth);
+    dots.forEach((d,i) => d.classList.toggle("active", i === idx));
+  }, {passive:true});
+}
+
+function openLightbox(src){
+  $("lightboxImg").src = src;
+  $("lightbox").classList.add("open");
+  document.body.classList.add("no-scroll");
+}
+function closeLightbox(){
+  $("lightbox").classList.remove("open");
+  $("lightboxImg").src = "";
+  document.body.classList.remove("no-scroll");
+}
+
 /* ============ EVENT DETAIL ============ */
 function openEventDetail(id){
   const e = allEvents.find(x => getEventId(x) === id);
@@ -592,41 +716,49 @@ function openEventDetail(id){
   selectedEvent = e;
 
   const cat = getEventCat(e);
-  const color = getCatColor(cat);
-  const icon = getCatIcon(cat);
+  const info = getCatInfo(cat);
   const start = getEventStart(e);
   const end = getEventEnd(e);
   const loc = getEventLoc(e);
-  const img = getEventImg(e);
   const link = getEventLink(e);
   const syn = getEventShort(e) || getEventDesc(e);
   const fullDesc = getEventDesc(e);
   const isSaved = savedIds.includes(id);
+  const images = parseImages(getEventImg(e));
 
-  let metaParts = [];
-  if(start) metaParts.push(formatDate(start));
-  if(end && start && !sameDate(start,end)) metaParts.push("→ " + formatDate(end));
-  if(loc) metaParts.push("📍 " + loc);
+  // Big date
+  const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
+  const bigMonth = start ? monthShort[start.getMonth()] : "";
+  const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
 
-  const heroHtml = img
-    ? `<img class="detail-hero" src="${escapeHtml(img)}" alt="" onerror="this.outerHTML='<div class=\\'detail-hero-fallback\\'>${icon}</div>'">`
-    : `<div class="detail-hero-fallback">${icon}</div>`;
+  // End date note
+  let endNote = "";
+  if(end && start && !sameDate(start,end)){
+    endNote = ` • hingga ${formatDate(end)}`;
+  }
+
+  const carouselHtml = buildCarousel(images, info.icon);
 
   let html = `
-    <div style="display:flex;justify-content:flex-end;margin-bottom:6px">
-      <button class="mini-btn" onclick="closeSheet('detailSheet')">✕ Tutup</button>
+    ${carouselHtml}
+
+    <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
+      <span class="cat-dot" style="background:${info.color}"></span>
+      ${info.icon} ${escapeHtml(cat||"Lain-lain")}
     </div>
-    ${heroHtml}
-    <div class="sheet-event-cat">
-      <span class="cat-dot" style="background:${color}"></span>
-      <span>${icon} ${escapeHtml(cat||"Lain-lain")}</span>
+
+    <div class="big-date-block">
+      <div class="big-date-day">${bigDay}</div>
+      <div class="big-date-month">${bigMonth}</div>
     </div>
-    <h2 class="detail-title">${escapeHtml(getEventName(e))}</h2>
-    <div class="detail-meta">${metaParts.join(" • ")}</div>
+    <div class="big-date-sub">${bigSub}${endNote}</div>
+
+    <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
+    ${loc ? `<div class="detail-meta">📍 ${escapeHtml(loc)}</div>` : ""}
     <div class="detail-synopsis">${escapeHtml(syn)}</div>
 
     <div class="detail-actions">
-      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this, true)">
+      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this)">
         ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
       </button>
       <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
@@ -634,21 +766,77 @@ function openEventDetail(id){
   `;
 
   if(fullDesc && fullDesc !== syn){
-    html += `<button class="action-btn primary" style="width:100%" onclick="openFullDetail('${id}')">📖 Baca penuh</button>`;
+    html += `<button class="action-btn primary full" style="margin-bottom:10px" onclick="openFullDetail('${id}')">📖 Baca Penuh</button>`;
   }
 
   if(link){
-    html += `<div style="margin-top:14px"><a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary" style="text-decoration:none;width:100%;display:flex">🔗 Official Link</a></div>`;
+    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn link full" style="margin-bottom:10px">🔗 Official Website</a>`;
   }
 
   html += `<div id="affiliateContainer_${id}"></div>`;
 
   $("detailSheetContent").innerHTML = html;
   openSheet("detailSheet");
-
+  attachCarouselScroll();
   loadAffiliates(id, "affiliateContainer_" + id);
 }
 
+function openFullDetail(id){
+  const e = allEvents.find(x => getEventId(x) === id);
+  if(!e) return;
+
+  const cat = getEventCat(e);
+  const info = getCatInfo(cat);
+  const start = getEventStart(e);
+  const loc = getEventLoc(e);
+  const link = getEventLink(e);
+  const fullDesc = getEventDesc(e);
+  const isSaved = savedIds.includes(id);
+
+  const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
+  const bigMonth = start ? monthShort[start.getMonth()] : "";
+  const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
+
+  let html = `
+    <div style="display:flex;justify-content:flex-start;margin-bottom:12px">
+      <button class="mini-btn" onclick="openEventDetail('${id}')">← Kembali</button>
+    </div>
+
+    <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
+      <span class="cat-dot" style="background:${info.color}"></span>
+      ${info.icon} ${escapeHtml(cat||"Lain-lain")}
+    </div>
+
+    <div class="big-date-block">
+      <div class="big-date-day">${bigDay}</div>
+      <div class="big-date-month">${bigMonth}</div>
+    </div>
+    <div class="big-date-sub">${bigSub}</div>
+
+    <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
+    ${loc ? `<div class="detail-meta">📍 ${escapeHtml(loc)}</div>` : ""}
+    <div class="detail-synopsis">${escapeHtml(fullDesc)}</div>
+
+    <div class="detail-actions">
+      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this)">
+        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
+      </button>
+      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
+    </div>
+  `;
+
+  if(link){
+    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn link full" style="margin-bottom:10px">🔗 Official Website</a>`;
+  }
+
+  html += `<div id="affiliateFull_${id}"></div>`;
+
+  $("detailSheetContent").innerHTML = html;
+  $("detailSheet").querySelector(".sheet-scroll").scrollTop = 0;
+  loadAffiliates(id, "affiliateFull_" + id);
+}
+
+/* ============ AFFILIATE LOADER ============ */
 async function loadAffiliates(eventId, containerId){
   const container = $(containerId);
   if(!container) return;
@@ -661,75 +849,30 @@ async function loadAffiliates(eventId, containerId){
     container.innerHTML = `
       <div class="affiliate-section">
         <div class="affiliate-title">🛍️ Persediaan & Beli</div>
-        ${items.map(it => `
-          <div class="affiliate-card">
-            <div class="affiliate-name">${escapeHtml(it.Title||"")}</div>
-            <div class="affiliate-desc">${escapeHtml(it.URL||"")}</div>
-          </div>
-        `).join("")}
+        ${items.map(it => {
+          const title = it.Title || "";
+          const body = it.URL || "";
+          // Cari URL dalam body
+          const urlMatch = body.match(/https?:\/\/[^\s]+/);
+          const url = urlMatch ? urlMatch[0] : "";
+          const desc = url ? body.replace(url, "").trim() : body;
+          return `
+            <div class="affiliate-card">
+              <div class="affiliate-card-head">
+                <div class="affiliate-name">${escapeHtml(title)}</div>
+              </div>
+              ${desc ? `<div class="affiliate-desc">${escapeHtml(desc)}</div>` : ""}
+              ${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="affiliate-buy">🛒 Beli Sekarang →</a>` : ""}
+            </div>
+          `;
+        }).join("")}
       </div>
     `;
   }catch(e){console.error("affiliate err", e)}
 }
 
-function openFullDetail(id){
-  const e = allEvents.find(x => getEventId(x) === id);
-  if(!e) return;
-
-  const cat = getEventCat(e);
-  const color = getCatColor(cat);
-  const icon = getCatIcon(cat);
-  const start = getEventStart(e);
-  const end = getEventEnd(e);
-  const loc = getEventLoc(e);
-  const img = getEventImg(e);
-  const link = getEventLink(e);
-  const fullDesc = getEventDesc(e);
-  const isSaved = savedIds.includes(id);
-
-  let metaParts = [];
-  if(start) metaParts.push(formatDate(start));
-  if(end && start && !sameDate(start,end)) metaParts.push("→ " + formatDate(end));
-  if(loc) metaParts.push("📍 " + loc);
-
-  const heroHtml = img
-    ? `<img class="detail-hero" src="${escapeHtml(img)}" alt="">`
-    : `<div class="detail-hero-fallback">${icon}</div>`;
-
-  let html = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <button class="mini-btn" onclick="openEventDetail('${id}')">← Kembali</button>
-      <button class="mini-btn" onclick="closeSheet('detailSheet')">✕</button>
-    </div>
-    ${heroHtml}
-    <div class="sheet-event-cat">
-      <span class="cat-dot" style="background:${color}"></span>
-      <span>${icon} ${escapeHtml(cat||"Lain-lain")}</span>
-    </div>
-    <h2 class="detail-title">${escapeHtml(getEventName(e))}</h2>
-    <div class="detail-meta">${metaParts.join(" • ")}</div>
-    <div class="detail-synopsis" style="white-space:pre-line">${escapeHtml(fullDesc)}</div>
-
-    <div class="detail-actions">
-      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this, true)">
-        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
-      </button>
-      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
-    </div>
-  `;
-
-  if(link){
-    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary" style="text-decoration:none;width:100%;display:flex;margin-top:10px">🔗 Official Link</a>`;
-  }
-
-  html += `<div id="affiliateFull_${id}"></div>`;
-
-  $("detailSheetContent").innerHTML = html;
-  loadAffiliates(id, "affiliateFull_" + id);
-}
-
 /* ============ SAVE EVENT ============ */
-function toggleSave(id, btn, keepSheet){
+function toggleSave(id, btn){
   const idx = savedIds.indexOf(id);
   if(idx >= 0){
     savedIds.splice(idx,1);
@@ -746,6 +889,7 @@ function toggleSave(id, btn, keepSheet){
     btn.classList.toggle("success", isSaved);
     btn.innerHTML = isSaved ? "✓ Disimpan" : "❤ Simpan";
   }
+  updateSavedCount();
 }
 
 /* ============ REMINDER (.ics) ============ */
@@ -774,7 +918,7 @@ function downloadICS(id){
     `DTSTART;VALUE=DATE:${fmt(start)}`,
     `DTEND;VALUE=DATE:${fmt(new Date(end.getTime()+86400000))}`,
     `SUMMARY:${title}`,
-    `DESCRIPTION:${desc}`,
+    desc ? `DESCRIPTION:${desc}` : "",
     loc ? `LOCATION:${loc}` : "",
     "BEGIN:VALARM",
     "TRIGGER:-P1D",
@@ -799,7 +943,7 @@ function downloadICS(id){
 function renderExplore(){
   const grid = $("exploreGrid");
   grid.innerHTML = CATEGORIES.map(c => {
-    const count = allEvents.filter(e => normalise(getEventCat(e)) === normalise(c.name) && normalise(getEventStatus(e)) === "published").length;
+    const count = allEvents.filter(e => normalise(getEventCat(e)) === normalise(c.name)).length;
     return `
       <button class="explore-card" onclick="pickCategory('${escapeHtml(c.name)}')">
         <div class="explore-icon">${c.icon}</div>
@@ -857,37 +1001,29 @@ function renderSeasons(){
 function openSeasonDetail(id){
   const s = allSeasons.find(x => String(x["Season ID"]) === id);
   if(!s) return;
-  selectedSeason = s;
 
   let html = `
-    <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
-      <button class="mini-btn" onclick="closeSheet('seasonSheet')">✕ Tutup</button>
-    </div>
-    <div class="detail-hero-fallback">🌧️</div>
+    <div class="detail-hero-fallback" style="width:100%;height:140px;border-radius:16px;background:linear-gradient(135deg,#e0e7ff,#c7d2fe);display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:16px">🌧️</div>
     <h2 class="detail-title">${escapeHtml(s["Season Name"]||"")}</h2>
     <div class="detail-meta">Musim aktif</div>
     <div class="detail-synopsis" style="white-space:pre-line">${escapeHtml(s["Description"]||"")}</div>
+    <div id="seasonAffiliateContainer"></div>
   `;
-
-  if(!currentEventIdForSeason){
-    // placeholder
-  }
-
-  html += `<div id="seasonAffiliateContainer"></div>`;
 
   $("seasonSheetContent").innerHTML = html;
   openSheet("seasonSheet");
-
   loadAffiliates(id, "seasonAffiliateContainer");
 }
 
 /* ============ SHEET CONTROL ============ */
 let openSheetId = null;
 function openSheet(id){
-  closeSheet(openSheetId);
+  if(openSheetId && openSheetId !== id) closeSheet(openSheetId);
   openSheetId = id;
   $("sheetOverlay").classList.add("open");
   $(id).classList.add("open");
+  document.body.classList.add("no-scroll");
+  $(id).querySelector(".sheet-scroll").scrollTop = 0;
 }
 
 function closeSheet(id){
@@ -897,6 +1033,7 @@ function closeSheet(id){
   }
   if(!document.querySelector(".bottom-sheet.open")){
     $("sheetOverlay").classList.remove("open");
+    document.body.classList.remove("no-scroll");
     openSheetId = null;
   }
 }
@@ -905,17 +1042,26 @@ $("sheetOverlay").addEventListener("click", () => closeSheet());
 
 // Swipe down to close
 document.querySelectorAll(".bottom-sheet").forEach(sheet => {
-  let startY = 0, curY = 0;
+  let startY = 0, curY = 0, dragging = false;
+  const scroll = sheet.querySelector(".sheet-scroll");
   sheet.addEventListener("touchstart", e => {
-    if(sheet.scrollTop > 0) return;
+    if(scroll && scroll.scrollTop > 0) return;
     startY = e.touches[0].clientY;
-  });
+    dragging = true;
+  }, {passive:true});
   sheet.addEventListener("touchmove", e => {
-    if(sheet.scrollTop > 0) return;
+    if(!dragging) return;
+    if(scroll && scroll.scrollTop > 0){dragging=false;return;}
     curY = e.touches[0].clientY - startY;
-    if(curY > 0) sheet.style.transform = `translateY(${curY}px)`;
-  });
+    if(curY > 0){
+      sheet.style.transition = "none";
+      sheet.style.transform = `translateY(${curY}px)`;
+    }
+  }, {passive:true});
   sheet.addEventListener("touchend", () => {
+    if(!dragging) return;
+    dragging = false;
+    sheet.style.transition = "";
     sheet.style.transform = "";
     if(curY > 100) closeSheet(sheet.id);
     curY = 0;
@@ -951,17 +1097,12 @@ $("nextMonth").addEventListener("click", () => {
   }, {passive:true});
 })();
 
-/* ============ TODAY BUTTON ============ */
+/* ============ TODAY ============ */
 $("todayBtn").addEventListener("click", () => {
   currentDate = new Date();
   renderCalendar();
   switchTab("calendar");
-  setTimeout(() => {
-    const today = new Date();
-    const events = getEventsForDate(today);
-    const holidays = getHolidayForDate(today);
-    selectDate(today, events, holidays);
-  }, 100);
+  setTimeout(() => selectDate(new Date()), 100);
 });
 
 /* ============ SAVED EVENTS ============ */
@@ -980,13 +1121,12 @@ function openSavedEvents(){
     const list = savedIds.map(id => allEvents.find(e => getEventId(e) === id)).filter(Boolean);
     container.innerHTML = list.map(e => {
       const cat = getEventCat(e);
-      const color = getCatColor(cat);
-      const icon = getCatIcon(cat);
+      const info = getCatInfo(cat);
       return `
-        <div class="sheet-event" onclick="closeSheet();switchTab('calendar');setTimeout(()=>openEventDetail('${getEventId(e)}'),200)">
+        <div class="sheet-event" onclick="closeSheet('dateSheet');switchTab('calendar');setTimeout(()=>openEventDetail('${getEventId(e)}'),250)">
           <div class="sheet-event-cat">
-            <span class="cat-dot" style="background:${color}"></span>
-            <span>${icon} ${escapeHtml(cat||"")}</span>
+            <span class="cat-dot" style="background:${info.color}"></span>
+            <span>${info.icon} ${escapeHtml(cat||"")}</span>
           </div>
           <div class="sheet-event-name">${escapeHtml(getEventName(e))}</div>
           <div class="sheet-event-meta">${formatDate(getEventStart(e))}</div>
@@ -998,7 +1138,8 @@ function openSavedEvents(){
 }
 
 function updateSavedCount(){
-  $("savedCountText").textContent = savedIds.length + " event";
+  const el = $("savedCountText");
+  if(el) el.textContent = savedIds.length + " event";
 }
 
 function showAbout(){
@@ -1008,9 +1149,8 @@ function showAbout(){
     <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
       <p style="margin-bottom:12px"><strong>Musim Lab</strong> bantu anda tahu apa yang akan datang di Malaysia — musim, cuti, event — dan bersedia sebelum tiba.</p>
       <p style="margin-bottom:12px">Kami kumpul info dari pelbagai sumber dan susun dalam satu kalendar mudah.</p>
-      <p style="color:#888;font-size:12px">Musim Lab mungkin terima komisen dari link affiliate tanpa kos tambahan kepada anda.</p>
+      <p style="color:#888;font-size:12px"><strong>Affiliate Disclosure:</strong> Musim Lab mungkin terima komisen dari link affiliate tanpa kos tambahan kepada anda.</p>
     </div>
-    <button class="action-btn secondary" style="width:100%;margin-top:14px" onclick="closeSheet('dateSheet')">Tutup</button>
   `;
   openSheet("dateSheet");
 }
