@@ -1,1196 +1,1239 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
-
-<title>Musim Lab — Tahu musim. Tahu keperluan.</title>
-<meta name="description" content="Tahu apa yang akan datang. Bersedia sebelum tiba.">
-<meta name="theme-color" content="#ffffff">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MusimLab — Admin</title>
 
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
-body{margin:0;padding:0;background:#f7f7f8;color:#171717;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:hidden}
-body.no-scroll{overflow:hidden}
-button{font:inherit}
-img{max-width:100%;display:block}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f5f7fb;color:#1f2937}
 
-/* ============ HEADER ============ */
-.top-header{background:#fff;padding:14px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.brand-wrap{display:flex;align-items:center;gap:10px;min-width:0}
-.brand-logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0;box-shadow:0 3px 10px rgba(139,92,246,.3)}
-.brand-text{min-width:0}
-.brand{font-size:17px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
-.brand-sub{font-size:10px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.today-btn{background:#f1f1f3;border:0;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;color:#171717;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0}
-.today-btn:active{transform:scale(.95)}
+.header{height:64px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:50;gap:20px}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.5px;flex-shrink:0}
+.logo span{font-weight:400;color:#9ca3af}
 
-/* ============ MAIN ============ */
-main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
-.view{display:none}
-.view.active{display:block}
-.section-title{font-size:19px;font-weight:800;margin:6px 4px 12px;letter-spacing:-.3px}
-.section-sub{font-size:12px;color:#888;margin:-8px 4px 14px}
+.tabs{display:flex;gap:4px;background:#f3f4f6;padding:4px;border-radius:10px}
+.tab{padding:8px 18px;border-radius:7px;font-size:13px;font-weight:650;cursor:pointer;border:none;background:transparent;color:#6b7280;transition:.15s}
+.tab:hover{color:#111827}
+.tab.active{background:#fff;color:#111827;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 
-/* ============ FILTER CHIP ============ */
-.filter-chip{display:none;align-items:center;gap:6px;background:#ede9fe;color:#6d28d9;padding:6px 10px 6px 12px;border-radius:999px;font-size:12px;font-weight:700;margin:0 4px 12px;width:fit-content;cursor:pointer}
-.filter-chip.show{display:flex}
-.filter-chip .x{width:18px;height:18px;border-radius:50%;background:#ddd6fe;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1}
+.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
 
-/* ============ CALENDAR (clean style) ============ */
-.calendar-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid #ededed;box-shadow:0 4px 20px rgba(0,0,0,.04);touch-action:pan-y}
-.month-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px}
-.month-name{font-size:17px;font-weight:800}
-.month-buttons{display:flex;gap:4px}
-.month-btn{width:34px;height:34px;border:0;border-radius:10px;background:#f1f1f2;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
-.month-btn:active{transform:scale(.92)}
+.btn{border:none;border-radius:9px;padding:10px 15px;font-size:13px;font-weight:650;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:#111827;color:#fff}
+.btn-secondary{background:#fff;border:1px solid #d1d5db;color:#374151}
+.btn-danger{background:#fee2e2;color:#b91c1c}
+.btn-small{padding:7px 11px;font-size:12px}
 
-.weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 6px 4px;border-bottom:1px solid #f0f0f0}
-.weekday{text-align:center;padding:6px 2px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.4px}
+.container{max-width:1100px;margin:auto;padding:28px 18px 60px}
+.page-title{margin-bottom:18px}
+.page-title h1{font-size:25px;letter-spacing:-.4px}
+.page-title p{color:#6b7280;font-size:13px;margin-top:5px}
 
-.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:6px}
-.day-cell{aspect-ratio:1;border-radius:50%;position:relative;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:background .15s;padding:2px}
-.day-cell.empty{pointer-events:none}
-.day-cell:active{background:#f5f3ff}
-.day-number{font-size:14px;font-weight:600;color:#333;line-height:1}
-.day-cell.weekend .day-number{color:#999}
-.day-cell.today{background:#171717}
-.day-cell.today .day-number{color:#fff;font-weight:800}
-.day-cell.today .day-dot{background:#fff !important}
-.day-cell.selected{background:#ede9fe;outline:2px solid #8b5cf6;outline-offset:-2px}
-.day-cell.selected .day-number{color:#6d28d9;font-weight:800}
-.day-dots{display:flex;gap:2px;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);min-height:4px}
-.day-dot{width:4px;height:4px;border-radius:50%}
+.toolbar{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:10px;display:grid;grid-template-columns:1fr 150px 150px;gap:8px;margin-bottom:16px}
+input,textarea,select{width:100%;border:1px solid #d1d5db;border-radius:8px;padding:10px 11px;font-size:13px;outline:none;background:#fff;font-family:inherit}
+input:focus,textarea:focus,select:focus{border-color:#6b7280}
+textarea{min-height:110px;resize:vertical}
 
-/* ============ BOTTOM SHEET ============ */
-.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s ease;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
-.sheet-overlay.open{opacity:1;pointer-events:auto}
+.event-list{display:grid;gap:10px}
+.event-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;display:flex;justify-content:space-between;gap:16px}
+.event-main{min-width:0;flex:1}
+.event-name{font-size:16px;font-weight:700;margin-bottom:7px}
+.event-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:700;background:#f3f4f6;color:#374151}
+.badge-status{background:#dcfce7;color:#166534}
+.badge-draft{background:#fef3c7;color:#92400e}
+.badge-season{background:#ede9fe;color:#6d28d9}
+.badge-negeri{background:#dbeafe;color:#1e40af}
+.badge-off{background:#fee2e2;color:#991b1b}
+.short-description{color:#6b7280;font-size:13px;line-height:1.45}
+.event-actions{display:flex;align-items:center;gap:6px}
 
-.bottom-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;z-index:110;padding:0;transform:translateY(110%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(0,0,0,.12);overscroll-behavior:contain}
-.bottom-sheet.open{transform:translateY(0)}
+/* SEASON CARD */
+.season-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;display:flex;justify-content:space-between;gap:16px;align-items:flex-start;position:relative;overflow:hidden}
+.season-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--season-color,#6366f1)}
+.season-card.inactive{opacity:.65;background:#fafafa}
+.season-left{min-width:0;flex:1}
+.season-title{font-size:17px;font-weight:750;margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.season-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.season-desc{color:#6b7280;font-size:13px;line-height:1.5;margin-bottom:10px;max-width:600px}
+.season-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
 
-.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1;padding:8px 16px 20px}
+/* SWITCH */
+.switch{position:relative;display:inline-block;width:46px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;inset:0;background:#d1d5db;transition:.25s;border-radius:26px}
+.slider:before{content:"";position:absolute;height:20px;width:20px;left:3px;bottom:3px;background:white;transition:.25s;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked + .slider{background:#10b981}
+.switch input:checked + .slider:before{transform:translateX(20px)}
 
-.sheet-handle{width:40px;height:4px;border-radius:999px;background:#d6d6d6;margin:8px auto 4px;cursor:grab;flex-shrink:0}
+.form-view{display:none}
+.form-view.active{display:block}
+.dashboard-view.hidden{display:none}
+.form-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.form-header-left{display:flex;align-items:center;gap:10px}
+.back-btn{border:1px solid #d1d5db;background:#fff;border-radius:8px;padding:8px 11px;cursor:pointer}
+.form-header h2{font-size:20px}
 
-/* Sheet: header */
-.sheet-heading{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
-.sheet-heading-sub{color:#888;font-size:13px;margin-bottom:16px}
+.form-section{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;margin-bottom:12px}
+.section-title{font-size:14px;font-weight:750;margin-bottom:15px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:13px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:12px;font-weight:650;color:#374151;margin-bottom:6px}
+.field small{display:block;color:#9ca3af;font-size:10px;margin-top:4px}
+.full{grid-column:1/-1}
 
-/* ============ CAROUSEL ============ */
-.carousel-wrap{position:relative;margin:-8px -16px 16px;background:#f5f5f7}
-.carousel-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.carousel-track::-webkit-scrollbar{display:none}
-.carousel-slide{flex:0 0 100%;scroll-snap-align:start;position:relative;aspect-ratio:16/10;background:#f0f0f3;overflow:hidden}
-.carousel-slide img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
-.carousel-slide img[data-failed="1"]{display:none}
-.carousel-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
-.carousel-dots{display:flex;justify-content:center;gap:6px;padding:10px 0;background:#f5f5f7}
-.carousel-dot{width:6px;height:6px;border-radius:50%;background:#d4d4d8;transition:.2s}
-.carousel-dot.active{background:#171717;width:20px;border-radius:999px}
+.link-list{display:grid;gap:8px;margin-bottom:10px}
+.link-card{border:1px solid #e5e7eb;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.link-info{min-width:0;flex:1}
+.link-title{font-size:13px;font-weight:700}
+.link-url{color:#6b7280;font-size:11px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.link-actions{display:flex;gap:5px}
+.add-link{width:100%;border:1px dashed #9ca3af;background:#fafafa;padding:10px;border-radius:9px;cursor:pointer;font-size:12px;font-weight:650;color:#374151}
 
-/* ============ SHEET: detail content ============ */
-.cat-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:14px}
-.cat-pill .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:5px}
 
-.big-date-block{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
-.big-date-day{font-size:44px;font-weight:900;letter-spacing:-2px;line-height:.9}
-.big-date-month{font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-.big-date-sub{font-size:12px;color:#888;font-weight:600;margin-bottom:16px}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
+.modal.active{display:flex}
+.modal-box{width:100%;max-width:470px;background:#fff;border-radius:14px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.15)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modal-header h3{font-size:17px}
+.close{border:none;background:#f3f4f6;width:30px;height:30px;border-radius:7px;cursor:pointer}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 
-.detail-title{font-size:22px;font-weight:800;line-height:1.2;letter-spacing:-.5px;margin:0 0 8px}
-.detail-meta{font-size:13px;color:#666;line-height:1.6;margin-bottom:16px}
-.detail-synopsis{font-size:14px;line-height:1.7;color:#333;margin-bottom:20px;white-space:pre-line}
+.empty{padding:24px;text-align:center;color:#9ca3af;font-size:13px;border:1px dashed #d1d5db;border-radius:10px;background:#fff}
+.message{position:fixed;right:16px;bottom:16px;background:#111827;color:#fff;padding:12px 15px;border-radius:9px;font-size:12px;display:none;z-index:200;box-shadow:0 10px 25px rgba(0,0,0,.15);max-width:320px}
+.message.show{display:block}
 
-.detail-actions{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.action-btn{flex:1;min-width:calc(50% - 4px);padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
-.action-btn:active{transform:scale(.96)}
-.action-btn.primary{background:#171717;color:#fff}
-.action-btn.secondary{background:#f1f1f3;color:#171717}
-.action-btn.success{background:#dcfce7;color:#166534}
-.action-btn.full{min-width:100%}
-.action-btn.link{text-decoration:none;color:#fff;background:#171717}
+/* ICON/COLOR PICKER */
+.icon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:6px}
+.icon-btn{aspect-ratio:1;border:2px solid #e5e7eb;border-radius:10px;background:#fff;font-size:22px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;padding:0}
+.icon-btn:hover{border-color:#9ca3af}
+.icon-btn.selected{border-color:#111827;background:#f9fafb;box-shadow:0 0 0 3px rgba(17,24,39,.1)}
 
-/* ============ AFFILIATE ============ */
-.affiliate-section{margin-top:8px;padding-top:20px;border-top:1px solid #f0f0f0}
-.affiliate-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.affiliate-card{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;transition:.15s}
-.affiliate-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
-.affiliate-name{font-size:14px;font-weight:800;color:#171717;flex:1}
-.affiliate-desc{font-size:12px;color:#555;line-height:1.6;white-space:pre-line;margin-bottom:12px}
-.affiliate-buy{display:inline-flex;align-items:center;gap:6px;background:#8b5cf6;color:#fff;text-decoration:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800}
-.affiliate-buy:active{transform:scale(.96)}
+.color-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px}
+.color-btn{aspect-ratio:1;border:2px solid transparent;border-radius:10px;cursor:pointer;transition:.15s;padding:0;position:relative}
+.color-btn:hover{transform:scale(1.08)}
+.color-btn.selected{border-color:#111827;box-shadow:0 0 0 3px rgba(17,24,39,.15)}
 
-/* ============ STICKY BOTTOM ============ */
-.sheet-bottom{flex-shrink:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #f0f0f0;background:#fff;border-radius:0 0 0 0}
-.sheet-close{width:100%;padding:14px;border-radius:14px;border:0;background:#f1f1f3;color:#171717;font-size:14px;font-weight:800;cursor:pointer;transition:.15s}
-.sheet-close:active{transform:scale(.98);background:#e5e5e7}
+.preview-row{display:flex;gap:12px;align-items:center;padding:12px;background:#f9fafb;border-radius:10px;border:1px solid #e5e7eb;margin-top:10px}
+.preview-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
 
-/* ============ EMPTY STATE ============ */
-.empty-state{text-align:center;padding:40px 20px;color:#999}
-.empty-state .emoji{font-size:44px;margin-bottom:10px;opacity:.6}
-.empty-state .msg{font-size:14px;font-weight:600;color:#666;margin-bottom:6px}
-.empty-state .sub{font-size:12px;color:#aaa}
-
-/* ============ SHEET EVENT LIST ============ */
-.sheet-event{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:.15s}
-.sheet-event:active{transform:scale(.985);background:#f5f5f7}
-.sheet-event-cat{display:flex;align-items:center;gap:7px;font-size:11px;color:#888;font-weight:700;margin-bottom:6px}
-.sheet-event-cat .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sheet-event-name{font-size:15px;font-weight:800;line-height:1.3;margin-bottom:5px}
-.sheet-event-meta{font-size:12px;color:#666;line-height:1.5}
-.sheet-event-actions{margin-top:10px;display:flex;gap:6px}
-.mini-btn{border:1px solid #ddd;background:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
-.mini-btn:active{transform:scale(.95)}
-.mini-btn.saved{background:#dcfce7;color:#166534;border-color:#bbf7d0}
-
-/* ============ EXPLORE ============ */
-.explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px}
-.explore-card{background:#fff;border:1px solid #ededed;border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:8px;min-height:110px}
-.explore-card:active{transform:scale(.97);background:#fafafa}
-.explore-icon{font-size:26px;line-height:1}
-.explore-name{font-size:14px;font-weight:800;line-height:1.25}
-.explore-count{font-size:11px;color:#888;margin-top:auto}
-
-/* ============ MUSIM ============ */
-.season-card{background:#fff;border:1px solid #ededed;border-radius:18px;padding:18px;margin-bottom:11px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
-.season-card:active{transform:scale(.985)}
-.season-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6366f1,#8b5cf6)}
-.season-name{font-size:18px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.season-badge{font-size:10px;font-weight:800;background:#dcfce7;color:#166534;padding:3px 8px;border-radius:999px}
-.season-synopsis{font-size:13px;color:#666;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
-.season-cta{font-size:12px;font-weight:700;color:#6366f1}
-
-/* ============ MORE ============ */
-.more-list{display:grid;gap:8px}
-.more-item{background:#fff;border:1px solid #ededed;border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer}
-.more-item:active{transform:scale(.99);background:#fafafa}
-.more-icon{width:40px;height:40px;border-radius:11px;background:#f5f3ff;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
-.more-text{flex:1;min-width:0}
-.more-text-title{font-size:14px;font-weight:800}
-.more-text-sub{font-size:11px;color:#888;margin-top:2px}
-.more-chev{color:#ccc;font-size:18px}
-
-/* ============ BOTTOM NAV ============ */
-.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:90;background:#fff;border-top:1px solid #eee;padding:0 8px env(safe-area-inset-bottom);box-shadow:0 -2px 20px rgba(0,0,0,.04)}
-.nav-inner{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);align-items:end;height:64px;position:relative}
-.nav-button{border:0;background:transparent;padding:6px 2px 8px;cursor:pointer;color:#999;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;position:relative;transition:color .2s}
-.nav-button .nav-icon{font-size:22px;line-height:1;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
-.nav-button .nav-label{font-size:10px;font-weight:700;transition:opacity .2s}
-.nav-button.active{color:#8b5cf6}
-.nav-button.active .nav-icon{background:#8b5cf6;color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(139,92,246,.4);border:4px solid #f7f7f8;font-size:22px;position:absolute;bottom:calc(100% - 22px);left:50%;margin-left:-26px}
-.nav-button.active .nav-label{transform:translateY(-2px);font-weight:800}
-
-/* ============ TOAST ============ */
-.toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,20px);background:#171717;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s ease;z-index:200;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-
-/* ============ LIGHTBOX ============ */
-.lightbox{position:fixed;inset:0;background:#000;z-index:300;display:none;align-items:center;justify-content:center;padding:0}
-.lightbox.open{display:flex}
-.lightbox img{max-width:100%;max-height:100vh;object-fit:contain}
-.lightbox-close{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:0;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px)}
-
-/* ============ LOADING ============ */
-.loading{text-align:center;padding:40px 15px;color:#888;font-size:13px}
-
-/* ============ DESKTOP ============ */
-@media (min-width:700px){
-  .day-number{font-size:15px}
-  .bottom-sheet{left:50%;right:auto;width:560px;transform:translate(-50%,110%)}
-  .bottom-sheet.open{transform:translate(-50%,0)}
-  .carousel-slide{aspect-ratio:16/9}
+@media(max-width:700px){
+  .header{padding:0 14px;gap:10px}
+  .header .btn{padding:8px 11px}
+  .logo{font-size:17px}
+  .tab{padding:7px 12px;font-size:12px}
+  .container{padding:20px 12px 40px}
+  .toolbar{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .event-card{flex-direction:column;gap:12px}
+  .event-actions{width:100%}
+  .event-actions button{flex:1}
+  .season-card{flex-direction:column}
+  .season-right{width:100%;justify-content:space-between;flex-wrap:wrap}
+  .form-header{align-items:flex-start}
+  .form-header-right{display:none}
+  .form-section{padding:15px}
+  .link-card{align-items:flex-start}
+  .link-actions{flex-shrink:0}
 }
 </style>
 </head>
 <body>
 
-<header class="top-header">
-  <div class="brand-wrap">
-    <div class="brand-logo">ML</div>
-    <div class="brand-text">
-      <div class="brand">Musim Lab</div>
-      <div class="brand-sub">Tahu musim. Tahu keperluan.</div>
-    </div>
+<header class="header">
+  <div class="logo">MUSIM<span>LAB</span></div>
+  <div class="tabs">
+    <button class="tab active" id="tabEvents" onclick="switchTab('events')">Events</button>
+    <button class="tab" id="tabSeasons" onclick="switchTab('seasons')">Seasons</button>
   </div>
-  <button class="today-btn" id="todayBtn">📍 Hari Ini</button>
+  <div class="header-right">
+    <button class="btn btn-primary" id="addBtn" onclick="handleAddClick()">+ Add Event</button>
+  </div>
 </header>
 
-<main>
+<main class="container">
 
-  <section class="view active" id="viewCalendar">
-    <div class="filter-chip" id="filterChip" onclick="clearFilter()">
-      <span id="filterChipText">Semua</span>
-      <span class="x">×</span>
+  <!-- ============ EVENTS VIEW ============ -->
+  <section id="eventsView">
+    <div id="dashboardView" class="dashboard-view">
+      <div class="page-title">
+        <h1>Events</h1>
+        <p>Manage events and affiliate links.</p>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="Search events..." oninput="renderEvents()">
+        <select id="statusFilter" onchange="renderEvents()">
+          <option value="">All Status</option>
+          <option value="Published">Published</option>
+          <option value="Draft">Draft</option>
+        </select>
+        <select id="seasonFilter" onchange="renderEvents()">
+          <option value="">All Seasons</option>
+        </select>
+      </div>
+
+      <div id="eventList" class="event-list">
+        <div class="empty">Loading events...</div>
+      </div>
     </div>
 
-    <div class="calendar-card" id="calendarCard">
-      <div class="month-header">
-        <div class="month-name" id="monthName">Januari 2026</div>
-        <div class="month-buttons">
-          <button class="month-btn" id="prevMonth" aria-label="Sebelum">‹</button>
-          <button class="month-btn" id="nextMonth" aria-label="Seterusnya">›</button>
+    <div id="formView" class="form-view">
+      <div class="form-header">
+        <div class="form-header-left">
+          <button class="back-btn" onclick="closeForm()">←</button>
+          <h2 id="formTitle">Add Event</h2>
+        </div>
+        <div class="form-header-right">
+          <button class="btn btn-primary" onclick="saveEvent()">Save</button>
         </div>
       </div>
 
-      <div class="weekdays">
-        <div class="weekday">Isn</div>
-        <div class="weekday">Sel</div>
-        <div class="weekday">Rab</div>
-        <div class="weekday">Kha</div>
-        <div class="weekday">Jum</div>
-        <div class="weekday">Sab</div>
-        <div class="weekday">Aha</div>
+      <div class="form-section">
+        <div class="section-title">Event Information</div>
+        <div class="grid-2">
+          <div class="field full">
+            <label>Event Name</label>
+            <input type="text" id="eventName" placeholder="Example: Le Tour de Langkawi">
+          </div>
+          <div class="field">
+            <label>Start Date</label>
+            <input type="date" id="startDate">
+          </div>
+          <div class="field">
+            <label>End Date</label>
+            <input type="date" id="endDate">
+          </div>
+          <div class="field">
+            <label>Category</label>
+            <select id="category">
+              <option value="">Select Category</option>
+              <option>Muzik & Konsert</option>
+              <option>Sukan & Outdoor</option>
+              <option>Budaya & Agama</option>
+              <option>Teknologi & Perniagaan</option>
+              <option>Gaya Hidup</option>
+              <option>Local</option>
+              <option>Cuti Sekolah</option>
+              <option>Musim</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Season</label>
+            <select id="seasonId">
+              <option value="">No Season</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Negeri</label>
+            <select id="negeri">
+              <option value="">Pilih Negeri</option>
+              <option>Johor</option>
+              <option>Kedah</option>
+              <option>Kelantan</option>
+              <option>Melaka</option>
+              <option>Negeri Sembilan</option>
+              <option>Pahang</option>
+              <option>Perak</option>
+              <option>Perlis</option>
+              <option>Pulau Pinang</option>
+              <option>Sabah</option>
+              <option>Sarawak</option>
+              <option>Selangor</option>
+              <option>Terengganu</option>
+              <option>Kuala Lumpur</option>
+              <option>Putrajaya</option>
+              <option>Labuan</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Location / Venue</label>
+            <input type="text" id="location" placeholder="Example: Bukit Jalil">
+            <small>Contoh venue spesifik. Negeri pilih di atas.</small>
+          </div>
+          <div class="field full">
+            <label>Short Description</label>
+            <textarea id="shortDescription" style="min-height:75px" placeholder="Short summary shown on the event card..."></textarea>
+          </div>
+        </div>
       </div>
 
-      <div class="calendar-grid" id="calendarGrid">
-        <div class="loading" style="grid-column:1/-1">Memuatkan kalendar...</div>
+      <div class="form-section">
+        <div class="section-title">Details</div>
+        <div class="field">
+          <label>Image URLs (Google Drive)</label>
+          <textarea id="imageUrl" style="min-height:110px" placeholder="https://drive.google.com/file/d/ABC1/view
+https://drive.google.com/file/d/ABC2/view
+
+Pisah setiap URL dengan | (pipe) atau baris baru."></textarea>
+          <small>💡 Tip: Pisah dengan <code>|</code> atau baris baru. Max 7 gambar.</small>
+        </div>
+        <div class="field">
+          <label>Full Description</label>
+          <textarea id="description" placeholder="Full event description..."></textarea>
+        </div>
+        <div class="field">
+          <label>Official Link</label>
+          <input type="url" id="officialLink" placeholder="https://...">
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Status</label>
+            <select id="status">
+              <option value="Draft">Draft</option>
+              <option value="Published">Published</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-title">Affiliate Links</div>
+        <div id="linkList" class="link-list">
+          <div class="empty">No affiliate links yet.</div>
+        </div>
+        <button class="add-link" onclick="openLinkModal()">+ Add Affiliate Link</button>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeForm()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveEvent()">Save Event</button>
       </div>
     </div>
   </section>
 
-  <section class="view" id="viewExplore">
-    <h2 class="section-title">Explore</h2>
-    <p class="section-sub">Pilih kategori untuk tapis kalendar.</p>
-    <div class="explore-grid" id="exploreGrid"></div>
-  </section>
+  <!-- ============ SEASONS VIEW ============ -->
+  <section id="seasonsView" style="display:none">
+    <div id="seasonsDashboard" class="dashboard-view">
+      <div class="page-title">
+        <h1>Seasons</h1>
+        <p>Toggle ON bila musim bermula, OFF bila tamat.</p>
+      </div>
 
-  <section class="view" id="viewMusim">
-    <h2 class="section-title">Musim Aktif</h2>
-    <p class="section-sub">Musim yang sedang berlaku di Malaysia.</p>
-    <div id="seasonList">
-      <div class="loading">Memuatkan musim...</div>
+      <div id="seasonList" class="event-list">
+        <div class="empty">Loading seasons...</div>
+      </div>
     </div>
-  </section>
 
-  <section class="view" id="viewMore">
-    <h2 class="section-title">More</h2>
-
-    <div class="more-list">
-      <div class="more-item" onclick="openSavedEvents()">
-        <div class="more-icon">❤️</div>
-        <div class="more-text">
-          <div class="more-text-title">Event Disimpan</div>
-          <div class="more-text-sub" id="savedCountText">0 event</div>
+    <div id="seasonFormView" class="form-view">
+      <div class="form-header">
+        <div class="form-header-left">
+          <button class="back-btn" onclick="closeSeasonForm()">←</button>
+          <h2 id="seasonFormTitle">Add Season</h2>
         </div>
-        <div class="more-chev">›</div>
+        <div class="form-header-right">
+          <button class="btn btn-primary" onclick="saveSeason()">Save</button>
+        </div>
       </div>
 
-      <div class="more-item" onclick="showAbout()">
-        <div class="more-icon">ℹ️</div>
-        <div class="more-text">
-          <div class="more-text-title">Tentang Musim Lab</div>
-          <div class="more-text-sub">Apa itu Musim Lab?</div>
+      <div class="form-section">
+        <div class="section-title">Season Information</div>
+        <div class="field">
+          <label>Season Name</label>
+          <input type="text" id="seasonName" placeholder="Example: Musim Hujan">
         </div>
-        <div class="more-chev">›</div>
+        <div class="field">
+          <label>Sinopsis</label>
+          <textarea id="seasonDescription" style="min-height:140px" placeholder="Tulis penerangan musim di sini..."></textarea>
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="seasonStatus">
+            <option value="Active">Active (ON — dipaparkan di index)</option>
+            <option value="Inactive">Inactive (OFF — disembunyikan)</option>
+          </select>
+        </div>
       </div>
 
-      <div class="more-item" onclick="showToast('Brochure akan datang!')">
-        <div class="more-icon">📄</div>
-        <div class="more-text">
-          <div class="more-text-title">Download Brochure</div>
-          <div class="more-text-sub">Panduan musim (akan datang)</div>
+      <div class="form-section">
+        <div class="section-title">Icon & Color</div>
+
+        <div class="field">
+          <label>Icon</label>
+          <div class="icon-grid" id="iconGrid"></div>
         </div>
-        <div class="more-chev">›</div>
+
+        <div class="field">
+          <label>Color</label>
+          <div class="color-grid" id="colorGrid"></div>
+        </div>
+
+        <div class="preview-row">
+          <div class="preview-icon" id="previewIcon" style="background:#6366f1">🌧️</div>
+          <div>
+            <div style="font-size:13px;font-weight:700">Preview</div>
+            <div style="font-size:11px;color:#6b7280;margin-top:2px">Macam mana card nampak di index.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="more-item" onclick="showAbout()">
-        <div class="more-icon">🛍️</div>
-        <div class="more-text">
-          <div class="more-text-title">Affiliate Disclosure</div>
-          <div class="more-text-sub">Kami mungkin dapat komisen</div>
+      <div class="form-section">
+        <div class="section-title">Affiliate Links</div>
+        <div id="seasonLinkList" class="link-list">
+          <div class="empty">No affiliate links yet.</div>
         </div>
-        <div class="more-chev">›</div>
+        <button class="add-link" onclick="openSeasonLinkModal()">+ Add Affiliate Link</button>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeSeasonForm()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveSeason()">Save Season</button>
       </div>
     </div>
   </section>
 
 </main>
 
-<div class="sheet-overlay" id="sheetOverlay"></div>
-
-<!-- SHEET: DATE EVENTS -->
-<div class="bottom-sheet" id="dateSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-scroll">
-    <div class="sheet-heading" id="dateSheetTitle">15 Januari 2026</div>
-    <div class="sheet-heading-sub" id="dateSheetSub">0 event</div>
-    <div id="dateSheetContent"></div>
-  </div>
-  <div class="sheet-bottom">
-    <button class="sheet-close" onclick="closeSheet('dateSheet')">✕ Tutup</button>
-  </div>
-</div>
-
-<!-- SHEET: EVENT DETAIL -->
-<div class="bottom-sheet" id="detailSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-scroll" id="detailSheetContent"></div>
-  <div class="sheet-bottom">
-    <button class="sheet-close" onclick="closeSheet('detailSheet')">✕ Tutup</button>
+<!-- LINK MODAL -->
+<div id="linkModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="linkModalTitle">Add Affiliate Link</h3>
+      <button class="close" onclick="closeLinkModal()">×</button>
+    </div>
+    <div class="field">
+      <label>Name</label>
+      <input id="linkTitle" placeholder="Example: Raincoat Lelaki">
+    </div>
+    <div class="field">
+      <label>Penerangan / Link</label>
+      <textarea id="linkUrl" style="min-height:110px" placeholder="Tulis penerangan produk dan letakkan link affiliate di sini..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeLinkModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLink()">Save Link</button>
+    </div>
   </div>
 </div>
 
-<!-- SHEET: SEASON DETAIL -->
-<div class="bottom-sheet" id="seasonSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-scroll" id="seasonSheetContent"></div>
-  <div class="sheet-bottom">
-    <button class="sheet-close" onclick="closeSheet('seasonSheet')">✕ Tutup</button>
-  </div>
-</div>
-
-<nav class="bottom-nav">
-  <div class="nav-inner">
-    <button class="nav-button active" data-tab="calendar">
-      <span class="nav-icon">📅</span>
-      <span class="nav-label">Calendar</span>
-    </button>
-    <button class="nav-button" data-tab="explore">
-      <span class="nav-icon">🔍</span>
-      <span class="nav-label">Explore</span>
-    </button>
-    <button class="nav-button" data-tab="musim">
-      <span class="nav-icon">🌧️</span>
-      <span class="nav-label">Musim</span>
-    </button>
-    <button class="nav-button" data-tab="more">
-      <span class="nav-icon">⋯</span>
-      <span class="nav-label">More</span>
-    </button>
-  </div>
-</nav>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lightboxImg" src="" alt="">
-</div>
-
-<div class="toast" id="toast"></div>
+<div id="message" class="message"></div>
 
 <script>
-/* =====================================================
-   MUSIM LAB — INDEX v5 (Hybrid Design)
-===================================================== */
-
-const API_URL = "https://script.google.com/macros/s/AKfycbxyvyOYNCWWQcqcPOuceNHEzSBCWn7BaSFCC_gyFFnRaCkQAKIHYDhB_30db1qmmi85/exec";
+/*************************************************
+ * CONFIG
+ *************************************************/
+const API_URL = "https://script.google.com/macros/s/AKfycbwMD2R7T8HmE-0O4pihjEckJvCQ-UQPtT_vdWVXIThiuy_NrSNLrgZa31K_eM6AbMbN/exec";
 const API_TOKEN = "ml-2025-a7b3c9d1e5f6";
-const HOLIDAY_URL = "public-holidayMalaysia.json";
 
-let allEvents = [];
-let allSeasons = [];
-let holidayData = [];
-let currentDate = new Date();
-let selectedDate = null;
-let selectedEvent = null;
-let activeCategory = "ALL";
-let savedIds = JSON.parse(localStorage.getItem("ml_saved") || "[]");
+/*************************************************
+ * PRESETS
+ *************************************************/
+const ICON_PRESETS = ["🌧️","☀️","🎉","🎒","🌸","🍂","⛅","🌊","🏖️","⛄","🌪️","🍁"];
 
-const monthNames = ["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
-const monthShort = ["JAN","FEB","MAC","APR","MEI","JUN","JUL","OGO","SEP","OKT","NOV","DIS"];
-const dayNames = ["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"];
-
-/* ============ CATEGORIES + COLORS ============ */
-const CATEGORIES = [
-  { name: "Muzik & Konsert", icon: "🎵", color: "#8b5cf6" },
-  { name: "Sukan & Outdoor", icon: "⚽", color: "#f59e0b" },
-  { name: "Budaya & Agama", icon: "🕌", color: "#10b981" },
-  { name: "Teknologi & Perniagaan", icon: "💼", color: "#3b82f6" },
-  { name: "Gaya Hidup", icon: "✨", color: "#f43f5e" },
-  { name: "Local", icon: "🏘️", color: "#a16207" },
-  { name: "Cuti Sekolah", icon: "🎒", color: "#06b6d4" },
-  { name: "Musim", icon: "🌦️", color: "#6366f1" }
+const COLOR_PRESETS = [
+  { name: "Biru",    hex: "#3b82f6" },
+  { name: "Ungu",    hex: "#8b5cf6" },
+  { name: "Hijau",   hex: "#10b981" },
+  { name: "Kuning",  hex: "#f59e0b" },
+  { name: "Oren",    hex: "#f97316" },
+  { name: "Merah",   hex: "#ef4444" },
+  { name: "Pink",    hex: "#ec4899" },
+  { name: "Cyan",    hex: "#06b6d4" },
+  { name: "Coklat",  hex: "#a16207" },
+  { name: "Slate",   hex: "#64748b" },
+  { name: "Teal",    hex: "#14b8a6" },
+  { name: "Hitam",   hex: "#171717" }
 ];
 
-/* ============ HELPERS ============ */
-function normalise(v){return String(v||"").trim().toLowerCase()}
-function $(id){return document.getElementById(id)}
+/*************************************************
+ * AUTO-MATCH NEGERI dari Location
+ *************************************************/
+const NEGERI_KEYWORDS = {
+  "Kuala Lumpur": ["kuala lumpur","kl","bukit jalil","klcc","cheras","kepong","wangsa maju","setapak","ampang"],
+  "Selangor": ["selangor","shah alam","petaling jaya","pj","subang","klang","kajang","puchong","cyberjaya","putrajaya","bangi","semenyih","sepang"],
+  "Pulau Pinang": ["pulau pinang","penang","george town","bayan lepas","butterworth","bukit mertajam"],
+  "Johor": ["johor","jb","johor bahru","iskandar","batu pahat","muar","kluang","kulai","pontian"],
+  "Kedah": ["kedah","alor setar","sungai petani","langkawi","kulim"],
+  "Kelantan": ["kelantan","kota bharu","kubang kerian","tumpat"],
+  "Melaka": ["melaka","malacca","ayer keroh","klebang"],
+  "Negeri Sembilan": ["negeri sembilan","seremban","nilai","port dickson","pd","bahau"],
+  "Pahang": ["pahang","kuantan","temerloh","bentong","cameron highland","genting","bukit tinggi"],
+  "Perak": ["perak","ipoh","taiping","teluk intan","kuala kangsar"],
+  "Perlis": ["perlis","kangar","arau"],
+  "Sabah": ["sabah","kota kinabalu","kk","sandakan","tawau","kudat","lahad datu"],
+  "Sarawak": ["sarawak","kuching","miri","sibu","bintulu","kota samarahan"],
+  "Terengganu": ["terengganu","kuala terengganu","kt","kemaman","dungun"],
+  "Putrajaya": ["putrajaya"],
+  "Labuan": ["labuan"]
+};
 
-function getCatInfo(cat){
-  const c = CATEGORIES.find(x => normalise(x.name) === normalise(cat));
-  return c || { name: cat || "Lain-lain", icon: "📍", color: "#8b5e3c" };
-}
+function autoMatchNegeri(location, currentNegeri){
+  // Kalau dah ada negeri, tak payah auto
+  if(currentNegeri && currentNegeri.trim()) return currentNegeri;
+  if(!location) return "";
 
-function parseDate(value){
-  if(!value) return null;
-  if(value instanceof Date) return new Date(value.getFullYear(),value.getMonth(),value.getDate());
-  const text = String(value).trim();
-  let m = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-  if(m) return new Date(+m[3],+m[2]-1,+m[1]);
-  m = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-  if(m) return new Date(+m[1],+m[2]-1,+m[3]);
-  const d = new Date(text);
-  if(!isNaN(d)) return new Date(d.getFullYear(),d.getMonth(),d.getDate());
-  return null;
-}
-function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
-function sameDate(a,b){return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
-function formatDate(d){
-  if(!d) return "";
-  return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-/* ============ GOOGLE DRIVE URL CONVERTER ============ */
-function driveToDirect(url){
-  if(!url) return "";
-  url = String(url).trim();
-  if(url.includes("lh3.googleusercontent.com")) return url;
-  if(url.includes("drive.google.com/thumbnail")) return url;
-
-  let id = null, m;
-  if((m = url.match(/\/file\/d\/([^\/\?]+)/))) id = m[1];
-  else if((m = url.match(/[?&]id=([^&]+)/))) id = m[1];
-  else if((m = url.match(/\/d\/([^\/\?]+)/))) id = m[1];
-
-  if(id) return `https://lh3.googleusercontent.com/d/${id}=w1200`;
-  return url;
-}
-
-function parseImages(raw){
-  if(!raw) return [];
-  return String(raw).split("|").map(s => s.trim()).filter(Boolean).map(driveToDirect);
-}
-
-/* ============ EVENT GETTERS ============ */
-function getEventStart(e){return parseDate(e["Start Date"]||e.startDate)}
-function getEventEnd(e){return parseDate(e["End Date"]||e.endDate)}
-function getEventCat(e){return String(e["Category"]||e.category||"").trim()}
-function getEventName(e){return String(e["Event Name"]||e.eventName||"Event").trim()}
-function getEventLoc(e){return String(e["Location"]||e.location||"").trim()}
-function getEventDesc(e){return String(e["Description"]||e.description||"").trim()}
-function getEventShort(e){return String(e["Short Description"]||e.shortDescription||"").trim()}
-function getEventImg(e){return String(e["Image URL"]||e.imageUrl||"").trim()}
-function getEventLink(e){return String(e["Official Link"]||e.officialLink||"").trim()}
-function getEventId(e){return String(e["Event ID"]||e.eventId||"").trim()}
-
-function eventMatchesFilter(e){
-  if(activeCategory === "ALL") return true;
-  return normalise(getEventCat(e)) === normalise(activeCategory);
-}
-
-function getEventsForDate(date){
-  const target = new Date(date.getFullYear(),date.getMonth(),date.getDate());
-  return allEvents.filter(e => {
-    if(!eventMatchesFilter(e)) return false;
-    // NO status filter — tunjuk semua
-    let s = getEventStart(e), en = getEventEnd(e);
-    if(!s) return false;
-    if(!en) en = s;
-    if(en < s){const t=s;s=en;en=t;}
-    return target >= s && target <= en;
-  });
-}
-
-function getHolidayForDate(date){
-  if(!Array.isArray(holidayData)) return [];
-  const target = dateKey(date);
-  return holidayData.filter(h => {
-    if(!h) return false;
-    const s = parseDate(h.start);
-    const en = parseDate(h.end || h.start);
-    if(!s) return false;
-    const fe = en || s;
-    return target >= dateKey(s) && target <= dateKey(fe);
-  });
-}
-
-/* ============ TOAST ============ */
-let toastTimer = null;
-function showToast(msg){
-  const t = $("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove("show"), 2400);
-}
-
-/* ============ TABS ============ */
-document.querySelectorAll(".nav-button").forEach(btn => {
-  btn.addEventListener("click", () => switchTab(btn.dataset.tab));
-});
-
-function switchTab(tab){
-  document.querySelectorAll(".nav-button").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
-  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-  const map = {calendar:"viewCalendar",explore:"viewExplore",musim:"viewMusim",more:"viewMore"};
-  $(map[tab]).classList.add("active");
-  window.scrollTo({top:0,behavior:"smooth"});
-  if(tab === "explore") renderExplore();
-  if(tab === "musim") renderSeasons();
-  if(tab === "more") updateSavedCount();
-}
-
-/* ============ RENDER CALENDAR ============ */
-function renderCalendar(){
-  const grid = $("calendarGrid");
-  grid.innerHTML = "";
-
-  const y = currentDate.getFullYear();
-  const m = currentDate.getMonth();
-  $("monthName").textContent = `${monthNames[m]} ${y}`;
-
-  const first = new Date(y,m,1);
-  const offset = (first.getDay() + 6) % 7;
-  const days = new Date(y,m+1,0).getDate();
-  const today = new Date();
-
-  for(let i=0;i<offset;i++){
-    const b = document.createElement("div");
-    b.className = "day-cell empty";
-    grid.appendChild(b);
-  }
-
-  for(let d=1;d<=days;d++){
-    const date = new Date(y,m,d);
-    const cell = document.createElement("div");
-    cell.className = "day-cell";
-    const dow = date.getDay();
-    if(dow === 0 || dow === 6) cell.classList.add("weekend");
-    if(sameDate(date,today)) cell.classList.add("today");
-    if(selectedDate && sameDate(date,selectedDate)) cell.classList.add("selected");
-
-    const num = document.createElement("div");
-    num.className = "day-number";
-    num.textContent = d;
-    cell.appendChild(num);
-
-    const events = getEventsForDate(date);
-    if(events.length > 0){
-      const dotsWrap = document.createElement("div");
-      dotsWrap.className = "day-dots";
-      // Show up to 3 dots, satu per kategori unik
-      const seenCats = new Set();
-      const dots = [];
-      for(const e of events){
-        const cat = normalise(getEventCat(e));
-        if(seenCats.has(cat)) continue;
-        seenCats.add(cat);
-        dots.push(getCatInfo(getEventCat(e)).color);
-        if(dots.length >= 3) break;
-      }
-      dots.forEach(color => {
-        const dot = document.createElement("span");
-        dot.className = "day-dot";
-        dot.style.background = color;
-        dotsWrap.appendChild(dot);
-      });
-      cell.appendChild(dotsWrap);
+  const loc = String(location).toLowerCase().trim();
+  for(const [negeri, keywords] of Object.entries(NEGERI_KEYWORDS)){
+    for(const kw of keywords){
+      if(loc.includes(kw)) return negeri;
     }
-
-    cell.addEventListener("click", () => selectDate(date));
-    grid.appendChild(cell);
   }
+  return "";
 }
 
-function updateFilterChip(){
-  const chip = $("filterChip");
-  const txt = $("filterChipText");
-  if(activeCategory === "ALL"){
-    chip.classList.remove("show");
-  }else{
-    chip.classList.add("show");
-    txt.textContent = activeCategory;
-  }
+/*************************************************
+ * STATE
+ *************************************************/
+let events = [];
+let seasons = [];
+let currentTab = "events";
+
+let currentEventId = null;
+let tempLinks = [];
+let __currentLinks = [];
+
+let currentSeasonId = null;
+let tempSeasonLinks = [];
+let __currentSeasonLinks = [];
+let editingSeasonLinkId = null;
+
+let editingLinkId = null;
+let linkContext = "event";
+
+let selectedIcon = "🌧️";
+let selectedColor = "#6366f1";
+
+/*************************************************
+ * MESSAGE
+ *************************************************/
+function showMessage(text){
+  const el = document.getElementById("message");
+  el.textContent = text;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2500);
 }
 
-function clearFilter(){
-  activeCategory = "ALL";
-  updateFilterChip();
-  renderCalendar();
-  switchTab("calendar");
+/*************************************************
+ * TABS
+ *************************************************/
+function switchTab(tab){
+  currentTab = tab;
+  document.getElementById("tabEvents").classList.toggle("active", tab === "events");
+  document.getElementById("tabSeasons").classList.toggle("active", tab === "seasons");
+  document.getElementById("eventsView").style.display = tab === "events" ? "block" : "none";
+  document.getElementById("seasonsView").style.display = tab === "seasons" ? "block" : "none";
+  closeForm();
+  closeSeasonForm();
+  updateAddButton();
+  if(tab === "seasons") renderSeasons();
 }
 
-/* ============ SELECT DATE ============ */
-function selectDate(date){
-  selectedDate = date;
-  renderCalendar();
-
-  const events = getEventsForDate(date);
-  const holidays = getHolidayForDate(date);
-
-  $("dateSheetTitle").textContent = `${dayNames[date.getDay()]}, ${formatDate(date)}`;
-  const container = $("dateSheetContent");
-
-  let html = "";
-
-  if(holidays.length > 0){
-    html += `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:12px;margin-bottom:12px;font-size:12px;font-weight:700;color:#92400e">
-      🎉 ${holidays.map(h=>h.name||"Cuti").join(" • ")}
-    </div>`;
-  }
-
-  if(events.length === 0){
-    html += `<div class="empty-state">
-      <div class="emoji">🌿</div>
-      <div class="msg">Takde event</div>
-      <div class="sub">Hari ni tenang je.</div>
-    </div>`;
-    $("dateSheetSub").textContent = "";
-  }else{
-    $("dateSheetSub").textContent = `${events.length} event`;
-    html += events.map(e => {
-      const cat = getEventCat(e);
-      const info = getCatInfo(cat);
-      const id = getEventId(e);
-      const isSaved = savedIds.includes(id);
-      const loc = getEventLoc(e);
-      return `
-        <div class="sheet-event" onclick="openEventDetail('${id}')">
-          <div class="sheet-event-cat">
-            <span class="cat-dot" style="background:${info.color}"></span>
-            <span>${info.icon} ${escapeHtml(cat||"Lain-lain")}</span>
-          </div>
-          <div class="sheet-event-name">${escapeHtml(getEventName(e))}</div>
-          ${loc ? `<div class="sheet-event-meta">📍 ${escapeHtml(loc)}</div>` : ""}
-          <div class="sheet-event-actions" onclick="event.stopPropagation()">
-            <button class="mini-btn ${isSaved?"saved":""}" onclick="toggleSave('${id}', this)">
-              ${isSaved?"✓ Disimpan":"❤ Simpan"}
-            </button>
-          </div>
-        </div>
-      `;
-    }).join("");
-  }
-
-  container.innerHTML = html;
-  openSheet("dateSheet");
+function handleAddClick(){
+  if(currentTab === "events") openAddForm();
+  else openAddSeasonForm();
 }
 
-/* ============ CAROUSEL ============ */
-let carouselState = {};
-
-function buildCarousel(images, icon){
-  if(!images.length){
-    return `<div class="carousel-wrap"><div class="carousel-slide"><div class="carousel-fallback">${icon}</div></div></div>`;
-  }
-
-  const slides = images.map((src, i) => `
-    <div class="carousel-slide">
-      <img src="${escapeHtml(src)}" alt="" loading="${i===0?"eager":"lazy"}"
-           onclick="openLightbox('${escapeHtml(src)}')"
-           onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'carousel-fallback\\'>${icon}</div>'">
-    </div>
-  `).join("");
-
-  const dots = images.length > 1
-    ? `<div class="carousel-dots" id="carouselDots">${images.map((_,i)=>`<div class="carousel-dot ${i===0?"active":""}"></div>`).join("")}</div>`
-    : "";
-
-  return `
-    <div class="carousel-wrap">
-      <div class="carousel-track" id="carouselTrack">${slides}</div>
-      ${dots}
-    </div>
-  `;
+function updateAddButton(){
+  const btn = document.getElementById("addBtn");
+  btn.textContent = currentTab === "events" ? "+ Add Event" : "+ Add Season";
 }
 
-function attachCarouselScroll(){
-  const track = $("carouselTrack");
-  if(!track) return;
-  const dots = document.querySelectorAll("#carouselDots .carousel-dot");
-  if(!dots.length) return;
-
-  track.addEventListener("scroll", () => {
-    const idx = Math.round(track.scrollLeft / track.clientWidth);
-    dots.forEach((d,i) => d.classList.toggle("active", i === idx));
-  }, {passive:true});
+/*************************************************
+ * API
+ *************************************************/
+async function apiGet(params){
+  const query = new URLSearchParams({ ...params, token: API_TOKEN, t: Date.now() });
+  const response = await fetch(API_URL + "?" + query.toString());
+  return response.json();
 }
 
-function openLightbox(src){
-  $("lightboxImg").src = src;
-  $("lightbox").classList.add("open");
-  document.body.classList.add("no-scroll");
-}
-function closeLightbox(){
-  $("lightbox").classList.remove("open");
-  $("lightboxImg").src = "";
-  document.body.classList.remove("no-scroll");
+async function apiPost(action, data){
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ token: API_TOKEN, action, data })
+  });
+  return response.json();
 }
 
-/* ============ EVENT DETAIL ============ */
-function openEventDetail(id){
-  const e = allEvents.find(x => getEventId(x) === id);
-  if(!e) return;
-  selectedEvent = e;
-
-  const cat = getEventCat(e);
-  const info = getCatInfo(cat);
-  const start = getEventStart(e);
-  const end = getEventEnd(e);
-  const loc = getEventLoc(e);
-  const link = getEventLink(e);
-  const syn = getEventShort(e) || getEventDesc(e);
-  const fullDesc = getEventDesc(e);
-  const isSaved = savedIds.includes(id);
-  const images = parseImages(getEventImg(e));
-
-  // Big date
-  const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
-  const bigMonth = start ? monthShort[start.getMonth()] : "";
-  const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
-
-  // End date note
-  let endNote = "";
-  if(end && start && !sameDate(start,end)){
-    endNote = ` • hingga ${formatDate(end)}`;
-  }
-
-  const carouselHtml = buildCarousel(images, info.icon);
-
-  let html = `
-    ${carouselHtml}
-
-    <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
-      <span class="cat-dot" style="background:${info.color}"></span>
-      ${info.icon} ${escapeHtml(cat||"Lain-lain")}
-    </div>
-
-    <div class="big-date-block">
-      <div class="big-date-day">${bigDay}</div>
-      <div class="big-date-month">${bigMonth}</div>
-    </div>
-    <div class="big-date-sub">${bigSub}${endNote}</div>
-
-    <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
-    ${loc ? `<div class="detail-meta">📍 ${escapeHtml(loc)}</div>` : ""}
-    <div class="detail-synopsis">${escapeHtml(syn)}</div>
-
-    <div class="detail-actions">
-      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this)">
-        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
-      </button>
-      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
-    </div>
-  `;
-
-  if(fullDesc && fullDesc !== syn){
-    html += `<button class="action-btn primary full" style="margin-bottom:10px" onclick="openFullDetail('${id}')">📖 Baca Penuh</button>`;
-  }
-
-  if(link){
-    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn link full" style="margin-bottom:10px">🔗 Official Website</a>`;
-  }
-
-  html += `<div id="affiliateContainer_${id}"></div>`;
-
-  $("detailSheetContent").innerHTML = html;
-  openSheet("detailSheet");
-  attachCarouselScroll();
-  loadAffiliates(id, "affiliateContainer_" + id);
-}
-
-function openFullDetail(id){
-  const e = allEvents.find(x => getEventId(x) === id);
-  if(!e) return;
-
-  const cat = getEventCat(e);
-  const info = getCatInfo(cat);
-  const start = getEventStart(e);
-  const loc = getEventLoc(e);
-  const link = getEventLink(e);
-  const fullDesc = getEventDesc(e);
-  const isSaved = savedIds.includes(id);
-
-  const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
-  const bigMonth = start ? monthShort[start.getMonth()] : "";
-  const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
-
-  let html = `
-    <div style="display:flex;justify-content:flex-start;margin-bottom:12px">
-      <button class="mini-btn" onclick="openEventDetail('${id}')">← Kembali</button>
-    </div>
-
-    <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
-      <span class="cat-dot" style="background:${info.color}"></span>
-      ${info.icon} ${escapeHtml(cat||"Lain-lain")}
-    </div>
-
-    <div class="big-date-block">
-      <div class="big-date-day">${bigDay}</div>
-      <div class="big-date-month">${bigMonth}</div>
-    </div>
-    <div class="big-date-sub">${bigSub}</div>
-
-    <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
-    ${loc ? `<div class="detail-meta">📍 ${escapeHtml(loc)}</div>` : ""}
-    <div class="detail-synopsis">${escapeHtml(fullDesc)}</div>
-
-    <div class="detail-actions">
-      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this)">
-        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
-      </button>
-      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
-    </div>
-  `;
-
-  if(link){
-    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn link full" style="margin-bottom:10px">🔗 Official Website</a>`;
-  }
-
-  html += `<div id="affiliateFull_${id}"></div>`;
-
-  $("detailSheetContent").innerHTML = html;
-  $("detailSheet").querySelector(".sheet-scroll").scrollTop = 0;
-  loadAffiliates(id, "affiliateFull_" + id);
-}
-
-/* ============ AFFILIATE LOADER ============ */
-async function loadAffiliates(eventId, containerId){
-  const container = $(containerId);
-  if(!container) return;
+/*************************************************
+ * LOAD
+ *************************************************/
+async function loadEvents(){
   try{
-    const r = await fetch(`${API_URL}?action=getLinks&eventId=${encodeURIComponent(eventId)}&token=${API_TOKEN}&t=${Date.now()}`);
-    const res = await r.json();
-    const items = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    if(!items.length) return;
-
-    container.innerHTML = `
-      <div class="affiliate-section">
-        <div class="affiliate-title">🛍️ Persediaan & Beli</div>
-        ${items.map(it => {
-          const title = it.Title || "";
-          const body = it.URL || "";
-          // Cari URL dalam body
-          const urlMatch = body.match(/https?:\/\/[^\s]+/);
-          const url = urlMatch ? urlMatch[0] : "";
-          const desc = url ? body.replace(url, "").trim() : body;
-          return `
-            <div class="affiliate-card">
-              <div class="affiliate-card-head">
-                <div class="affiliate-name">${escapeHtml(title)}</div>
-              </div>
-              ${desc ? `<div class="affiliate-desc">${escapeHtml(desc)}</div>` : ""}
-              ${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="affiliate-buy">🛒 Beli Sekarang →</a>` : ""}
-            </div>
-          `;
-        }).join("")}
-      </div>
-    `;
-  }catch(e){console.error("affiliate err", e)}
-}
-
-/* ============ SAVE EVENT ============ */
-function toggleSave(id, btn){
-  const idx = savedIds.indexOf(id);
-  if(idx >= 0){
-    savedIds.splice(idx,1);
-    showToast("Dibuang dari simpanan");
-  }else{
-    savedIds.push(id);
-    showToast("❤ Disimpan!");
+    const result = await apiGet({ action: "getEvents" });
+    events = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+    renderEvents();
+  }catch(error){
+    console.error(error);
+    document.getElementById("eventList").innerHTML = `<div class="empty">Failed to load events.</div>`;
   }
-  localStorage.setItem("ml_saved", JSON.stringify(savedIds));
-
-  if(btn){
-    const isSaved = savedIds.includes(id);
-    btn.classList.toggle("saved", isSaved);
-    btn.classList.toggle("success", isSaved);
-    btn.innerHTML = isSaved ? "✓ Disimpan" : "❤ Simpan";
-  }
-  updateSavedCount();
 }
 
-/* ============ REMINDER (.ics) ============ */
-function downloadICS(id){
-  const e = allEvents.find(x => getEventId(x) === id);
-  if(!e) return;
-  const start = getEventStart(e);
-  if(!start){showToast("Tarikh tak dijumpai");return;}
-  const end = getEventEnd(e) || start;
-
-  function fmt(d){
-    return d.getFullYear() + String(d.getMonth()+1).padStart(2,"0") + String(d.getDate()).padStart(2,"0");
-  }
-
-  const title = getEventName(e);
-  const desc = (getEventShort(e) || getEventDesc(e)).replace(/\n/g,"\\n");
-  const loc = getEventLoc(e);
-
-  const ics = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Musim Lab//EN",
-    "BEGIN:VEVENT",
-    `UID:${id}@musimlab`,
-    `DTSTAMP:${fmt(new Date())}T000000Z`,
-    `DTSTART;VALUE=DATE:${fmt(start)}`,
-    `DTEND;VALUE=DATE:${fmt(new Date(end.getTime()+86400000))}`,
-    `SUMMARY:${title}`,
-    desc ? `DESCRIPTION:${desc}` : "",
-    loc ? `LOCATION:${loc}` : "",
-    "BEGIN:VALARM",
-    "TRIGGER:-P1D",
-    "ACTION:DISPLAY",
-    "DESCRIPTION:Esok: " + title,
-    "END:VALARM",
-    "END:VEVENT",
-    "END:VCALENDAR"
-  ].filter(Boolean).join("\r\n");
-
-  const blob = new Blob([ics], {type:"text/calendar"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = title.replace(/[^a-z0-9]/gi,"_") + ".ics";
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast("🔔 Fail kalendar dimuat turun");
-}
-
-/* ============ EXPLORE ============ */
-function renderExplore(){
-  const grid = $("exploreGrid");
-  grid.innerHTML = CATEGORIES.map(c => {
-    const count = allEvents.filter(e => normalise(getEventCat(e)) === normalise(c.name)).length;
-    return `
-      <button class="explore-card" onclick="pickCategory('${escapeHtml(c.name)}')">
-        <div class="explore-icon">${c.icon}</div>
-        <div class="explore-name">${escapeHtml(c.name)}</div>
-        <div class="explore-count">${count} event</div>
-      </button>
-    `;
-  }).join("");
-}
-
-function pickCategory(cat){
-  activeCategory = cat;
-  updateFilterChip();
-  renderCalendar();
-  switchTab("calendar");
-}
-
-/* ============ MUSIM ============ */
 async function loadSeasons(){
   try{
-    const r = await fetch(`${API_URL}?action=getSeasons&token=${API_TOKEN}&t=${Date.now()}`);
-    const res = await r.json();
-    allSeasons = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    const result = await apiGet({ action: "getSeasons" });
+    seasons = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+    populateSeasonDropdown();
     renderSeasons();
-  }catch(e){
-    console.error("seasons err", e);
-    $("seasonList").innerHTML = `<div class="empty-state"><div class="emoji">🌧️</div><div class="msg">Tak dapat muat musim</div></div>`;
-  }
+  }catch(error){console.error(error)}
 }
 
-function renderSeasons(){
-  const list = $("seasonList");
-  const active = allSeasons.filter(s => String(s.Status||"").toLowerCase() === "active");
+function populateSeasonDropdown(){
+  const select = document.getElementById("seasonId");
+  const filter = document.getElementById("seasonFilter");
+  select.innerHTML = `<option value="">No Season</option>`;
+  filter.innerHTML = `<option value="">All Seasons</option>`;
 
-  if(!active.length){
-    list.innerHTML = `<div class="empty-state"><div class="emoji">🌤️</div><div class="msg">Takde musim aktif</div><div class="sub">Check balik nanti!</div></div>`;
+  seasons.filter(s => String(s.Status || "").toLowerCase() === "active").forEach(season => {
+    const opt = document.createElement("option");
+    opt.value = season["Season ID"];
+    opt.textContent = season["Season Name"];
+    select.appendChild(opt);
+  });
+
+  seasons.forEach(season => {
+    const opt = document.createElement("option");
+    opt.value = season["Season ID"];
+    opt.textContent = season["Season Name"];
+    filter.appendChild(opt);
+  });
+}
+
+/*************************************************
+ * RENDER EVENTS
+ *************************************************/
+function renderEvents(){
+  const list = document.getElementById("eventList");
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const status = document.getElementById("statusFilter").value;
+  const season = document.getElementById("seasonFilter").value;
+
+  const filtered = events.filter(event => {
+    const name = String(event["Event Name"] || "").toLowerCase();
+    const location = String(event["Location"] || "").toLowerCase();
+    const matchSearch = name.includes(search) || location.includes(search);
+    const matchStatus = !status || String(event["Status"]) === status;
+    const matchSeason = !season || String(event["Season ID"]) === season;
+    return matchSearch && matchStatus && matchSeason;
+  });
+
+  if(!filtered.length){
+    list.innerHTML = `<div class="empty">No events found.</div>`;
     return;
   }
 
-  list.innerHTML = active.map(s => {
-    const id = s["Season ID"];
+  list.innerHTML = filtered.map(event => {
+    const seasonName = getSeasonName(event["Season ID"]);
+    const statusBadge = String(event["Status"]) === "Published"
+      ? `<span class="badge badge-status">Published</span>`
+      : `<span class="badge badge-draft">Draft</span>`;
+    const seasonBadge = seasonName ? `<span class="badge badge-season">${escapeHtml(seasonName)}</span>` : "";
+    const negeriBadge = event["Negeri"] ? `<span class="badge badge-negeri">📍 ${escapeHtml(event["Negeri"])}</span>` : "";
+
     return `
-      <div class="season-card" onclick="openSeasonDetail('${id}')">
-        <div class="season-name">
-          🌧️ ${escapeHtml(s["Season Name"]||"")}
-          <span class="season-badge">Aktif</span>
+      <div class="event-card">
+        <div class="event-main">
+          <div class="event-name">${escapeHtml(event["Event Name"] || "")}</div>
+          <div class="event-meta">
+            <span class="badge">${formatDate(event["Start Date"])}</span>
+            <span class="badge">${escapeHtml(event["Category"] || "")}</span>
+            ${negeriBadge}
+            ${statusBadge}
+            ${seasonBadge}
+          </div>
+          <div class="short-description">
+            ${escapeHtml(event["Short Description"] || event["Description"] || "No description.")}
+          </div>
         </div>
-        <div class="season-synopsis">${escapeHtml(s["Description"]||"")}</div>
-        <div class="season-cta">Baca penuh →</div>
+        <div class="event-actions">
+          <button class="btn btn-secondary btn-small" onclick="editEvent('${event["Event ID"]}')">Edit</button>
+          <button class="btn btn-danger btn-small" onclick="deleteEvent('${event["Event ID"]}')">Delete</button>
+        </div>
       </div>
     `;
   }).join("");
 }
 
-function openSeasonDetail(id){
-  const s = allSeasons.find(x => String(x["Season ID"]) === id);
-  if(!s) return;
-
-  let html = `
-    <div class="detail-hero-fallback" style="width:100%;height:140px;border-radius:16px;background:linear-gradient(135deg,#e0e7ff,#c7d2fe);display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:16px">🌧️</div>
-    <h2 class="detail-title">${escapeHtml(s["Season Name"]||"")}</h2>
-    <div class="detail-meta">Musim aktif</div>
-    <div class="detail-synopsis" style="white-space:pre-line">${escapeHtml(s["Description"]||"")}</div>
-    <div id="seasonAffiliateContainer"></div>
-  `;
-
-  $("seasonSheetContent").innerHTML = html;
-  openSheet("seasonSheet");
-  loadAffiliates(id, "seasonAffiliateContainer");
-}
-
-/* ============ SHEET CONTROL ============ */
-let openSheetId = null;
-function openSheet(id){
-  if(openSheetId && openSheetId !== id) closeSheet(openSheetId);
-  openSheetId = id;
-  $("sheetOverlay").classList.add("open");
-  $(id).classList.add("open");
-  document.body.classList.add("no-scroll");
-  $(id).querySelector(".sheet-scroll").scrollTop = 0;
-}
-
-function closeSheet(id){
-  if(id) $(id).classList.remove("open");
-  else{
-    document.querySelectorAll(".bottom-sheet").forEach(s => s.classList.remove("open"));
+/*************************************************
+ * RENDER SEASONS
+ *************************************************/
+function renderSeasons(){
+  const list = document.getElementById("seasonList");
+  if(!list) return;
+  if(!seasons.length){
+    list.innerHTML = `<div class="empty">No seasons yet. Klik "+ Add Season" untuk mula.</div>`;
+    return;
   }
-  if(!document.querySelector(".bottom-sheet.open")){
-    $("sheetOverlay").classList.remove("open");
-    document.body.classList.remove("no-scroll");
-    openSheetId = null;
-  }
-}
 
-$("sheetOverlay").addEventListener("click", () => closeSheet());
+  list.innerHTML = seasons.map(season => {
+    const id = season["Season ID"];
+    const isActive = String(season.Status || "").toLowerCase() === "active";
+    const desc = season["Description"] || "";
+    const preview = desc.length > 150 ? desc.slice(0, 150) + "..." : desc;
+    const icon = season["Icon"] || "🌧️";
+    const color = season["Color"] || "#6366f1";
 
-// Swipe down to close
-document.querySelectorAll(".bottom-sheet").forEach(sheet => {
-  let startY = 0, curY = 0, dragging = false;
-  const scroll = sheet.querySelector(".sheet-scroll");
-  sheet.addEventListener("touchstart", e => {
-    if(scroll && scroll.scrollTop > 0) return;
-    startY = e.touches[0].clientY;
-    dragging = true;
-  }, {passive:true});
-  sheet.addEventListener("touchmove", e => {
-    if(!dragging) return;
-    if(scroll && scroll.scrollTop > 0){dragging=false;return;}
-    curY = e.touches[0].clientY - startY;
-    if(curY > 0){
-      sheet.style.transition = "none";
-      sheet.style.transform = `translateY(${curY}px)`;
-    }
-  }, {passive:true});
-  sheet.addEventListener("touchend", () => {
-    if(!dragging) return;
-    dragging = false;
-    sheet.style.transition = "";
-    sheet.style.transform = "";
-    if(curY > 100) closeSheet(sheet.id);
-    curY = 0;
-  });
-});
-
-/* ============ MONTH NAV ============ */
-$("prevMonth").addEventListener("click", () => {
-  currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 1);
-  renderCalendar();
-});
-$("nextMonth").addEventListener("click", () => {
-  currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 1);
-  renderCalendar();
-});
-
-/* ============ SWIPE CALENDAR ============ */
-(function(){
-  const card = $("calendarCard");
-  let sx=0, sy=0;
-  card.addEventListener("touchstart", e => {
-    sx = e.touches[0].clientX;
-    sy = e.touches[0].clientY;
-  }, {passive:true});
-  card.addEventListener("touchend", e => {
-    const dx = e.changedTouches[0].clientX - sx;
-    const dy = e.changedTouches[0].clientY - sy;
-    if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)*1.5){
-      if(dx < 0) currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 1);
-      else currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 1);
-      renderCalendar();
-    }
-  }, {passive:true});
-})();
-
-/* ============ TODAY ============ */
-$("todayBtn").addEventListener("click", () => {
-  currentDate = new Date();
-  renderCalendar();
-  switchTab("calendar");
-  setTimeout(() => selectDate(new Date()), 100);
-});
-
-/* ============ SAVED EVENTS ============ */
-function openSavedEvents(){
-  const container = $("dateSheetContent");
-  $("dateSheetTitle").textContent = "❤️ Event Disimpan";
-  $("dateSheetSub").textContent = savedIds.length + " event";
-
-  if(!savedIds.length){
-    container.innerHTML = `<div class="empty-state">
-      <div class="emoji">💔</div>
-      <div class="msg">Belum ada simpanan</div>
-      <div class="sub">Tap ❤ pada event untuk simpan.</div>
-    </div>`;
-  }else{
-    const list = savedIds.map(id => allEvents.find(e => getEventId(e) === id)).filter(Boolean);
-    container.innerHTML = list.map(e => {
-      const cat = getEventCat(e);
-      const info = getCatInfo(cat);
-      return `
-        <div class="sheet-event" onclick="closeSheet('dateSheet');switchTab('calendar');setTimeout(()=>openEventDetail('${getEventId(e)}'),250)">
-          <div class="sheet-event-cat">
-            <span class="cat-dot" style="background:${info.color}"></span>
-            <span>${info.icon} ${escapeHtml(cat||"")}</span>
+    return `
+      <div class="season-card ${isActive ? "" : "inactive"}" style="--season-color:${escapeHtml(color)}">
+        <div class="season-left">
+          <div class="season-title">
+            <span class="season-icon" style="background:${escapeHtml(color)}20;color:${escapeHtml(color)}">${escapeHtml(icon)}</span>
+            ${escapeHtml(season["Season Name"] || "")}
+            ${isActive ? `<span class="badge badge-status">Active</span>` : `<span class="badge badge-off">Inactive</span>`}
           </div>
-          <div class="sheet-event-name">${escapeHtml(getEventName(e))}</div>
-          <div class="sheet-event-meta">${formatDate(getEventStart(e))}</div>
+          <div class="season-desc">${escapeHtml(preview) || "<em>Tiada sinopsis.</em>"}</div>
         </div>
-      `;
-    }).join("");
-  }
-  openSheet("dateSheet");
+        <div class="season-right">
+          <label class="switch" title="${isActive ? "Klik untuk OFF" : "Klik untuk ON"}">
+            <input type="checkbox" ${isActive ? "checked" : ""} onchange="toggleSeasonStatus('${id}', this)">
+            <span class="slider"></span>
+          </label>
+          <button class="btn btn-secondary btn-small" onclick="editSeason('${id}')">Edit</button>
+          <button class="btn btn-danger btn-small" onclick="deleteSeason('${id}')">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
-function updateSavedCount(){
-  const el = $("savedCountText");
-  if(el) el.textContent = savedIds.length + " event";
-}
-
-function showAbout(){
-  $("dateSheetTitle").textContent = "Tentang Musim Lab";
-  $("dateSheetSub").textContent = "";
-  $("dateSheetContent").innerHTML = `
-    <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
-      <p style="margin-bottom:12px"><strong>Musim Lab</strong> bantu anda tahu apa yang akan datang di Malaysia — musim, cuti, event — dan bersedia sebelum tiba.</p>
-      <p style="margin-bottom:12px">Kami kumpul info dari pelbagai sumber dan susun dalam satu kalendar mudah.</p>
-      <p style="color:#888;font-size:12px"><strong>Affiliate Disclosure:</strong> Musim Lab mungkin terima komisen dari link affiliate tanpa kos tambahan kepada anda.</p>
-    </div>
-  `;
-  openSheet("dateSheet");
-}
-
-/* ============ ESCAPE ============ */
-function escapeHtml(v){
-  return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-}
-
-/* ============ LOAD ============ */
-async function loadEvents(){
+async function toggleSeasonStatus(seasonId, checkbox){
+  const newState = checkbox.checked;
   try{
-    const r = await fetch(`${API_URL}?action=getEvents&token=${API_TOKEN}&t=${Date.now()}`);
-    const res = await r.json();
-    allEvents = (res && res.success && Array.isArray(res.data)) ? res.data : (Array.isArray(res) ? res : []);
-    renderCalendar();
-  }catch(e){
-    console.error("events err", e);
-    allEvents = [];
-    renderCalendar();
-    showToast("Tak dapat muat event.");
+    const result = await apiPost("toggleSeasonStatus", { seasonId });
+    if(!result.success){
+      showMessage(result.message || "Gagal tukar status.");
+      checkbox.checked = !newState;
+      return;
+    }
+    showMessage(result.message || "Status dikemaskini.");
+    await loadSeasons();
+  }catch(error){
+    console.error(error);
+    showMessage("Error tukar status.");
+    checkbox.checked = !newState;
   }
 }
 
-async function loadHolidays(){
-  try{
-    const r = await fetch(HOLIDAY_URL + "?t=" + Date.now());
-    if(!r.ok) return;
-    const data = await r.json();
-    holidayData = Array.isArray(data) ? data : (Array.isArray(data.holidays) ? data.holidays : []);
-    renderCalendar();
-  }catch(e){holidayData = []}
+/*************************************************
+ * ICON + COLOR PICKER
+ *************************************************/
+function renderIconPicker(){
+  const grid = document.getElementById("iconGrid");
+  grid.innerHTML = ICON_PRESETS.map(icon => `
+    <button type="button" class="icon-btn ${icon === selectedIcon ? "selected" : ""}" onclick="pickIcon('${icon}')">${icon}</button>
+  `).join("");
 }
 
-/* ============ INIT ============ */
-loadEvents();
-loadHolidays();
+function pickIcon(icon){
+  selectedIcon = icon;
+  renderIconPicker();
+  updatePreview();
+}
+
+function renderColorPicker(){
+  const grid = document.getElementById("colorGrid");
+  grid.innerHTML = COLOR_PRESETS.map(c => `
+    <button type="button" class="color-btn ${c.hex === selectedColor ? "selected" : ""}"
+            style="background:${c.hex}" title="${c.name}"
+            onclick="pickColor('${c.hex}')"></button>
+  `).join("");
+}
+
+function pickColor(hex){
+  selectedColor = hex;
+  renderColorPicker();
+  updatePreview();
+}
+
+function updatePreview(){
+  const icon = document.getElementById("previewIcon");
+  icon.textContent = selectedIcon;
+  icon.style.background = selectedColor + "20";
+  icon.style.color = selectedColor;
+}
+
+/*************************************************
+ * SEASON FORM
+ *************************************************/
+function openAddSeasonForm(){
+  currentSeasonId = null;
+  tempSeasonLinks = [];
+  document.getElementById("seasonFormTitle").textContent = "Add Season";
+  clearSeasonForm();
+  document.getElementById("seasonsDashboard").classList.add("hidden");
+  document.getElementById("seasonFormView").classList.add("active");
+}
+
+function closeSeasonForm(){
+  document.getElementById("seasonFormView").classList.remove("active");
+  document.getElementById("seasonsDashboard").classList.remove("hidden");
+  currentSeasonId = null;
+  tempSeasonLinks = [];
+  editingSeasonLinkId = null;
+}
+
+function clearSeasonForm(){
+  document.getElementById("seasonName").value = "";
+  document.getElementById("seasonDescription").value = "";
+  document.getElementById("seasonStatus").value = "Active";
+  document.getElementById("seasonLinkList").innerHTML = `<div class="empty">No affiliate links yet.</div>`;
+  selectedIcon = "🌧️";
+  selectedColor = "#6366f1";
+  renderIconPicker();
+  renderColorPicker();
+  updatePreview();
+}
+
+async function editSeason(seasonId){
+  const season = seasons.find(s => String(s["Season ID"]) === String(seasonId));
+  if(!season) return;
+
+  currentSeasonId = season["Season ID"];
+  tempSeasonLinks = [];
+  document.getElementById("seasonFormTitle").textContent = "Edit Season";
+
+  document.getElementById("seasonName").value = season["Season Name"] || "";
+  document.getElementById("seasonDescription").value = season["Description"] || "";
+  document.getElementById("seasonStatus").value = season.Status || "Active";
+
+  selectedIcon = season["Icon"] || "🌧️";
+  selectedColor = season["Color"] || "#6366f1";
+  renderIconPicker();
+  renderColorPicker();
+  updatePreview();
+
+  document.getElementById("seasonsDashboard").classList.add("hidden");
+  document.getElementById("seasonFormView").classList.add("active");
+
+  await loadSeasonLinks(seasonId);
+}
+
+async function saveSeason(){
+  const name = document.getElementById("seasonName").value.trim();
+  if(!name){showMessage("Season Name diperlukan.");return;}
+
+  const data = {
+    seasonId: currentSeasonId,
+    seasonName: name,
+    description: document.getElementById("seasonDescription").value,
+    status: document.getElementById("seasonStatus").value,
+    icon: selectedIcon,
+    color: selectedColor
+  };
+
+  const action = currentSeasonId ? "updateSeason" : "addSeason";
+
+  try{
+    const result = await apiPost(action, data);
+    if(!result.success){showMessage(result.message || "Gagal simpan season.");return;}
+
+    let newSeasonId = currentSeasonId || (result.data && result.data.seasonId) || null;
+    if(!currentSeasonId && !newSeasonId){
+      showMessage("Season disimpan, tapi ID tak diterima.");
+      closeSeasonForm();
+      await loadSeasons();
+      return;
+    }
+
+    if(tempSeasonLinks.length > 0){
+      for(const link of tempSeasonLinks){
+        await apiPost("addLink", {
+          eventId: newSeasonId,
+          linkType: "Season",
+          title: link.Title,
+          url: link.URL
+        });
+      }
+      tempSeasonLinks = [];
+    }
+
+    showMessage(result.message || "Season berjaya disimpan.");
+    closeSeasonForm();
+    await loadSeasons();
+  }catch(error){
+    console.error(error);
+    showMessage("Error simpan season.");
+  }
+}
+
+async function deleteSeason(seasonId){
+  if(!confirm("Padam season ini?\n\nAffiliate links untuk season ini juga akan dipadam.")) return;
+  try{
+    const result = await apiPost("deleteSeason", { seasonId });
+    showMessage(result.message || "Season dipadam.");
+    await loadSeasons();
+  }catch(error){showMessage("Error padam season.");}
+}
+
+/*************************************************
+ * EVENT FORM
+ *************************************************/
+function openAddForm(){
+  currentEventId = null;
+  tempLinks = [];
+  document.getElementById("formTitle").textContent = "Add Event";
+  clearForm();
+  document.getElementById("dashboardView").classList.add("hidden");
+  document.getElementById("formView").classList.add("active");
+}
+
+function closeForm(){
+  document.getElementById("formView").classList.remove("active");
+  document.getElementById("dashboardView").classList.remove("hidden");
+  currentEventId = null;
+  tempLinks = [];
+  editingLinkId = null;
+}
+
+function clearForm(){
+  document.getElementById("eventName").value = "";
+  document.getElementById("startDate").value = "";
+  document.getElementById("endDate").value = "";
+  document.getElementById("category").value = "";
+  document.getElementById("negeri").value = "";
+  document.getElementById("location").value = "";
+  document.getElementById("shortDescription").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("seasonId").value = "";
+  document.getElementById("imageUrl").value = "";
+  document.getElementById("officialLink").value = "";
+  document.getElementById("status").value = "Draft";
+  document.getElementById("linkList").innerHTML = `<div class="empty">No affiliate links yet.</div>`;
+}
+
+async function editEvent(eventId){
+  const event = events.find(e => String(e["Event ID"]) === String(eventId));
+  if(!event) return;
+
+  currentEventId = event["Event ID"];
+  tempLinks = [];
+  document.getElementById("formTitle").textContent = "Edit Event";
+
+  document.getElementById("eventName").value = event["Event Name"] || "";
+  document.getElementById("startDate").value = formatDateForInput(event["Start Date"]);
+  document.getElementById("endDate").value = formatDateForInput(event["End Date"]);
+  document.getElementById("category").value = event["Category"] || "";
+  document.getElementById("location").value = event["Location"] || "";
+  document.getElementById("shortDescription").value = event["Short Description"] || "";
+  document.getElementById("description").value = event["Description"] || "";
+  document.getElementById("seasonId").value = event["Season ID"] || "";
+  document.getElementById("imageUrl").value = normalizeImageUrls(event["Image URL"] || "");
+  document.getElementById("officialLink").value = event["Official Link"] || "";
+  document.getElementById("status").value = event["Status"] || "Draft";
+
+  // Auto-match Negeri dari Location
+  const existingNegeri = event["Negeri"] || "";
+  const autoNegeri = autoMatchNegeri(event["Location"], existingNegeri);
+  document.getElementById("negeri").value = autoNegeri;
+
+  document.getElementById("dashboardView").classList.add("hidden");
+  document.getElementById("formView").classList.add("active");
+
+  await loadLinks(eventId);
+}
+
+// Convert multi-format image URL ke format baris baru untuk display
+function normalizeImageUrls(raw){
+  if(!raw) return "";
+  return String(raw).split("|").map(s => s.trim()).filter(Boolean).join("\n");
+}
+
+// Convert dari textarea ke format pipe untuk simpan
+function serializeImageUrls(raw){
+  if(!raw) return "";
+  return String(raw).split(/[\n|]/).map(s => s.trim()).filter(Boolean).join("|");
+}
+
+async function saveEvent(){
+  const imageRaw = document.getElementById("imageUrl").value;
+  const imageSerialized = serializeImageUrls(imageRaw);
+
+  const data = {
+    eventId: currentEventId,
+    eventName: document.getElementById("eventName").value,
+    startDate: document.getElementById("startDate").value,
+    endDate: document.getElementById("endDate").value,
+    category: document.getElementById("category").value,
+    location: document.getElementById("location").value,
+    shortDescription: document.getElementById("shortDescription").value,
+    description: document.getElementById("description").value,
+    seasonId: document.getElementById("seasonId").value,
+    imageUrl: imageSerialized,
+    officialLink: document.getElementById("officialLink").value,
+    status: document.getElementById("status").value,
+    negeri: document.getElementById("negeri").value
+  };
+
+  if(!data.eventName.trim()){showMessage("Event Name diperlukan.");return;}
+
+  const action = currentEventId ? "updateEvent" : "addEvent";
+
+  try{
+    const result = await apiPost(action, data);
+    if(!result.success){showMessage(result.message || "Failed to save event.");return;}
+
+    let newEventId = currentEventId || (result.data && result.data.eventId) || null;
+    if(!currentEventId && !newEventId){
+      showMessage("Event disimpan, tapi Event ID tak diterima.");
+      closeForm();
+      await loadEvents();
+      await loadSeasons();
+      return;
+    }
+
+    if(tempLinks.length > 0){
+      for(const link of tempLinks){
+        await apiPost("addLink", {
+          eventId: newEventId,
+          linkType: "Affiliate",
+          title: link.Title,
+          url: link.URL
+        });
+      }
+      tempLinks = [];
+    }
+
+    showMessage(result.message || "Event berjaya disimpan.");
+    closeForm();
+    await loadEvents();
+    await loadSeasons();
+  }catch(error){
+    console.error(error);
+    showMessage("Error saving event.");
+  }
+}
+
+async function deleteEvent(eventId){
+  if(!confirm("Delete this event?\n\nRelated links will also be deleted.")) return;
+  try{
+    const result = await apiPost("deleteEvent", { eventId });
+    showMessage(result.message || "Event deleted.");
+    await loadEvents();
+  }catch(error){showMessage("Error deleting event.");}
+}
+
+/*************************************************
+ * LINKS
+ *************************************************/
+async function loadLinks(eventId){
+  linkContext = "event";
+  try{
+    const result = await apiGet({ action: "getLinks", eventId });
+    const items = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+    renderLinkList("linkList", items, false);
+  }catch(error){
+    document.getElementById("linkList").innerHTML = `<div class="empty">Failed to load links.</div>`;
+  }
+}
+
+async function loadSeasonLinks(seasonId){
+  linkContext = "season";
+  try{
+    const result = await apiGet({ action: "getLinks", eventId: seasonId });
+    const items = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+    renderLinkList("seasonLinkList", items, true);
+  }catch(error){
+    document.getElementById("seasonLinkList").innerHTML = `<div class="empty">Failed to load links.</div>`;
+  }
+}
+
+function renderLinkList(containerId, items, isSeason){
+  const list = document.getElementById(containerId);
+
+  if(isSeason && !currentSeasonId && tempSeasonLinks.length > 0) items = tempSeasonLinks;
+  if(!isSeason && !currentEventId && tempLinks.length > 0) items = tempLinks;
+
+  if(!Array.isArray(items) || !items.length){
+    list.innerHTML = `<div class="empty">No affiliate links yet.</div>`;
+    return;
+  }
+
+  if(isSeason) window.__currentSeasonLinks = items;
+  else window.__currentLinks = items;
+
+  const prefix = isSeason ? "Season" : "Event";
+
+  list.innerHTML = items.map((item, index) => {
+    const isTemp = !item["Link ID"];
+    const title = item["Title"] || item.Title || "";
+    const url = item["URL"] || item.URL || "";
+    const editFn = `editLinkByIndex('${prefix}', ${index}, ${isTemp})`;
+    const deleteFn = isTemp
+      ? `deleteTempLink('${prefix}', ${index})`
+      : `deleteLinkByIndex('${prefix}', ${index})`;
+
+    return `
+      <div class="link-card">
+        <div class="link-info">
+          <div class="link-title">🛍 ${escapeHtml(title)}</div>
+          <div class="link-url">${escapeHtml(url)}</div>
+        </div>
+        <div class="link-actions">
+          <button class="btn btn-secondary btn-small" onclick="${editFn}">Edit</button>
+          <button class="btn btn-danger btn-small" onclick="${deleteFn}">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openLinkModal(){
+  editingLinkId = null;
+  document.getElementById("linkModalTitle").textContent = "Add Affiliate Link";
+  document.getElementById("linkTitle").value = "";
+  document.getElementById("linkUrl").value = "";
+  document.getElementById("linkModal").classList.add("active");
+}
+
+function openSeasonLinkModal(){
+  editingSeasonLinkId = null;
+  document.getElementById("linkModalTitle").textContent = "Add Affiliate Link (Season)";
+  document.getElementById("linkTitle").value = "";
+  document.getElementById("linkUrl").value = "";
+  document.getElementById("linkModal").classList.add("active");
+}
+
+function closeLinkModal(){
+  document.getElementById("linkModal").classList.remove("active");
+  editingLinkId = null;
+  editingSeasonLinkId = null;
+}
+
+function editLinkByIndex(prefix, index, isTemp){
+  const arr = prefix === "Season" ? window.__currentSeasonLinks : window.__currentLinks;
+  const item = arr[index];
+  if(!item) return;
+
+  if(prefix === "Season"){
+    editingSeasonLinkId = isTemp ? "temp-" + index : item["Link ID"];
+    document.getElementById("linkModalTitle").textContent = "Edit Affiliate Link (Season)";
+  }else{
+    editingLinkId = isTemp ? "temp-" + index : item["Link ID"];
+    document.getElementById("linkModalTitle").textContent = "Edit Affiliate Link";
+  }
+
+  document.getElementById("linkTitle").value = item["Title"] || item.Title || "";
+  document.getElementById("linkUrl").value = item["URL"] || item.URL || "";
+  document.getElementById("linkModal").classList.add("active");
+}
+
+async function saveLink(){
+  const title = document.getElementById("linkTitle").value.trim();
+  const url = document.getElementById("linkUrl").value.trim();
+  if(!title || !url){showMessage("Name and Affiliate Link diperlukan.");return;}
+
+  const isSeason = currentTab === "seasons";
+
+  if(isSeason && !currentSeasonId){
+    if(editingSeasonLinkId && String(editingSeasonLinkId).startsWith("temp-")){
+      const idx = parseInt(editingSeasonLinkId.replace("temp-", ""));
+      tempSeasonLinks[idx] = { Title: title, URL: url };
+    }else{
+      tempSeasonLinks.push({ Title: title, URL: url });
+    }
+    renderLinkList("seasonLinkList", tempSeasonLinks, true);
+    closeLinkModal();
+    showMessage("Link ditambah (sementara).");
+    return;
+  }
+
+  if(!isSeason && !currentEventId){
+    if(editingLinkId && String(editingLinkId).startsWith("temp-")){
+      const idx = parseInt(editingLinkId.replace("temp-", ""));
+      tempLinks[idx] = { Title: title, URL: url };
+    }else{
+      tempLinks.push({ Title: title, URL: url });
+    }
+    renderLinkList("linkList", tempLinks, false);
+    closeLinkModal();
+    showMessage("Link ditambah (sementara).");
+    return;
+  }
+
+  const activeEditId = isSeason ? editingSeasonLinkId : editingLinkId;
+  const isEdit = activeEditId && !String(activeEditId).startsWith("temp-");
+  const action = isEdit ? "updateLink" : "addLink";
+
+  const data = isEdit
+    ? { linkId: activeEditId, linkType: isSeason ? "Season" : "Affiliate", title, url }
+    : { eventId: isSeason ? currentSeasonId : currentEventId, linkType: isSeason ? "Season" : "Affiliate", title, url };
+
+  try{
+    const result = await apiPost(action, data);
+    if(!result.success){showMessage(result.message || "Gagal simpan link.");return;}
+    showMessage(result.message || "Link berjaya disimpan.");
+    closeLinkModal();
+    if(isSeason) await loadSeasonLinks(currentSeasonId);
+    else await loadLinks(currentEventId);
+  }catch(error){showMessage("Error saving link.");}
+}
+
+function deleteTempLink(prefix, index){
+  if(!confirm("Padam link ini?")) return;
+  if(prefix === "Season"){
+    tempSeasonLinks.splice(index, 1);
+    renderLinkList("seasonLinkList", tempSeasonLinks, true);
+  }else{
+    tempLinks.splice(index, 1);
+    renderLinkList("linkList", tempLinks, false);
+  }
+  showMessage("Dipadam.");
+}
+
+function deleteLinkByIndex(prefix, index){
+  const arr = prefix === "Season" ? window.__currentSeasonLinks : window.__currentLinks;
+  const item = arr[index];
+  if(!item || !item["Link ID"]) return;
+  deleteLink(item["Link ID"], prefix);
+}
+
+async function deleteLink(id, prefix){
+  if(!confirm("Padam link ini?")) return;
+  try{
+    const result = await apiPost("deleteLink", { linkId: id });
+    showMessage(result.message || "Dipadam.");
+    if(prefix === "Season") await loadSeasonLinks(currentSeasonId);
+    else await loadLinks(currentEventId);
+  }catch(error){showMessage("Error padam link.");}
+}
+
+/*************************************************
+ * HELPERS
+ *************************************************/
+function getSeasonName(id){
+  if(!id) return "";
+  const season = seasons.find(s => String(s["Season ID"]) === String(id));
+  return season ? season["Season Name"] : "";
+}
+
+function formatDate(value){
+  if(!value) return "";
+  const date = new Date(value);
+  if(isNaN(date)) return value;
+  return date.toLocaleDateString("en-GB", { day:"2-digit", month:"short", year:"numeric" });
+}
+
+function formatDateForInput(value){
+  if(!value) return "";
+  const date = new Date(value);
+  if(isNaN(date)) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth()+1).padStart(2,"0");
+  const day = String(date.getDate()).padStart(2,"0");
+  return `${year}-${month}-${day}`;
+}
+
+function escapeHtml(value){
+  return String(value || "")
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+/*************************************************
+ * INIT
+ *************************************************/
+renderIconPicker();
+renderColorPicker();
+updatePreview();
+
 loadSeasons();
-updateSavedCount();
+loadEvents();
 </script>
-
 </body>
 </html>
