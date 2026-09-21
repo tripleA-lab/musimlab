@@ -613,19 +613,13 @@ async function apiPost(action, data){
  *************************************************/
 async function loadHolidays(){
   try{
-    const r = await fetch(`${API_URL}?action=getHolidays&token=${API_TOKEN}&t=${Date.now()}`);
-    const res = await r.json();
-    const raw = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    // Convert dari Sheet format ke format internal
-    holidayData = raw.map(h => ({
-      start: h["Start Date"],
-      end: h["End Date"] || h["Start Date"],
-      name: h["Name"] || "Cuti"
-    }));
-    renderCalendar();
+    const result = await apiGet({ action: "getHolidays" });
+    holidays = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+    renderHolidays();
   }catch(e){
     console.error("holidays err", e);
-    holidayData = [];
+    holidays = [];
+    renderHolidays();
   }
 }
 
