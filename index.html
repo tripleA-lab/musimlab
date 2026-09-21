@@ -1445,15 +1445,25 @@ async function loadEvents(){
     showToast("Tak dapat muat event.");
   }
 }
-async function loadHolidays(){
+
+ async function loadHolidays(){
   try{
-    const r = await fetch(HOLIDAY_URL + "?t=" + Date.now());
-    if(!r.ok) return;
-    const data = await r.json();
-    holidayData = Array.isArray(data) ? data : (Array.isArray(data.holidays) ? data.holidays : []);
+    const r = await fetch(`${API_URL}?action=getHolidays&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const raw = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    holidayData = raw.map(h => ({
+      start: h["Start Date"],
+      end: h["End Date"] || h["Start Date"],
+      name: h["Name"] || "Cuti"
+    }));
     renderCalendar();
-  }catch(e){holidayData = []}
+  }catch(e){
+    console.error("holidays err", e);
+    holidayData = [];
+  }
 }
+
+   
 async function loadNews(){
   try{
     const r = await fetch(`${API_URL}?action=getNews&token=${API_TOKEN}&t=${Date.now()}`);
