@@ -15,6 +15,13 @@ body.no-scroll{overflow:hidden}
 button{font:inherit}
 img{max-width:100%;display:block}
 
+
+.big-date-sub{font-size:12px;color:#888;font-weight:600;margin-bottom:16px}
+ .date-range-block{margin-bottom:16px}
+.date-range-main{font-size:26px;font-weight:900;letter-spacing:-.5px;line-height:1.15;color:#171717}
+.date-range-sub{font-size:13px;color:#888;font-weight:600;margin-top:6px}
+
+ 
 /* ============ HEADER ============ */
 .top-header{background:#fff;padding:14px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .brand-wrap{display:flex;align-items:center;gap:10px;min-width:0}
@@ -336,8 +343,8 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
       <div class="more-item" onclick="showAbout()">
         <div class="more-icon">🛍️</div>
         <div class="more-text">
-          <div class="more-text-title">Affiliate Disclosure</div>
-          <div class="more-text-sub">Kami mungkin dapat komisen</div>
+          <div class="more-text-title">PESANAN PENAJA</div>
+          <div class="more-text-sub">TANPA ANDA SIAPA KAMI</div>
         </div>
         <div class="more-chev">›</div>
       </div>
@@ -418,7 +425,13 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 const API_URL = "https://script.google.com/macros/s/AKfycbz_Aqg5XEskKKpwsoz9WA4HcSCV5H61cK63hj9kw78YD_eRCCQgkm71q_KJhoG2SfX4/exec";
 const API_TOKEN = "ml-2025-a7b3c9d1e5f6";
-const HOLIDAY_URL = "public-holidayMalaysia.json";
+const HOLIDAY_URL = "public-holidayMalaysia.json"; const EMPTY_QUOTES = [
+  "It always seems impossible until it's done.",
+  "Take only memories, leave only footprints.",
+  "Usually I spend my holiday with my family.",
+  "Orang sekarang kata healing itu best... jom cuba!",
+  "Rehat dulu, nanti kita teruskan."
+];
 const BANNER_URL = "https://drive.google.com/file/d/1JQtMheQkkQmwXKJPx1Phy8KzlCNmTDV4/view";
 
 let allEvents = [];
@@ -844,7 +857,12 @@ function selectDate(date){
   }
 
   if(events.length === 0){
-    html += `<div class="empty-state"><div class="emoji">🌿</div><div class="msg">Takde event</div><div class="sub">Hari ni tenang je.</div></div>`;
+    const quote = EMPTY_QUOTES[(date.getDate() - 1) % EMPTY_QUOTES.length];
+html += `<div class="empty-state">
+  <div class="emoji">🌿</div>
+  <div class="msg">Takde event</div>
+  <div class="sub" style="font-style:italic;color:#777;max-width:280px;margin:8px auto 0;line-height:1.6">"${escapeHtml(quote)}"</div>
+</div>`;
     $("dateSheetSub").textContent = "";
   }else{
     $("dateSheetSub").textContent = `${events.length} event`;
@@ -922,11 +940,24 @@ function openEventDetail(id){
   const isSaved = savedIds.includes(id);
   const images = parseImages(getEventImg(e));
 
-  const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
-  const bigMonth = start ? monthShort[start.getMonth()] : "";
-  const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
-  let endNote = "";
-  if(end && start && !sameDate(start,end)) endNote = ` • hingga ${formatDate(end)}`;
+  let dateMain = "", dateSub = "";
+if(start){
+  const sD = start.getDate(), sM = monthShort[start.getMonth()], sY = start.getFullYear();
+  if(end && !sameDate(start, end)){
+    const eD = end.getDate(), eM = monthShort[end.getMonth()], eY = end.getFullYear();
+    if(sM === eM && sY === eY){
+      dateMain = `${sD} – ${eD} ${sM} ${sY}`;
+    } else if(sY === eY){
+      dateMain = `${sD} ${sM} – ${eD} ${eM} ${sY}`;
+    } else {
+      dateMain = `${sD} ${sM} ${sY} – ${eD} ${eM} ${eY}`;
+    }
+    dateSub = `${dayNames[start.getDay()]} – ${dayNames[end.getDay()]}`;
+  } else {
+    dateMain = `${sD} ${sM} ${sY}`;
+    dateSub = dayNames[start.getDay()];
+  }
+}
   const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
 
   let html = `
@@ -935,11 +966,10 @@ function openEventDetail(id){
       <span class="cat-dot" style="background:${info.color}"></span>
       ${info.icon} ${escapeHtml(cat||"Lain-lain")}
     </div>
-    <div class="big-date-block">
-      <div class="big-date-day">${bigDay}</div>
-      <div class="big-date-month">${bigMonth}</div>
-    </div>
-    <div class="big-date-sub">${bigSub}${endNote}</div>
+   <div class="date-range-block">
+  <div class="date-range-main">${dateMain}</div>
+  <div class="date-range-sub">${dateSub}</div>
+</div>
     <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
     ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
     <div class="detail-synopsis">${escapeHtml(syn)}</div>
@@ -976,10 +1006,26 @@ function openFullDetail(id){
   const link = getEventLink(e);
   const fullDesc = getEventDesc(e);
   const isSaved = savedIds.includes(id);
-
-  const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
-  const bigMonth = start ? monthShort[start.getMonth()] : "";
-  const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
+   let dateMain = "", dateSub = "";
+if(start){
+  const sD = start.getDate(), sM = monthShort[start.getMonth()], sY = start.getFullYear();
+  const end = getEventEnd(e);
+  if(end && !sameDate(start, end)){
+    const eD = end.getDate(), eM = monthShort[end.getMonth()], eY = end.getFullYear();
+    if(sM === eM && sY === eY){
+      dateMain = `${sD} – ${eD} ${sM} ${sY}`;
+    } else if(sY === eY){
+      dateMain = `${sD} ${sM} – ${eD} ${eM} ${sY}`;
+    } else {
+      dateMain = `${sD} ${sM} ${sY} – ${eD} ${eM} ${eY}`;
+    }
+    dateSub = `${dayNames[start.getDay()]} – ${dayNames[end.getDay()]}`;
+  } else {
+    dateMain = `${sD} ${sM} ${sY}`;
+    dateSub = dayNames[start.getDay()];
+  }
+}
+ 
   const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
 
   let html = `
@@ -1374,7 +1420,7 @@ function showAbout(){
     <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
       <p style="margin-bottom:12px"><strong>Musim Lab</strong> bantu anda tahu apa yang akan datang di Malaysia — musim, cuti, event — dan bersedia sebelum tiba.</p>
       <p style="margin-bottom:12px">Kami kumpul info dari pelbagai sumber dan susun dalam satu kalendar mudah.</p>
-      <p style="color:#888;font-size:12px"><strong>Affiliate Disclosure:</strong> Musim Lab mungkin terima komisen dari link affiliate tanpa kos tambahan kepada anda.</p>
+      <p style="color:#888;font-size:12px"><strong>PESANAN PENAJA:</strong> TANPA ANDA, SIAPALAH KAMI.</p>
     </div>
   `;
   openSheet("dateSheet");
