@@ -64,6 +64,8 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .month-buttons{display:flex;gap:4px}
 .month-btn{width:34px;height:34px;border:0;border-radius:10px;background:#f1f1f2;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 .month-btn:active{transform:scale(.92)}
+ .today-btn-sm{background:#f1f1f3;border:0;padding:0 12px;height:34px;border-radius:10px;font-size:11px;font-weight:700;color:#171717;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
+.today-btn-sm:active{transform:scale(.95);background:#e5e5e7} 
 .weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 6px 4px;border-bottom:1px solid #f0f0f0}
 .weekday{text-align:center;padding:6px 2px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.4px}
 .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:6px}
@@ -238,16 +240,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 </head>
 <body>
 
-<header class="top-header">
-  <div class="brand-wrap">
-    <div class="brand-logo">ML</div>
-    <div class="brand-text">
-      <div class="brand">Musim Lab</div>
-      <div class="brand-sub">Tahu musim. Tahu keperluan.</div>
-    </div>
-  </div>
-  <button class="today-btn" id="todayBtn">📍 Hari Ini</button>
-</header>
+
 
 <main>
 
@@ -270,12 +263,13 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
     <div class="calendar-card" id="calendarCard">
       <div class="month-header">
-        <div class="month-name" id="monthName">Januari 2026</div>
-        <div class="month-buttons">
-          <button class="month-btn" id="prevMonth" aria-label="Sebelum">‹</button>
-          <button class="month-btn" id="nextMonth" aria-label="Seterusnya">›</button>
-        </div>
-      </div>
+  <div class="month-name" id="monthName">Januari 2026</div>
+  <div class="month-buttons">
+    <button class="today-btn-sm" id="todayBtn">📍 Hari Ini</button>
+    <button class="month-btn" id="prevMonth" aria-label="Sebelum">‹</button>
+    <button class="month-btn" id="nextMonth" aria-label="Seterusnya">›</button>
+  </div>
+</div>
       <div class="weekdays">
         <div class="weekday">Isn</div><div class="weekday">Sel</div>
         <div class="weekday">Rab</div><div class="weekday">Kha</div>
@@ -1422,6 +1416,60 @@ async function loadNews(){
     renderNewsTicker();
   }catch(e){console.error("news err", e)}
 }
+
+    /* ============ NEWS TICKER SWIPE ============ */
+(function(){
+  const ticker = $("newsTicker");
+  if(!ticker) return;
+  
+  let sx = 0, sy = 0, swiped = false;
+  
+  ticker.addEventListener("touchstart", e => {
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+    swiped = false;
+    stopNewsTicker();
+  }, {passive:true});
+  
+  ticker.addEventListener("touchmove", e => {
+    const dx = Math.abs(e.touches[0].clientX - sx);
+    const dy = Math.abs(e.touches[0].clientY - sy);
+    if(dx > 10 || dy > 10) swiped = true;
+  }, {passive:true});
+  
+  ticker.addEventListener("touchend", e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    const total = allNews.filter(n => String(n.Status||"").toLowerCase() === "active").length;
+    
+    if(!swiped || total <= 1){
+      startNewsTicker();
+      return;
+    }
+    
+    // Swipe detection
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0){
+        // Swipe kiri → next
+        goToNewsSlide((newsTickerIndex + 1) % total);
+      } else {
+        // Swipe kanan → prev
+        goToNewsSlide((newsTickerIndex - 1 + total) % total);
+      }
+    } else {
+      // Swipe tapi tak cukup jauh → reset
+      startNewsTicker();
+    }
+  }, {passive:true});
+  
+  // Prevent click selepas swipe
+  ticker.addEventListener("click", e => {
+    if(swiped){
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }, true);
+})();
 
 /* ============ DEEP LINK ============ */
 function checkDeepLink(){
