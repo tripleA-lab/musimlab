@@ -168,6 +168,7 @@ textarea{min-height:110px;resize:vertical}
     <button class="tab active" id="tabEvents" onclick="switchTab('events')">Events</button>
     <button class="tab" id="tabSeasons" onclick="switchTab('seasons')">Seasons</button>
     <button class="tab" id="tabNews" onclick="switchTab('news')">News</button>
+    <button class="tab" id="tabHolidays" onclick="switchTab('holidays')">Holidays</button>
   </div>
   <div class="header-right">
     <button class="btn btn-primary" id="addBtn" onclick="handleAddClick()">+ Add Event</button>
@@ -322,6 +323,51 @@ textarea{min-height:110px;resize:vertical}
     </div>
   </section>
 
+  <!-- ============ HOLIDAYS ============ -->
+<section id="holidaysView" style="display:none">
+  <div id="holidaysDashboard" class="dashboard-view">
+    <div class="page-title"><h1>Holidays</h1><p>Cuti umum & cuti sekolah. Tambah setahun pun boleh.</p></div>
+    <div id="holidayList" class="event-list"><div class="empty">Loading holidays...</div></div>
+  </div>
+
+  <div id="holidayFormView" class="form-view">
+    <div class="form-header">
+      <div class="form-header-left">
+        <button class="back-btn" onclick="closeHolidayForm()">←</button>
+        <h2 id="holidayFormTitle">Add Holiday</h2>
+      </div>
+      <div class="form-header-right"><button class="btn btn-primary" onclick="saveHoliday()">Save</button></div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Holiday Information</div>
+      <div class="field">
+        <label>Nama Cuti</label>
+        <input type="text" id="holidayName" placeholder="Example: Hari Malaysia">
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Tarikh Mula</label>
+          <input type="date" id="holidayStart">
+        </div>
+        <div class="field">
+          <label>Tarikh Tamat</label>
+          <input type="date" id="holidayEnd">
+          <small>Kosongkan kalau 1 hari sahaja.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="closeHolidayForm()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveHoliday()">Save Holiday</button>
+    </div>
+  </div>
+</section>
+
+
+
+  
   <!-- ============ NEWS ============ -->
   <section id="newsView" style="display:none">
     <div id="newsDashboard" class="dashboard-view">
@@ -490,12 +536,13 @@ function autoMatchNegeri(location, currentNegeri){
 /*************************************************
  * STATE
  *************************************************/
-let events = [], seasons = [], news = [];
+let events = [], seasons = [], news = [], holidays = [];
 let currentTab = "events";
 
 let currentEventId = null, tempLinks = [], __currentLinks = [];
 let currentSeasonId = null, tempSeasonLinks = [], __currentSeasonLinks = [];
 let currentNewsId = null, tempNewsLinks = [], __currentNewsLinks = [];
+let currentHolidayId = null;  
 let editingLinkId = null, editingSeasonLinkId = null, editingNewsLinkId = null;
 let selectedIcon = "🌧️", selectedColor = "#6366f1";
 let selectedSeverity = "Info";
@@ -515,29 +562,33 @@ function showMessage(text){
  *************************************************/
 function switchTab(tab){
   currentTab = tab;
-  ["Events","Seasons","News"].forEach(t => {
-    document.getElementById("tab" + t).classList.toggle("active", t.toLowerCase() === tab);
-  });
-  document.getElementById("eventsView").style.display = tab === "events" ? "block" : "none";
-  document.getElementById("seasonsView").style.display = tab === "seasons" ? "block" : "none";
-  document.getElementById("newsView").style.display = tab === "news" ? "block" : "none";
-  closeForm(); closeSeasonForm(); closeNewsForm();
-  updateAddButton();
-  if(tab === "seasons") renderSeasons();
-  if(tab === "news") renderNews();
+  ["Events","Seasons","News","Holidays"].forEach(t => {
+  document.getElementById("tab" + t).classList.toggle("active", t.toLowerCase() === tab);
+});
+document.getElementById("eventsView").style.display = tab === "events" ? "block" : "none";
+document.getElementById("seasonsView").style.display = tab === "seasons" ? "block" : "none";
+document.getElementById("newsView").style.display = tab === "news" ? "block" : "none";
+document.getElementById("holidaysView").style.display = tab === "holidays" ? "block" : "none";
+closeForm(); closeSeasonForm(); closeNewsForm(); closeHolidayForm();
+updateAddButton();
+if(tab === "seasons") renderSeasons();
+if(tab === "news") renderNews();
+if(tab === "holidays") renderHolidays();
 }
 
-function handleAddClick(){
+
+ function handleAddClick(){
   if(currentTab === "events") openAddForm();
   else if(currentTab === "seasons") openAddSeasonForm();
-  else openAddNewsForm();
+  else if(currentTab === "news") openAddNewsForm();
+  else if(currentTab === "holidays") openAddHolidayForm();
 }
 
 function updateAddButton(){
   const btn = document.getElementById("addBtn");
-  const map = {events: "+ Add Event", seasons: "+ Add Season", news: "+ Add News"};
+  const map = {events: "+ Add Event", seasons: "+ Add Season", news: "+ Add News", holidays: "+ Add Holiday"};
   btn.textContent = map[currentTab];
-}
+} 
 
 /*************************************************
  * API
@@ -556,10 +607,139 @@ async function apiPost(action, data){
   return response.json();
 }
 
+
+/*************************************************
+ * HOLIDAYS
+ *************************************************/
+async function loadHolidays(){
+  try{
+    const r = await fetch(`${API_URL}?action=getHolidays&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const raw = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    // Convert dari Sheet format ke format internal
+    holidayData = raw.map(h => ({
+      start: h["Start Date"],
+      end: h["End Date"] || h["Start Date"],
+      name: h["Name"] || "Cuti"
+    }));
+    renderCalendar();
+  }catch(e){
+    console.error("holidays err", e);
+    holidayData = [];
+  }
+}
+
+function renderHolidays(){
+  const list = document.getElementById("holidayList");
+  if(!list) return;
+  if(!holidays.length){
+    list.innerHTML = `<div class="empty">No holidays yet. Klik "+ Add Holiday" untuk mula.</div>`;
+    return;
+  }
+  // Sort by start date
+  const sorted = [...holidays].sort((a,b) => {
+    const da = new Date(a["Start Date"]), db = new Date(b["Start Date"]);
+    return da - db;
+  });
+  list.innerHTML = sorted.map(h => {
+    const id = h["Holiday ID"];
+    const start = h["Start Date"];
+    const end = h["End Date"];
+    const dateText = (end && end !== start)
+      ? `${formatDate(start)} – ${formatDate(end)}`
+      : formatDate(start);
+    return `
+      <div class="event-card">
+        <div class="event-main">
+          <div class="event-name">🎉 ${escapeHtml(h["Name"] || "")}</div>
+          <div class="event-meta">
+            <span class="badge">📅 ${dateText}</span>
+          </div>
+        </div>
+        <div class="event-actions">
+          <button class="btn btn-secondary btn-small" onclick="editHoliday('${id}')">Edit</button>
+          <button class="btn btn-danger btn-small" onclick="deleteHoliday('${id}')">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openAddHolidayForm(){
+  currentHolidayId = null;
+  document.getElementById("holidayFormTitle").textContent = "Add Holiday";
+  document.getElementById("holidayName").value = "";
+  document.getElementById("holidayStart").value = "";
+  document.getElementById("holidayEnd").value = "";
+  document.getElementById("holidaysDashboard").classList.add("hidden");
+  document.getElementById("holidayFormView").classList.add("active");
+}
+
+function closeHolidayForm(){
+  document.getElementById("holidayFormView").classList.remove("active");
+  document.getElementById("holidaysDashboard").classList.remove("hidden");
+  currentHolidayId = null;
+}
+
+function editHoliday(holidayId){
+  const h = holidays.find(x => String(x["Holiday ID"]) === String(holidayId));
+  if(!h) return;
+  currentHolidayId = h["Holiday ID"];
+  document.getElementById("holidayFormTitle").textContent = "Edit Holiday";
+  document.getElementById("holidayName").value = h["Name"] || "";
+  document.getElementById("holidayStart").value = formatDateForInput(h["Start Date"]);
+  document.getElementById("holidayEnd").value = formatDateForInput(h["End Date"]);
+  document.getElementById("holidaysDashboard").classList.add("hidden");
+  document.getElementById("holidayFormView").classList.add("active");
+}
+
+async function saveHoliday(){
+  if(isSaving) return;
+  setSaving(true);
+
+  const name = document.getElementById("holidayName").value.trim();
+  const start = document.getElementById("holidayStart").value;
+  const end = document.getElementById("holidayEnd").value;
+
+  if(!name){showMessage("Nama cuti diperlukan.");setSaving(false);return;}
+  if(!start){showMessage("Tarikh mula diperlukan.");setSaving(false);return;}
+
+  const data = {
+    holidayId: currentHolidayId,
+    name: name,
+    startDate: start,
+    endDate: end || start
+  };
+
+  const action = currentHolidayId ? "updateHoliday" : "addHoliday";
+
+  try{
+    const result = await apiPost(action, data);
+    if(!result.success){showMessage(result.message || "Gagal.");setSaving(false);return;}
+    showMessage(result.message || "Cuti berjaya disimpan.");
+    closeHolidayForm();
+    await loadHolidays();
+  }catch(e){
+    console.error(e);
+    showMessage("Error simpan cuti.");
+  }
+  setSaving(false);
+}
+
+async function deleteHoliday(holidayId){
+  if(!confirm("Padam cuti ini?")) return;
+  try{
+    const result = await apiPost("deleteHoliday", { holidayId });
+    showMessage(result.message || "Cuti dipadam.");
+    await loadHolidays();
+  }catch(e){showMessage("Error padam cuti.");}
+}
+
+  
 /*************************************************
  * LOAD
  *************************************************/
-async function loadEvents(){
+  async function loadEvents(){
   try{
     const result = await apiGet({ action: "getEvents" });
     events = (result && result.success && Array.isArray(result.data)) ? result.data : [];
@@ -1301,6 +1481,7 @@ renderSeverityPicker();
 loadSeasons();
 loadEvents();
 loadNews();
+loadHolidays();  
 </script>
 </body>
 </html>
