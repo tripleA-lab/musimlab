@@ -490,12 +490,21 @@ function getCatInfo(cat){
   const c = CATEGORIES.find(x => normalise(x.name) === normalise(cat));
   return c || { name: cat || "Lain-lain", icon: "📍", color: "#8b5e3c" };
 }
-
 function parseDate(value){
   if(!value) return null;
   if(value instanceof Date) return new Date(value.getFullYear(),value.getMonth(),value.getDate());
   const text = String(value).trim();
   if(!text) return null;
+
+  // Kalau ada "T" = ISO format dari Sheet (UTC) → adjust +8 Malaysia
+  if(text.includes("T")){
+    const d = new Date(text);
+    if(!isNaN(d.getTime())){
+      const my = new Date(d.getTime() + 8 * 3600 * 1000);
+      return new Date(my.getUTCFullYear(), my.getUTCMonth(), my.getUTCDate());
+    }
+  }
+
   let m = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
   if(m) return new Date(+m[1],+m[2]-1,+m[3]);
   m = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
@@ -510,6 +519,7 @@ function parseDate(value){
   if(!isNaN(d.getTime())) return new Date(d.getFullYear(), d.getMonth(), d.getDate());
   return null;
 }
+
 function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
 function sameDate(a,b){return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
 function formatDate(d){if(!d) return "";return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;}
