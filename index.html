@@ -15,23 +15,6 @@ body.no-scroll{overflow:hidden}
 button{font:inherit}
 img{max-width:100%;display:block}
 
-
-.big-date-sub{font-size:12px;color:#888;font-weight:600;margin-bottom:16px}
- .date-range-block{margin-bottom:16px}
-.date-range-main{font-size:26px;font-weight:900;letter-spacing:-.5px;line-height:1.15;color:#171717}
-.date-range-sub{font-size:13px;color:#888;font-weight:600;margin-top:6px}
-
- 
-/* ============ HEADER ============ */
-.top-header{background:#fff;padding:14px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.brand-wrap{display:flex;align-items:center;gap:10px;min-width:0}
-.brand-logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0;box-shadow:0 3px 10px rgba(139,92,246,.3)}
-.brand-text{min-width:0}
-.brand{font-size:17px;font-weight:800;letter-spacing:-.3px;line-height:1.1}
-.brand-sub{font-size:10px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.today-btn{background:#f1f1f3;border:0;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;color:#171717;cursor:pointer;display:flex;align-items:center;gap:5px;flex-shrink:0}
-.today-btn:active{transform:scale(.95)}
-
 /* ============ MAIN ============ */
 main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .view{display:none}
@@ -71,8 +54,8 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .month-buttons{display:flex;gap:4px}
 .month-btn{width:34px;height:34px;border:0;border-radius:10px;background:#f1f1f2;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 .month-btn:active{transform:scale(.92)}
- .today-btn-sm{background:#f1f1f3;border:0;padding:0 12px;height:34px;border-radius:10px;font-size:11px;font-weight:700;color:#171717;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
-.today-btn-sm:active{transform:scale(.95);background:#e5e5e7} 
+.today-btn-sm{background:#f1f1f3;border:0;padding:0 12px;height:34px;border-radius:10px;font-size:11px;font-weight:700;color:#171717;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
+.today-btn-sm:active{transform:scale(.95);background:#e5e5e7}
 .weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 6px 4px;border-bottom:1px solid #f0f0f0}
 .weekday{text-align:center;padding:6px 2px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.4px}
 .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:6px}
@@ -175,10 +158,9 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 /* ============ DETAIL ============ */
 .cat-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:14px}
 .cat-pill .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.big-date-block{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
-.big-date-day{font-size:44px;font-weight:900;letter-spacing:-2px;line-height:.9}
-.big-date-month{font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-.big-date-sub{font-size:12px;color:#888;font-weight:600;margin-bottom:16px}
+.date-range-block{margin-bottom:16px}
+.date-range-main{font-size:26px;font-weight:900;letter-spacing:-.5px;line-height:1.15;color:#171717}
+.date-range-sub{font-size:13px;color:#888;font-weight:600;margin-top:6px}
 .detail-title{font-size:22px;font-weight:800;line-height:1.2;letter-spacing:-.5px;margin:0 0 8px}
 .detail-meta{font-size:13px;color:#666;line-height:1.6;margin-bottom:16px}
 .detail-synopsis{font-size:14px;line-height:1.7;color:#333;margin-bottom:20px;white-space:pre-line}
@@ -244,23 +226,21 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   .banner-wrap img{max-height:220px}
 }
 </style>
+
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-90RWGEK9LY"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-90RWGEK9LY');
 </script>
- 
 </head>
 <body>
 
-
-
 <main>
 
-  <!-- BANNER (muncul semua view) -->
+  <!-- BANNER -->
   <div class="banner-wrap" id="bannerWrap" style="display:none">
     <img id="bannerImg" src="" alt="Musim Lab" onclick="showToast('Selamat datang ke Musim Lab!')">
   </div>
@@ -279,13 +259,13 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
     <div class="calendar-card" id="calendarCard">
       <div class="month-header">
-  <div class="month-name" id="monthName">Januari 2026</div>
-  <div class="month-buttons">
-    <button class="today-btn-sm" id="todayBtn">📍 Hari Ini</button>
-    <button class="month-btn" id="prevMonth" aria-label="Sebelum">‹</button>
-    <button class="month-btn" id="nextMonth" aria-label="Seterusnya">›</button>
-  </div>
-</div>
+        <div class="month-name" id="monthName">Januari 2026</div>
+        <div class="month-buttons">
+          <button class="today-btn-sm" id="todayBtn">📍 Hari Ini</button>
+          <button class="month-btn" id="prevMonth" aria-label="Sebelum">‹</button>
+          <button class="month-btn" id="nextMonth" aria-label="Seterusnya">›</button>
+        </div>
+      </div>
       <div class="weekdays">
         <div class="weekday">Isn</div><div class="weekday">Sel</div>
         <div class="weekday">Rab</div><div class="weekday">Kha</div>
@@ -429,19 +409,20 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 <script>
 /* =====================================================
-   MUSIM LAB — INDEX v7 (Banner + News Ticker)
+   MUSIM LAB — INDEX v8
 ===================================================== */
 
 const API_URL = "https://script.google.com/macros/s/AKfycbz_Aqg5XEskKKpwsoz9WA4HcSCV5H61cK63hj9kw78YD_eRCCQgkm71q_KJhoG2SfX4/exec";
 const API_TOKEN = "ml-2025-a7b3c9d1e5f6";
-const HOLIDAY_URL = "public-holidayMalaysia.json"; const EMPTY_QUOTES = [
+const BANNER_URL = "https://drive.google.com/file/d/1JQtMheQkkQmwXKJPx1Phy8KzlCNmTDV4/view";
+
+const EMPTY_QUOTES = [
   "It always seems impossible until it's done.",
   "Take only memories, leave only footprints.",
   "Usually I spend my holiday with my family.",
   "Orang sekarang kata healing itu best... jom cuba!",
   "Rehat dulu, nanti kita teruskan."
 ];
-const BANNER_URL = "https://drive.google.com/file/d/1JQtMheQkkQmwXKJPx1Phy8KzlCNmTDV4/view";
 
 let allEvents = [];
 let allSeasons = [];
@@ -499,13 +480,14 @@ function getCatInfo(cat){
   const c = CATEGORIES.find(x => normalise(x.name) === normalise(cat));
   return c || { name: cat || "Lain-lain", icon: "📍", color: "#8b5e3c" };
 }
+
 function parseDate(value){
   if(!value) return null;
   if(value instanceof Date) return new Date(value.getFullYear(),value.getMonth(),value.getDate());
   const text = String(value).trim();
   if(!text) return null;
 
-  // Kalau ada "T" = ISO format dari Sheet (UTC) → adjust +8 Malaysia
+  // ISO format dari Sheet → adjust +8 Malaysia
   if(text.includes("T")){
     const d = new Date(text);
     if(!isNaN(d.getTime())){
@@ -669,11 +651,7 @@ function renderNewsTicker(){
     dots.appendChild(dot);
   });
 
-  if(active.length === 1){
-    dots.style.display = "none";
-  } else {
-    dots.style.display = "flex";
-  }
+  dots.style.display = active.length > 1 ? "flex" : "none";
 
   newsTickerIndex = 0;
   startNewsTicker();
@@ -728,9 +706,7 @@ function openNewsDetail(newsId){
   const created = n["Created"] ? new Date(n["Created"]) : null;
 
   let timeAgo = "";
-  if(created && !isNaN(created.getTime())){
-    timeAgo = formatTimeAgo(created);
-  }
+  if(created && !isNaN(created.getTime())) timeAgo = formatTimeAgo(created);
 
   let html = "";
 
@@ -746,10 +722,8 @@ function openNewsDetail(newsId){
     <div class="news-detail-badge" style="background:${sev.color}15;color:${sev.color}">
       ${sev.icon} ${escapeHtml(n["Severity"]||"Info")}
     </div>
-
     <h1 class="news-detail-title">${escapeHtml(n["Title"]||"")}</h1>
     <div class="news-detail-meta">${timeAgo ? "🕐 " + timeAgo : ""}</div>
-
     <div class="news-detail-body">${escapeHtml(n["Body"]||"")}</div>
   `;
 
@@ -877,11 +851,11 @@ function selectDate(date){
 
   if(events.length === 0){
     const quote = EMPTY_QUOTES[(date.getDate() - 1) % EMPTY_QUOTES.length];
-html += `<div class="empty-state">
-  <div class="emoji">🌿</div>
-  <div class="msg">Takde event</div>
-  <div class="sub" style="font-style:italic;color:#777;max-width:280px;margin:8px auto 0;line-height:1.6">"${escapeHtml(quote)}"</div>
-</div>`;
+    html += `<div class="empty-state">
+      <div class="emoji">🌿</div>
+      <div class="msg">Takde event</div>
+      <div class="sub" style="font-style:italic;color:#777;max-width:280px;margin:8px auto 0;line-height:1.6">"${escapeHtml(quote)}"</div>
+    </div>`;
     $("dateSheetSub").textContent = "";
   }else{
     $("dateSheetSub").textContent = `${events.length} event`;
@@ -942,6 +916,30 @@ function attachCarouselScroll(key){
   }, {passive:true});
 }
 
+/* ============ DATE RANGE HELPER ============ */
+function buildDateRange(start, end){
+  let dateMain = "", dateSub = "";
+  if(!start) return { dateMain: "—", dateSub: "" };
+
+  const sD = start.getDate(), sM = monthShort[start.getMonth()], sY = start.getFullYear();
+
+  if(end && !sameDate(start, end)){
+    const eD = end.getDate(), eM = monthShort[end.getMonth()], eY = end.getFullYear();
+    if(sM === eM && sY === eY){
+      dateMain = `${sD} – ${eD} ${sM} ${sY}`;
+    } else if(sY === eY){
+      dateMain = `${sD} ${sM} – ${eD} ${eM} ${sY}`;
+    } else {
+      dateMain = `${sD} ${sM} ${sY} – ${eD} ${eM} ${eY}`;
+    }
+    dateSub = `${dayNames[start.getDay()]} – ${dayNames[end.getDay()]}`;
+  } else {
+    dateMain = `${sD} ${sM} ${sY}`;
+    dateSub = dayNames[start.getDay()];
+  }
+  return { dateMain, dateSub };
+}
+
 /* ============ EVENT DETAIL ============ */
 function openEventDetail(id){
   const e = allEvents.find(x => getEventId(x) === id);
@@ -959,24 +957,7 @@ function openEventDetail(id){
   const isSaved = savedIds.includes(id);
   const images = parseImages(getEventImg(e));
 
-  let dateMain = "", dateSub = "";
-if(start){
-  const sD = start.getDate(), sM = monthShort[start.getMonth()], sY = start.getFullYear();
-  if(end && !sameDate(start, end)){
-    const eD = end.getDate(), eM = monthShort[end.getMonth()], eY = end.getFullYear();
-    if(sM === eM && sY === eY){
-      dateMain = `${sD} – ${eD} ${sM} ${sY}`;
-    } else if(sY === eY){
-      dateMain = `${sD} ${sM} – ${eD} ${eM} ${sY}`;
-    } else {
-      dateMain = `${sD} ${sM} ${sY} – ${eD} ${eM} ${eY}`;
-    }
-    dateSub = `${dayNames[start.getDay()]} – ${dayNames[end.getDay()]}`;
-  } else {
-    dateMain = `${sD} ${sM} ${sY}`;
-    dateSub = dayNames[start.getDay()];
-  }
-}
+  const { dateMain, dateSub } = buildDateRange(start, end);
   const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
 
   let html = `
@@ -985,10 +966,10 @@ if(start){
       <span class="cat-dot" style="background:${info.color}"></span>
       ${info.icon} ${escapeHtml(cat||"Lain-lain")}
     </div>
-   <div class="date-range-block">
-  <div class="date-range-main">${dateMain}</div>
-  <div class="date-range-sub">${dateSub}</div>
-</div>
+    <div class="date-range-block">
+      <div class="date-range-main">${dateMain}</div>
+      <div class="date-range-sub">${dateSub}</div>
+    </div>
     <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
     ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
     <div class="detail-synopsis">${escapeHtml(syn)}</div>
@@ -1014,72 +995,7 @@ if(start){
   loadAffiliates(id, "affiliateContainer_" + id);
 }
 
-
-  const e = allEvents.find(x => getEventId(x) === id);
-  if(!e) return;
-  $("shareBtn").dataset.eventId = id;
-
-  const cat = getEventCat(e);
-  const info = getCatInfo(cat);
-  const start = getEventStart(e);
-  const link = getEventLink(e);
-  const fullDesc = getEventDesc(e);
-  const isSaved = savedIds.includes(id);
-   let dateMain = "", dateSub = "";
-if(start){
-  const sD = start.getDate(), sM = monthShort[start.getMonth()], sY = start.getFullYear();
-  const end = getEventEnd(e);
-  if(end && !sameDate(start, end)){
-    const eD = end.getDate(), eM = monthShort[end.getMonth()], eY = end.getFullYear();
-    if(sM === eM && sY === eY){
-      dateMain = `${sD} – ${eD} ${sM} ${sY}`;
-    } else if(sY === eY){
-      dateMain = `${sD} ${sM} – ${eD} ${eM} ${sY}`;
-    } else {
-      dateMain = `${sD} ${sM} ${sY} – ${eD} ${eM} ${eY}`;
-    }
-    dateSub = `${dayNames[start.getDay()]} – ${dayNames[end.getDay()]}`;
-  } else {
-    dateMain = `${sD} ${sM} ${sY}`;
-    dateSub = dayNames[start.getDay()];
-  }
-}
- 
-  const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
-
-  let html = `
-    <div style="display:flex;justify-content:flex-start;margin-bottom:12px">
-      <button class="mini-btn" onclick="openEventDetail('${id}')">← Kembali</button>
-    </div>
-    <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
-      <span class="cat-dot" style="background:${info.color}"></span>
-      ${info.icon} ${escapeHtml(cat||"Lain-lain")}
-    </div>
-    <div class="big-date-block">
-      <div class="big-date-day">${bigDay}</div>
-      <div class="big-date-month">${bigMonth}</div>
-    </div>
-    <div class="big-date-sub">${bigSub}</div>
-    <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
-    ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
-    <div class="detail-synopsis">${escapeHtml(fullDesc)}</div>
-    <div class="detail-actions">
-      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this)">
-        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
-      </button>
-      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
-    </div>
-  `;
-  if(link){
-    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary full" style="margin-bottom:10px">🔗 Official Website</a>`;
-  }
-  html += `<div id="affiliateFull_${id}"></div>`;
-
-  $("detailSheetContent").innerHTML = html;
-  $("detailSheet").querySelector(".sheet-scroll").scrollTop = 0;
-  loadAffiliates(id, "affiliateFull_" + id);
-}
-
+/* ============ FULL DETAIL ============ */
 function openFullDetail(id){
   const e = allEvents.find(x => getEventId(x) === id);
   if(!e) return;
@@ -1088,13 +1004,12 @@ function openFullDetail(id){
   const cat = getEventCat(e);
   const info = getCatInfo(cat);
   const start = getEventStart(e);
+  const end = getEventEnd(e);
   const link = getEventLink(e);
   const fullDesc = getEventDesc(e);
   const isSaved = savedIds.includes(id);
 
-  const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
-  const bigMonth = start ? monthShort[start.getMonth()] : "";
-  const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
+  const { dateMain, dateSub } = buildDateRange(start, end);
   const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
 
   let html = `
@@ -1107,11 +1022,10 @@ function openFullDetail(id){
       ${info.icon} ${escapeHtml(cat||"Lain-lain")}
     </div>
 
-    <div class="big-date-block">
-      <div class="big-date-day">${bigDay}</div>
-      <div class="big-date-month">${bigMonth}</div>
+    <div class="date-range-block">
+      <div class="date-range-main">${dateMain}</div>
+      <div class="date-range-sub">${dateSub}</div>
     </div>
-    <div class="big-date-sub">${bigSub}</div>
 
     <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
     ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
@@ -1128,16 +1042,12 @@ function openFullDetail(id){
   if(link){
     html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary full" style="margin-bottom:10px">🔗 Official Website</a>`;
   }
-
   html += `<div id="affiliateFull_${id}"></div>`;
 
   $("detailSheetContent").innerHTML = html;
   $("detailSheet").querySelector(".sheet-scroll").scrollTop = 0;
   loadAffiliates(id, "affiliateFull_" + id);
 }
-
-
- 
 
 /* ============ AFFILIATE ============ */
 async function loadAffiliates(itemId, containerId){
@@ -1524,7 +1434,7 @@ async function loadEvents(){
   }
 }
 
- async function loadHolidays(){
+async function loadHolidays(){
   try{
     const r = await fetch(`${API_URL}?action=getHolidays&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
@@ -1541,7 +1451,6 @@ async function loadEvents(){
   }
 }
 
-   
 async function loadNews(){
   try{
     const r = await fetch(`${API_URL}?action=getNews&token=${API_TOKEN}&t=${Date.now()}`);
@@ -1551,52 +1460,47 @@ async function loadNews(){
   }catch(e){console.error("news err", e)}
 }
 
-    /* ============ NEWS TICKER SWIPE ============ */
+/* ============ NEWS TICKER SWIPE ============ */
 (function(){
   const ticker = $("newsTicker");
   if(!ticker) return;
-  
+
   let sx = 0, sy = 0, swiped = false;
-  
+
   ticker.addEventListener("touchstart", e => {
     sx = e.touches[0].clientX;
     sy = e.touches[0].clientY;
     swiped = false;
     stopNewsTicker();
   }, {passive:true});
-  
+
   ticker.addEventListener("touchmove", e => {
     const dx = Math.abs(e.touches[0].clientX - sx);
     const dy = Math.abs(e.touches[0].clientY - sy);
     if(dx > 10 || dy > 10) swiped = true;
   }, {passive:true});
-  
+
   ticker.addEventListener("touchend", e => {
     const dx = e.changedTouches[0].clientX - sx;
     const dy = e.changedTouches[0].clientY - sy;
     const total = allNews.filter(n => String(n.Status||"").toLowerCase() === "active").length;
-    
+
     if(!swiped || total <= 1){
       startNewsTicker();
       return;
     }
-    
-    // Swipe detection
+
     if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
       if(dx < 0){
-        // Swipe kiri → next
         goToNewsSlide((newsTickerIndex + 1) % total);
       } else {
-        // Swipe kanan → prev
         goToNewsSlide((newsTickerIndex - 1 + total) % total);
       }
     } else {
-      // Swipe tapi tak cukup jauh → reset
       startNewsTicker();
     }
   }, {passive:true});
-  
-  // Prevent click selepas swipe
+
   ticker.addEventListener("click", e => {
     if(swiped){
       e.stopPropagation();
