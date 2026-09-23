@@ -999,11 +999,11 @@ async function deleteNews(newsId){
 async function loadNewsLinks(newsId){
   try{
     const result = await apiGet({ action: "getLinks", eventId: newsId });
+    if(String(currentNewsId) !== String(newsId)) return; // ← RACE GUARD
     const items = (result && result.success && Array.isArray(result.data)) ? result.data : [];
     renderLinkList("newsLinkList", items, "news");
-  }catch(e){
-    document.getElementById("newsLinkList").innerHTML = `<div class="empty">Failed to load links.</div>`;
-  }
+  }catch(e){}
+}
 }
 
 function openNewsLinkModal(){
@@ -1181,16 +1181,20 @@ async function saveSeason(){
  *************************************************/
 function openAddForm(){
   currentEventId = null; tempLinks = [];
+  window.__currentLinks = [];
   document.getElementById("formTitle").textContent = "Add Event";
   clearForm();
   document.getElementById("dashboardView").classList.add("hidden");
   document.getElementById("formView").classList.add("active");
 }
+
 function closeForm(){
   document.getElementById("formView").classList.remove("active");
   document.getElementById("dashboardView").classList.remove("hidden");
   currentEventId = null; tempLinks = []; editingLinkId = null;
+  window.__currentLinks = [];
 }
+  
 function clearForm(){
   ["eventName","startDate","endDate","category","negeri","location","shortDescription","description","imageUrl","officialLink"].forEach(id => document.getElementById(id).value = "");
   document.getElementById("seasonId").value = "";
@@ -1294,21 +1298,30 @@ function updatePreview(){
   el.style.color = selectedColor;
 }
 
-async function loadLinks(eventId){
+ async function loadLinks(eventId){
+  const list = document.getElementById("linkList");
+  if(list) list.innerHTML = `<div class="empty">Loading links...</div>`;
+
   try{
     const result = await apiGet({ action: "getLinks", eventId });
+    if(String(currentEventId) !== String(eventId)) return;
     const items = (result && result.success && Array.isArray(result.data)) ? result.data : [];
     renderLinkList("linkList", items, "event");
-  }catch(e){}
+  }catch(e){
+    if(String(currentEventId) === String(eventId)){
+      if(list) list.innerHTML = `<div class="empty">Failed to load links.</div>`;
+    }
+  }
 }
+
 async function loadSeasonLinks(seasonId){
   try{
     const result = await apiGet({ action: "getLinks", eventId: seasonId });
+    if(String(currentSeasonId) !== String(seasonId)) return; // ← RACE GUARD
     const items = (result && result.success && Array.isArray(result.data)) ? result.data : [];
     renderLinkList("seasonLinkList", items, "season");
   }catch(e){}
 }
-
 function renderLinkList(containerId, items, type){
   const list = document.getElementById(containerId);
   const isSeason = type === "season";
