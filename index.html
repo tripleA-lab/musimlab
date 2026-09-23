@@ -1080,61 +1080,7 @@ if(start){
   loadAffiliates(id, "affiliateFull_" + id);
 }
 
- function openFullDetail(id){
-  const e = allEvents.find(x => getEventId(x) === id);
-  if(!e) return;
-  $("shareBtn").dataset.eventId = id;
 
-  const cat = getEventCat(e);
-  const info = getCatInfo(cat);
-  const start = getEventStart(e);
-  const link = getEventLink(e);
-  const fullDesc = getEventDesc(e);
-  const isSaved = savedIds.includes(id);
-
-  const bigDay = start ? String(start.getDate()).padStart(2,"0") : "—";
-  const bigMonth = start ? monthShort[start.getMonth()] : "";
-  const bigSub = start ? `${dayNames[start.getDay()]} • ${start.getFullYear()}` : "";
-  const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
-
-  let html = `
-    <div style="display:flex;justify-content:flex-start;margin-bottom:12px">
-      <button class="mini-btn" onclick="openEventDetail('${id}')">← Kembali</button>
-    </div>
-
-    <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
-      <span class="cat-dot" style="background:${info.color}"></span>
-      ${info.icon} ${escapeHtml(cat||"Lain-lain")}
-    </div>
-
-    <div class="big-date-block">
-      <div class="big-date-day">${bigDay}</div>
-      <div class="big-date-month">${bigMonth}</div>
-    </div>
-    <div class="big-date-sub">${bigSub}</div>
-
-    <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
-    ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
-    <div class="detail-synopsis">${escapeHtml(fullDesc)}</div>
-
-    <div class="detail-actions">
-      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this)">
-        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
-      </button>
-      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
-    </div>
-  `;
-
-  if(link){
-    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary full" style="margin-bottom:10px">🔗 Official Website</a>`;
-  }
-
-  html += `<div id="affiliateFull_${id}"></div>`;
-
-  $("detailSheetContent").innerHTML = html;
-  $("detailSheet").querySelector(".sheet-scroll").scrollTop = 0;
-  loadAffiliates(id, "affiliateFull_" + id);
-}
 
 
  
