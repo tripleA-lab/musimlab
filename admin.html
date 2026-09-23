@@ -959,7 +959,31 @@ async function saveNews(){
   setSaving(false);
 }
 
+/*************************************************
+ * DELETE EVENT
+ *************************************************/
+async function deleteEvent(eventId){
+  if(!confirm("Padam event ini?\n\nAffiliate links juga akan dipadam.")) return;
+  try{
+    const result = await apiPost("deleteEvent", { eventId });
+    showMessage(result.message || "Event dipadam.");
+    await loadEvents();
+  }catch(e){showMessage("Error padam event.");}
+}
 
+/*************************************************
+ * DELETE SEASON
+ *************************************************/
+async function deleteSeason(seasonId){
+  if(!confirm("Padam season ini?\n\nAffiliate links juga akan dipadam.")) return;
+  try{
+    const result = await apiPost("deleteSeason", { seasonId });
+    showMessage(result.message || "Season dipadam.");
+    await loadSeasons();
+  }catch(e){showMessage("Error padam season.");}
+}
+
+  
 async function deleteNews(newsId){
   if(!confirm("Padam news ini?\n\nAffiliate links juga akan dipadam.")) return;
   try{
