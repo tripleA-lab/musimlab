@@ -1014,7 +1014,7 @@ if(start){
   loadAffiliates(id, "affiliateContainer_" + id);
 }
 
-function openFullDetail(id){
+
   const e = allEvents.find(x => getEventId(x) === id);
   if(!e) return;
   $("shareBtn").dataset.eventId = id;
