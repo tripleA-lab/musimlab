@@ -1557,13 +1557,18 @@ function closeForm(){
   if(searchEl) searchEl.value = "";
 }
 
-  
-function clearForm(){
-  ["eventName","startDate","endDate","category","negeri","location","shortDescription","description","imageUrl","officialLink"].forEach(id => document.getElementById(id).value = "");
+  function clearForm(){
+  ["eventName","startDate","endDate","category","negeri","location","shortDescription","description","imageUrl","officialLink"].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = "";
+  });
   document.getElementById("seasonId").value = "";
   document.getElementById("status").value = "Draft";
-  document.getElementById("linkList").innerHTML = `<div class="empty">No affiliate links yet.</div>`;
+  // linkList dah tak wujud — guna itemPickerList
+  const pickerSearch = document.getElementById("itemPickerSearch");
+  if(pickerSearch) pickerSearch.value = "";
 }
+
 async function editEvent(eventId){
   const e = events.find(x => String(x["Event ID"]) === String(eventId));
   if(!e) return;
