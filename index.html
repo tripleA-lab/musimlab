@@ -427,6 +427,7 @@ const EMPTY_QUOTES = [
 let allEvents = [];
 let allSeasons = [];
 let allNews = [];
+let allItems = [];  
 let holidayData = [];
 let currentDate = new Date();
 let selectedDate = null;
@@ -992,7 +993,7 @@ function openEventDetail(id){
   $("detailSheetContent").innerHTML = html;
   openSheet("detailSheet");
   setTimeout(() => attachCarouselScroll(id), 60);
-  loadAffiliates(id, "affiliateContainer_" + id);
+   loadEventPreparation(id, "affiliateContainer_" + id);
 }
 
 /* ============ FULL DETAIL ============ */
@@ -1046,9 +1047,52 @@ function openFullDetail(id){
 
   $("detailSheetContent").innerHTML = html;
   $("detailSheet").querySelector(".sheet-scroll").scrollTop = 0;
-  loadAffiliates(id, "affiliateFull_" + id);
+   loadEventPreparation(id, "affiliateFull_" + id);
 }
 
+async function loadEventPreparation(eventId, containerId){
+  const container = $(containerId);
+  if(!container) return;
+
+  try{
+    const r = await fetch(`${API_URL}?action=getEventItems&eventId=${encodeURIComponent(eventId)}&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+
+    if(!mappings.length) return;
+
+    const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds
+      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
+      .filter(Boolean);
+
+    if(!selectedItems.length) return;
+
+    container.innerHTML = `
+      <div class="affiliate-section">
+        <div class="affiliate-title">🛍️ Persediaan & Beli</div>
+        ${selectedItems.map(it => {
+          const icon = it["Icon"] || "🛍️";
+          const name = it["Name"] || "";
+          const desc = it["Description"] || "";
+          const url = it["URL"] || "";
+          return `
+            <div class="affiliate-card">
+              <div class="affiliate-card-head">
+                <div class="affiliate-name">${escapeHtml(icon)} ${escapeHtml(name)}</div>
+              </div>
+              ${desc ? `<div class="affiliate-desc">${escapeHtml(desc)}</div>` : ""}
+              ${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="affiliate-buy">🛒 Beli Sekarang →</a>` : ""}
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }catch(e){
+    console.error("event preparation err", e);
+  }
+}
+  
 /* ============ AFFILIATE ============ */
 async function loadAffiliates(itemId, containerId){
   const container = $(containerId);
@@ -1460,6 +1504,17 @@ async function loadNews(){
   }catch(e){console.error("news err", e)}
 }
 
+async function loadItems(){
+  try{
+    const r = await fetch(`${API_URL}?action=getItems&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    allItems = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+  }catch(e){
+    console.error("items err", e);
+    allItems = [];
+  }
+}
+  
 /* ============ NEWS TICKER SWIPE ============ */
 (function(){
   const ticker = $("newsTicker");
@@ -1525,6 +1580,7 @@ loadEvents();
 loadHolidays();
 loadSeasons();
 loadNews();
+loadItems();
 updateSavedCount();
 checkDeepLink();
 </script>
