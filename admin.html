@@ -130,6 +130,19 @@ textarea{min-height:110px;resize:vertical}
 .preview-row{display:flex;gap:12px;align-items:center;padding:12px;background:#f9fafb;border-radius:10px;border:1px solid #e5e7eb;margin-top:10px}
 .preview-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
 
+/* ITEM CARD */
+.item-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;display:flex;justify-content:space-between;gap:16px;align-items:flex-start;position:relative;overflow:hidden}
+.item-card.inactive{opacity:.65;background:#fafafa}
+.item-card::before{content:"";position:absolute;top:0;left:0;bottom:0;width:4px;background:#8b5cf6}
+.item-card.inactive::before{background:#d1d5db}
+.item-left{min-width:0;flex:1;padding-left:8px;display:flex;gap:12px;align-items:flex-start}
+.item-icon-box{width:44px;height:44px;border-radius:12px;background:#f5f3ff;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.item-details{min-width:0;flex:1}
+.item-title{font-size:15px;font-weight:750;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.item-desc{color:#6b7280;font-size:12px;line-height:1.5;margin-bottom:4px;max-width:500px}
+.item-url{color:#9ca3af;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:400px}
+.item-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+  
 /* SEVERITY PICKER */
 .severity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .severity-btn{padding:12px 8px;border:2px solid #e5e7eb;border-radius:10px;background:#fff;cursor:pointer;font-size:12px;font-weight:700;transition:.15s;display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -169,6 +182,7 @@ textarea{min-height:110px;resize:vertical}
     <button class="tab" id="tabSeasons" onclick="switchTab('seasons')">Seasons</button>
     <button class="tab" id="tabNews" onclick="switchTab('news')">News</button>
     <button class="tab" id="tabHolidays" onclick="switchTab('holidays')">Holidays</button>
+    <button class="tab" id="tabItems" onclick="switchTab('items')">Items</button>
   </div>
   <div class="header-right">
     <button class="btn btn-primary" id="addBtn" onclick="handleAddClick()">+ Add Event</button>
@@ -448,7 +462,61 @@ textarea{min-height:110px;resize:vertical}
       </div>
     </div>
   </section>
+<!-- ============ ITEMS ============ -->
+<section id="itemsView" style="display:none">
+  <div id="itemsDashboard" class="dashboard-view">
+    <div class="page-title"><h1>Items Master</h1><p>Senarai barang untuk event. Tick je dalam event form.</p></div>
+    <div class="toolbar" style="grid-template-columns:1fr">
+      <input type="text" id="itemSearchInput" placeholder="🔍 Cari item..." oninput="renderItems()">
+    </div>
+    <div id="itemList" class="event-list"><div class="empty">Loading items...</div></div>
+  </div>
 
+  <div id="itemFormView" class="form-view">
+    <div class="form-header">
+      <div class="form-header-left">
+        <button class="back-btn" onclick="closeItemForm()">←</button>
+        <h2 id="itemFormTitle">Add Item</h2>
+      </div>
+      <div class="form-header-right"><button class="btn btn-primary" onclick="saveItem()">Save</button></div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Item Information</div>
+      <div class="grid-2">
+        <div class="field full">
+          <label>Icon (emoji)</label>
+          <input type="text" id="itemIcon" placeholder="☂️" maxlength="4" style="font-size:24px;text-align:center">
+          <small>Copy emoji dari keyboard. Contoh: ☂️ 🌂 💧 👟</small>
+        </div>
+        <div class="field full">
+          <label>Nama Item</label>
+          <input type="text" id="itemName" placeholder="Example: Payung Kecil">
+        </div>
+        <div class="field full">
+          <label>Description</label>
+          <textarea id="itemDescription" style="min-height:80px" placeholder="Penerangan ringkas..."></textarea>
+        </div>
+        <div class="field full">
+          <label>Affiliate URL</label>
+          <input type="url" id="itemUrl" placeholder="https://shopee.com/...">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="itemStatus">
+            <option value="Active">Active (boleh tick)</option>
+            <option value="Inactive">Inactive (disembunyikan)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="closeItemForm()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveItem()">Save Item</button>
+    </div>
+  </div>
+</section>
 </main>
 
 <!-- LINK MODAL -->
@@ -536,13 +604,14 @@ function autoMatchNegeri(location, currentNegeri){
 /*************************************************
  * STATE
  *************************************************/
-let events = [], seasons = [], news = [], holidays = [];
+let events = [], seasons = [], news = [], holidays = [], items = [];
 let currentTab = "events";
 
 let currentEventId = null, tempLinks = [], __currentLinks = [];
 let currentSeasonId = null, tempSeasonLinks = [], __currentSeasonLinks = [];
 let currentNewsId = null, tempNewsLinks = [], __currentNewsLinks = [];
 let currentHolidayId = null;  
+let currentItemId = null; 
 let editingLinkId = null, editingSeasonLinkId = null, editingNewsLinkId = null;
 let selectedIcon = "🌧️", selectedColor = "#6366f1";
 let selectedSeverity = "Info";
@@ -562,33 +631,36 @@ function showMessage(text){
  *************************************************/
 function switchTab(tab){
   currentTab = tab;
-  ["Events","Seasons","News","Holidays"].forEach(t => {
+  ["Events","Seasons","News","Holidays","Items"].forEach(t => {
   document.getElementById("tab" + t).classList.toggle("active", t.toLowerCase() === tab);
 });
 document.getElementById("eventsView").style.display = tab === "events" ? "block" : "none";
 document.getElementById("seasonsView").style.display = tab === "seasons" ? "block" : "none";
 document.getElementById("newsView").style.display = tab === "news" ? "block" : "none";
 document.getElementById("holidaysView").style.display = tab === "holidays" ? "block" : "none";
-closeForm(); closeSeasonForm(); closeNewsForm(); closeHolidayForm();
+document.getElementById("itemsView").style.display = tab === "items" ? "block" : "none";
+closeForm(); closeSeasonForm(); closeNewsForm(); closeHolidayForm(); closeItemForm();
 updateAddButton();
 if(tab === "seasons") renderSeasons();
 if(tab === "news") renderNews();
 if(tab === "holidays") renderHolidays();
+if(tab === "items") renderItems();
 }
 
-
- function handleAddClick(){
+function handleAddClick(){
   if(currentTab === "events") openAddForm();
   else if(currentTab === "seasons") openAddSeasonForm();
   else if(currentTab === "news") openAddNewsForm();
   else if(currentTab === "holidays") openAddHolidayForm();
+  else if(currentTab === "items") openAddItemForm();
 }
 
 function updateAddButton(){
   const btn = document.getElementById("addBtn");
-  const map = {events: "+ Add Event", seasons: "+ Add Season", news: "+ Add News", holidays: "+ Add Holiday"};
+  const map = {events: "+ Add Event", seasons: "+ Add Season", news: "+ Add News", holidays: "+ Add Holiday", items: "+ Add Item"};
   btn.textContent = map[currentTab];
-} 
+}
+
 
 /*************************************************
  * API
@@ -729,6 +801,174 @@ async function deleteHoliday(holidayId){
   }catch(e){showMessage("Error padam cuti.");}
 }
 
+
+  /*************************************************
+ * ITEMS MASTER
+ *************************************************/
+async function loadItems(){
+  try{
+    const result = await apiGet({ action: "getItems" });
+    items = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+    renderItems();
+  }catch(e){
+    console.error("items err", e);
+    items = [];
+    renderItems();
+  }
+}
+
+function renderItems(){
+  const list = document.getElementById("itemList");
+  if(!list) return;
+
+  const search = (document.getElementById("itemSearchInput")?.value || "").toLowerCase();
+
+  let filtered = items;
+  if(search){
+    filtered = items.filter(it => {
+      const name = String(it["Name"] || "").toLowerCase();
+      const desc = String(it["Description"] || "").toLowerCase();
+      return name.includes(search) || desc.includes(search);
+    });
+  }
+
+  if(!filtered.length){
+    list.innerHTML = `<div class="empty">${search ? "Takde item padan." : "No items yet. Klik \"+ Add Item\" untuk mula."}</div>`;
+    return;
+  }
+
+  // Sort: Active dulu, alphabet
+  const sorted = [...filtered].sort((a,b) => {
+    const sa = String(a.Status||"").toLowerCase() === "active" ? 0 : 1;
+    const sb = String(b.Status||"").toLowerCase() === "active" ? 0 : 1;
+    if(sa !== sb) return sa - sb;
+    return String(a["Name"]||"").localeCompare(String(b["Name"]||""));
+  });
+
+  list.innerHTML = sorted.map(it => {
+    const id = it["Item ID"];
+    const isActive = String(it.Status || "").toLowerCase() === "active";
+    const icon = it["Icon"] || "🛍️";
+    const name = it["Name"] || "";
+    const desc = it["Description"] || "";
+    const url = it["URL"] || "";
+    return `
+      <div class="item-card ${isActive ? "" : "inactive"}">
+        <div class="item-left">
+          <div class="item-icon-box">${escapeHtml(icon)}</div>
+          <div class="item-details">
+            <div class="item-title">
+              ${escapeHtml(name)}
+              ${isActive ? `<span class="badge badge-status">Active</span>` : `<span class="badge badge-off">Inactive</span>`}
+            </div>
+            ${desc ? `<div class="item-desc">${escapeHtml(desc)}</div>` : ""}
+            ${url ? `<div class="item-url">${escapeHtml(url)}</div>` : ""}
+          </div>
+        </div>
+        <div class="item-right">
+          <label class="switch" title="${isActive ? "Klik untuk OFF" : "Klik untuk ON"}">
+            <input type="checkbox" ${isActive ? "checked" : ""} onchange="toggleItemStatus('${id}', this)">
+            <span class="slider"></span>
+          </label>
+          <button class="btn btn-secondary btn-small" onclick="editItem('${id}')">Edit</button>
+          <button class="btn btn-danger btn-small" onclick="deleteItem('${id}')">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function openAddItemForm(){
+  currentItemId = null;
+  document.getElementById("itemFormTitle").textContent = "Add Item";
+  document.getElementById("itemIcon").value = "";
+  document.getElementById("itemName").value = "";
+  document.getElementById("itemDescription").value = "";
+  document.getElementById("itemUrl").value = "";
+  document.getElementById("itemStatus").value = "Active";
+  document.getElementById("itemsDashboard").classList.add("hidden");
+  document.getElementById("itemFormView").classList.add("active");
+}
+
+function closeItemForm(){
+  document.getElementById("itemFormView").classList.remove("active");
+  document.getElementById("itemsDashboard").classList.remove("hidden");
+  currentItemId = null;
+}
+
+function editItem(itemId){
+  const it = items.find(x => String(x["Item ID"]) === String(itemId));
+  if(!it) return;
+  currentItemId = it["Item ID"];
+  document.getElementById("itemFormTitle").textContent = "Edit Item";
+  document.getElementById("itemIcon").value = it["Icon"] || "";
+  document.getElementById("itemName").value = it["Name"] || "";
+  document.getElementById("itemDescription").value = it["Description"] || "";
+  document.getElementById("itemUrl").value = it["URL"] || "";
+  document.getElementById("itemStatus").value = it["Status"] || "Active";
+  document.getElementById("itemsDashboard").classList.add("hidden");
+  document.getElementById("itemFormView").classList.add("active");
+}
+
+async function saveItem(){
+  if(isSaving) return;
+  setSaving(true);
+
+  const name = document.getElementById("itemName").value.trim();
+  const url = document.getElementById("itemUrl").value.trim();
+
+  if(!name){showMessage("Nama item diperlukan.");setSaving(false);return;}
+  if(!url){showMessage("URL diperlukan.");setSaving(false);return;}
+
+  const data = {
+    itemId: currentItemId,
+    icon: document.getElementById("itemIcon").value.trim() || "🛍️",
+    name: name,
+    description: document.getElementById("itemDescription").value,
+    url: url,
+    status: document.getElementById("itemStatus").value
+  };
+
+  const action = currentItemId ? "updateItem" : "addItem";
+
+  try{
+    const result = await apiPost(action, data);
+    if(!result.success){showMessage(result.message || "Gagal.");setSaving(false);return;}
+    showMessage(result.message || "Item berjaya disimpan.");
+    closeItemForm();
+    await loadItems();
+  }catch(e){
+    console.error(e);
+    showMessage("Error simpan item.");
+  }
+  setSaving(false);
+}
+
+async function deleteItem(itemId){
+  if(!confirm("Padam item ini?\n\nItem akan hilang dari semua event yang guna.")) return;
+  try{
+    const result = await apiPost("deleteItem", { itemId });
+    showMessage(result.message || "Item dipadam.");
+    await loadItems();
+  }catch(e){showMessage("Error padam item.");}
+}
+
+async function toggleItemStatus(itemId, checkbox){
+  const newState = checkbox.checked;
+  try{
+    const result = await apiPost("toggleItemStatus", { itemId });
+    if(!result.success){
+      showMessage(result.message || "Gagal tukar status.");
+      checkbox.checked = !newState;
+      return;
+    }
+    showMessage(result.message || "Status dikemaskini.");
+    await loadItems();
+  }catch(e){
+    checkbox.checked = !newState;
+    showMessage("Error tukar status.");
+  }
+}
   
 /*************************************************
  * LOAD
@@ -1513,6 +1753,7 @@ loadSeasons();
 loadEvents();
 loadNews();
 loadHolidays();  
+loadItems();
 </script>
 </body>
 </html>
