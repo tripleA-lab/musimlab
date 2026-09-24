@@ -1626,29 +1626,42 @@ async function saveEvent(){
     return;
   }
   const action = currentEventId ? "updateEvent" : "addEvent";
+    const action = currentEventId ? "updateEvent" : "addEvent";
   try{
     const result = await apiPost(action, data);
     if(!result.success){
-      showMessage(result.message || "Gagal.");
+      showMessage(result.message || "Gagal simpan event.");
       setSaving(false);
       return;
     }
+
     let newId = currentEventId || (result.data && result.data.eventId) || null;
-if(!currentEventId && !newId){
-  closeForm(); await loadEvents(); await loadSeasons();
-  setSaving(false);
-  return;
-}
+    if(!currentEventId && !newId){
+      closeForm(); await loadEvents(); await loadSeasons();
+      setSaving(false);
+      return;
+    }
 
-// Simpan items yang dipilih
-await saveEventItemsToAPI(newId, currentEventItemIds);
+    // Simpan items — dalam try-catch sendiri supaya tak fail seluruh save
+    try{
+      const itemsResult = await saveEventItemsToAPI(newId, currentEventItemIds);
+      if(!itemsResult || !itemsResult.success){
+        console.warn("saveEventItems gagal:", itemsResult);
+        showMessage("Event disimpan, tapi items gagal: " + (itemsResult?.message || "unknown"));
+      } else {
+        showMessage(result.message || "Event berjaya disimpan.");
+      }
+    }catch(itemErr){
+      console.error("saveEventItems error:", itemErr);
+      showMessage("Event disimpan, tapi items error.");
+    }
 
-showMessage(result.message || "Event berjaya disimpan.");
     closeForm();
     await loadEvents();
     await loadSeasons();
   }catch(e){
-    showMessage("Error saving event.");
+    console.error("saveEvent error:", e);
+    showMessage("Error saving event: " + (e.message || "unknown"));
   }
   setSaving(false);
 }
