@@ -741,7 +741,7 @@ function openNewsDetail(newsId){
   $("newsSheetContent").innerHTML = html;
   openSheet("newsSheet");
   if(images.length) setTimeout(() => attachCarouselScroll("news_" + newsId), 60);
-  loadAffiliates(newsId, "affiliateNewsContainer");
+   loadNewsPreparation(newsId, "affiliateNewsContainer");
 }
 
 function formatTimeAgo(date){
@@ -1092,6 +1092,66 @@ async function loadEventPreparation(eventId, containerId){
     console.error("event preparation err", e);
   }
 }
+
+  async function loadSeasonPreparation(seasonId, containerId){
+  const container = $(containerId);
+  if(!container) return;
+
+  try{
+    const r = await fetch(`${API_URL}?action=getSeasonItems&seasonId=${encodeURIComponent(seasonId)}&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    if(!mappings.length) return;
+
+    const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
+    if(!selectedItems.length) return;
+
+    container.innerHTML = renderPreparationCards(selectedItems);
+  }catch(e){ console.error("season prep err", e); }
+}
+
+async function loadNewsPreparation(newsId, containerId){
+  const container = $(containerId);
+  if(!container) return;
+
+  try{
+    const r = await fetch(`${API_URL}?action=getNewsItems&newsId=${encodeURIComponent(newsId)}&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    if(!mappings.length) return;
+
+    const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
+    if(!selectedItems.length) return;
+
+    container.innerHTML = renderPreparationCards(selectedItems);
+  }catch(e){ console.error("news prep err", e); }
+}
+
+function renderPreparationCards(selectedItems){
+  return `
+    <div class="affiliate-section">
+      <div class="affiliate-title">🛍️ Persediaan & Beli</div>
+      ${selectedItems.map(it => {
+        const icon = it["Icon"] || "🛍️";
+        const name = it["Name"] || "";
+        const desc = it["Description"] || "";
+        const url = it["URL"] || "";
+        return `
+          <div class="affiliate-card">
+            <div class="affiliate-card-head">
+              <div class="affiliate-name">${escapeHtml(icon)} ${escapeHtml(name)}</div>
+            </div>
+            ${desc ? `<div class="affiliate-desc">${escapeHtml(desc)}</div>` : ""}
+            ${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="affiliate-buy">🛒 Beli Sekarang →</a>` : ""}
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+  
   
 /* ============ AFFILIATE ============ */
 async function loadAffiliates(itemId, containerId){
@@ -1345,7 +1405,7 @@ function openSeasonDetail(id){
   `;
   $("seasonSheetContent").innerHTML = html;
   openSheet("seasonSheet");
-  loadAffiliates(id, "seasonAffiliateContainer");
+   loadSeasonPreparation(id, "seasonAffiliateContainer");
 }
 
 /* ============ SHEET ============ */
