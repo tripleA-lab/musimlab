@@ -1569,7 +1569,7 @@ function closeForm(){
   if(pickerSearch) pickerSearch.value = "";
 }
 
-async function editEvent(eventId){
+  async function editEvent(eventId){
   const e = events.find(x => String(x["Event ID"]) === String(eventId));
   if(!e) return;
   currentEventId = e["Event ID"]; tempLinks = [];
@@ -1586,12 +1586,19 @@ async function editEvent(eventId){
   document.getElementById("officialLink").value = e["Official Link"] || "";
   document.getElementById("status").value = e["Status"] || "Draft";
   document.getElementById("negeri").value = autoMatchNegeri(e["Location"], e["Negeri"]);
+
+  // ⬇️ INI YANG TERTINGGAL — TAMBAH 2 BARIS
+  document.getElementById("dashboardView").classList.add("hidden");
+  document.getElementById("formView").classList.add("active");
+  // ⬆️
+
   currentEventItemIds = [];
   const searchEl = document.getElementById("itemPickerSearch");
   if(searchEl) searchEl.value = "";
   renderItemPicker();
   await loadEventItems(eventId);
 }
+
 
   
 async function saveEvent(){
