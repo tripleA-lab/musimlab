@@ -329,11 +329,16 @@ textarea{min-height:110px;resize:vertical}
         </div>
       </div>
 
-      <div class="form-section">
-        <div class="section-title">Affiliate Links</div>
-        <div id="seasonLinkList" class="link-list"><div class="empty">No affiliate links yet.</div></div>
-        <button class="add-link" onclick="openSeasonLinkModal()">+ Add Affiliate Link</button>
-      </div>
+     <div class="form-section">
+  <div class="section-title">🛍️ Persediaan & Barang Perlu</div>
+  <div class="item-picker-search">
+    <input type="text" id="seasonItemPickerSearch" placeholder="🔍 Cari item..." oninput="filterItemPicker('season')">
+    <span class="item-picker-count" id="seasonItemPickerCount">0 dipilih</span>
+  </div>
+  <div class="item-picker-list" id="seasonItemPickerList">
+    <div class="item-picker-empty">Loading...</div>
+  </div>
+</div>
 
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeSeasonForm()">Cancel</button>
@@ -456,10 +461,15 @@ textarea{min-height:110px;resize:vertical}
       </div>
 
       <div class="form-section">
-        <div class="section-title">Affiliate Links</div>
-        <div id="newsLinkList" class="link-list"><div class="empty">No affiliate links yet.</div></div>
-        <button class="add-link" onclick="openNewsLinkModal()">+ Add Affiliate Link</button>
-      </div>
+  <div class="section-title">🛍️ Persediaan & Barang Perlu</div>
+  <div class="item-picker-search">
+    <input type="text" id="seasonItemPickerSearch" placeholder="🔍 Cari item..." oninput="filterItemPicker('season')">
+    <span class="item-picker-count" id="seasonItemPickerCount">0 dipilih</span>
+  </div>
+  <div class="item-picker-list" id="seasonItemPickerList">
+    <div class="item-picker-empty">Loading...</div>
+  </div>
+</div>
 
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeNewsForm()">Cancel</button>
@@ -1100,21 +1110,29 @@ async function toggleNewsStatus(newsId, checkbox){
  *************************************************/
 function openAddNewsForm(){
   currentNewsId = null;
+  currentNewsItemIds = [];
   tempNewsLinks = [];
   selectedSeverity = "Info";
   document.getElementById("newsFormTitle").textContent = "Add News";
   clearNewsForm();
   document.getElementById("newsDashboard").classList.add("hidden");
   document.getElementById("newsFormView").classList.add("active");
+  const s = document.getElementById("newsItemPickerSearch");
+  if(s) s.value = "";
+  renderItemPicker("news");
 }
 
-function closeNewsForm(){
+  function closeNewsForm(){
   document.getElementById("newsFormView").classList.remove("active");
   document.getElementById("newsDashboard").classList.remove("hidden");
   currentNewsId = null;
+  currentNewsItemIds = [];
   tempNewsLinks = [];
   editingNewsLinkId = null;
+  const s = document.getElementById("newsItemPickerSearch");
+  if(s) s.value = "";
 }
+
 
 function clearNewsForm(){
   document.getElementById("newsTitle").value = "";
@@ -1147,8 +1165,14 @@ async function editNews(newsId){
   document.getElementById("newsDashboard").classList.add("hidden");
   document.getElementById("newsFormView").classList.add("active");
 
-  await loadNewsLinks(newsId);
+  currentNewsItemIds = [];
+  const nSearch = document.getElementById("newsItemPickerSearch");
+  if(nSearch) nSearch.value = "";
+  renderItemPicker("news");
+  await loadNewsItems(newsId);
 }
+
+  
 async function saveNews(){
   if(isSaving) return;
   setSaving(true);
@@ -1182,19 +1206,17 @@ async function saveNews(){
       return;
     }
 
-    if(tempNewsLinks.length > 0){
-      for(const link of tempNewsLinks){
-        await apiPost("addLink", {
-          eventId: newNewsId,
-          linkType: "News",
-          title: link.Title,
-          url: link.URL
-        });
-      }
-      tempNewsLinks = [];
-    }
+   // Simpan items
+try{
+  const itemsResult = await saveNewsItemsToAPI(newNewsId, currentNewsItemIds);
+  if(!itemsResult || !itemsResult.success){
+    console.warn("saveNewsItems gagal:", itemsResult);
+  }
+}catch(itemErr){
+  console.error("saveNewsItems error:", itemErr);
+}
 
-    showMessage(result.message || "News berjaya disimpan.");
+showMessage(result.message || "News berjaya disimpan.");
     closeNewsForm();
     await loadNews();
   }catch(e){
@@ -1356,16 +1378,22 @@ async function toggleSeasonStatus(seasonId, checkbox){
  *************************************************/
 function openAddSeasonForm(){
   currentSeasonId = null;
+  currentSeasonItemIds = [];
   tempSeasonLinks = [];
   document.getElementById("seasonFormTitle").textContent = "Add Season";
   clearSeasonForm();
   document.getElementById("seasonsDashboard").classList.add("hidden");
   document.getElementById("seasonFormView").classList.add("active");
+  const s = document.getElementById("seasonItemPickerSearch");
+  if(s) s.value = "";
+  renderItemPicker("season");
 }
 function closeSeasonForm(){
   document.getElementById("seasonFormView").classList.remove("active");
   document.getElementById("seasonsDashboard").classList.remove("hidden");
-  currentSeasonId = null; tempSeasonLinks = []; editingSeasonLinkId = null;
+  currentSeasonId = null; currentSeasonItemIds = []; tempSeasonLinks = []; editingSeasonLinkId = null;
+  const s = document.getElementById("seasonItemPickerSearch");
+  if(s) s.value = "";
 }
 function clearSeasonForm(){
   document.getElementById("seasonName").value = "";
@@ -1386,9 +1414,14 @@ async function editSeason(seasonId){
   selectedIcon = s["Icon"] || "🌧️";
   selectedColor = s["Color"] || "#6366f1";
   renderIconPicker(); renderColorPicker(); updatePreview();
-  document.getElementById("seasonsDashboard").classList.add("hidden");
+   document.getElementById("seasonsDashboard").classList.add("hidden");
   document.getElementById("seasonFormView").classList.add("active");
-  await loadSeasonLinks(seasonId);
+
+  currentSeasonItemIds = [];
+  const sSearch = document.getElementById("seasonItemPickerSearch");
+  if(sSearch) sSearch.value = "";
+  renderItemPicker("season");
+  await loadSeasonItems(seasonId);
 }
 async function saveSeason(){
   if(isSaving) return;
@@ -1408,28 +1441,49 @@ async function saveSeason(){
     if(!result.success){showMessage(result.message || "Gagal.");setSaving(false);return;}
     let newId = currentSeasonId || (result.data && result.data.seasonId) || null;
     if(!currentSeasonId && !newId){closeSeasonForm(); await loadSeasons(); setSaving(false); return;}
-    if(tempSeasonLinks.length > 0){
-      for(const link of tempSeasonLinks){
-        await apiPost("addLink", { eventId: newId, linkType: "Season", title: link.Title, url: link.URL });
-      }
-      tempSeasonLinks = [];
-    }
-    showMessage(result.message || "Season berjaya disimpan.");
+    // Simpan items
+try{
+  const itemsResult = await saveSeasonItemsToAPI(newId, currentSeasonItemIds);
+  if(!itemsResult || !itemsResult.success){
+    console.warn("saveSeasonItems gagal:", itemsResult);
+  }
+}catch(itemErr){
+  console.error("saveSeasonItems error:", itemErr);
+}
+
+showMessage(result.message || "Season berjaya disimpan.");
     closeSeasonForm();
     await loadSeasons();
   }catch(e){showMessage("Error simpan season.");}
   setSaving(false);
 }
 
-  /*************************************************
- * ITEM PICKER (Event Form)
+ /*************************************************
+ * ITEM PICKER (Generalized)
  *************************************************/
-function renderItemPicker(){
-  const list = document.getElementById("itemPickerList");
-  const countEl = document.getElementById("itemPickerCount");
+function getItemIdsFor(prefix){
+  if(prefix === "event") return currentEventItemIds;
+  if(prefix === "season") return currentSeasonItemIds;
+  if(prefix === "news") return currentNewsItemIds;
+  return [];
+}
+
+function setItemIdsFor(prefix, arr){
+  if(prefix === "event") currentEventItemIds = arr;
+  else if(prefix === "season") currentSeasonItemIds = arr;
+  else if(prefix === "news") currentNewsItemIds = arr;
+}
+
+function renderItemPicker(prefix){
+  if(!prefix) prefix = "event";
+
+  const list = document.getElementById(prefix + "ItemPickerList");
+  const countEl = document.getElementById(prefix + "ItemPickerCount");
+  const searchEl = document.getElementById(prefix + "ItemPickerSearch");
   if(!list) return;
 
-  const search = (document.getElementById("itemPickerSearch")?.value || "").toLowerCase();
+  const selectedIds = getItemIdsFor(prefix);
+  const search = (searchEl?.value || "").toLowerCase();
   const activeItems = items.filter(it => String(it.Status||"").toLowerCase() === "active");
 
   let available = activeItems;
@@ -1441,10 +1495,10 @@ function renderItemPicker(){
     });
   }
 
-  const selected = available.filter(it => currentEventItemIds.includes(it["Item ID"]));
-  const unselected = available.filter(it => !currentEventItemIds.includes(it["Item ID"]));
+  const selected = available.filter(it => selectedIds.includes(it["Item ID"]));
+  const unselected = available.filter(it => !selectedIds.includes(it["Item ID"]));
 
-  if(countEl) countEl.textContent = `${currentEventItemIds.length} dipilih`;
+  if(countEl) countEl.textContent = `${selectedIds.length} dipilih`;
 
   if(!available.length){
     list.innerHTML = `<div class="item-picker-empty">${
@@ -1456,29 +1510,25 @@ function renderItemPicker(){
   }
 
   let html = "";
-
-  // Section: Dipilih
   if(selected.length){
     html += `<div class="item-picker-divider">✓ Dipilih (${selected.length})</div>`;
-    html += selected.map(it => renderPickerRow(it, true)).join("");
+    html += selected.map(it => renderPickerRow(it, true, prefix)).join("");
   }
-
-  // Section: Semua
   if(unselected.length){
     html += `<div class="item-picker-divider">Semua Item (${unselected.length})</div>`;
-    html += unselected.map(it => renderPickerRow(it, false)).join("");
+    html += unselected.map(it => renderPickerRow(it, false, prefix)).join("");
   }
 
   list.innerHTML = html;
 }
 
-function renderPickerRow(it, isSelected){
+function renderPickerRow(it, isSelected, prefix){
   const id = it["Item ID"];
   const icon = it["Icon"] || "🛍️";
   const name = it["Name"] || "";
   const desc = it["Description"] || "";
   return `
-    <div class="item-picker-row ${isSelected ? "selected" : ""}" onclick="toggleEventItem('${id}')">
+    <div class="item-picker-row ${isSelected ? "selected" : ""}" onclick="toggleItemFor('${prefix}', '${id}')">
       <div class="picker-check">${isSelected ? "✓" : ""}</div>
       <div class="picker-icon">${escapeHtml(icon)}</div>
       <div style="flex:1;min-width:0">
@@ -1489,18 +1539,16 @@ function renderPickerRow(it, isSelected){
   `;
 }
 
-function filterItemPicker(){
-  renderItemPicker();
+function filterItemPicker(prefix){
+  renderItemPicker(prefix);
 }
 
-function toggleEventItem(itemId){
-  const idx = currentEventItemIds.indexOf(itemId);
-  if(idx >= 0){
-    currentEventItemIds.splice(idx, 1);
-  } else {
-    currentEventItemIds.push(itemId);
-  }
-  renderItemPicker();
+function toggleItemFor(prefix, itemId){
+  const arr = getItemIdsFor(prefix);
+  const idx = arr.indexOf(itemId);
+  if(idx >= 0) arr.splice(idx, 1);
+  else arr.push(itemId);
+  renderItemPicker(prefix);
 }
 
 async function loadEventItems(eventId){
@@ -1509,23 +1557,56 @@ async function loadEventItems(eventId){
     if(String(currentEventId) !== String(eventId)) return;
     const rows = (result && result.success && Array.isArray(result.data)) ? result.data : [];
     currentEventItemIds = rows.map(r => r["Item ID"]).filter(Boolean);
-    renderItemPicker();
+    renderItemPicker("event");
   }catch(e){
     console.error("event items err", e);
     currentEventItemIds = [];
-    renderItemPicker();
+    renderItemPicker("event");
+  }
+}
+
+async function loadSeasonItems(seasonId){
+  try{
+    const result = await apiGet({ action: "getSeasonItems", seasonId });
+    if(String(currentSeasonId) !== String(seasonId)) return;
+    const rows = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+    currentSeasonItemIds = rows.map(r => r["Item ID"]).filter(Boolean);
+    renderItemPicker("season");
+  }catch(e){
+    console.error("season items err", e);
+    currentSeasonItemIds = [];
+    renderItemPicker("season");
+  }
+}
+
+async function loadNewsItems(newsId){
+  try{
+    const result = await apiGet({ action: "getNewsItems", newsId });
+    if(String(currentNewsId) !== String(newsId)) return;
+    const rows = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+    currentNewsItemIds = rows.map(r => r["Item ID"]).filter(Boolean);
+    renderItemPicker("news");
+  }catch(e){
+    console.error("news items err", e);
+    currentNewsItemIds = [];
+    renderItemPicker("news");
   }
 }
 
 async function saveEventItemsToAPI(eventId, itemIds){
-  try{
-    const result = await apiPost("saveEventItems", { eventId, itemIds });
-    return result;
-  }catch(e){
-    console.error("save event items err", e);
-    return { success: false, message: "Error simpan items." };
-  }
+  try{ return await apiPost("saveEventItems", { eventId, itemIds }); }
+  catch(e){ return { success: false, message: "Error simpan items." }; }
 }
+
+async function saveSeasonItemsToAPI(seasonId, itemIds){
+  try{ return await apiPost("saveSeasonItems", { seasonId, itemIds }); }
+  catch(e){ return { success: false, message: "Error simpan items." }; }
+}
+
+async function saveNewsItemsToAPI(newsId, itemIds){
+  try{ return await apiPost("saveNewsItems", { newsId, itemIds }); }
+  catch(e){ return { success: false, message: "Error simpan items." }; }
+} 
 
 
   
