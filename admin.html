@@ -270,10 +270,15 @@ textarea{min-height:110px;resize:vertical}
       </div>
 
       <div class="form-section">
-        <div class="section-title">Affiliate Links</div>
-        <div id="linkList" class="link-list"><div class="empty">No affiliate links yet.</div></div>
-        <button class="add-link" onclick="openLinkModal()">+ Add Affiliate Link</button>
-      </div>
+  <div class="section-title">🛍️ Persediaan & Barang Perlu</div>
+  <div class="item-picker-search">
+    <input type="text" id="itemPickerSearch" placeholder="🔍 Cari item..." oninput="filterItemPicker()">
+    <span class="item-picker-count" id="itemPickerCount">0 dipilih</span>
+  </div>
+  <div class="item-picker-list" id="itemPickerList">
+    <div class="item-picker-empty">Loading...</div>
+  </div>
+</div>
 
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeForm()">Cancel</button>
@@ -607,7 +612,7 @@ function autoMatchNegeri(location, currentNegeri){
 let events = [], seasons = [], news = [], holidays = [], items = [];
 let currentTab = "events";
 
-let currentEventId = null, tempLinks = [], __currentLinks = [];
+let currentEventId = null, currentEventItemIds = [], tempLinks = [], __currentLinks = [];
 let currentSeasonId = null, tempSeasonLinks = [], __currentSeasonLinks = [];
 let currentNewsId = null, tempNewsLinks = [], __currentNewsLinks = [];
 let currentHolidayId = null;  
@@ -1416,24 +1421,142 @@ async function saveSeason(){
   setSaving(false);
 }
 
+  /*************************************************
+ * ITEM PICKER (Event Form)
+ *************************************************/
+function renderItemPicker(){
+  const list = document.getElementById("itemPickerList");
+  const countEl = document.getElementById("itemPickerCount");
+  if(!list) return;
+
+  const search = (document.getElementById("itemPickerSearch")?.value || "").toLowerCase();
+  const activeItems = items.filter(it => String(it.Status||"").toLowerCase() === "active");
+
+  let available = activeItems;
+  if(search){
+    available = activeItems.filter(it => {
+      const name = String(it["Name"] || "").toLowerCase();
+      const desc = String(it["Description"] || "").toLowerCase();
+      return name.includes(search) || desc.includes(search);
+    });
+  }
+
+  const selected = available.filter(it => currentEventItemIds.includes(it["Item ID"]));
+  const unselected = available.filter(it => !currentEventItemIds.includes(it["Item ID"]));
+
+  if(countEl) countEl.textContent = `${currentEventItemIds.length} dipilih`;
+
+  if(!available.length){
+    list.innerHTML = `<div class="item-picker-empty">${
+      search ? "Takde item padan dengan carian."
+      : (items.length ? "Tiada item aktif. Aktifkan dalam tab Items."
+      : "Belum ada item. Tambah di tab Items.")
+    }</div>`;
+    return;
+  }
+
+  let html = "";
+
+  // Section: Dipilih
+  if(selected.length){
+    html += `<div class="item-picker-divider">✓ Dipilih (${selected.length})</div>`;
+    html += selected.map(it => renderPickerRow(it, true)).join("");
+  }
+
+  // Section: Semua
+  if(unselected.length){
+    html += `<div class="item-picker-divider">Semua Item (${unselected.length})</div>`;
+    html += unselected.map(it => renderPickerRow(it, false)).join("");
+  }
+
+  list.innerHTML = html;
+}
+
+function renderPickerRow(it, isSelected){
+  const id = it["Item ID"];
+  const icon = it["Icon"] || "🛍️";
+  const name = it["Name"] || "";
+  const desc = it["Description"] || "";
+  return `
+    <div class="item-picker-row ${isSelected ? "selected" : ""}" onclick="toggleEventItem('${id}')">
+      <div class="picker-check">${isSelected ? "✓" : ""}</div>
+      <div class="picker-icon">${escapeHtml(icon)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="picker-name">${escapeHtml(name)}</div>
+        ${desc && !isSelected ? `<div style="font-size:11px;color:#9ca3af;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(desc)}</div>` : ""}
+      </div>
+    </div>
+  `;
+}
+
+function filterItemPicker(){
+  renderItemPicker();
+}
+
+function toggleEventItem(itemId){
+  const idx = currentEventItemIds.indexOf(itemId);
+  if(idx >= 0){
+    currentEventItemIds.splice(idx, 1);
+  } else {
+    currentEventItemIds.push(itemId);
+  }
+  renderItemPicker();
+}
+
+async function loadEventItems(eventId){
+  try{
+    const result = await apiGet({ action: "getEventItems", eventId });
+    if(String(currentEventId) !== String(eventId)) return;
+    const rows = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+    currentEventItemIds = rows.map(r => r["Item ID"]).filter(Boolean);
+    renderItemPicker();
+  }catch(e){
+    console.error("event items err", e);
+    currentEventItemIds = [];
+    renderItemPicker();
+  }
+}
+
+async function saveEventItemsToAPI(eventId, itemIds){
+  try{
+    const result = await apiPost("saveEventItems", { eventId, itemIds });
+    return result;
+  }catch(e){
+    console.error("save event items err", e);
+    return { success: false, message: "Error simpan items." };
+  }
+}
+
+
+  
 /*************************************************
  * EVENT FORM
  *************************************************/
 function openAddForm(){
-  currentEventId = null; tempLinks = [];
+  currentEventId = null;
+  currentEventItemIds = [];
+  tempLinks = [];
   window.__currentLinks = [];
   document.getElementById("formTitle").textContent = "Add Event";
   clearForm();
   document.getElementById("dashboardView").classList.add("hidden");
   document.getElementById("formView").classList.add("active");
+  const searchEl = document.getElementById("itemPickerSearch");
+  if(searchEl) searchEl.value = "";
+  renderItemPicker();
 }
-
 function closeForm(){
   document.getElementById("formView").classList.remove("active");
   document.getElementById("dashboardView").classList.remove("hidden");
-  currentEventId = null; tempLinks = []; editingLinkId = null;
+  currentEventId = null;
+  currentEventItemIds = [];
+  tempLinks = [];
+  editingLinkId = null;
   window.__currentLinks = [];
+  const searchEl = document.getElementById("itemPickerSearch");
+  if(searchEl) searchEl.value = "";
 }
+
   
 function clearForm(){
   ["eventName","startDate","endDate","category","negeri","location","shortDescription","description","imageUrl","officialLink"].forEach(id => document.getElementById(id).value = "");
@@ -1458,10 +1581,14 @@ async function editEvent(eventId){
   document.getElementById("officialLink").value = e["Official Link"] || "";
   document.getElementById("status").value = e["Status"] || "Draft";
   document.getElementById("negeri").value = autoMatchNegeri(e["Location"], e["Negeri"]);
-  document.getElementById("dashboardView").classList.add("hidden");
-  document.getElementById("formView").classList.add("active");
-  await loadLinks(eventId);
+  currentEventItemIds = [];
+  const searchEl = document.getElementById("itemPickerSearch");
+  if(searchEl) searchEl.value = "";
+  renderItemPicker();
+  await loadEventItems(eventId);
 }
+
+  
 async function saveEvent(){
   if(isSaving) return;
   setSaving(true);
@@ -1495,18 +1622,16 @@ async function saveEvent(){
       return;
     }
     let newId = currentEventId || (result.data && result.data.eventId) || null;
-    if(!currentEventId && !newId){
-      closeForm(); await loadEvents(); await loadSeasons();
-      setSaving(false);
-      return;
-    }
-    if(tempLinks.length > 0){
-      for(const link of tempLinks){
-        await apiPost("addLink", { eventId: newId, linkType: "Affiliate", title: link.Title, url: link.URL });
-      }
-      tempLinks = [];
-    }
-    showMessage(result.message || "Event berjaya disimpan.");
+if(!currentEventId && !newId){
+  closeForm(); await loadEvents(); await loadSeasons();
+  setSaving(false);
+  return;
+}
+
+// Simpan items yang dipilih
+await saveEventItemsToAPI(newId, currentEventItemIds);
+
+showMessage(result.message || "Event berjaya disimpan.");
     closeForm();
     await loadEvents();
     await loadSeasons();
