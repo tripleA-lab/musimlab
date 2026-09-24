@@ -1707,7 +1707,6 @@ async function saveEvent(){
     return;
   }
   const action = currentEventId ? "updateEvent" : "addEvent";
-    const action = currentEventId ? "updateEvent" : "addEvent";
   try{
     const result = await apiPost(action, data);
     if(!result.success){
