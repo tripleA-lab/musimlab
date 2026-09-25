@@ -95,23 +95,9 @@ textarea{min-height:110px;resize:vertical}
 .field small{display:block;color:#9ca3af;font-size:10px;margin-top:4px}
 .full{grid-column:1/-1}
 
-.link-list{display:grid;gap:8px;margin-bottom:10px}
-.link-card{border:1px solid #e5e7eb;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.link-info{min-width:0;flex:1}
-.link-title{font-size:13px;font-weight:700}
-.link-url{color:#6b7280;font-size:11px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.link-actions{display:flex;gap:5px}
 .add-link{width:100%;border:1px dashed #9ca3af;background:#fafafa;padding:10px;border-radius:9px;cursor:pointer;font-size:12px;font-weight:650;color:#374151}
 
 .form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:5px}
-
-.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
-.modal.active{display:flex}
-.modal-box{width:100%;max-width:470px;background:#fff;border-radius:14px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.15)}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.modal-header h3{font-size:17px}
-.close{border:none;background:#f3f4f6;width:30px;height:30px;border-radius:7px;cursor:pointer}
-.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 
 .empty{padding:24px;text-align:center;color:#9ca3af;font-size:13px;border:1px dashed #d1d5db;border-radius:10px;background:#fff}
 .message{position:fixed;right:16px;bottom:16px;background:#111827;color:#fff;padding:12px 15px;border-radius:9px;font-size:12px;display:none;z-index:200;box-shadow:0 10px 25px rgba(0,0,0,.15);max-width:320px}
@@ -142,7 +128,22 @@ textarea{min-height:110px;resize:vertical}
 .item-desc{color:#6b7280;font-size:12px;line-height:1.5;margin-bottom:4px;max-width:500px}
 .item-url{color:#9ca3af;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:400px}
 .item-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
-  
+
+/* ITEM PICKER */
+.item-picker-search{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.item-picker-search input{flex:1}
+.item-picker-count{font-size:11px;font-weight:700;color:#6b7280;background:#f3f4f6;padding:6px 10px;border-radius:8px;white-space:nowrap}
+.item-picker-list{max-height:340px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:10px;padding:6px;background:#fafafa}
+.item-picker-row{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;transition:.15s;background:#fff;margin-bottom:4px;border:1px solid transparent}
+.item-picker-row:hover{background:#f9fafb;border-color:#e5e7eb}
+.item-picker-row.selected{background:#ecfdf5;border-color:#10b981}
+.picker-check{width:20px;height:20px;border-radius:6px;border:2px solid #d1d5db;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;background:#fff}
+.item-picker-row.selected .picker-check{background:#10b981;border-color:#10b981}
+.picker-icon{font-size:20px;flex-shrink:0}
+.picker-name{font-size:13px;font-weight:650}
+.item-picker-divider{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;padding:8px 10px 4px}
+.item-picker-empty{padding:20px;text-align:center;color:#9ca3af;font-size:12px}
+
 /* SEVERITY PICKER */
 .severity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .severity-btn{padding:12px 8px;border:2px solid #e5e7eb;border-radius:10px;background:#fff;cursor:pointer;font-size:12px;font-weight:700;transition:.15s;display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -151,6 +152,11 @@ textarea{min-height:110px;resize:vertical}
 .severity-btn.selected.sev-info{border-color:#3b82f6;background:#eff6ff;color:#1e40af}
 .severity-btn.selected.sev-warning{border-color:#f59e0b;background:#fffbeb;color:#92400e}
 .severity-btn.selected.sev-danger{border-color:#ef4444;background:#fef2f2;color:#991b1b}
+
+.btn.loading{pointer-events:none;opacity:.7;position:relative;color:transparent!important}
+.btn.loading::after{content:"";position:absolute;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;left:50%;top:50%;margin:-7px 0 0 -7px;border-color:rgba(255,255,255,.3);border-top-color:#fff}
+.btn-secondary.loading::after{border-color:rgba(0,0,0,.2);border-top-color:#333}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 @media(max-width:700px){
   .header{padding:0 14px;gap:10px}
@@ -165,11 +171,6 @@ textarea{min-height:110px;resize:vertical}
   .form-header{align-items:flex-start}
   .form-header-right{display:none}
   .form-section{padding:15px}
-  .btn.loading{pointer-events:none;opacity:.7;position:relative;color:transparent!important}
-.btn.loading::after{content:"";position:absolute;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;left:50%;top:50%;margin:-7px 0 0 -7px;border-color:rgba(255,255,255,.3);border-top-color:#fff}
-.btn-secondary.loading::after{border-color:rgba(0,0,0,.2);border-top-color:#333}
-@keyframes spin{to{transform:rotate(360deg)}}
-  
 }
 </style>
 </head>
@@ -270,15 +271,15 @@ textarea{min-height:110px;resize:vertical}
       </div>
 
       <div class="form-section">
-  <div class="section-title">🛍️ Persediaan & Barang Perlu</div>
-  <div class="item-picker-search">
-    <input type="text" id="itemPickerSearch" placeholder="🔍 Cari item..." oninput="filterItemPicker()">
-    <span class="item-picker-count" id="itemPickerCount">0 dipilih</span>
-  </div>
-  <div class="item-picker-list" id="itemPickerList">
-    <div class="item-picker-empty">Loading...</div>
-  </div>
-</div>
+        <div class="section-title">🛍️ Persediaan & Barang Perlu</div>
+        <div class="item-picker-search">
+          <input type="text" id="eventItemPickerSearch" placeholder="🔍 Cari item..." oninput="filterItemPicker('event')">
+          <span class="item-picker-count" id="eventItemPickerCount">0 dipilih</span>
+        </div>
+        <div class="item-picker-list" id="eventItemPickerList">
+          <div class="item-picker-empty">Loading...</div>
+        </div>
+      </div>
 
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeForm()">Cancel</button>
@@ -329,16 +330,16 @@ textarea{min-height:110px;resize:vertical}
         </div>
       </div>
 
-     <div class="form-section">
-  <div class="section-title">🛍️ Persediaan & Barang Perlu</div>
-  <div class="item-picker-search">
-    <input type="text" id="seasonItemPickerSearch" placeholder="🔍 Cari item..." oninput="filterItemPicker('season')">
-    <span class="item-picker-count" id="seasonItemPickerCount">0 dipilih</span>
-  </div>
-  <div class="item-picker-list" id="seasonItemPickerList">
-    <div class="item-picker-empty">Loading...</div>
-  </div>
-</div>
+      <div class="form-section">
+        <div class="section-title">🛍️ Persediaan & Barang Perlu</div>
+        <div class="item-picker-search">
+          <input type="text" id="seasonItemPickerSearch" placeholder="🔍 Cari item..." oninput="filterItemPicker('season')">
+          <span class="item-picker-count" id="seasonItemPickerCount">0 dipilih</span>
+        </div>
+        <div class="item-picker-list" id="seasonItemPickerList">
+          <div class="item-picker-empty">Loading...</div>
+        </div>
+      </div>
 
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeSeasonForm()">Cancel</button>
@@ -348,50 +349,47 @@ textarea{min-height:110px;resize:vertical}
   </section>
 
   <!-- ============ HOLIDAYS ============ -->
-<section id="holidaysView" style="display:none">
-  <div id="holidaysDashboard" class="dashboard-view">
-    <div class="page-title"><h1>Holidays</h1><p>Cuti umum & cuti sekolah. Tambah setahun pun boleh.</p></div>
-    <div id="holidayList" class="event-list"><div class="empty">Loading holidays...</div></div>
-  </div>
-
-  <div id="holidayFormView" class="form-view">
-    <div class="form-header">
-      <div class="form-header-left">
-        <button class="back-btn" onclick="closeHolidayForm()">←</button>
-        <h2 id="holidayFormTitle">Add Holiday</h2>
-      </div>
-      <div class="form-header-right"><button class="btn btn-primary" onclick="saveHoliday()">Save</button></div>
+  <section id="holidaysView" style="display:none">
+    <div id="holidaysDashboard" class="dashboard-view">
+      <div class="page-title"><h1>Holidays</h1><p>Cuti umum & cuti sekolah. Tambah setahun pun boleh.</p></div>
+      <div id="holidayList" class="event-list"><div class="empty">Loading holidays...</div></div>
     </div>
 
-    <div class="form-section">
-      <div class="section-title">Holiday Information</div>
-      <div class="field">
-        <label>Nama Cuti</label>
-        <input type="text" id="holidayName" placeholder="Example: Hari Malaysia">
-      </div>
-      <div class="grid-2">
-        <div class="field">
-          <label>Tarikh Mula</label>
-          <input type="date" id="holidayStart">
+    <div id="holidayFormView" class="form-view">
+      <div class="form-header">
+        <div class="form-header-left">
+          <button class="back-btn" onclick="closeHolidayForm()">←</button>
+          <h2 id="holidayFormTitle">Add Holiday</h2>
         </div>
+        <div class="form-header-right"><button class="btn btn-primary" onclick="saveHoliday()">Save</button></div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-title">Holiday Information</div>
         <div class="field">
-          <label>Tarikh Tamat</label>
-          <input type="date" id="holidayEnd">
-          <small>Kosongkan kalau 1 hari sahaja.</small>
+          <label>Nama Cuti</label>
+          <input type="text" id="holidayName" placeholder="Example: Hari Malaysia">
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Tarikh Mula</label>
+            <input type="date" id="holidayStart">
+          </div>
+          <div class="field">
+            <label>Tarikh Tamat</label>
+            <input type="date" id="holidayEnd">
+            <small>Kosongkan kalau 1 hari sahaja.</small>
+          </div>
         </div>
       </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeHolidayForm()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveHoliday()">Save Holiday</button>
+      </div>
     </div>
+  </section>
 
-    <div class="form-actions">
-      <button class="btn btn-secondary" onclick="closeHolidayForm()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveHoliday()">Save Holiday</button>
-    </div>
-  </div>
-</section>
-
-
-
-  
   <!-- ============ NEWS ============ -->
   <section id="newsView" style="display:none">
     <div id="newsDashboard" class="dashboard-view">
@@ -461,15 +459,15 @@ textarea{min-height:110px;resize:vertical}
       </div>
 
       <div class="form-section">
-  <div class="section-title">🛍️ Persediaan & Barang Perlu</div>
-  <div class="item-picker-search">
-    <input type="text" id="seasonItemPickerSearch" placeholder="🔍 Cari item..." oninput="filterItemPicker('season')">
-    <span class="item-picker-count" id="seasonItemPickerCount">0 dipilih</span>
-  </div>
-  <div class="item-picker-list" id="seasonItemPickerList">
-    <div class="item-picker-empty">Loading...</div>
-  </div>
-</div>
+        <div class="section-title">🛍️ Persediaan & Barang Perlu</div>
+        <div class="item-picker-search">
+          <input type="text" id="newsItemPickerSearch" placeholder="🔍 Cari item..." oninput="filterItemPicker('news')">
+          <span class="item-picker-count" id="newsItemPickerCount">0 dipilih</span>
+        </div>
+        <div class="item-picker-list" id="newsItemPickerList">
+          <div class="item-picker-empty">Loading...</div>
+        </div>
+      </div>
 
       <div class="form-actions">
         <button class="btn btn-secondary" onclick="closeNewsForm()">Cancel</button>
@@ -477,78 +475,63 @@ textarea{min-height:110px;resize:vertical}
       </div>
     </div>
   </section>
-<!-- ============ ITEMS ============ -->
-<section id="itemsView" style="display:none">
-  <div id="itemsDashboard" class="dashboard-view">
-    <div class="page-title"><h1>Items Master</h1><p>Senarai barang untuk event. Tick je dalam event form.</p></div>
-    <div class="toolbar" style="grid-template-columns:1fr">
-      <input type="text" id="itemSearchInput" placeholder="🔍 Cari item..." oninput="renderItems()">
-    </div>
-    <div id="itemList" class="event-list"><div class="empty">Loading items...</div></div>
-  </div>
 
-  <div id="itemFormView" class="form-view">
-    <div class="form-header">
-      <div class="form-header-left">
-        <button class="back-btn" onclick="closeItemForm()">←</button>
-        <h2 id="itemFormTitle">Add Item</h2>
+  <!-- ============ ITEMS ============ -->
+  <section id="itemsView" style="display:none">
+    <div id="itemsDashboard" class="dashboard-view">
+      <div class="page-title"><h1>Items Master</h1><p>Senarai barang untuk event. Tick je dalam event form.</p></div>
+      <div class="toolbar" style="grid-template-columns:1fr">
+        <input type="text" id="itemSearchInput" placeholder="🔍 Cari item..." oninput="renderItems()">
       </div>
-      <div class="form-header-right"><button class="btn btn-primary" onclick="saveItem()">Save</button></div>
+      <div id="itemList" class="event-list"><div class="empty">Loading items...</div></div>
     </div>
 
-    <div class="form-section">
-      <div class="section-title">Item Information</div>
-      <div class="grid-2">
-        <div class="field full">
-          <label>Icon (emoji)</label>
-          <input type="text" id="itemIcon" placeholder="☂️" maxlength="4" style="font-size:24px;text-align:center">
-          <small>Copy emoji dari keyboard. Contoh: ☂️ 🌂 💧 👟</small>
+    <div id="itemFormView" class="form-view">
+      <div class="form-header">
+        <div class="form-header-left">
+          <button class="back-btn" onclick="closeItemForm()">←</button>
+          <h2 id="itemFormTitle">Add Item</h2>
         </div>
-        <div class="field full">
-          <label>Nama Item</label>
-          <input type="text" id="itemName" placeholder="Example: Payung Kecil">
-        </div>
-        <div class="field full">
-          <label>Description</label>
-          <textarea id="itemDescription" style="min-height:80px" placeholder="Penerangan ringkas..."></textarea>
-        </div>
-        <div class="field full">
-          <label>Affiliate URL</label>
-          <input type="url" id="itemUrl" placeholder="https://shopee.com/...">
-        </div>
-        <div class="field">
-          <label>Status</label>
-          <select id="itemStatus">
-            <option value="Active">Active (boleh tick)</option>
-            <option value="Inactive">Inactive (disembunyikan)</option>
-          </select>
+        <div class="form-header-right"><button class="btn btn-primary" onclick="saveItem()">Save</button></div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-title">Item Information</div>
+        <div class="grid-2">
+          <div class="field full">
+            <label>Icon (emoji)</label>
+            <input type="text" id="itemIcon" placeholder="☂️" maxlength="4" style="font-size:24px;text-align:center">
+            <small>Copy emoji dari keyboard. Contoh: ☂️ 🌂 💧 👟</small>
+          </div>
+          <div class="field full">
+            <label>Nama Item</label>
+            <input type="text" id="itemName" placeholder="Example: Payung Kecil">
+          </div>
+          <div class="field full">
+            <label>Description</label>
+            <textarea id="itemDescription" style="min-height:80px" placeholder="Penerangan ringkas..."></textarea>
+          </div>
+          <div class="field full">
+            <label>Affiliate URL</label>
+            <input type="url" id="itemUrl" placeholder="https://shopee.com/...">
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="itemStatus">
+              <option value="Active">Active (boleh tick)</option>
+              <option value="Inactive">Inactive (disembunyikan)</option>
+            </select>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-actions">
-      <button class="btn btn-secondary" onclick="closeItemForm()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveItem()">Save Item</button>
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="closeItemForm()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveItem()">Save Item</button>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 </main>
-
-<!-- LINK MODAL -->
-<div id="linkModal" class="modal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3 id="linkModalTitle">Add Affiliate Link</h3>
-      <button class="close" onclick="closeLinkModal()">×</button>
-    </div>
-    <div class="field"><label>Name</label><input id="linkTitle"></div>
-    <div class="field"><label>Penerangan / Link</label><textarea id="linkUrl" style="min-height:110px"></textarea></div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeLinkModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveLink()">Save Link</button>
-    </div>
-  </div>
-</div>
 
 <div id="message" class="message"></div>
 
@@ -570,13 +553,11 @@ const COLOR_PRESETS = [
 ];
 
 /*************************************************
- * SAVE LOCK — prevent double-submit
+ * SAVE LOCK
  *************************************************/
 let isSaving = false;
-
 function setSaving(state, btnEl){
   isSaving = state;
-  // Disable semua save button utama
   document.querySelectorAll(".btn-primary").forEach(b => {
     if(b.textContent.includes("Save") || b.classList.contains("loading")){
       b.classList.toggle("loading", state);
@@ -584,7 +565,7 @@ function setSaving(state, btnEl){
     }
   });
 }
-  
+
 const NEGERI_KEYWORDS = {
   "Kuala Lumpur": ["kuala lumpur","kl","bukit jalil","klcc","cheras","kepong","wangsa maju","setapak","ampang"],
   "Selangor": ["selangor","shah alam","petaling jaya","pj","subang","klang","kajang","puchong","cyberjaya","putrajaya","bangi","semenyih","sepang"],
@@ -622,12 +603,11 @@ function autoMatchNegeri(location, currentNegeri){
 let events = [], seasons = [], news = [], holidays = [], items = [];
 let currentTab = "events";
 
-let currentEventId = null, currentEventItemIds = [], tempLinks = [], __currentLinks = [];
-let currentSeasonId = null, tempSeasonLinks = [], __currentSeasonLinks = [];
-let currentNewsId = null, tempNewsLinks = [], __currentNewsLinks = [];
-let currentHolidayId = null;  
-let currentItemId = null; 
-let editingLinkId = null, editingSeasonLinkId = null, editingNewsLinkId = null;
+let currentEventId = null, currentEventItemIds = [];
+let currentSeasonId = null, currentSeasonItemIds = [];
+let currentNewsId = null, currentNewsItemIds = [];
+let currentHolidayId = null;
+let currentItemId = null;
 let selectedIcon = "🌧️", selectedColor = "#6366f1";
 let selectedSeverity = "Info";
 
@@ -647,19 +627,19 @@ function showMessage(text){
 function switchTab(tab){
   currentTab = tab;
   ["Events","Seasons","News","Holidays","Items"].forEach(t => {
-  document.getElementById("tab" + t).classList.toggle("active", t.toLowerCase() === tab);
-});
-document.getElementById("eventsView").style.display = tab === "events" ? "block" : "none";
-document.getElementById("seasonsView").style.display = tab === "seasons" ? "block" : "none";
-document.getElementById("newsView").style.display = tab === "news" ? "block" : "none";
-document.getElementById("holidaysView").style.display = tab === "holidays" ? "block" : "none";
-document.getElementById("itemsView").style.display = tab === "items" ? "block" : "none";
-closeForm(); closeSeasonForm(); closeNewsForm(); closeHolidayForm(); closeItemForm();
-updateAddButton();
-if(tab === "seasons") renderSeasons();
-if(tab === "news") renderNews();
-if(tab === "holidays") renderHolidays();
-if(tab === "items") renderItems();
+    document.getElementById("tab" + t).classList.toggle("active", t.toLowerCase() === tab);
+  });
+  document.getElementById("eventsView").style.display = tab === "events" ? "block" : "none";
+  document.getElementById("seasonsView").style.display = tab === "seasons" ? "block" : "none";
+  document.getElementById("newsView").style.display = tab === "news" ? "block" : "none";
+  document.getElementById("holidaysView").style.display = tab === "holidays" ? "block" : "none";
+  document.getElementById("itemsView").style.display = tab === "items" ? "block" : "none";
+  closeForm(); closeSeasonForm(); closeNewsForm(); closeHolidayForm(); closeItemForm();
+  updateAddButton();
+  if(tab === "seasons") renderSeasons();
+  if(tab === "news") renderNews();
+  if(tab === "holidays") renderHolidays();
+  if(tab === "items") renderItems();
 }
 
 function handleAddClick(){
@@ -675,7 +655,6 @@ function updateAddButton(){
   const map = {events: "+ Add Event", seasons: "+ Add Season", news: "+ Add News", holidays: "+ Add Holiday", items: "+ Add Item"};
   btn.textContent = map[currentTab];
 }
-
 
 /*************************************************
  * API
@@ -693,7 +672,6 @@ async function apiPost(action, data){
   });
   return response.json();
 }
-
 
 /*************************************************
  * HOLIDAYS
@@ -717,7 +695,6 @@ function renderHolidays(){
     list.innerHTML = `<div class="empty">No holidays yet. Klik "+ Add Holiday" untuk mula.</div>`;
     return;
   }
-  // Sort by start date
   const sorted = [...holidays].sort((a,b) => {
     const da = new Date(a["Start Date"]), db = new Date(b["Start Date"]);
     return da - db;
@@ -785,13 +762,7 @@ async function saveHoliday(){
   if(!name){showMessage("Nama cuti diperlukan.");setSaving(false);return;}
   if(!start){showMessage("Tarikh mula diperlukan.");setSaving(false);return;}
 
-  const data = {
-    holidayId: currentHolidayId,
-    name: name,
-    startDate: start,
-    endDate: end || start
-  };
-
+  const data = { holidayId: currentHolidayId, name, startDate: start, endDate: end || start };
   const action = currentHolidayId ? "updateHoliday" : "addHoliday";
 
   try{
@@ -816,8 +787,7 @@ async function deleteHoliday(holidayId){
   }catch(e){showMessage("Error padam cuti.");}
 }
 
-
-  /*************************************************
+/*************************************************
  * ITEMS MASTER
  *************************************************/
 async function loadItems(){
@@ -837,7 +807,6 @@ function renderItems(){
   if(!list) return;
 
   const search = (document.getElementById("itemSearchInput")?.value || "").toLowerCase();
-
   let filtered = items;
   if(search){
     filtered = items.filter(it => {
@@ -852,7 +821,6 @@ function renderItems(){
     return;
   }
 
-  // Sort: Active dulu, alphabet
   const sorted = [...filtered].sort((a,b) => {
     const sa = String(a.Status||"").toLowerCase() === "active" ? 0 : 1;
     const sb = String(b.Status||"").toLowerCase() === "active" ? 0 : 1;
@@ -943,7 +911,6 @@ async function saveItem(){
     url: url,
     status: document.getElementById("itemStatus").value
   };
-
   const action = currentItemId ? "updateItem" : "addItem";
 
   try{
@@ -984,11 +951,11 @@ async function toggleItemStatus(itemId, checkbox){
     showMessage("Error tukar status.");
   }
 }
-  
+
 /*************************************************
  * LOAD
  *************************************************/
-  async function loadEvents(){
+async function loadEvents(){
   try{
     const result = await apiGet({ action: "getEvents" });
     events = (result && result.success && Array.isArray(result.data)) ? result.data : [];
@@ -1111,7 +1078,6 @@ async function toggleNewsStatus(newsId, checkbox){
 function openAddNewsForm(){
   currentNewsId = null;
   currentNewsItemIds = [];
-  tempNewsLinks = [];
   selectedSeverity = "Info";
   document.getElementById("newsFormTitle").textContent = "Add News";
   clearNewsForm();
@@ -1122,17 +1088,14 @@ function openAddNewsForm(){
   renderItemPicker("news");
 }
 
-  function closeNewsForm(){
+function closeNewsForm(){
   document.getElementById("newsFormView").classList.remove("active");
   document.getElementById("newsDashboard").classList.remove("hidden");
   currentNewsId = null;
   currentNewsItemIds = [];
-  tempNewsLinks = [];
-  editingNewsLinkId = null;
   const s = document.getElementById("newsItemPickerSearch");
   if(s) s.value = "";
 }
-
 
 function clearNewsForm(){
   document.getElementById("newsTitle").value = "";
@@ -1141,7 +1104,6 @@ function clearNewsForm(){
   document.getElementById("newsLink").value = "";
   document.getElementById("newsCredit").value = "";
   document.getElementById("newsStatus").value = "Active";
-  document.getElementById("newsLinkList").innerHTML = `<div class="empty">No affiliate links yet.</div>`;
   renderSeverityPicker();
 }
 
@@ -1150,7 +1112,6 @@ async function editNews(newsId){
   if(!n) return;
 
   currentNewsId = n["News ID"];
-  tempNewsLinks = [];
   selectedSeverity = n["Severity"] || "Info";
   document.getElementById("newsFormTitle").textContent = "Edit News";
 
@@ -1172,7 +1133,6 @@ async function editNews(newsId){
   await loadNewsItems(newsId);
 }
 
-  
 async function saveNews(){
   if(isSaving) return;
   setSaving(true);
@@ -1206,17 +1166,16 @@ async function saveNews(){
       return;
     }
 
-   // Simpan items
-try{
-  const itemsResult = await saveNewsItemsToAPI(newNewsId, currentNewsItemIds);
-  if(!itemsResult || !itemsResult.success){
-    console.warn("saveNewsItems gagal:", itemsResult);
-  }
-}catch(itemErr){
-  console.error("saveNewsItems error:", itemErr);
-}
+    try{
+      const itemsResult = await saveNewsItemsToAPI(newNewsId, currentNewsItemIds);
+      if(!itemsResult || !itemsResult.success){
+        console.warn("saveNewsItems gagal:", itemsResult);
+      }
+    }catch(itemErr){
+      console.error("saveNewsItems error:", itemErr);
+    }
 
-showMessage(result.message || "News berjaya disimpan.");
+    showMessage(result.message || "News berjaya disimpan.");
     closeNewsForm();
     await loadNews();
   }catch(e){
@@ -1226,11 +1185,20 @@ showMessage(result.message || "News berjaya disimpan.");
   setSaving(false);
 }
 
+async function deleteNews(newsId){
+  if(!confirm("Padam news ini?")) return;
+  try{
+    const result = await apiPost("deleteNews", { newsId });
+    showMessage(result.message || "News dipadam.");
+    await loadNews();
+  }catch(e){showMessage("Error padam news.");}
+}
+
 /*************************************************
  * DELETE EVENT
  *************************************************/
 async function deleteEvent(eventId){
-  if(!confirm("Padam event ini?\n\nAffiliate links juga akan dipadam.")) return;
+  if(!confirm("Padam event ini?")) return;
   try{
     const result = await apiPost("deleteEvent", { eventId });
     showMessage(result.message || "Event dipadam.");
@@ -1242,43 +1210,12 @@ async function deleteEvent(eventId){
  * DELETE SEASON
  *************************************************/
 async function deleteSeason(seasonId){
-  if(!confirm("Padam season ini?\n\nAffiliate links juga akan dipadam.")) return;
+  if(!confirm("Padam season ini?")) return;
   try{
     const result = await apiPost("deleteSeason", { seasonId });
     showMessage(result.message || "Season dipadam.");
     await loadSeasons();
   }catch(e){showMessage("Error padam season.");}
-}
-
-  
-async function deleteNews(newsId){
-  if(!confirm("Padam news ini?\n\nAffiliate links juga akan dipadam.")) return;
-  try{
-    const result = await apiPost("deleteNews", { newsId });
-    showMessage(result.message || "News dipadam.");
-    await loadNews();
-  }catch(e){showMessage("Error padam news.");}
-}
-
-/*************************************************
- * NEWS LINKS
- *************************************************/
-async function loadNewsLinks(newsId){
-  try{
-    const result = await apiGet({ action: "getLinks", eventId: newsId });
-    if(String(currentNewsId) !== String(newsId)) return; // ← RACE GUARD
-    const items = (result && result.success && Array.isArray(result.data)) ? result.data : [];
-    renderLinkList("newsLinkList", items, "news");
-  }catch(e){}
-}
-
-
-function openNewsLinkModal(){
-  editingNewsLinkId = null;
-  document.getElementById("linkModalTitle").textContent = "Add Affiliate Link (News)";
-  document.getElementById("linkTitle").value = "";
-  document.getElementById("linkUrl").value = "";
-  document.getElementById("linkModal").classList.add("active");
 }
 
 /*************************************************
@@ -1379,7 +1316,6 @@ async function toggleSeasonStatus(seasonId, checkbox){
 function openAddSeasonForm(){
   currentSeasonId = null;
   currentSeasonItemIds = [];
-  tempSeasonLinks = [];
   document.getElementById("seasonFormTitle").textContent = "Add Season";
   clearSeasonForm();
   document.getElementById("seasonsDashboard").classList.add("hidden");
@@ -1388,25 +1324,28 @@ function openAddSeasonForm(){
   if(s) s.value = "";
   renderItemPicker("season");
 }
+
 function closeSeasonForm(){
   document.getElementById("seasonFormView").classList.remove("active");
   document.getElementById("seasonsDashboard").classList.remove("hidden");
-  currentSeasonId = null; currentSeasonItemIds = []; tempSeasonLinks = []; editingSeasonLinkId = null;
+  currentSeasonId = null;
+  currentSeasonItemIds = [];
   const s = document.getElementById("seasonItemPickerSearch");
   if(s) s.value = "";
 }
+
 function clearSeasonForm(){
   document.getElementById("seasonName").value = "";
   document.getElementById("seasonDescription").value = "";
   document.getElementById("seasonStatus").value = "Active";
-  document.getElementById("seasonLinkList").innerHTML = `<div class="empty">No affiliate links yet.</div>`;
   selectedIcon = "🌧️"; selectedColor = "#6366f1";
   renderIconPicker(); renderColorPicker(); updatePreview();
 }
+
 async function editSeason(seasonId){
   const s = seasons.find(x => String(x["Season ID"]) === String(seasonId));
   if(!s) return;
-  currentSeasonId = s["Season ID"]; tempSeasonLinks = [];
+  currentSeasonId = s["Season ID"];
   document.getElementById("seasonFormTitle").textContent = "Edit Season";
   document.getElementById("seasonName").value = s["Season Name"] || "";
   document.getElementById("seasonDescription").value = s["Description"] || "";
@@ -1414,7 +1353,7 @@ async function editSeason(seasonId){
   selectedIcon = s["Icon"] || "🌧️";
   selectedColor = s["Color"] || "#6366f1";
   renderIconPicker(); renderColorPicker(); updatePreview();
-   document.getElementById("seasonsDashboard").classList.add("hidden");
+  document.getElementById("seasonsDashboard").classList.add("hidden");
   document.getElementById("seasonFormView").classList.add("active");
 
   currentSeasonItemIds = [];
@@ -1423,42 +1362,47 @@ async function editSeason(seasonId){
   renderItemPicker("season");
   await loadSeasonItems(seasonId);
 }
+
 async function saveSeason(){
   if(isSaving) return;
   setSaving(true);
 
   const name = document.getElementById("seasonName").value.trim();
   if(!name){showMessage("Season Name diperlukan.");setSaving(false);return;}
+
   const data = {
-    seasonId: currentSeasonId, seasonName: name,
+    seasonId: currentSeasonId,
+    seasonName: name,
     description: document.getElementById("seasonDescription").value,
     status: document.getElementById("seasonStatus").value,
-    icon: selectedIcon, color: selectedColor
+    icon: selectedIcon,
+    color: selectedColor
   };
   const action = currentSeasonId ? "updateSeason" : "addSeason";
+
   try{
     const result = await apiPost(action, data);
     if(!result.success){showMessage(result.message || "Gagal.");setSaving(false);return;}
     let newId = currentSeasonId || (result.data && result.data.seasonId) || null;
     if(!currentSeasonId && !newId){closeSeasonForm(); await loadSeasons(); setSaving(false); return;}
-    // Simpan items
-try{
-  const itemsResult = await saveSeasonItemsToAPI(newId, currentSeasonItemIds);
-  if(!itemsResult || !itemsResult.success){
-    console.warn("saveSeasonItems gagal:", itemsResult);
-  }
-}catch(itemErr){
-  console.error("saveSeasonItems error:", itemErr);
-}
 
-showMessage(result.message || "Season berjaya disimpan.");
+    try{
+      const itemsResult = await saveSeasonItemsToAPI(newId, currentSeasonItemIds);
+      if(!itemsResult || !itemsResult.success){
+        console.warn("saveSeasonItems gagal:", itemsResult);
+      }
+    }catch(itemErr){
+      console.error("saveSeasonItems error:", itemErr);
+    }
+
+    showMessage(result.message || "Season berjaya disimpan.");
     closeSeasonForm();
     await loadSeasons();
   }catch(e){showMessage("Error simpan season.");}
   setSaving(false);
 }
 
- /*************************************************
+/*************************************************
  * ITEM PICKER (Generalized)
  *************************************************/
 function getItemIdsFor(prefix){
@@ -1606,54 +1550,47 @@ async function saveSeasonItemsToAPI(seasonId, itemIds){
 async function saveNewsItemsToAPI(newsId, itemIds){
   try{ return await apiPost("saveNewsItems", { newsId, itemIds }); }
   catch(e){ return { success: false, message: "Error simpan items." }; }
-} 
+}
 
-
-  
 /*************************************************
  * EVENT FORM
  *************************************************/
 function openAddForm(){
   currentEventId = null;
   currentEventItemIds = [];
-  tempLinks = [];
-  window.__currentLinks = [];
   document.getElementById("formTitle").textContent = "Add Event";
   clearForm();
   document.getElementById("dashboardView").classList.add("hidden");
   document.getElementById("formView").classList.add("active");
-  const searchEl = document.getElementById("itemPickerSearch");
+  const searchEl = document.getElementById("eventItemPickerSearch");
   if(searchEl) searchEl.value = "";
-  renderItemPicker();
+  renderItemPicker("event");
 }
+
 function closeForm(){
   document.getElementById("formView").classList.remove("active");
   document.getElementById("dashboardView").classList.remove("hidden");
   currentEventId = null;
   currentEventItemIds = [];
-  tempLinks = [];
-  editingLinkId = null;
-  window.__currentLinks = [];
-  const searchEl = document.getElementById("itemPickerSearch");
+  const searchEl = document.getElementById("eventItemPickerSearch");
   if(searchEl) searchEl.value = "";
 }
 
-  function clearForm(){
+function clearForm(){
   ["eventName","startDate","endDate","category","negeri","location","shortDescription","description","imageUrl","officialLink"].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.value = "";
   });
   document.getElementById("seasonId").value = "";
   document.getElementById("status").value = "Draft";
-  // linkList dah tak wujud — guna itemPickerList
-  const pickerSearch = document.getElementById("itemPickerSearch");
+  const pickerSearch = document.getElementById("eventItemPickerSearch");
   if(pickerSearch) pickerSearch.value = "";
 }
 
-  async function editEvent(eventId){
+async function editEvent(eventId){
   const e = events.find(x => String(x["Event ID"]) === String(eventId));
   if(!e) return;
-  currentEventId = e["Event ID"]; tempLinks = [];
+  currentEventId = e["Event ID"];
   document.getElementById("formTitle").textContent = "Edit Event";
   document.getElementById("eventName").value = e["Event Name"] || "";
   document.getElementById("startDate").value = formatDateForInput(e["Start Date"]);
@@ -1668,20 +1605,16 @@ function closeForm(){
   document.getElementById("status").value = e["Status"] || "Draft";
   document.getElementById("negeri").value = autoMatchNegeri(e["Location"], e["Negeri"]);
 
-  // ⬇️ INI YANG TERTINGGAL — TAMBAH 2 BARIS
   document.getElementById("dashboardView").classList.add("hidden");
   document.getElementById("formView").classList.add("active");
-  // ⬆️
 
   currentEventItemIds = [];
-  const searchEl = document.getElementById("itemPickerSearch");
+  const searchEl = document.getElementById("eventItemPickerSearch");
   if(searchEl) searchEl.value = "";
-  renderItemPicker();
+  renderItemPicker("event");
   await loadEventItems(eventId);
 }
 
-
-  
 async function saveEvent(){
   if(isSaving) return;
   setSaving(true);
@@ -1722,7 +1655,6 @@ async function saveEvent(){
       return;
     }
 
-    // Simpan items — dalam try-catch sendiri supaya tak fail seluruh save
     try{
       const itemsResult = await saveEventItemsToAPI(newId, currentEventItemIds);
       if(!itemsResult || !itemsResult.success){
@@ -1747,7 +1679,7 @@ async function saveEvent(){
 }
 
 /*************************************************
- * SHARED: icon/color picker, links, helpers
+ * SHARED: icon/color picker, helpers
  *************************************************/
 function renderIconPicker(){
   document.getElementById("iconGrid").innerHTML = ICON_PRESETS.map(i =>
@@ -1766,176 +1698,6 @@ function updatePreview(){
   el.textContent = selectedIcon;
   el.style.background = selectedColor + "20";
   el.style.color = selectedColor;
-}
-
- async function loadLinks(eventId){
-  const list = document.getElementById("linkList");
-  if(list) list.innerHTML = `<div class="empty">Loading links...</div>`;
-
-  try{
-    const result = await apiGet({ action: "getLinks", eventId });
-    if(String(currentEventId) !== String(eventId)) return;
-    const items = (result && result.success && Array.isArray(result.data)) ? result.data : [];
-    renderLinkList("linkList", items, "event");
-  }catch(e){
-    if(String(currentEventId) === String(eventId)){
-      if(list) list.innerHTML = `<div class="empty">Failed to load links.</div>`;
-    }
-  }
-}
-
-async function loadSeasonLinks(seasonId){
-  try{
-    const result = await apiGet({ action: "getLinks", eventId: seasonId });
-    if(String(currentSeasonId) !== String(seasonId)) return; // ← RACE GUARD
-    const items = (result && result.success && Array.isArray(result.data)) ? result.data : [];
-    renderLinkList("seasonLinkList", items, "season");
-  }catch(e){}
-}
-function renderLinkList(containerId, items, type){
-  const list = document.getElementById(containerId);
-  const isSeason = type === "season";
-  const isNews = type === "news";
-  const currentId = isSeason ? currentSeasonId : (isNews ? currentNewsId : currentEventId);
-  const temp = isSeason ? tempSeasonLinks : (isNews ? tempNewsLinks : tempLinks);
-
-  if(!currentId && temp.length > 0) items = temp;
-  if(!Array.isArray(items) || !items.length){
-    list.innerHTML = `<div class="empty">No affiliate links yet.</div>`;
-    return;
-  }
-
-  if(isSeason) window.__currentSeasonLinks = items;
-  else if(isNews) window.__currentNewsLinks = items;
-  else window.__currentLinks = items;
-
-  list.innerHTML = items.map((item, index) => {
-    const isTemp = !item["Link ID"];
-    const title = item["Title"] || item.Title || "";
-    const url = item["URL"] || item.URL || "";
-    const editFn = `editLinkByIndex('${type}', ${index}, ${isTemp})`;
-    const deleteFn = isTemp ? `deleteTempLink('${type}', ${index})` : `deleteLinkByIndex('${type}', ${index})`;
-    return `
-      <div class="link-card">
-        <div class="link-info">
-          <div class="link-title">🛍 ${escapeHtml(title)}</div>
-          <div class="link-url">${escapeHtml(url)}</div>
-        </div>
-        <div class="link-actions">
-          <button class="btn btn-secondary btn-small" onclick="${editFn}">Edit</button>
-          <button class="btn btn-danger btn-small" onclick="${deleteFn}">Delete</button>
-        </div>
-      </div>
-    `;
-  }).join("");
-}
-
-function openLinkModal(){
-  editingLinkId = null;
-  document.getElementById("linkModalTitle").textContent = "Add Affiliate Link";
-  document.getElementById("linkTitle").value = "";
-  document.getElementById("linkUrl").value = "";
-  document.getElementById("linkModal").classList.add("active");
-}
-function openSeasonLinkModal(){
-  editingSeasonLinkId = null;
-  document.getElementById("linkModalTitle").textContent = "Add Affiliate Link (Season)";
-  document.getElementById("linkTitle").value = "";
-  document.getElementById("linkUrl").value = "";
-  document.getElementById("linkModal").classList.add("active");
-}
-function closeLinkModal(){
-  document.getElementById("linkModal").classList.remove("active");
-  editingLinkId = null; editingSeasonLinkId = null; editingNewsLinkId = null;
-}
-
-function editLinkByIndex(type, index, isTemp){
-  const arr = type === "season" ? window.__currentSeasonLinks : (type === "news" ? window.__currentNewsLinks : window.__currentLinks);
-  const item = arr[index];
-  if(!item) return;
-
-  if(type === "season") editingSeasonLinkId = isTemp ? "temp-" + index : item["Link ID"];
-  else if(type === "news") editingNewsLinkId = isTemp ? "temp-" + index : item["Link ID"];
-  else editingLinkId = isTemp ? "temp-" + index : item["Link ID"];
-
-  document.getElementById("linkModalTitle").textContent = "Edit Affiliate Link";
-  document.getElementById("linkTitle").value = item["Title"] || item.Title || "";
-  document.getElementById("linkUrl").value = item["URL"] || item.URL || "";
-  document.getElementById("linkModal").classList.add("active");
-}
-
-async function saveLink(){
-  const title = document.getElementById("linkTitle").value.trim();
-  const url = document.getElementById("linkUrl").value.trim();
-  if(!title || !url){showMessage("Name and Link diperlukan.");return;}
-
-  const isSeason = currentTab === "seasons";
-  const isNews = currentTab === "news";
-  const isEvent = currentTab === "events";
-
-  const currentId = isSeason ? currentSeasonId : (isNews ? currentNewsId : currentEventId);
-  const activeEditId = isSeason ? editingSeasonLinkId : (isNews ? editingNewsLinkId : editingLinkId);
-
-  // Temp mode
-  if(!currentId){
-    const tempArr = isSeason ? tempSeasonLinks : (isNews ? tempNewsLinks : tempLinks);
-    const editTempId = activeEditId;
-    if(editTempId && String(editTempId).startsWith("temp-")){
-      const idx = parseInt(editTempId.replace("temp-", ""));
-      tempArr[idx] = { Title: title, URL: url };
-    } else {
-      tempArr.push({ Title: title, URL: url });
-    }
-    const containerId = isSeason ? "seasonLinkList" : (isNews ? "newsLinkList" : "linkList");
-    renderLinkList(containerId, tempArr, isSeason ? "season" : (isNews ? "news" : "event"));
-    closeLinkModal();
-    showMessage("Link ditambah (sementara).");
-    return;
-  }
-
-  const isEdit = activeEditId && !String(activeEditId).startsWith("temp-");
-  const action = isEdit ? "updateLink" : "addLink";
-  const linkType = isSeason ? "Season" : (isNews ? "News" : "Affiliate");
-
-  const data = isEdit
-    ? { linkId: activeEditId, linkType, title, url }
-    : { eventId: currentId, linkType, title, url };
-
-  try{
-    const result = await apiPost(action, data);
-    if(!result.success){showMessage(result.message || "Gagal simpan link.");return;}
-    showMessage(result.message || "Link berjaya disimpan.");
-    closeLinkModal();
-    if(isSeason) await loadSeasonLinks(currentSeasonId);
-    else if(isNews) await loadNewsLinks(currentNewsId);
-    else await loadLinks(currentEventId);
-  }catch(e){showMessage("Error saving link.");}
-}
-
-function deleteTempLink(type, index){
-  if(!confirm("Padam link ini?")) return;
-  if(type === "season"){ tempSeasonLinks.splice(index, 1); renderLinkList("seasonLinkList", tempSeasonLinks, "season"); }
-  else if(type === "news"){ tempNewsLinks.splice(index, 1); renderLinkList("newsLinkList", tempNewsLinks, "news"); }
-  else { tempLinks.splice(index, 1); renderLinkList("linkList", tempLinks, "event"); }
-  showMessage("Dipadam.");
-}
-
-function deleteLinkByIndex(type, index){
-  const arr = type === "season" ? window.__currentSeasonLinks : (type === "news" ? window.__currentNewsLinks : window.__currentLinks);
-  const item = arr[index];
-  if(!item || !item["Link ID"]) return;
-  deleteLink(item["Link ID"], type);
-}
-
-async function deleteLink(id, type){
-  if(!confirm("Padam link ini?")) return;
-  try{
-    const result = await apiPost("deleteLink", { linkId: id });
-    showMessage(result.message || "Dipadam.");
-    if(type === "season") await loadSeasonLinks(currentSeasonId);
-    else if(type === "news") await loadNewsLinks(currentNewsId);
-    else await loadLinks(currentEventId);
-  }catch(e){showMessage("Error padam link.");}
 }
 
 /*************************************************
@@ -1982,7 +1744,7 @@ renderSeverityPicker();
 loadSeasons();
 loadEvents();
 loadNews();
-loadHolidays();  
+loadHolidays();
 loadItems();
 </script>
 </body>
