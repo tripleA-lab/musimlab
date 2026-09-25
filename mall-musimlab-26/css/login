@@ -1,0 +1,273 @@
+/* ============================================
+   MusimLab — Login Page Styles
+   ============================================ */
+
+:root {
+  /* Brand colors dari logo chameleon */
+  --hijau-cerah:  #84cc16;
+  --ungu:         #8b5cf6;
+  --hijau-gelap:  #10b981;
+  --hitam:        #111827;
+  --hitam-soft:   #1f2937;
+  --putih:        #ffffff;
+  --gray-100:     #f3f4f6;
+  --gray-300:     #d1d5db;
+  --gray-500:     #6b7280;
+  --gray-700:     #374151;
+  
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --radius-lg: 20px;
+  --radius-md: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--hitam);
+  color: var(--hitam);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* ============ CONTAINER ============ */
+.login-container {
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 10;
+}
+
+/* ============ CARD ============ */
+.login-card {
+  background: var(--putih);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px 32px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  z-index: 2;
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============ LOGO ============ */
+.login-logo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo-icon {
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 8px;
+  display: inline-block;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.login-logo h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--hitam);
+  margin-bottom: 4px;
+}
+
+.login-logo h1 span {
+  font-weight: 400;
+  color: var(--gray-500);
+}
+
+.tagline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--gray-500);
+  text-transform: uppercase;
+}
+
+/* ============ DIVIDER ============ */
+.login-divider {
+  height: 3px;
+  background: linear-gradient(90deg, var(--hijau-cerah), var(--ungu));
+  border-radius: 99px;
+  margin-bottom: 24px;
+}
+
+/* ============ HEADER ============ */
+.login-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--hitam);
+  margin-bottom: 6px;
+}
+
+.login-header p {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+/* ============ GOOGLE BUTTON ============ */
+.google-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  min-height: 44px;
+}
+
+.google-btn-wrapper > div {
+  width: 100% !important;
+}
+
+/* ============ LOADING ============ */
+.loading-state {
+  text-align: center;
+  padding: 16px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--gray-100);
+  border-top-color: var(--hijau-cerah);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-state p {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+/* ============ ERROR ============ */
+.error-message {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  border-left: 4px solid #ef4444;
+  animation: shake 0.4s ease-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* ============ FOOTER ============ */
+.login-footer {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--gray-100);
+}
+
+.login-footer p {
+  font-size: 12px;
+  color: var(--gray-500);
+}
+
+/* ============ BACKGROUND BLOBS ============ */
+.login-background {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  animation: float 12s ease-in-out infinite;
+}
+
+.blob-1 {
+  width: 400px;
+  height: 400px;
+  background: var(--hijau-cerah);
+  top: -100px;
+  left: -100px;
+}
+
+.blob-2 {
+  width: 350px;
+  height: 350px;
+  background: var(--ungu);
+  bottom: -80px;
+  right: -80px;
+  animation-delay: -4s;
+}
+
+.blob-3 {
+  width: 300px;
+  height: 300px;
+  background: var(--hijau-gelap);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: -8s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 500px) {
+  .login-card {
+    padding: 32px 22px 24px;
+  }
+  
+  .logo-icon {
+    font-size: 48px;
+  }
+  
+  .login-logo h1 {
+    font-size: 24px;
+  }
+  
+  .login-header h2 {
+    font-size: 18px;
+  }
+}
