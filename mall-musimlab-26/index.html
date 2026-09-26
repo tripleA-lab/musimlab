@@ -2,58 +2,1732 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
-<title>Login — MusimLab Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<title>Musim Lab — Tahu musim. Tahu keperluan.</title>
+<meta name="description" content="Kalendar event, musim, cuti & berita terkini Malaysia. Tahu apa yang akan datang. Bersedia sebelum tiba.">
+<meta name="keywords" content="kalendar malaysia, event malaysia, cuti umum, musim malaysia, musim lab">
+<meta name="author" content="Musim Lab">
+<meta name="theme-color" content="#8b5cf6">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://triplea-lab.github.io/musimlab/">
+<meta property="og:title" content="Musim Lab — Tahu musim. Tahu keperluan.">
+<meta property="og:description" content="Kalendar event, musim, cuti & berita terkini Malaysia. Tahu apa yang akan datang.">
+<meta property="og:image" content="https://triplea-lab.github.io/musimlab/assets/web-app-manifest-512x512.png">
+<meta property="og:site_name" content="Musim Lab">
 
-<link rel="stylesheet" href="css/login.css">
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Musim Lab — Tahu musim. Tahu keperluan.">
+<meta name="twitter:description" content="Kalendar event, musim, cuti & berita terkini Malaysia.">
+<meta name="twitter:image" content="https://triplea-lab.github.io/musimlab/assets/web-app-manifest-512x512.png">
 
-<!-- Google Sign-In -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/site.webmanifest">
+
+<!-- PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Musim Lab">
+<meta name="mobile-web-app-capable" content="yes">
+
+<style>
+:root{
+  /* ===== Chameleon Palette ===== */
+  --hijau-cerah: #84cc16;
+  --ungu: #8b5cf6;
+  --ungu-dark: #6d28d9;
+  --ungu-soft: #ede9fe;
+  --hijau-gelap: #10b981;
+  --hijau-soft: #dcfce7;
+  --hitam: #171717;
+
+  /* ===== Neutral ===== */
+  --bg: #f7f7f8;
+  --card: #ffffff;
+  --text: #171717;
+  --text-soft: #666;
+  --text-mute: #999;
+  --border: #ededed;
+  --border-soft: #f0f0f0;
+
+  /* ===== Gradients ===== */
+  --gradient-brand: linear-gradient(135deg, #84cc16 0%, #8b5cf6 100%);
+  --gradient-soft: linear-gradient(135deg, #f5f3ff 0%, #f0fdf4 100%);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:hidden}
+body.no-scroll{overflow:hidden}
+button{font:inherit}
+img{max-width:100%;display:block}
+
+/* ============ SKELETON LOADING ============ */
+@keyframes skeleton-pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.45}
+}
+.skeleton{
+  background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
+  background-size:200% 100%;
+  animation:skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius:8px;
+}
+.skeleton-calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+  padding:8px 6px;
+}
+.skeleton-day{
+  aspect-ratio:1;
+  border-radius:50%;
+  background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);
+  background-size:200% 100%;
+  animation:skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* ============ MAIN ============ */
+main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
+.view{display:none}
+.view.active{display:block}
+.section-title{font-size:19px;font-weight:800;margin:6px 4px 12px;letter-spacing:-.3px}
+.section-sub{font-size:12px;color:var(--text-mute);margin:-8px 4px 14px}
+
+/* ============ BANNER ============ */
+.banner-wrap{margin:0 0 12px;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:#fafafa}
+.banner-wrap img{width:100%;height:auto;display:block;object-fit:cover;max-height:180px;cursor:pointer}
+
+/* ============ NEWS TICKER ============ */
+.news-ticker{margin:0 0 12px;border-radius:14px;overflow:hidden;position:relative;background:var(--card);border:1px solid var(--border);box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.news-ticker-inner{position:relative;height:62px}
+.news-slide{position:absolute;inset:0;display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:transform .55s cubic-bezier(.4,0,.2,1),opacity .5s ease;transform:translateX(100%);opacity:0;border-left:4px solid var(--news-color,#3b82f6)}
+.news-slide.active{transform:translateX(0);opacity:1}
+.news-slide.leaving{transform:translateX(-100%);opacity:0}
+.news-slide-icon{font-size:24px;flex-shrink:0;line-height:1}
+.news-slide-content{min-width:0;flex:1}
+.news-slide-title{font-size:13px;font-weight:800;color:var(--text);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.news-slide-sub{font-size:11px;color:var(--text-mute);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.news-slide-arrow{font-size:14px;color:#bbb;flex-shrink:0}
+.news-dots{display:flex;justify-content:center;gap:5px;padding:0 0 8px}
+.news-dot{width:5px;height:5px;border-radius:50%;background:#e5e5e5;transition:.2s;cursor:pointer}
+.news-dot.active{background:var(--gradient-brand);width:14px;border-radius:999px}
+
+/* ============ FILTER CHIP ============ */
+.filter-chip{display:none;align-items:center;gap:6px;background:var(--ungu-soft);color:var(--ungu-dark);padding:6px 10px 6px 12px;border-radius:999px;font-size:12px;font-weight:700;margin:0 4px 12px;width:fit-content;cursor:pointer;max-width:100%}
+.filter-chip.show{display:flex}
+.filter-chip .x{width:18px;height:18px;border-radius:50%;background:#ddd6fe;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;flex-shrink:0}
+
+/* ============ CALENDAR ============ */
+.calendar-card{background:var(--card);border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.04);touch-action:pan-y;position:relative}
+.calendar-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-brand);z-index:2}
+.month-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px;position:relative;z-index:3}
+.month-name{font-size:17px;font-weight:800}
+.month-buttons{display:flex;gap:4px}
+.month-btn{width:34px;height:34px;border:0;border-radius:10px;background:#f1f1f2;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.month-btn:active{transform:scale(.92)}
+.today-btn-sm{background:var(--hijau-soft);border:0;padding:0 12px;height:34px;border-radius:10px;font-size:11px;font-weight:800;color:#166534;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
+.today-btn-sm:active{transform:scale(.95);background:#bbf7d0}
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 6px 4px;border-bottom:1px solid var(--border-soft)}
+.weekday{text-align:center;padding:6px 2px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.4px}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:6px}
+.day-cell{aspect-ratio:1;border-radius:50%;position:relative;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:background .15s;padding:2px}
+.day-cell.empty{pointer-events:none}
+.day-cell:active{background:#f5f3ff}
+.day-number{font-size:14px;font-weight:600;color:#333;line-height:1}
+.day-cell.weekend .day-number{color:#999}
+.day-cell.today{background:var(--gradient-brand);box-shadow:0 4px 12px rgba(139,92,246,.35)}
+.day-cell.today .day-number{color:#fff;font-weight:800}
+.day-cell.today .day-dot{background:#fff !important}
+.day-cell.selected{background:var(--ungu-soft);outline:2px solid var(--ungu);outline-offset:-2px}
+.day-cell.selected .day-number{color:var(--ungu-dark);font-weight:800}
+.day-dots{display:flex;gap:2px;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);min-height:4px}
+.day-dot{width:4px;height:4px;border-radius:50%}
+
+/* ============ NEGERI ============ */
+.negeri-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px}
+.negeri-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:8px;min-height:90px;position:relative;overflow:hidden}
+.negeri-card:active{transform:scale(.97);background:#fafafa}
+.negeri-card.has-event{border-color:#c7d2fe;background:linear-gradient(135deg,#fff,#f5f3ff)}
+.negeri-card.has-event::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-brand)}
+.negeri-emoji{font-size:24px;line-height:1}
+.negeri-name{font-size:14px;font-weight:800;line-height:1.25}
+.negeri-count{font-size:11px;color:var(--text-mute);margin-top:auto}
+.negeri-card.has-event .negeri-count{color:var(--ungu-dark);font-weight:700}
+
+/* ============ EXPLORE ============ */
+.explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px}
+.explore-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:8px;min-height:110px}
+.explore-card:active{transform:scale(.97);background:#fafafa}
+.explore-icon{font-size:26px;line-height:1}
+.explore-name{font-size:14px;font-weight:800;line-height:1.25}
+.explore-count{font-size:11px;color:var(--text-mute);margin-top:auto}
+
+/* ============ SEASON ============ */
+.season-card{background:var(--card);border:1px solid var(--border);border-radius:20px;margin-bottom:12px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+.season-card:active{transform:scale(.985)}
+.season-hero{height:100px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--season-color-soft,#ede9fe),var(--season-color-lighter,#f5f3ff));position:relative;overflow:hidden}
+.season-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,var(--season-color-soft,#ede9fe),transparent 60%)}
+.season-icon-big{font-size:52px;line-height:1;position:relative;z-index:2;filter:drop-shadow(0 4px 10px rgba(0,0,0,.08))}
+.season-body{padding:16px}
+.season-name{font-size:17px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.season-badge{font-size:10px;font-weight:800;background:var(--hijau-soft);color:#166534;padding:3px 8px;border-radius:999px}
+.season-synopsis{font-size:13px;color:var(--text-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
+.season-cta{font-size:12px;font-weight:800;color:var(--season-color,#6366f1)}
+
+/* ============ MORE ============ */
+.more-list{display:grid;gap:8px}
+.more-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.more-item:active{transform:scale(.99);background:#fafafa}
+.more-icon{width:40px;height:40px;border-radius:11px;background:var(--ungu-soft);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.more-text{flex:1;min-width:0}
+.more-text-title{font-size:14px;font-weight:800}
+.more-text-sub{font-size:11px;color:var(--text-mute);margin-top:2px}
+.more-chev{color:#ccc;font-size:18px}
+
+/* ============ FOOTER ============ */
+.site-footer{margin-top:32px;padding:24px 16px 100px;text-align:center;border-top:1px solid var(--border-soft);color:var(--text-mute)}
+.footer-logo{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px;letter-spacing:-.3px}
+.footer-logo span{font-weight:400;color:var(--text-mute)}
+.footer-tagline{font-size:11px;color:var(--text-mute);margin-bottom:16px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:14px}
+.footer-links a{font-size:12px;color:var(--text-soft);text-decoration:none;font-weight:600;cursor:pointer}
+.footer-links a:active{color:var(--ungu)}
+.footer-copy{font-size:10px;color:#bbb;line-height:1.6}
+
+/* ============ NAV PILL ============ */
+.bottom-nav{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:rgba(255,255,255,.94);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:24px;padding:6px;box-shadow:0 10px 40px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);max-width:520px;margin:0 auto;overflow:visible}
+.nav-inner{display:grid;grid-template-columns:repeat(5,1fr);align-items:center;height:56px;position:relative;overflow:visible}
+.nav-button{border:0;background:transparent;padding:4px 2px;cursor:pointer;color:var(--text-mute);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;transition:color .25s;overflow:visible}
+.nav-button .nav-icon{font-size:20px;line-height:1;transition:all .3s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%}
+.nav-button .nav-label{font-size:9px;font-weight:700;transition:all .25s;white-space:nowrap}
+.nav-button.active{color:var(--ungu)}
+.nav-button.active .nav-icon{background:var(--gradient-brand);color:#fff;font-size:19px;box-shadow:0 6px 18px rgba(139,92,246,.4);transform:translateY(-14px);border:3px solid #fff}
+.nav-button.active .nav-label{transform:translateY(-8px);font-weight:800;color:var(--ungu-dark)}
+
+/* ============ SHEET ============ */
+.sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.sheet-overlay.open{opacity:1;pointer-events:auto}
+.bottom-sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;z-index:110;padding:0;transform:translateY(110%);transition:transform .3s cubic-bezier(.32,.72,0,1);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(0,0,0,.12);overscroll-behavior:contain}
+.bottom-sheet.open{transform:translateY(0)}
+.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1;padding:8px 16px 20px}
+.sheet-handle{width:40px;height:4px;border-radius:999px;background:#d6d6d6;margin:8px auto 4px;cursor:grab;flex-shrink:0}
+.sheet-heading{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
+.sheet-heading-sub{color:var(--text-mute);font-size:13px;margin-bottom:16px}
+
+.sheet-event{background:#fafafa;border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:.15s}
+.sheet-event:active{transform:scale(.985);background:#f5f5f7}
+.sheet-event-cat{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text-mute);font-weight:700;margin-bottom:6px}
+.sheet-event-cat .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sheet-event-name{font-size:15px;font-weight:800;line-height:1.3;margin-bottom:5px}
+.sheet-event-meta{font-size:12px;color:var(--text-soft);line-height:1.5}
+.sheet-event-actions{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.mini-btn{border:1px solid #ddd;background:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;color:#333}
+.mini-btn:active{transform:scale(.95)}
+.mini-btn.saved{background:var(--hijau-soft);color:#166534;border-color:#bbf7d0}
+
+/* ============ CAROUSEL ============ */
+.carousel-wrap{position:relative;margin:-8px -16px 16px;background:#f5f5f7}
+.carousel-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-slide{flex:0 0 100%;scroll-snap-align:start;position:relative;aspect-ratio:16/10;background:#f0f0f3;overflow:hidden}
+.carousel-slide img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.carousel-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
+.carousel-dots{display:flex;justify-content:center;gap:6px;padding:10px 0;background:#f5f5f7}
+.carousel-dot{width:6px;height:6px;border-radius:50%;background:#d4d4d8;transition:.2s}
+.carousel-dot.active{background:var(--ungu);width:20px;border-radius:999px}
+
+/* ============ DETAIL ============ */
+.cat-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:14px}
+.cat-pill .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.date-range-block{margin-bottom:16px}
+.date-range-main{font-size:26px;font-weight:900;letter-spacing:-.5px;line-height:1.15;color:var(--text)}
+.date-range-sub{font-size:13px;color:var(--text-mute);font-weight:600;margin-top:6px}
+.detail-title{font-size:22px;font-weight:800;line-height:1.2;letter-spacing:-.5px;margin:0 0 8px}
+.detail-meta{font-size:13px;color:var(--text-soft);line-height:1.6;margin-bottom:16px}
+.detail-synopsis{font-size:14px;line-height:1.7;color:#333;margin-bottom:20px;white-space:pre-line}
+.detail-actions{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.action-btn{flex:1;min-width:calc(50% - 4px);padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s;text-decoration:none;font-family:inherit}
+.action-btn:active{transform:scale(.96)}
+.action-btn.primary{background:var(--gradient-brand);color:#fff;box-shadow:0 4px 14px rgba(139,92,246,.3)}
+.action-btn.secondary{background:#f1f1f3;color:var(--text)}
+.action-btn.success{background:var(--hijau-soft);color:#166534}
+.action-btn.full{min-width:100%}
+
+/* ============ AFFILIATE ============ */
+.affiliate-section{margin-top:8px;padding-top:20px;border-top:1px solid var(--border-soft)}
+.affiliate-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.affiliate-card{background:#fafafa;border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:9px}
+.affiliate-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.affiliate-name{font-size:14px;font-weight:800;color:var(--text);flex:1}
+.affiliate-desc{font-size:12px;color:#555;line-height:1.6;white-space:pre-line;margin-bottom:12px}
+.affiliate-buy{display:inline-flex;align-items:center;gap:6px;background:var(--ungu);color:#fff;text-decoration:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800}
+.affiliate-buy:active{transform:scale(.96)}
+
+/* ============ NEWS DETAIL ============ */
+.news-detail-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:800;margin-bottom:14px}
+.news-detail-title{font-size:22px;font-weight:800;line-height:1.25;letter-spacing:-.4px;margin:0 0 10px}
+.news-detail-meta{font-size:12px;color:var(--text-mute);margin-bottom:18px;font-weight:600}
+.news-detail-body{font-size:14px;line-height:1.75;color:#333;margin-bottom:20px;white-space:pre-line}
+.news-credit{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-soft);background:#f5f5f7;padding:8px 14px;border-radius:10px;text-decoration:none;font-weight:600;margin-bottom:16px}
+.news-credit:active{background:#e5e5e7}
+
+/* ============ STICKY BOTTOM ============ */
+.sheet-bottom{flex-shrink:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--border-soft);background:#fff;display:flex;gap:8px}
+.sheet-close{flex:1;padding:14px;border-radius:14px;border:0;background:#f1f1f3;color:var(--text);font-size:14px;font-weight:800;cursor:pointer;transition:.15s}
+.sheet-close:active{transform:scale(.98);background:#e5e5e7}
+.sheet-share{flex:1;padding:14px;border-radius:14px;border:0;background:var(--gradient-brand);color:#fff;font-size:14px;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 14px rgba(139,92,246,.3)}
+.sheet-share:active{transform:scale(.98);opacity:.9}
+
+/* ============ EMPTY ============ */
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-mute)}
+.empty-state .emoji{font-size:44px;margin-bottom:10px;opacity:.6}
+.empty-state .msg{font-size:14px;font-weight:600;color:var(--text-soft);margin-bottom:6px}
+.empty-state .sub{font-size:12px;color:#aaa}
+
+/* ============ LIGHTBOX ============ */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:300;display:none;align-items:center;justify-content:center;padding:0;touch-action:none}
+.lightbox.open{display:flex}
+.lightbox img{max-width:100%;max-height:100vh;object-fit:contain;user-select:none;-webkit-user-drag:none;transition:transform .2s}
+.lightbox-close{position:absolute;top:calc(16px + env(safe-area-inset-top));right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;border:0;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(10px);z-index:2}
+.lightbox-counter{position:absolute;top:calc(22px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);color:#fff;font-size:13px;font-weight:700;background:rgba(255,255,255,.15);padding:6px 14px;border-radius:999px;backdrop-filter:blur(10px);z-index:2}
+.lightbox-hint{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:11px;font-weight:600;white-space:nowrap}
+
+/* ============ TOAST ============ */
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--gradient-brand);color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:400;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(139,92,246,.35)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ============ PWA INSTALL BANNER ============ */
+.pwa-banner{position:fixed;left:12px;right:12px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:85;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;display:none;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);max-width:520px;margin:0 auto}
+.pwa-banner.show{display:flex}
+.pwa-icon{width:40px;height:40px;border-radius:10px;background:var(--gradient-brand);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pwa-text{flex:1;min-width:0}
+.pwa-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px}
+.pwa-sub{font-size:11px;color:var(--text-mute)}
+.pwa-actions{display:flex;gap:6px;flex-shrink:0}
+.pwa-btn{padding:8px 12px;border-radius:9px;border:0;font-size:12px;font-weight:800;cursor:pointer}
+.pwa-btn.primary{background:var(--gradient-brand);color:#fff}
+.pwa-btn.ghost{background:transparent;color:var(--text-mute)}
+
+.loading{text-align:center;padding:40px 15px;color:var(--text-mute);font-size:13px}
+
+@media (min-width:700px){
+  .day-number{font-size:15px}
+  .bottom-sheet{left:50%;right:auto;width:560px;transform:translate(-50%,110%)}
+  .bottom-sheet.open{transform:translate(-50%,0)}
+  .carousel-slide{aspect-ratio:16/9}
+  .bottom-nav{left:50%;right:auto;width:520px;transform:translateX(-50%)}
+  .banner-wrap img{max-height:220px}
+}
+</style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-90RWGEK9LY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-90RWGEK9LY');
+</script>
 </head>
 <body>
 
-<div class="login-container">
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="logo-icon">🦎</div>
-      <h1>MUSIM<span>LAB</span></h1>
-      <p class="tagline">Musim Berubah, Kita Berubah</p>
-    </div>
+<main>
 
-    <div class="login-divider"></div>
-
-    <div class="login-header">
-      <h2>Admin Access</h2>
-      <p>Sign in dengan Google untuk teruskan</p>
-    </div>
-
-    <div id="googleSignInButton" class="google-btn-wrapper"></div>
-
-    <div id="loadingState" class="loading-state" style="display:none">
-      <div class="spinner"></div>
-      <p>Mengesahkan...</p>
-    </div>
-
-    <div id="errorMessage" class="error-message" style="display:none"></div>
-
-    <div class="login-footer">
-      <p>🔒 Hanya admin sahaja boleh akses</p>
-    </div>
+  <!-- BANNER -->
+  <div class="banner-wrap" id="bannerWrap" style="display:none">
+    <img id="bannerImg" src="" alt="Musim Lab" onclick="showToast('Selamat datang ke Musim Lab! 🦎')">
   </div>
 
-  <div class="login-background">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+  <!-- CALENDAR -->
+  <section class="view active" id="viewCalendar">
+    <div class="news-ticker" id="newsTicker" style="display:none">
+      <div class="news-ticker-inner" id="newsTickerInner"></div>
+      <div class="news-dots" id="newsDots"></div>
+    </div>
+
+    <div class="filter-chip" id="filterChip" onclick="clearFilter()">
+      <span id="filterChipText">Semua</span>
+      <span class="x">×</span>
+    </div>
+
+    <div class="calendar-card" id="calendarCard">
+      <div class="month-header">
+        <div class="month-name" id="monthName">—</div>
+        <div class="month-buttons">
+          <button class="today-btn-sm" id="todayBtn">📍 Hari Ini</button>
+          <button class="month-btn" id="prevMonth" aria-label="Sebelum">‹</button>
+          <button class="month-btn" id="nextMonth" aria-label="Seterusnya">›</button>
+        </div>
+      </div>
+      <div class="weekdays">
+        <div class="weekday">Isn</div><div class="weekday">Sel</div>
+        <div class="weekday">Rab</div><div class="weekday">Kha</div>
+        <div class="weekday">Jum</div><div class="weekday">Sab</div>
+        <div class="weekday">Aha</div>
+      </div>
+      <div class="calendar-grid" id="calendarGrid">
+        <div class="skeleton-calendar" style="grid-column:1/-1">
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLORE -->
+  <section class="view" id="viewExplore">
+    <h2 class="section-title">Explore</h2>
+    <p class="section-sub">Pilih kategori untuk tapis kalendar.</p>
+    <div class="explore-grid" id="exploreGrid"></div>
+  </section>
+
+  <!-- NEGERI -->
+  <section class="view" id="viewNegeri">
+    <h2 class="section-title">Negeri</h2>
+    <p class="section-sub">Cari event ikut negeri.</p>
+    <div class="negeri-grid" id="negeriGrid"></div>
+  </section>
+
+  <!-- MUSIM -->
+  <section class="view" id="viewMusim">
+    <h2 class="section-title">Musim Aktif</h2>
+    <p class="section-sub">Musim yang sedang berlaku di Malaysia.</p>
+    <div id="seasonList">
+      <div class="loading">Memuatkan musim...</div>
+    </div>
+  </section>
+
+  <!-- MORE -->
+  <section class="view" id="viewMore">
+    <h2 class="section-title">More</h2>
+    <div class="more-list">
+      <div class="more-item" onclick="openSavedEvents()">
+        <div class="more-icon">❤️</div>
+        <div class="more-text">
+          <div class="more-text-title">Event Disimpan</div>
+          <div class="more-text-sub" id="savedCountText">0 event</div>
+        </div>
+        <div class="more-chev">›</div>
+      </div>
+      <div class="more-item" onclick="showAbout()">
+        <div class="more-icon">ℹ️</div>
+        <div class="more-text">
+          <div class="more-text-title">Tentang Musim Lab</div>
+          <div class="more-text-sub">Kenali kami</div>
+        </div>
+        <div class="more-chev">›</div>
+      </div>
+      <div class="more-item" onclick="showToast('📄 Brochure akan datang!')">
+        <div class="more-icon">📄</div>
+        <div class="more-text">
+          <div class="more-text-title">Download Brochure</div>
+          <div class="more-text-sub">Panduan musim (akan datang)</div>
+        </div>
+        <div class="more-chev">›</div>
+      </div>
+      <div class="more-item" onclick="showAds()">
+        <div class="more-icon">🤝</div>
+        <div class="more-text">
+          <div class="more-text-title">Iklan & Kerjasama</div>
+          <div class="more-text-sub">Peluang penajaan & partnership</div>
+        </div>
+        <div class="more-chev">›</div>
+      </div>
+      <div class="more-item" onclick="showContact()">
+        <div class="more-icon">✉️</div>
+        <div class="more-text">
+          <div class="more-text-title">Hubungi Kami</div>
+          <div class="more-text-sub">Feedback & pertanyaan</div>
+        </div>
+        <div class="more-chev">›</div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-logo">MUSIM<span>LAB</span></div>
+      <div class="footer-tagline">Musim Berubah, Kita Berubah</div>
+      <div class="footer-links">
+        <a onclick="showAbout()">Tentang</a>
+        <a onclick="showContact()">Contact</a>
+        <a onclick="showToast('Privacy policy akan datang')">Privacy</a>
+        <a onclick="showToast('Terms akan datang')">Terms</a>
+      </div>
+      <div class="footer-copy">
+        © 2025 Musim Lab. Dibina dengan ❤️ di Malaysia.<br>
+        Info dari sumber rasmi & komuniti.
+      </div>
+    </footer>
+  </section>
+
+</main>
+
+<div class="sheet-overlay" id="sheetOverlay"></div>
+
+<!-- DATE SHEET -->
+<div class="bottom-sheet" id="dateSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-scroll">
+    <div class="sheet-heading" id="dateSheetTitle">—</div>
+    <div class="sheet-heading-sub" id="dateSheetSub"></div>
+    <div id="dateSheetContent"></div>
+  </div>
+  <div class="sheet-bottom">
+    <button class="sheet-close" onclick="closeSheet('dateSheet')">✕ Tutup</button>
   </div>
 </div>
 
-<script src="js/config.js"></script>
-<script src="js/auth.js"></script>
+<!-- DETAIL SHEET -->
+<div class="bottom-sheet" id="detailSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-scroll" id="detailSheetContent"></div>
+  <div class="sheet-bottom">
+    <button class="sheet-share" id="shareBtn">📤 Kongsi</button>
+    <button class="sheet-close" onclick="closeSheet('detailSheet')">✕ Tutup</button>
+  </div>
+</div>
+
+<!-- SEASON SHEET -->
+<div class="bottom-sheet" id="seasonSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-scroll" id="seasonSheetContent"></div>
+  <div class="sheet-bottom">
+    <button class="sheet-close" onclick="closeSheet('seasonSheet')">✕ Tutup</button>
+  </div>
+</div>
+
+<!-- NEWS SHEET -->
+<div class="bottom-sheet" id="newsSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-scroll" id="newsSheetContent"></div>
+  <div class="sheet-bottom">
+    <button class="sheet-share" id="newsShareBtn">📤 Kongsi</button>
+    <button class="sheet-close" onclick="closeSheet('newsSheet')">✕ Tutup</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="bottom-nav">
+  <div class="nav-inner">
+    <button class="nav-button" data-tab="explore"><span class="nav-icon">🔍</span><span class="nav-label">Explore</span></button>
+    <button class="nav-button" data-tab="negeri"><span class="nav-icon">📍</span><span class="nav-label">Negeri</span></button>
+    <button class="nav-button active" data-tab="calendar"><span class="nav-icon">📅</span><span class="nav-label">Calendar</span></button>
+    <button class="nav-button" data-tab="musim"><span class="nav-icon">🌦️</span><span class="nav-label">Musim</span></button>
+    <button class="nav-button" data-tab="more"><span class="nav-icon">⋯</span><span class="nav-label">More</span></button>
+  </div>
+</nav>
+
+<!-- PWA INSTALL BANNER -->
+<div class="pwa-banner" id="pwaBanner">
+  <div class="pwa-icon">🦎</div>
+  <div class="pwa-text">
+    <div class="pwa-title">Pasang Musim Lab</div>
+    <div class="pwa-sub">Akses laju, macam app biasa</div>
+  </div>
+  <div class="pwa-actions">
+    <button class="pwa-btn ghost" onclick="dismissPWA()">Nanti</button>
+    <button class="pwa-btn primary" onclick="installPWA()">Pasang</button>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-hint" id="lightboxHint">Swipe kiri/kanan • Swipe bawah untuk tutup</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================
+   MUSIM LAB — INDEX v9 (Chameleon Theme)
+===================================================== */
+
+const API_URL = "https://script.google.com/macros/s/AKfycbz_Aqg5XEskKKpwsoz9WA4HcSCV5H61cK63hj9kw78YD_eRCCQgkm71q_KJhoG2SfX4/exec";
+const API_TOKEN = "ml-2025-a7b3c9d1e5f6";
+const BANNER_URL = "https://drive.google.com/file/d/1JQtMheQkkQmwXKJPx1Phy8KzlCNmTDV4/view";
+
+const EMPTY_QUOTES = [
+  "It always seems impossible until it's done.",
+  "Take only memories, leave only footprints.",
+  "Usually I spend my holiday with my family.",
+  "Orang sekarang kata healing itu best... jom cuba!",
+  "Rehat dulu, nanti kita teruskan."
+];
+
+let allEvents = [];
+let allSeasons = [];
+let allNews = [];
+let allItems = [];
+let holidayData = [];
+let currentDate = new Date();
+let selectedDate = null;
+let selectedEvent = null;
+let selectedSeason = null;
+let selectedNews = null;
+let activeCategory = "ALL";
+let activeNegeri = "ALL";
+let savedIds = JSON.parse(localStorage.getItem("ml_saved") || "[]");
+
+let newsTickerIndex = 0;
+let newsTickerTimer = null;
+
+const monthNames = ["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
+const monthShort = ["JAN","FEB","MAC","APR","MEI","JUN","JUL","OGO","SEP","OKT","NOV","DIS"];
+const dayNames = ["Ahad","Isnin","Selasa","Rabu","Khamis","Jumaat","Sabtu"];
+
+const NEGERI_LIST = [
+  { name: "Johor", emoji: "🏝️" },{ name: "Kedah", emoji: "🌾" },
+  { name: "Kelantan", emoji: "🎨" },{ name: "Melaka", emoji: "🏛️" },
+  { name: "Negeri Sembilan", emoji: "🐂" },{ name: "Pahang", emoji: "🌴" },
+  { name: "Perak", emoji: "⛰️" },{ name: "Perlis", emoji: "🌾" },
+  { name: "Pulau Pinang", emoji: "🌉" },{ name: "Sabah", emoji: "🏔️" },
+  { name: "Sarawak", emoji: "🦧" },{ name: "Selangor", emoji: "🏙️" },
+  { name: "Terengganu", emoji: "🐢" },{ name: "Kuala Lumpur", emoji: "🌆" },
+  { name: "Putrajaya", emoji: "🏛️" },{ name: "Labuan", emoji: "⚓" }
+];
+
+const CATEGORIES = [
+  { name: "Muzik & Konsert", icon: "🎵", color: "#8b5cf6" },
+  { name: "Sukan & Outdoor", icon: "⚽", color: "#f59e0b" },
+  { name: "Budaya & Agama", icon: "🕌", color: "#10b981" },
+  { name: "Teknologi & Perniagaan", icon: "💼", color: "#3b82f6" },
+  { name: "Gaya Hidup", icon: "✨", color: "#f43f5e" },
+  { name: "Local", icon: "🏘️", color: "#a16207" },
+  { name: "Cuti Sekolah", icon: "🎒", color: "#06b6d4" },
+  { name: "Musim", icon: "🌦️", color: "#6366f1" }
+];
+
+const SEVERITY_MAP = {
+  "Info": { icon: "ℹ️", color: "#3b82f6" },
+  "Warning": { icon: "⚠️", color: "#f59e0b" },
+  "Danger": { icon: "🚨", color: "#ef4444" }
+};
+function getSevInfo(s){return SEVERITY_MAP[s] || SEVERITY_MAP["Info"];}
+
+/* ============ HELPERS ============ */
+function normalise(v){return String(v||"").trim().toLowerCase()}
+function $(id){return document.getElementById(id)}
+function getCatInfo(cat){
+  const c = CATEGORIES.find(x => normalise(x.name) === normalise(cat));
+  return c || { name: cat || "Lain-lain", icon: "📍", color: "#8b5e3c" };
+}
+
+function parseDate(value){
+  if(!value) return null;
+  if(value instanceof Date) return new Date(value.getFullYear(),value.getMonth(),value.getDate());
+  const text = String(value).trim();
+  if(!text) return null;
+  if(text.includes("T")){
+    const d = new Date(text);
+    if(!isNaN(d.getTime())){
+      const my = new Date(d.getTime() + 8 * 3600 * 1000);
+      return new Date(my.getUTCFullYear(), my.getUTCMonth(), my.getUTCDate());
+    }
+  }
+  let m = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m) return new Date(+m[1],+m[2]-1,+m[3]);
+  m = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(m) return new Date(+m[3],+m[2]-1,+m[1]);
+  const monthMap = {jan:0,feb:1,mac:2,mar:2,apr:3,mei:4,may:4,jun:5,jul:6,ogo:7,aug:7,sep:8,okt:9,oct:9,nov:10,dis:11,dec:11};
+  m = text.match(/^(\d{1,2})[- ]([a-zA-Z]+)[- ](\d{4})/);
+  if(m){
+    const mon = monthMap[m[2].toLowerCase().substring(0,3)];
+    if(mon !== undefined) return new Date(+m[3], mon, +m[1]);
+  }
+  const d = new Date(text);
+  if(!isNaN(d.getTime())) return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  return null;
+}
+
+function dateKey(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
+function sameDate(a,b){return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate()}
+function formatDate(d){if(!d) return "";return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;}
+
+function driveToDirect(url){
+  if(!url) return "";
+  url = String(url).trim();
+  if(url.includes("lh3.googleusercontent.com")) return url;
+  if(url.includes("drive.google.com/thumbnail")) return url;
+  let id = null, m;
+  if((m = url.match(/\/file\/d\/([^\/\?]+)/))) id = m[1];
+  else if((m = url.match(/[?&]id=([^&]+)/))) id = m[1];
+  else if((m = url.match(/\/d\/([^\/\?]+)/))) id = m[1];
+  if(id) return `https://lh3.googleusercontent.com/d/${id}=w1200`;
+  return url;
+}
+function parseImages(raw){
+  if(!raw) return [];
+  return String(raw).split(/[\n|]/).map(s => s.trim()).filter(Boolean).map(driveToDirect);
+}
+
+function getEventStart(e){return parseDate(e["Start Date"]||e.startDate)}
+function getEventEnd(e){return parseDate(e["End Date"]||e.endDate)}
+function getEventCat(e){return String(e["Category"]||e.category||"").trim()}
+function getEventName(e){return String(e["Event Name"]||e.eventName||"Event").trim()}
+function getEventLoc(e){return String(e["Location"]||e.location||"").trim()}
+function getEventNegeri(e){return String(e["Negeri"]||e.negeri||"").trim()}
+function getEventDesc(e){return String(e["Description"]||e.description||"").trim()}
+function getEventShort(e){return String(e["Short Description"]||e.shortDescription||"").trim()}
+function getEventImg(e){return String(e["Image URL"]||e.imageUrl||"").trim()}
+function getEventLink(e){return String(e["Official Link"]||e.officialLink||"").trim()}
+function getEventId(e){return String(e["Event ID"]||e.eventId||"").trim()}
+
+function eventMatchesFilter(e){
+  if(activeCategory !== "ALL" && normalise(getEventCat(e)) !== normalise(activeCategory)) return false;
+  if(activeNegeri !== "ALL" && getEventNegeri(e) !== activeNegeri) return false;
+  return true;
+}
+
+function getEventsForDate(date){
+  const target = new Date(date.getFullYear(),date.getMonth(),date.getDate());
+  return allEvents.filter(e => {
+    if(!eventMatchesFilter(e)) return false;
+    let s = getEventStart(e), en = getEventEnd(e);
+    if(!s) return false;
+    if(!en) en = s;
+    if(en < s){const t=s;s=en;en=t;}
+    return target >= s && target <= en;
+  });
+}
+
+function getHolidayForDate(date){
+  if(!Array.isArray(holidayData)) return [];
+  const target = dateKey(date);
+  return holidayData.filter(h => {
+    if(!h) return false;
+    const s = parseDate(h.start);
+    const en = parseDate(h.end || h.start);
+    if(!s) return false;
+    const fe = en || s;
+    return target >= dateKey(s) && target <= dateKey(fe);
+  });
+}
+
+function showToast(msg){
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(()=>t.classList.remove("show"), 2400);
+}
+
+/* ============ TABS ============ */
+document.querySelectorAll(".nav-button").forEach(btn => {
+  btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+});
+
+function switchTab(tab){
+  document.querySelectorAll(".nav-button").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  const map = {calendar:"viewCalendar",explore:"viewExplore",negeri:"viewNegeri",musim:"viewMusim",more:"viewMore"};
+  $(map[tab]).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(tab === "explore") renderExplore();
+  if(tab === "negeri") renderNegeri();
+  if(tab === "musim") renderSeasons();
+  if(tab === "more") updateSavedCount();
+}
+
+/* ============ BANNER ============ */
+function renderBanner(){
+  const wrap = $("bannerWrap");
+  const img = $("bannerImg");
+  const src = driveToDirect(BANNER_URL);
+  if(!src) return;
+  img.src = src;
+  img.onerror = () => { wrap.style.display = "none"; };
+  img.onload = () => { wrap.style.display = "block"; };
+}
+
+/* ============ NEWS TICKER ============ */
+function renderNewsTicker(){
+  const ticker = $("newsTicker");
+  const inner = $("newsTickerInner");
+  const dots = $("newsDots");
+  const active = allNews.filter(n => String(n.Status||"").toLowerCase() === "active");
+  if(!active.length){ticker.style.display = "none";return;}
+  ticker.style.display = "block";
+  inner.innerHTML = "";
+  dots.innerHTML = "";
+  active.forEach((n, i) => {
+    const sev = getSevInfo(n["Severity"]);
+    const slide = document.createElement("div");
+    slide.className = "news-slide" + (i === 0 ? " active" : "");
+    slide.style.setProperty("--news-color", sev.color);
+    slide.dataset.index = i;
+    slide.innerHTML = `
+      <div class="news-slide-icon">${sev.icon}</div>
+      <div class="news-slide-content">
+        <div class="news-slide-title">${escapeHtml(n["Title"]||"")}</div>
+        <div class="news-slide-sub">${escapeHtml(n["Severity"]||"Info")} • Klik untuk baca</div>
+      </div>
+      <div class="news-slide-arrow">›</div>
+    `;
+    slide.addEventListener("click", () => openNewsDetail(n["News ID"]));
+    inner.appendChild(slide);
+    const dot = document.createElement("div");
+    dot.className = "news-dot" + (i === 0 ? " active" : "");
+    dot.addEventListener("click", () => goToNewsSlide(i));
+    dots.appendChild(dot);
+  });
+  dots.style.display = active.length > 1 ? "flex" : "none";
+  newsTickerIndex = 0;
+  startNewsTicker();
+}
+
+function startNewsTicker(){
+  stopNewsTicker();
+  const active = allNews.filter(n => String(n.Status||"").toLowerCase() === "active");
+  if(active.length <= 1) return;
+  newsTickerTimer = setInterval(() => {
+    const next = (newsTickerIndex + 1) % active.length;
+    goToNewsSlide(next);
+  }, 5000);
+}
+function stopNewsTicker(){if(newsTickerTimer){clearInterval(newsTickerTimer);newsTickerTimer = null;}}
+
+function goToNewsSlide(index){
+  const inner = $("newsTickerInner");
+  const slides = inner.querySelectorAll(".news-slide");
+  const dots = $("newsDots").querySelectorAll(".news-dot");
+  if(!slides.length) return;
+  slides.forEach(s => s.classList.remove("active","leaving"));
+  const current = slides[newsTickerIndex];
+  if(current && newsTickerIndex !== index){
+    current.classList.add("leaving");
+    setTimeout(() => current.classList.remove("leaving"), 600);
+  }
+  slides[index].classList.add("active");
+  dots.forEach((d,i) => d.classList.toggle("active", i === index));
+  newsTickerIndex = index;
+  startNewsTicker();
+}
+
+/* ============ NEWS DETAIL ============ */
+function openNewsDetail(newsId){
+  const n = allNews.find(x => String(x["News ID"]) === String(newsId));
+  if(!n) return;
+  selectedNews = n;
+  $("newsShareBtn").dataset.newsId = newsId;
+  const sev = getSevInfo(n["Severity"]);
+  const images = parseImages(n["Image URL"]);
+  const credit = n["Credit"];
+  const link = n["Link"];
+  const created = n["Created"] ? new Date(n["Created"]) : null;
+  let timeAgo = "";
+  if(created && !isNaN(created.getTime())) timeAgo = formatTimeAgo(created);
+  let html = "";
+  if(images.length){
+    html += buildCarousel(images, sev.icon, "news_" + newsId);
+  } else {
+    html += `<div style="margin:-8px -16px 16px;padding:24px 16px;background:linear-gradient(135deg,${sev.color}15,${sev.color}05);display:flex;align-items:center;justify-content:center">
+      <div style="font-size:64px;line-height:1">${sev.icon}</div>
+    </div>`;
+  }
+  html += `
+    <div class="news-detail-badge" style="background:${sev.color}15;color:${sev.color}">
+      ${sev.icon} ${escapeHtml(n["Severity"]||"Info")}
+    </div>
+    <h1 class="news-detail-title">${escapeHtml(n["Title"]||"")}</h1>
+    <div class="news-detail-meta">${timeAgo ? "🕐 " + timeAgo : ""}</div>
+    <div class="news-detail-body">${escapeHtml(n["Body"]||"")}</div>
+  `;
+  if(credit){
+    if(link){
+      html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="news-credit">📰 Sumber: ${escapeHtml(credit)} →</a>`;
+    } else {
+      html += `<div class="news-credit">📰 Sumber: ${escapeHtml(credit)}</div>`;
+    }
+  }
+  html += `<div id="affiliateNewsContainer"></div>`;
+  $("newsSheetContent").innerHTML = html;
+  openSheet("newsSheet");
+  if(images.length) setTimeout(() => attachCarouselScroll("news_" + newsId), 60);
+  loadNewsPreparation(newsId, "affiliateNewsContainer");
+}
+
+function formatTimeAgo(date){
+  const diff = Date.now() - date.getTime();
+  const mins = Math.floor(diff / 60000);
+  if(mins < 1) return "Baru sahaja";
+  if(mins < 60) return mins + " minit lepas";
+  const hours = Math.floor(mins / 60);
+  if(hours < 24) return hours + " jam lepas";
+  const days = Math.floor(hours / 24);
+  if(days < 7) return days + " hari lepas";
+  return formatDate(date);
+}
+
+/* ============ RENDER CALENDAR ============ */
+function renderCalendar(){
+  const grid = $("calendarGrid");
+  grid.innerHTML = "";
+  const y = currentDate.getFullYear();
+  const m = currentDate.getMonth();
+  $("monthName").textContent = `${monthNames[m]} ${y}`;
+  const first = new Date(y,m,1);
+  const offset = (first.getDay() + 6) % 7;
+  const days = new Date(y,m+1,0).getDate();
+  const today = new Date();
+  for(let i=0;i<offset;i++){
+    const b = document.createElement("div");
+    b.className = "day-cell empty";
+    grid.appendChild(b);
+  }
+  for(let d=1;d<=days;d++){
+    const date = new Date(y,m,d);
+    const cell = document.createElement("div");
+    cell.className = "day-cell";
+    const dow = date.getDay();
+    if(dow === 0 || dow === 6) cell.classList.add("weekend");
+    if(sameDate(date,today)) cell.classList.add("today");
+    if(selectedDate && sameDate(date,selectedDate)) cell.classList.add("selected");
+    const num = document.createElement("div");
+    num.className = "day-number";
+    num.textContent = d;
+    cell.appendChild(num);
+    const events = getEventsForDate(date);
+    if(events.length > 0){
+      const dotsWrap = document.createElement("div");
+      dotsWrap.className = "day-dots";
+      const seenCats = new Set();
+      const dots = [];
+      for(const e of events){
+        const cat = normalise(getEventCat(e));
+        if(seenCats.has(cat)) continue;
+        seenCats.add(cat);
+        dots.push(getCatInfo(getEventCat(e)).color);
+        if(dots.length >= 3) break;
+      }
+      dots.forEach(color => {
+        const dot = document.createElement("span");
+        dot.className = "day-dot";
+        dot.style.background = color;
+        dotsWrap.appendChild(dot);
+      });
+      cell.appendChild(dotsWrap);
+    }
+    cell.addEventListener("click", () => selectDate(date));
+    grid.appendChild(cell);
+  }
+}
+
+function updateFilterChip(){
+  const chip = $("filterChip");
+  const txt = $("filterChipText");
+  const parts = [];
+  if(activeCategory !== "ALL") parts.push(activeCategory);
+  if(activeNegeri !== "ALL") parts.push("📍 " + activeNegeri);
+  if(parts.length === 0){ chip.classList.remove("show"); }
+  else { chip.classList.add("show"); txt.textContent = parts.join(" • "); }
+}
+
+function clearFilter(){
+  activeCategory = "ALL"; activeNegeri = "ALL";
+  updateFilterChip();
+  renderCalendar();
+  switchTab("calendar");
+}
+
+/* ============ SELECT DATE ============ */
+function selectDate(date){
+  selectedDate = date;
+  renderCalendar();
+  const events = getEventsForDate(date);
+  const holidays = getHolidayForDate(date);
+  $("dateSheetTitle").textContent = `${dayNames[date.getDay()]}, ${formatDate(date)}`;
+  const container = $("dateSheetContent");
+  let html = "";
+  if(holidays.length > 0){
+    html += `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:12px;margin-bottom:12px;font-size:12px;font-weight:700;color:#92400e">
+      🎉 ${holidays.map(h=>h.name||"Cuti").join(" • ")}
+    </div>`;
+  }
+  if(events.length === 0){
+    const quote = EMPTY_QUOTES[(date.getDate() - 1) % EMPTY_QUOTES.length];
+    html += `<div class="empty-state">
+      <div class="emoji">🌿</div>
+      <div class="msg">Takde event</div>
+      <div class="sub" style="font-style:italic;color:#777;max-width:280px;margin:8px auto 0;line-height:1.6">"${escapeHtml(quote)}"</div>
+    </div>`;
+    $("dateSheetSub").textContent = "";
+  }else{
+    $("dateSheetSub").textContent = `${events.length} event`;
+    html += events.map(e => {
+      const cat = getEventCat(e);
+      const info = getCatInfo(cat);
+      const id = getEventId(e);
+      const isSaved = savedIds.includes(id);
+      const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
+      return `
+        <div class="sheet-event" onclick="openEventDetail('${id}')">
+          <div class="sheet-event-cat">
+            <span class="cat-dot" style="background:${info.color}"></span>
+            <span>${info.icon} ${escapeHtml(cat||"Lain-lain")}</span>
+          </div>
+          <div class="sheet-event-name">${escapeHtml(getEventName(e))}</div>
+          ${locLine ? `<div class="sheet-event-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
+          <div class="sheet-event-actions" onclick="event.stopPropagation()">
+            <button class="mini-btn ${isSaved?"saved":""}" onclick="toggleSave('${id}', this)">
+              ${isSaved?"✓ Disimpan":"❤ Simpan"}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+  container.innerHTML = html;
+  openSheet("dateSheet");
+}
+
+/* ============ CAROUSEL ============ */
+function buildCarousel(images, icon, key){
+  if(!images.length){
+    return `<div class="carousel-wrap"><div class="carousel-slide"><div class="carousel-fallback">${icon}</div></div></div>`;
+  }
+  const slides = images.map((src, i) => `
+    <div class="carousel-slide">
+      <img src="${escapeHtml(src)}" alt="" loading="${i===0?"eager":"lazy"}"
+           onclick="openLightbox(${JSON.stringify(images).replace(/"/g,'&quot;')}, ${i})"
+           onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'carousel-fallback\\'>${icon}</div>'">
+    </div>
+  `).join("");
+  const dots = images.length > 1
+    ? `<div class="carousel-dots">${images.map((_,i)=>`<div class="carousel-dot ${i===0?"active":""}"></div>`).join("")}</div>`
+    : "";
+  return `<div class="carousel-wrap" data-carousel="${key}"><div class="carousel-track">${slides}</div>${dots}</div>`;
+}
+function attachCarouselScroll(key){
+  const wrap = document.querySelector(`[data-carousel="${key}"]`);
+  if(!wrap) return;
+  const track = wrap.querySelector(".carousel-track");
+  const dots = wrap.querySelectorAll(".carousel-dot");
+  if(!dots.length) return;
+  track.addEventListener("scroll", () => {
+    const idx = Math.round(track.scrollLeft / track.clientWidth);
+    dots.forEach((d,i) => d.classList.toggle("active", i === idx));
+  }, {passive:true});
+}
+
+/* ============ DATE RANGE HELPER ============ */
+function buildDateRange(start, end){
+  let dateMain = "", dateSub = "";
+  if(!start) return { dateMain: "—", dateSub: "" };
+  const sD = start.getDate(), sM = monthShort[start.getMonth()], sY = start.getFullYear();
+  if(end && !sameDate(start, end)){
+    const eD = end.getDate(), eM = monthShort[end.getMonth()], eY = end.getFullYear();
+    if(sM === eM && sY === eY){ dateMain = `${sD} – ${eD} ${sM} ${sY}`; }
+    else if(sY === eY){ dateMain = `${sD} ${sM} – ${eD} ${eM} ${sY}`; }
+    else { dateMain = `${sD} ${sM} ${sY} – ${eD} ${eM} ${eY}`; }
+    dateSub = `${dayNames[start.getDay()]} – ${dayNames[end.getDay()]}`;
+  } else {
+    dateMain = `${sD} ${sM} ${sY}`;
+    dateSub = dayNames[start.getDay()];
+  }
+  return { dateMain, dateSub };
+}
+
+/* ============ EVENT DETAIL ============ */
+function openEventDetail(id){
+  const e = allEvents.find(x => getEventId(x) === id);
+  if(!e) return;
+  selectedEvent = e;
+  $("shareBtn").dataset.eventId = id;
+  const cat = getEventCat(e);
+  const info = getCatInfo(cat);
+  const start = getEventStart(e);
+  const end = getEventEnd(e);
+  const link = getEventLink(e);
+  const syn = getEventShort(e) || getEventDesc(e);
+  const fullDesc = getEventDesc(e);
+  const isSaved = savedIds.includes(id);
+  const images = parseImages(getEventImg(e));
+  const { dateMain, dateSub } = buildDateRange(start, end);
+  const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
+  let html = `
+    ${buildCarousel(images, info.icon, id)}
+    <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
+      <span class="cat-dot" style="background:${info.color}"></span>
+      ${info.icon} ${escapeHtml(cat||"Lain-lain")}
+    </div>
+    <div class="date-range-block">
+      <div class="date-range-main">${dateMain}</div>
+      <div class="date-range-sub">${dateSub}</div>
+    </div>
+    <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
+    ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
+    <div class="detail-synopsis">${escapeHtml(syn)}</div>
+    <div class="detail-actions">
+      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this)">
+        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
+      </button>
+      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
+    </div>
+  `;
+  if(fullDesc && fullDesc !== syn){
+    html += `<button class="action-btn primary full" style="margin-bottom:10px" onclick="openFullDetail('${id}')">📖 Baca Penuh</button>`;
+  }
+  if(link){
+    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary full" style="margin-bottom:10px">🔗 Official Website</a>`;
+  }
+  html += `<div id="affiliateContainer_${id}"></div>`;
+  $("detailSheetContent").innerHTML = html;
+  openSheet("detailSheet");
+  setTimeout(() => attachCarouselScroll(id), 60);
+  loadEventPreparation(id, "affiliateContainer_" + id);
+}
+
+function openFullDetail(id){
+  const e = allEvents.find(x => getEventId(x) === id);
+  if(!e) return;
+  $("shareBtn").dataset.eventId = id;
+  const cat = getEventCat(e);
+  const info = getCatInfo(cat);
+  const start = getEventStart(e);
+  const end = getEventEnd(e);
+  const link = getEventLink(e);
+  const fullDesc = getEventDesc(e);
+  const isSaved = savedIds.includes(id);
+  const { dateMain, dateSub } = buildDateRange(start, end);
+  const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
+  let html = `
+    <div style="display:flex;justify-content:flex-start;margin-bottom:12px">
+      <button class="mini-btn" onclick="openEventDetail('${id}')">← Kembali</button>
+    </div>
+    <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
+      <span class="cat-dot" style="background:${info.color}"></span>
+      ${info.icon} ${escapeHtml(cat||"Lain-lain")}
+    </div>
+    <div class="date-range-block">
+      <div class="date-range-main">${dateMain}</div>
+      <div class="date-range-sub">${dateSub}</div>
+    </div>
+    <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
+    ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
+    <div class="detail-synopsis">${escapeHtml(fullDesc)}</div>
+    <div class="detail-actions">
+      <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this)">
+        ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
+      </button>
+      <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
+    </div>
+  `;
+  if(link){
+    html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary full" style="margin-bottom:10px">🔗 Official Website</a>`;
+  }
+  html += `<div id="affiliateFull_${id}"></div>`;
+  $("detailSheetContent").innerHTML = html;
+  $("detailSheet").querySelector(".sheet-scroll").scrollTop = 0;
+  loadEventPreparation(id, "affiliateFull_" + id);
+}
+
+async function loadEventPreparation(eventId, containerId){
+  const container = $(containerId);
+  if(!container) return;
+  try{
+    const r = await fetch(`${API_URL}?action=getEventItems&eventId=${encodeURIComponent(eventId)}&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    if(!mappings.length) return;
+    const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
+    if(!selectedItems.length) return;
+    container.innerHTML = renderPreparationCards(selectedItems);
+  }catch(e){ console.error("event preparation err", e); }
+}
+
+async function loadSeasonPreparation(seasonId, containerId){
+  const container = $(containerId);
+  if(!container) return;
+  try{
+    const r = await fetch(`${API_URL}?action=getSeasonItems&seasonId=${encodeURIComponent(seasonId)}&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    if(!mappings.length) return;
+    const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
+    if(!selectedItems.length) return;
+    container.innerHTML = renderPreparationCards(selectedItems);
+  }catch(e){ console.error("season prep err", e); }
+}
+
+async function loadNewsPreparation(newsId, containerId){
+  const container = $(containerId);
+  if(!container) return;
+  try{
+    const r = await fetch(`${API_URL}?action=getNewsItems&newsId=${encodeURIComponent(newsId)}&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    if(!mappings.length) return;
+    const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
+    if(!selectedItems.length) return;
+    container.innerHTML = renderPreparationCards(selectedItems);
+  }catch(e){ console.error("news prep err", e); }
+}
+
+function renderPreparationCards(selectedItems){
+  return `
+    <div class="affiliate-section">
+      <div class="affiliate-title">🛍️ Persediaan & Beli</div>
+      ${selectedItems.map(it => {
+        const icon = it["Icon"] || "🛍️";
+        const name = it["Name"] || "";
+        const desc = it["Description"] || "";
+        const url = it["URL"] || "";
+        return `
+          <div class="affiliate-card">
+            <div class="affiliate-card-head">
+              <div class="affiliate-name">${escapeHtml(icon)} ${escapeHtml(name)}</div>
+            </div>
+            ${desc ? `<div class="affiliate-desc">${escapeHtml(desc)}</div>` : ""}
+            ${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="affiliate-buy">🛒 Beli Sekarang →</a>` : ""}
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+/* ============ SAVE EVENT ============ */
+function toggleSave(id, btn){
+  const idx = savedIds.indexOf(id);
+  if(idx >= 0){savedIds.splice(idx,1);showToast("Dibuang dari simpanan");}
+  else{savedIds.push(id);showToast("❤ Disimpan!");}
+  localStorage.setItem("ml_saved", JSON.stringify(savedIds));
+  if(btn){
+    const isSaved = savedIds.includes(id);
+    btn.classList.toggle("saved", isSaved);
+    btn.classList.toggle("success", isSaved);
+    btn.innerHTML = isSaved ? "✓ Disimpan" : "❤ Simpan";
+  }
+  updateSavedCount();
+}
+
+/* ============ ICS ============ */
+function downloadICS(id){
+  const e = allEvents.find(x => getEventId(x) === id);
+  if(!e) return;
+  const start = getEventStart(e);
+  if(!start){showToast("Tarikh tak dijumpai");return;}
+  const end = getEventEnd(e) || start;
+  function fmt(d){return d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");}
+  const title = getEventName(e);
+  const desc = (getEventShort(e) || getEventDesc(e)).replace(/\n/g,"\\n");
+  const loc = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
+  const ics = [
+    "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Musim Lab//EN","BEGIN:VEVENT",
+    `UID:${id}@musimlab`,`DTSTAMP:${fmt(new Date())}T000000Z`,
+    `DTSTART;VALUE=DATE:${fmt(start)}`,
+    `DTEND;VALUE=DATE:${fmt(new Date(end.getTime()+86400000))}`,
+    `SUMMARY:${title}`, desc ? `DESCRIPTION:${desc}` : "", loc ? `LOCATION:${loc}` : "",
+    "BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:Esok: " + title,"END:VALARM",
+    "END:VEVENT","END:VCALENDAR"
+  ].filter(Boolean).join("\r\n");
+  const blob = new Blob([ics], {type:"text/calendar"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = title.replace(/[^a-z0-9]/gi,"_") + ".ics"; a.click();
+  URL.revokeObjectURL(url);
+  showToast("🔔 Fail kalendar dimuat turun");
+}
+
+/* ============ SHARE ============ */
+$("shareBtn").addEventListener("click", async () => {
+  const id = $("shareBtn").dataset.eventId;
+  if(!id) return;
+  const e = allEvents.find(x => getEventId(x) === id);
+  if(!e){showToast("Event tak dijumpai");return;}
+  const start = getEventStart(e);
+  const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
+  const text = `${getEventName(e)} — ${formatDate(start)}${locLine ? ` • ${locLine}` : ""}`;
+  const url = window.location.origin + window.location.pathname + "#event=" + id;
+  if(navigator.share){
+    try{await navigator.share({ title: getEventName(e), text: text, url: url });}
+    catch(err){if(err.name !== "AbortError") console.error(err);}
+  } else {
+    try{await navigator.clipboard.writeText(`${text}\n${url}`);showToast("📋 Link disalin!");}
+    catch(err){showToast("Tak dapat copy link");}
+  }
+});
+
+$("newsShareBtn").addEventListener("click", async () => {
+  const id = $("newsShareBtn").dataset.newsId;
+  if(!id) return;
+  const n = allNews.find(x => String(x["News ID"]) === id);
+  if(!n){showToast("News tak dijumpai");return;}
+  const text = `${n["Title"]}\n\n${(n["Body"]||"").substring(0,100)}...`;
+  const url = window.location.origin + window.location.pathname;
+  if(navigator.share){
+    try{await navigator.share({ title: n["Title"], text: text, url: url });}
+    catch(err){if(err.name !== "AbortError") console.error(err);}
+  } else {
+    try{await navigator.clipboard.writeText(`${text}\n${url}`);showToast("📋 Link disalin!");}
+    catch(err){showToast("Tak dapat copy link");}
+  }
+});
+
+/* ============ LIGHTBOX ============ */
+let lbImages = [];
+let lbIndex = 0;
+let lbSX = 0, lbSY = 0, lbCX = 0, lbCY = 0, lbActive = false;
+
+function openLightbox(images, startIndex = 0){
+  lbImages = images;
+  lbIndex = startIndex;
+  updateLightbox();
+  $("lightbox").classList.add("open");
+  document.body.classList.add("no-scroll");
+}
+function updateLightbox(){
+  $("lightboxImg").src = lbImages[lbIndex] || "";
+  $("lightboxCounter").textContent = `${lbIndex + 1} / ${lbImages.length}`;
+  $("lightboxHint").style.display = lbImages.length > 1 ? "block" : "none";
+}
+function closeLightbox(){
+  $("lightbox").classList.remove("open");
+  $("lightboxImg").src = "";
+  document.body.classList.remove("no-scroll");
+}
+(function(){
+  const lb = $("lightbox");
+  lb.addEventListener("touchstart", e => {
+    lbSX = e.touches[0].clientX; lbSY = e.touches[0].clientY;
+    lbCX = 0; lbCY = 0; lbActive = true;
+  }, {passive:true});
+  lb.addEventListener("touchmove", e => {
+    if(!lbActive) return;
+    lbCX = e.touches[0].clientX - lbSX;
+    lbCY = e.touches[0].clientY - lbSY;
+    const img = $("lightboxImg");
+    if(Math.abs(lbCX) > Math.abs(lbCY)){
+      img.style.transform = `translateX(${lbCX}px)`;
+    } else if(lbCY > 0){
+      img.style.transform = `translateY(${lbCY}px) scale(${Math.max(0.7, 1 - lbCY/800)})`;
+      img.style.opacity = String(Math.max(0.3, 1 - lbCY/500));
+    }
+  }, {passive:true});
+  lb.addEventListener("touchend", () => {
+    if(!lbActive) return;
+    lbActive = false;
+    const img = $("lightboxImg");
+    img.style.transform = ""; img.style.opacity = "";
+    const dx = lbCX, dy = lbCY;
+    if(dy > 100 && Math.abs(dy) > Math.abs(dx)) closeLightbox();
+    else if(dx < -60 && Math.abs(dx) > Math.abs(dy)){ if(lbIndex < lbImages.length - 1){ lbIndex++; updateLightbox(); } }
+    else if(dx > 60 && Math.abs(dx) > Math.abs(dy)){ if(lbIndex > 0){ lbIndex--; updateLightbox(); } }
+    lbCX = 0; lbCY = 0;
+  }, {passive:true});
+})();
+$("lightbox").addEventListener("click", e => {
+  if(e.target.id === "lightbox" || e.target.id === "lightboxImg"){
+    if(Math.abs(lbCX) < 5 && Math.abs(lbCY) < 5) closeLightbox();
+  }
+});
+
+/* ============ EXPLORE / NEGERI ============ */
+function renderExplore(){
+  const grid = $("exploreGrid");
+  grid.innerHTML = CATEGORIES.map(c => {
+    const count = allEvents.filter(e => normalise(getEventCat(e)) === normalise(c.name)).length;
+    return `<button class="explore-card" onclick="pickCategory('${escapeHtml(c.name)}')">
+      <div class="explore-icon">${c.icon}</div>
+      <div class="explore-name">${escapeHtml(c.name)}</div>
+      <div class="explore-count">${count} event</div>
+    </button>`;
+  }).join("");
+}
+function pickCategory(cat){ activeCategory = cat; activeNegeri = "ALL"; updateFilterChip(); renderCalendar(); switchTab("calendar"); }
+
+function renderNegeri(){
+  const grid = $("negeriGrid");
+  grid.innerHTML = NEGERI_LIST.map(n => {
+    const count = allEvents.filter(e => getEventNegeri(e) === n.name).length;
+    return `<button class="negeri-card ${count > 0 ? "has-event" : ""}" onclick="pickNegeri('${escapeHtml(n.name)}')">
+      <div class="negeri-emoji">${n.emoji}</div>
+      <div class="negeri-name">${escapeHtml(n.name)}</div>
+      <div class="negeri-count">${count} event</div>
+    </button>`;
+  }).join("");
+}
+function pickNegeri(name){ activeNegeri = name; activeCategory = "ALL"; updateFilterChip(); renderCalendar(); switchTab("calendar"); }
+
+/* ============ SEASONS ============ */
+async function loadSeasons(){
+  try{
+    const r = await fetch(`${API_URL}?action=getSeasons&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    allSeasons = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    renderSeasons();
+  }catch(e){console.error(e)}
+}
+function renderSeasons(){
+  const list = $("seasonList");
+  const active = allSeasons.filter(s => String(s.Status||"").toLowerCase() === "active");
+  if(!active.length){
+    list.innerHTML = `<div class="empty-state"><div class="emoji">🌤️</div><div class="msg">Takde musim aktif</div><div class="sub">Check balik nanti!</div></div>`;
+    return;
+  }
+  list.innerHTML = active.map(s => {
+    const id = s["Season ID"];
+    const icon = s["Icon"] || "🌧️";
+    const color = s["Color"] || "#6366f1";
+    const colorSoft = hexWithAlpha(color, 0.25);
+    const colorLighter = hexWithAlpha(color, 0.08);
+    return `<div class="season-card" onclick="openSeasonDetail('${id}')"
+       style="--season-color:${escapeHtml(color)};--season-color-soft:${colorSoft};--season-color-lighter:${colorLighter}">
+      <div class="season-hero"><div class="season-icon-big">${escapeHtml(icon)}</div></div>
+      <div class="season-body">
+        <div class="season-name">${escapeHtml(s["Season Name"]||"")}<span class="season-badge">Aktif</span></div>
+        <div class="season-synopsis">${escapeHtml(s["Description"]||"")}</div>
+        <div class="season-cta">Baca penuh →</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+function hexWithAlpha(hex, alpha){
+  const h = String(hex).replace("#","");
+  const r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+function openSeasonDetail(id){
+  const s = allSeasons.find(x => String(x["Season ID"]) === id);
+  if(!s) return;
+  const icon = s["Icon"] || "🌧️";
+  const color = s["Color"] || "#6366f1";
+  const colorSoft = hexWithAlpha(color, 0.25);
+  const colorLighter = hexWithAlpha(color, 0.08);
+  let html = `
+    <div style="margin:-8px -16px 16px;padding:32px 16px;background:linear-gradient(135deg,${colorSoft},${colorLighter});display:flex;align-items:center;justify-content:center">
+      <div style="font-size:72px;line-height:1;filter:drop-shadow(0 6px 16px rgba(0,0,0,.1))">${escapeHtml(icon)}</div>
+    </div>
+    <h2 class="detail-title">${escapeHtml(s["Season Name"]||"")}</h2>
+    <div class="detail-meta" style="color:${color};font-weight:700">● Musim aktif</div>
+    <div class="detail-synopsis" style="white-space:pre-line">${escapeHtml(s["Description"]||"")}</div>
+    <div id="seasonAffiliateContainer"></div>
+  `;
+  $("seasonSheetContent").innerHTML = html;
+  openSheet("seasonSheet");
+  loadSeasonPreparation(id, "seasonAffiliateContainer");
+}
+
+/* ============ SHEET ============ */
+let openSheetId = null;
+function openSheet(id){
+  if(openSheetId && openSheetId !== id) closeSheet(openSheetId);
+  openSheetId = id;
+  $("sheetOverlay").classList.add("open");
+  $(id).classList.add("open");
+  document.body.classList.add("no-scroll");
+  const sc = $(id).querySelector(".sheet-scroll");
+  if(sc) sc.scrollTop = 0;
+  if(id === "newsSheet") stopNewsTicker();
+}
+function closeSheet(id){
+  if(id) $(id).classList.remove("open");
+  else document.querySelectorAll(".bottom-sheet").forEach(s => s.classList.remove("open"));
+  if(!document.querySelector(".bottom-sheet.open")){
+    $("sheetOverlay").classList.remove("open");
+    document.body.classList.remove("no-scroll");
+    openSheetId = null;
+    startNewsTicker();
+  }
+}
+$("sheetOverlay").addEventListener("click", () => closeSheet());
+
+document.querySelectorAll(".bottom-sheet").forEach(sheet => {
+  let startY = 0, curY = 0, dragging = false;
+  const scroll = sheet.querySelector(".sheet-scroll");
+  sheet.addEventListener("touchstart", e => {
+    if(scroll && scroll.scrollTop > 0) return;
+    startY = e.touches[0].clientY; dragging = true;
+  }, {passive:true});
+  sheet.addEventListener("touchmove", e => {
+    if(!dragging) return;
+    if(scroll && scroll.scrollTop > 0){dragging=false;return;}
+    curY = e.touches[0].clientY - startY;
+    if(curY > 0){
+      sheet.style.transition = "none";
+      sheet.style.transform = `translateY(${curY}px)`;
+    }
+  }, {passive:true});
+  sheet.addEventListener("touchend", () => {
+    if(!dragging) return;
+    dragging = false;
+    sheet.style.transition = ""; sheet.style.transform = "";
+    if(curY > 100) closeSheet(sheet.id);
+    curY = 0;
+  });
+});
+
+/* ============ MONTH NAV + SWIPE ============ */
+$("prevMonth").addEventListener("click", () => { currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 1); renderCalendar(); });
+$("nextMonth").addEventListener("click", () => { currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 1); renderCalendar(); });
+(function(){
+  const card = $("calendarCard");
+  let sx=0, sy=0;
+  card.addEventListener("touchstart", e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+  card.addEventListener("touchend", e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)*1.5){
+      if(dx < 0) currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()+1, 1);
+      else currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 1);
+      renderCalendar();
+    }
+  }, {passive:true});
+})();
+
+/* ============ TODAY ============ */
+$("todayBtn").addEventListener("click", () => {
+  currentDate = new Date();
+  renderCalendar();
+  switchTab("calendar");
+  setTimeout(() => selectDate(new Date()), 100);
+});
+
+/* ============ SAVED + ABOUT ============ */
+function openSavedEvents(){
+  const container = $("dateSheetContent");
+  $("dateSheetTitle").textContent = "❤️ Event Disimpan";
+  $("dateSheetSub").textContent = savedIds.length + " event";
+  if(!savedIds.length){
+    container.innerHTML = `<div class="empty-state"><div class="emoji">💔</div><div class="msg">Belum ada simpanan</div><div class="sub">Tap ❤ pada event untuk simpan.</div></div>`;
+  }else{
+    const list = savedIds.map(id => allEvents.find(e => getEventId(e) === id)).filter(Boolean);
+    container.innerHTML = list.map(e => {
+      const info = getCatInfo(getEventCat(e));
+      return `<div class="sheet-event" onclick="closeSheet('dateSheet');setTimeout(()=>openEventDetail('${getEventId(e)}'),200)">
+        <div class="sheet-event-cat"><span class="cat-dot" style="background:${info.color}"></span><span>${info.icon} ${escapeHtml(getEventCat(e)||"")}</span></div>
+        <div class="sheet-event-name">${escapeHtml(getEventName(e))}</div>
+        <div class="sheet-event-meta">${formatDate(getEventStart(e))}</div>
+      </div>`;
+    }).join("");
+  }
+  openSheet("dateSheet");
+}
+function updateSavedCount(){ const el = $("savedCountText"); if(el) el.textContent = savedIds.length + " event"; }
+
+function showAbout(){
+  $("dateSheetTitle").textContent = "Tentang Musim Lab";
+  $("dateSheetSub").textContent = "";
+  $("dateSheetContent").innerHTML = `
+    <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
+      <p style="margin-bottom:12px"><strong>Musim Lab</strong> bantu anda tahu apa yang akan datang di Malaysia — musim, cuti, event — dan bersedia sebelum tiba.</p>
+      <p style="margin-bottom:12px">Kami kumpul info dari pelbagai sumber rasmi dan komuniti, susun dalam satu kalendar mudah.</p>
+      <p style="color:#888;font-size:12px;margin-top:16px"><strong>Musim Berubah, Kita Berubah.</strong> 🦎</p>
+    </div>
+  `;
+  openSheet("dateSheet");
+}
+
+function showAds(){
+  $("dateSheetTitle").textContent = "🤝 Iklan & Kerjasama";
+  $("dateSheetSub").textContent = "";
+  $("dateSheetContent").innerHTML = `
+    <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
+      <p style="margin-bottom:12px">Anda ada event, produk, atau servis yang berkaitan dengan musim Malaysia? Kami buka peluang untuk:</p>
+      <ul style="margin:12px 0 16px 20px;padding:0;line-height:2">
+        <li>📌 Featured event</li>
+        <li>🎯 Sponsored listing</li>
+        <li>🛍️ Affiliate partnership</li>
+        <li>📰 Branded content</li>
+      </ul>
+      <p style="margin-bottom:12px">Hubungi kami: <a href="mailto:hello@musimlab.com" style="color:#8b5cf6;font-weight:700;text-decoration:none">hello@musimlab.com</a></p>
+      <p style="color:#888;font-size:12px;margin-top:16px"><strong>Tanpa anda, siapa kami.</strong></p>
+    </div>
+  `;
+  openSheet("dateSheet");
+}
+
+function showContact(){
+  $("dateSheetTitle").textContent = "✉️ Hubungi Kami";
+  $("dateSheetSub").textContent = "";
+  $("dateSheetContent").innerHTML = `
+    <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
+      <p style="margin-bottom:12px">Ada feedback, cadangan, atau jumpa event menarik? Bagitau kami!</p>
+      <div style="display:grid;gap:10px;margin-top:16px">
+        <a href="mailto:hello@musimlab.com" style="display:flex;align-items:center;gap:12px;padding:14px;background:#fafafa;border:1px solid #ededed;border-radius:12px;text-decoration:none;color:#171717">
+          <span style="font-size:24px">📧</span>
+          <div>
+            <div style="font-size:13px;font-weight:800">Email</div>
+            <div style="font-size:11px;color:#888">hello@musimlab.com</div>
+          </div>
+        </a>
+        <a href="https://t.me/musimlab" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px;background:#fafafa;border:1px solid #ededed;border-radius:12px;text-decoration:none;color:#171717">
+          <span style="font-size:24px">💬</span>
+          <div>
+            <div style="font-size:13px;font-weight:800">Telegram</div>
+            <div style="font-size:11px;color:#888">@musimlab</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  `;
+  openSheet("dateSheet");
+}
+
+/* ============ ESCAPE ============ */
+function escapeHtml(v){
+  return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+/* ============ LOAD ============ */
+async function loadEvents(){
+  try{
+    const r = await fetch(`${API_URL}?action=getEvents&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    allEvents = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    renderCalendar();
+  }catch(e){
+    console.error("events err", e);
+    allEvents = [];
+    renderCalendar();
+    showToast("Tak dapat muat event.");
+  }
+}
+
+async function loadHolidays(){
+  try{
+    const r = await fetch(`${API_URL}?action=getHolidays&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    const raw = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    holidayData = raw.map(h => ({
+      start: h["Start Date"],
+      end: h["End Date"] || h["Start Date"],
+      name: h["Name"] || "Cuti"
+    }));
+    renderCalendar();
+  }catch(e){
+    console.error("holidays err", e);
+    holidayData = [];
+  }
+}
+
+async function loadNews(){
+  try{
+    const r = await fetch(`${API_URL}?action=getNews&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    allNews = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    renderNewsTicker();
+  }catch(e){console.error("news err", e)}
+}
+
+async function loadItems(){
+  try{
+    const r = await fetch(`${API_URL}?action=getItems&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    allItems = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+  }catch(e){
+    console.error("items err", e);
+    allItems = [];
+  }
+}
+
+/* ============ NEWS TICKER SWIPE ============ */
+(function(){
+  const ticker = $("newsTicker");
+  if(!ticker) return;
+  let sx = 0, sy = 0, swiped = false;
+  ticker.addEventListener("touchstart", e => {
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+    swiped = false;
+    stopNewsTicker();
+  }, {passive:true});
+  ticker.addEventListener("touchmove", e => {
+    const dx = Math.abs(e.touches[0].clientX - sx);
+    const dy = Math.abs(e.touches[0].clientY - sy);
+    if(dx > 10 || dy > 10) swiped = true;
+  }, {passive:true});
+  ticker.addEventListener("touchend", e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    const total = allNews.filter(n => String(n.Status||"").toLowerCase() === "active").length;
+    if(!swiped || total <= 1){ startNewsTicker(); return; }
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0){ goToNewsSlide((newsTickerIndex + 1) % total); }
+      else { goToNewsSlide((newsTickerIndex - 1 + total) % total); }
+    } else { startNewsTicker(); }
+  }, {passive:true});
+  ticker.addEventListener("click", e => {
+    if(swiped){ e.stopPropagation(); e.preventDefault(); }
+  }, true);
+})();
+
+/* ============ DEEP LINK ============ */
+function checkDeepLink(){
+  const hash = window.location.hash;
+  const m = hash.match(/^#event=(.+)$/);
+  if(m){
+    const id = decodeURIComponent(m[1]);
+    setTimeout(() => openEventDetail(id), 500);
+  }
+}
+
+/* ============ PWA INSTALL ============ */
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Tunjuk banner selepas 10 saat
+  setTimeout(() => {
+    if(!localStorage.getItem("pwa_dismissed")){
+      $("pwaBanner").classList.add("show");
+    }
+  }, 10000);
+});
+
+function installPWA(){
+  if(!deferredPrompt){
+    showToast("Guna menu browser → Add to Home Screen");
+    return;
+  }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choice) => {
+    if(choice.outcome === "accepted"){
+      showToast("✅ Musim Lab dipasang!");
+    }
+    deferredPrompt = null;
+    $("pwaBanner").classList.remove("show");
+  });
+}
+
+function dismissPWA(){
+  $("pwaBanner").classList.remove("show");
+  localStorage.setItem("pwa_dismissed", "1");
+}
+
+/* ============ INIT ============ */
+renderBanner();
+loadEvents();
+loadHolidays();
+loadSeasons();
+loadNews();
+loadItems();
+updateSavedCount();
+checkDeepLink();
+</script>
+
 </body>
 </html>
