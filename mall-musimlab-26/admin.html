@@ -157,8 +157,8 @@ textarea{min-height:110px;resize:vertical}
 .user-info{display:flex;align-items:center;gap:8px;padding:4px;border-radius:99px;background:#f3f4f6;cursor:pointer;transition:.2s;position:relative}
 .user-info:hover{background:#e5e7eb}
 .user-avatar{width:36px;height:36px;border-radius:50%;background-size:cover;background-position:center;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.user-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.12);min-width:240px;z-index:100}
-.user-info:hover .user-dropdown,.user-dropdown:hover{display:block}
+.user-dropdown{display:block;opacity:0;visibility:hidden;transform:translateY(-6px);position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.12);min-width:240px;z-index:100;transition:opacity .2s ease, transform .2s ease, visibility .2s}
+.user-info.open .user-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
 .user-name{font-size:13px;font-weight:700;color:#111827;margin-bottom:2px}
 .user-email{font-size:11px;color:#6b7280;margin-bottom:10px}
 
@@ -1773,6 +1773,7 @@ loadItems();
   if (!user) return;
   const el = document.getElementById("userInfo");
   if (!el) return;
+  
   el.innerHTML = `
     <div class="user-avatar" style="background-image:url('${user.picture}')"></div>
     <div class="user-dropdown">
@@ -1781,6 +1782,28 @@ loadItems();
       <button class="btn btn-secondary btn-small" onclick="Auth.logout()">Logout</button>
     </div>
   `;
+  
+  // ===== Toggle dropdown on click =====
+  el.addEventListener("click", (e) => {
+    // Kalau klik butang Logout, jangan toggle
+    if (e.target.closest("button")) return;
+    e.stopPropagation();
+    el.classList.toggle("open");
+  });
+  
+  // ===== Close bila klik luar =====
+  document.addEventListener("click", (e) => {
+    if (!el.contains(e.target)) {
+      el.classList.remove("open");
+    }
+  });
+  
+  // ===== Close bila tekan ESC =====
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      el.classList.remove("open");
+    }
+  });
 })();
 </script>
 </body>
