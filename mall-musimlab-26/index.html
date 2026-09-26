@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Login — MusimLab Admin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/login.css">
+
+<!-- Google Sign-In -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">🦎</div>
+      <h1>MUSIM<span>LAB</span></h1>
+      <p class="tagline">Musim Berubah, Kita Berubah</p>
+    </div>
+
+    <div class="login-divider"></div>
+
+    <div class="login-header">
+      <h2>Admin Access</h2>
+      <p>Sign in dengan Google untuk teruskan</p>
+    </div>
+
+    <div id="googleSignInButton" class="google-btn-wrapper"></div>
+
+    <div id="loadingState" class="loading-state" style="display:none">
+      <div class="spinner"></div>
+      <p>Mengesahkan...</p>
+    </div>
+
+    <div id="errorMessage" class="error-message" style="display:none"></div>
+
+    <div class="login-footer">
+      <p>🔒 Hanya admin sahaja boleh akses</p>
+    </div>
+  </div>
+
+  <div class="login-background">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
