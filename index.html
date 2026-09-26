@@ -4,59 +4,137 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
 <title>Musim Lab — Tahu musim. Tahu keperluan.</title>
-<meta name="description" content="Tahu apa yang akan datang. Bersedia sebelum tiba.">
-<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Kalendar event, musim, cuti & berita terkini Malaysia. Tahu apa yang akan datang. Bersedia sebelum tiba.">
+<meta name="keywords" content="kalendar malaysia, event malaysia, cuti umum, musim malaysia, musim lab">
+<meta name="author" content="Musim Lab">
+<meta name="theme-color" content="#8b5cf6">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://triplea-lab.github.io/musimlab/">
+<meta property="og:title" content="Musim Lab — Tahu musim. Tahu keperluan.">
+<meta property="og:description" content="Kalendar event, musim, cuti & berita terkini Malaysia. Tahu apa yang akan datang.">
+<meta property="og:image" content="https://triplea-lab.github.io/musimlab/assets/web-app-manifest-512x512.png">
+<meta property="og:site_name" content="Musim Lab">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Musim Lab — Tahu musim. Tahu keperluan.">
+<meta name="twitter:description" content="Kalendar event, musim, cuti & berita terkini Malaysia.">
+<meta name="twitter:image" content="https://triplea-lab.github.io/musimlab/assets/web-app-manifest-512x512.png">
+
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/site.webmanifest">
+
+<!-- PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Musim Lab">
+<meta name="mobile-web-app-capable" content="yes">
 
 <style>
+:root{
+  /* ===== Chameleon Palette ===== */
+  --hijau-cerah: #84cc16;
+  --ungu: #8b5cf6;
+  --ungu-dark: #6d28d9;
+  --ungu-soft: #ede9fe;
+  --hijau-gelap: #10b981;
+  --hijau-soft: #dcfce7;
+  --hitam: #171717;
+
+  /* ===== Neutral ===== */
+  --bg: #f7f7f8;
+  --card: #ffffff;
+  --text: #171717;
+  --text-soft: #666;
+  --text-mute: #999;
+  --border: #ededed;
+  --border-soft: #f0f0f0;
+
+  /* ===== Gradients ===== */
+  --gradient-brand: linear-gradient(135deg, #84cc16 0%, #8b5cf6 100%);
+  --gradient-soft: linear-gradient(135deg, #f5f3ff 0%, #f0fdf4 100%);
+}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{margin:0;padding:0;background:#f7f7f8;color:#171717;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:hidden}
+body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:hidden}
 body.no-scroll{overflow:hidden}
 button{font:inherit}
 img{max-width:100%;display:block}
+
+/* ============ SKELETON LOADING ============ */
+@keyframes skeleton-pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.45}
+}
+.skeleton{
+  background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
+  background-size:200% 100%;
+  animation:skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius:8px;
+}
+.skeleton-calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+  padding:8px 6px;
+}
+.skeleton-day{
+  aspect-ratio:1;
+  border-radius:50%;
+  background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);
+  background-size:200% 100%;
+  animation:skeleton-pulse 1.5s ease-in-out infinite;
+}
 
 /* ============ MAIN ============ */
 main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .view{display:none}
 .view.active{display:block}
 .section-title{font-size:19px;font-weight:800;margin:6px 4px 12px;letter-spacing:-.3px}
-.section-sub{font-size:12px;color:#888;margin:-8px 4px 14px}
+.section-sub{font-size:12px;color:var(--text-mute);margin:-8px 4px 14px}
 
 /* ============ BANNER ============ */
-.banner-wrap{margin:0 0 12px;border-radius:16px;overflow:hidden;border:1px solid #ededed;background:#fafafa}
+.banner-wrap{margin:0 0 12px;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:#fafafa}
 .banner-wrap img{width:100%;height:auto;display:block;object-fit:cover;max-height:180px;cursor:pointer}
-.banner-fallback{width:100%;height:120px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;font-weight:800;font-size:15px;letter-spacing:.5px}
 
 /* ============ NEWS TICKER ============ */
-.news-ticker{margin:0 0 12px;border-radius:14px;overflow:hidden;position:relative;background:#fff;border:1px solid #ededed;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.news-ticker{margin:0 0 12px;border-radius:14px;overflow:hidden;position:relative;background:var(--card);border:1px solid var(--border);box-shadow:0 2px 12px rgba(0,0,0,.04)}
 .news-ticker-inner{position:relative;height:62px}
 .news-slide{position:absolute;inset:0;display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:transform .55s cubic-bezier(.4,0,.2,1),opacity .5s ease;transform:translateX(100%);opacity:0;border-left:4px solid var(--news-color,#3b82f6)}
 .news-slide.active{transform:translateX(0);opacity:1}
 .news-slide.leaving{transform:translateX(-100%);opacity:0}
 .news-slide-icon{font-size:24px;flex-shrink:0;line-height:1}
 .news-slide-content{min-width:0;flex:1}
-.news-slide-title{font-size:13px;font-weight:800;color:#171717;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.news-slide-sub{font-size:11px;color:#888;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.news-slide-title{font-size:13px;font-weight:800;color:var(--text);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.news-slide-sub{font-size:11px;color:var(--text-mute);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .news-slide-arrow{font-size:14px;color:#bbb;flex-shrink:0}
 .news-dots{display:flex;justify-content:center;gap:5px;padding:0 0 8px}
 .news-dot{width:5px;height:5px;border-radius:50%;background:#e5e5e5;transition:.2s;cursor:pointer}
-.news-dot.active{background:#8b5cf6;width:14px;border-radius:999px}
+.news-dot.active{background:var(--gradient-brand);width:14px;border-radius:999px}
 
 /* ============ FILTER CHIP ============ */
-.filter-chip{display:none;align-items:center;gap:6px;background:#ede9fe;color:#6d28d9;padding:6px 10px 6px 12px;border-radius:999px;font-size:12px;font-weight:700;margin:0 4px 12px;width:fit-content;cursor:pointer;max-width:100%}
+.filter-chip{display:none;align-items:center;gap:6px;background:var(--ungu-soft);color:var(--ungu-dark);padding:6px 10px 6px 12px;border-radius:999px;font-size:12px;font-weight:700;margin:0 4px 12px;width:fit-content;cursor:pointer;max-width:100%}
 .filter-chip.show{display:flex}
 .filter-chip .x{width:18px;height:18px;border-radius:50%;background:#ddd6fe;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;flex-shrink:0}
 
 /* ============ CALENDAR ============ */
-.calendar-card{background:#fff;border-radius:20px;overflow:hidden;border:1px solid #ededed;box-shadow:0 4px 20px rgba(0,0,0,.04);touch-action:pan-y}
-.month-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px}
+.calendar-card{background:var(--card);border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.04);touch-action:pan-y;position:relative}
+.calendar-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-brand);z-index:2}
+.month-header{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px;position:relative;z-index:3}
 .month-name{font-size:17px;font-weight:800}
 .month-buttons{display:flex;gap:4px}
 .month-btn{width:34px;height:34px;border:0;border-radius:10px;background:#f1f1f2;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 .month-btn:active{transform:scale(.92)}
-.today-btn-sm{background:#f1f1f3;border:0;padding:0 12px;height:34px;border-radius:10px;font-size:11px;font-weight:700;color:#171717;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
-.today-btn-sm:active{transform:scale(.95);background:#e5e5e7}
-.weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 6px 4px;border-bottom:1px solid #f0f0f0}
+.today-btn-sm{background:var(--hijau-soft);border:0;padding:0 12px;height:34px;border-radius:10px;font-size:11px;font-weight:800;color:#166534;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0}
+.today-btn-sm:active{transform:scale(.95);background:#bbf7d0}
+.weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 6px 4px;border-bottom:1px solid var(--border-soft)}
 .weekday{text-align:center;padding:6px 2px;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.4px}
 .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:6px}
 .day-cell{aspect-ratio:1;border-radius:50%;position:relative;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:background .15s;padding:2px}
@@ -64,64 +142,74 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .day-cell:active{background:#f5f3ff}
 .day-number{font-size:14px;font-weight:600;color:#333;line-height:1}
 .day-cell.weekend .day-number{color:#999}
-.day-cell.today{background:#171717}
+.day-cell.today{background:var(--gradient-brand);box-shadow:0 4px 12px rgba(139,92,246,.35)}
 .day-cell.today .day-number{color:#fff;font-weight:800}
 .day-cell.today .day-dot{background:#fff !important}
-.day-cell.selected{background:#ede9fe;outline:2px solid #8b5cf6;outline-offset:-2px}
-.day-cell.selected .day-number{color:#6d28d9;font-weight:800}
+.day-cell.selected{background:var(--ungu-soft);outline:2px solid var(--ungu);outline-offset:-2px}
+.day-cell.selected .day-number{color:var(--ungu-dark);font-weight:800}
 .day-dots{display:flex;gap:2px;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);min-height:4px}
 .day-dot{width:4px;height:4px;border-radius:50%}
 
 /* ============ NEGERI ============ */
 .negeri-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px}
-.negeri-card{background:#fff;border:1px solid #ededed;border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:8px;min-height:90px;position:relative;overflow:hidden}
+.negeri-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:8px;min-height:90px;position:relative;overflow:hidden}
 .negeri-card:active{transform:scale(.97);background:#fafafa}
 .negeri-card.has-event{border-color:#c7d2fe;background:linear-gradient(135deg,#fff,#f5f3ff)}
-.negeri-card.has-event::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8b5cf6,#6366f1)}
+.negeri-card.has-event::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-brand)}
 .negeri-emoji{font-size:24px;line-height:1}
 .negeri-name{font-size:14px;font-weight:800;line-height:1.25}
-.negeri-count{font-size:11px;color:#888;margin-top:auto}
-.negeri-card.has-event .negeri-count{color:#6d28d9;font-weight:700}
+.negeri-count{font-size:11px;color:var(--text-mute);margin-top:auto}
+.negeri-card.has-event .negeri-count{color:var(--ungu-dark);font-weight:700}
 
 /* ============ EXPLORE ============ */
 .explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:4px}
-.explore-card{background:#fff;border:1px solid #ededed;border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:8px;min-height:110px}
+.explore-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;cursor:pointer;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:8px;min-height:110px}
 .explore-card:active{transform:scale(.97);background:#fafafa}
 .explore-icon{font-size:26px;line-height:1}
 .explore-name{font-size:14px;font-weight:800;line-height:1.25}
-.explore-count{font-size:11px;color:#888;margin-top:auto}
+.explore-count{font-size:11px;color:var(--text-mute);margin-top:auto}
 
 /* ============ SEASON ============ */
-.season-card{background:#fff;border:1px solid #ededed;border-radius:20px;margin-bottom:12px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+.season-card{background:var(--card);border:1px solid var(--border);border-radius:20px;margin-bottom:12px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
 .season-card:active{transform:scale(.985)}
 .season-hero{height:100px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--season-color-soft,#ede9fe),var(--season-color-lighter,#f5f3ff));position:relative;overflow:hidden}
 .season-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,var(--season-color-soft,#ede9fe),transparent 60%)}
 .season-icon-big{font-size:52px;line-height:1;position:relative;z-index:2;filter:drop-shadow(0 4px 10px rgba(0,0,0,.08))}
 .season-body{padding:16px}
 .season-name{font-size:17px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.season-badge{font-size:10px;font-weight:800;background:#dcfce7;color:#166534;padding:3px 8px;border-radius:999px}
-.season-synopsis{font-size:13px;color:#666;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
+.season-badge{font-size:10px;font-weight:800;background:var(--hijau-soft);color:#166534;padding:3px 8px;border-radius:999px}
+.season-synopsis{font-size:13px;color:var(--text-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
 .season-cta{font-size:12px;font-weight:800;color:var(--season-color,#6366f1)}
 
 /* ============ MORE ============ */
 .more-list{display:grid;gap:8px}
-.more-item{background:#fff;border:1px solid #ededed;border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.more-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer}
 .more-item:active{transform:scale(.99);background:#fafafa}
-.more-icon{width:40px;height:40px;border-radius:11px;background:#f5f3ff;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.more-icon{width:40px;height:40px;border-radius:11px;background:var(--ungu-soft);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
 .more-text{flex:1;min-width:0}
 .more-text-title{font-size:14px;font-weight:800}
-.more-text-sub{font-size:11px;color:#888;margin-top:2px}
+.more-text-sub{font-size:11px;color:var(--text-mute);margin-top:2px}
 .more-chev{color:#ccc;font-size:18px}
+
+/* ============ FOOTER ============ */
+.site-footer{margin-top:32px;padding:24px 16px 100px;text-align:center;border-top:1px solid var(--border-soft);color:var(--text-mute)}
+.footer-logo{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px;letter-spacing:-.3px}
+.footer-logo span{font-weight:400;color:var(--text-mute)}
+.footer-tagline{font-size:11px;color:var(--text-mute);margin-bottom:16px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:14px}
+.footer-links a{font-size:12px;color:var(--text-soft);text-decoration:none;font-weight:600;cursor:pointer}
+.footer-links a:active{color:var(--ungu)}
+.footer-copy{font-size:10px;color:#bbb;line-height:1.6}
 
 /* ============ NAV PILL ============ */
 .bottom-nav{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:rgba(255,255,255,.94);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:24px;padding:6px;box-shadow:0 10px 40px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);max-width:520px;margin:0 auto;overflow:visible}
 .nav-inner{display:grid;grid-template-columns:repeat(5,1fr);align-items:center;height:56px;position:relative;overflow:visible}
-.nav-button{border:0;background:transparent;padding:4px 2px;cursor:pointer;color:#999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;transition:color .25s;overflow:visible}
+.nav-button{border:0;background:transparent;padding:4px 2px;cursor:pointer;color:var(--text-mute);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;transition:color .25s;overflow:visible}
 .nav-button .nav-icon{font-size:20px;line-height:1;transition:all .3s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%}
 .nav-button .nav-label{font-size:9px;font-weight:700;transition:all .25s;white-space:nowrap}
-.nav-button.active{color:#8b5cf6}
-.nav-button.active .nav-icon{background:#8b5cf6;color:#fff;font-size:19px;box-shadow:0 6px 18px rgba(139,92,246,.4);transform:translateY(-14px);border:3px solid #fff}
-.nav-button.active .nav-label{transform:translateY(-8px);font-weight:800;color:#6d28d9}
+.nav-button.active{color:var(--ungu)}
+.nav-button.active .nav-icon{background:var(--gradient-brand);color:#fff;font-size:19px;box-shadow:0 6px 18px rgba(139,92,246,.4);transform:translateY(-14px);border:3px solid #fff}
+.nav-button.active .nav-label{transform:translateY(-8px);font-weight:800;color:var(--ungu-dark)}
 
 /* ============ SHEET ============ */
 .sheet-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
@@ -131,18 +219,18 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1;padding:8px 16px 20px}
 .sheet-handle{width:40px;height:4px;border-radius:999px;background:#d6d6d6;margin:8px auto 4px;cursor:grab;flex-shrink:0}
 .sheet-heading{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
-.sheet-heading-sub{color:#888;font-size:13px;margin-bottom:16px}
+.sheet-heading-sub{color:var(--text-mute);font-size:13px;margin-bottom:16px}
 
-.sheet-event{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:.15s}
+.sheet-event{background:#fafafa;border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:9px;cursor:pointer;transition:.15s}
 .sheet-event:active{transform:scale(.985);background:#f5f5f7}
-.sheet-event-cat{display:flex;align-items:center;gap:7px;font-size:11px;color:#888;font-weight:700;margin-bottom:6px}
+.sheet-event-cat{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text-mute);font-weight:700;margin-bottom:6px}
 .sheet-event-cat .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .sheet-event-name{font-size:15px;font-weight:800;line-height:1.3;margin-bottom:5px}
-.sheet-event-meta{font-size:12px;color:#666;line-height:1.5}
+.sheet-event-meta{font-size:12px;color:var(--text-soft);line-height:1.5}
 .sheet-event-actions{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
 .mini-btn{border:1px solid #ddd;background:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;color:#333}
 .mini-btn:active{transform:scale(.95)}
-.mini-btn.saved{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+.mini-btn.saved{background:var(--hijau-soft);color:#166534;border-color:#bbf7d0}
 
 /* ============ CAROUSEL ============ */
 .carousel-wrap{position:relative;margin:-8px -16px 16px;background:#f5f5f7}
@@ -153,54 +241,54 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .carousel-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(135deg,#ede9fe,#ddd6fe)}
 .carousel-dots{display:flex;justify-content:center;gap:6px;padding:10px 0;background:#f5f5f7}
 .carousel-dot{width:6px;height:6px;border-radius:50%;background:#d4d4d8;transition:.2s}
-.carousel-dot.active{background:#171717;width:20px;border-radius:999px}
+.carousel-dot.active{background:var(--ungu);width:20px;border-radius:999px}
 
 /* ============ DETAIL ============ */
 .cat-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:14px}
 .cat-pill .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .date-range-block{margin-bottom:16px}
-.date-range-main{font-size:26px;font-weight:900;letter-spacing:-.5px;line-height:1.15;color:#171717}
-.date-range-sub{font-size:13px;color:#888;font-weight:600;margin-top:6px}
+.date-range-main{font-size:26px;font-weight:900;letter-spacing:-.5px;line-height:1.15;color:var(--text)}
+.date-range-sub{font-size:13px;color:var(--text-mute);font-weight:600;margin-top:6px}
 .detail-title{font-size:22px;font-weight:800;line-height:1.2;letter-spacing:-.5px;margin:0 0 8px}
-.detail-meta{font-size:13px;color:#666;line-height:1.6;margin-bottom:16px}
+.detail-meta{font-size:13px;color:var(--text-soft);line-height:1.6;margin-bottom:16px}
 .detail-synopsis{font-size:14px;line-height:1.7;color:#333;margin-bottom:20px;white-space:pre-line}
 .detail-actions{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .action-btn{flex:1;min-width:calc(50% - 4px);padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s;text-decoration:none;font-family:inherit}
 .action-btn:active{transform:scale(.96)}
-.action-btn.primary{background:#171717;color:#fff}
-.action-btn.secondary{background:#f1f1f3;color:#171717}
-.action-btn.success{background:#dcfce7;color:#166534}
+.action-btn.primary{background:var(--gradient-brand);color:#fff;box-shadow:0 4px 14px rgba(139,92,246,.3)}
+.action-btn.secondary{background:#f1f1f3;color:var(--text)}
+.action-btn.success{background:var(--hijau-soft);color:#166534}
 .action-btn.full{min-width:100%}
 
 /* ============ AFFILIATE ============ */
-.affiliate-section{margin-top:8px;padding-top:20px;border-top:1px solid #f0f0f0}
+.affiliate-section{margin-top:8px;padding-top:20px;border-top:1px solid var(--border-soft)}
 .affiliate-title{font-size:14px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.affiliate-card{background:#fafafa;border:1px solid #ededed;border-radius:14px;padding:14px;margin-bottom:9px}
+.affiliate-card{background:#fafafa;border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:9px}
 .affiliate-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
-.affiliate-name{font-size:14px;font-weight:800;color:#171717;flex:1}
+.affiliate-name{font-size:14px;font-weight:800;color:var(--text);flex:1}
 .affiliate-desc{font-size:12px;color:#555;line-height:1.6;white-space:pre-line;margin-bottom:12px}
-.affiliate-buy{display:inline-flex;align-items:center;gap:6px;background:#8b5cf6;color:#fff;text-decoration:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800}
+.affiliate-buy{display:inline-flex;align-items:center;gap:6px;background:var(--ungu);color:#fff;text-decoration:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800}
 .affiliate-buy:active{transform:scale(.96)}
 
 /* ============ NEWS DETAIL ============ */
 .news-detail-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:800;margin-bottom:14px}
 .news-detail-title{font-size:22px;font-weight:800;line-height:1.25;letter-spacing:-.4px;margin:0 0 10px}
-.news-detail-meta{font-size:12px;color:#888;margin-bottom:18px;font-weight:600}
+.news-detail-meta{font-size:12px;color:var(--text-mute);margin-bottom:18px;font-weight:600}
 .news-detail-body{font-size:14px;line-height:1.75;color:#333;margin-bottom:20px;white-space:pre-line}
-.news-credit{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#666;background:#f5f5f7;padding:8px 14px;border-radius:10px;text-decoration:none;font-weight:600;margin-bottom:16px}
+.news-credit{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-soft);background:#f5f5f7;padding:8px 14px;border-radius:10px;text-decoration:none;font-weight:600;margin-bottom:16px}
 .news-credit:active{background:#e5e5e7}
 
 /* ============ STICKY BOTTOM ============ */
-.sheet-bottom{flex-shrink:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid #f0f0f0;background:#fff;display:flex;gap:8px}
-.sheet-close{flex:1;padding:14px;border-radius:14px;border:0;background:#f1f1f3;color:#171717;font-size:14px;font-weight:800;cursor:pointer;transition:.15s}
+.sheet-bottom{flex-shrink:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--border-soft);background:#fff;display:flex;gap:8px}
+.sheet-close{flex:1;padding:14px;border-radius:14px;border:0;background:#f1f1f3;color:var(--text);font-size:14px;font-weight:800;cursor:pointer;transition:.15s}
 .sheet-close:active{transform:scale(.98);background:#e5e5e7}
-.sheet-share{flex:1;padding:14px;border-radius:14px;border:0;background:#8b5cf6;color:#fff;font-size:14px;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:6px}
-.sheet-share:active{transform:scale(.98);background:#7c3aed}
+.sheet-share{flex:1;padding:14px;border-radius:14px;border:0;background:var(--gradient-brand);color:#fff;font-size:14px;font-weight:800;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 14px rgba(139,92,246,.3)}
+.sheet-share:active{transform:scale(.98);opacity:.9}
 
 /* ============ EMPTY ============ */
-.empty-state{text-align:center;padding:40px 20px;color:#999}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-mute)}
 .empty-state .emoji{font-size:44px;margin-bottom:10px;opacity:.6}
-.empty-state .msg{font-size:14px;font-weight:600;color:#666;margin-bottom:6px}
+.empty-state .msg{font-size:14px;font-weight:600;color:var(--text-soft);margin-bottom:6px}
 .empty-state .sub{font-size:12px;color:#aaa}
 
 /* ============ LIGHTBOX ============ */
@@ -212,10 +300,22 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .lightbox-hint{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:11px;font-weight:600;white-space:nowrap}
 
 /* ============ TOAST ============ */
-.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:#171717;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s;z-index:400;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--gradient-brand);color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:400;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(139,92,246,.35)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-.loading{text-align:center;padding:40px 15px;color:#888;font-size:13px}
+/* ============ PWA INSTALL BANNER ============ */
+.pwa-banner{position:fixed;left:12px;right:12px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:85;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;display:none;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);max-width:520px;margin:0 auto}
+.pwa-banner.show{display:flex}
+.pwa-icon{width:40px;height:40px;border-radius:10px;background:var(--gradient-brand);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pwa-text{flex:1;min-width:0}
+.pwa-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px}
+.pwa-sub{font-size:11px;color:var(--text-mute)}
+.pwa-actions{display:flex;gap:6px;flex-shrink:0}
+.pwa-btn{padding:8px 12px;border-radius:9px;border:0;font-size:12px;font-weight:800;cursor:pointer}
+.pwa-btn.primary{background:var(--gradient-brand);color:#fff}
+.pwa-btn.ghost{background:transparent;color:var(--text-mute)}
+
+.loading{text-align:center;padding:40px 15px;color:var(--text-mute);font-size:13px}
 
 @media (min-width:700px){
   .day-number{font-size:15px}
@@ -242,7 +342,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
   <!-- BANNER -->
   <div class="banner-wrap" id="bannerWrap" style="display:none">
-    <img id="bannerImg" src="" alt="Musim Lab" onclick="showToast('Selamat datang ke Musim Lab!')">
+    <img id="bannerImg" src="" alt="Musim Lab" onclick="showToast('Selamat datang ke Musim Lab! 🦎')">
   </div>
 
   <!-- CALENDAR -->
@@ -259,7 +359,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
     <div class="calendar-card" id="calendarCard">
       <div class="month-header">
-        <div class="month-name" id="monthName">Januari 2026</div>
+        <div class="month-name" id="monthName">—</div>
         <div class="month-buttons">
           <button class="today-btn-sm" id="todayBtn">📍 Hari Ini</button>
           <button class="month-btn" id="prevMonth" aria-label="Sebelum">‹</button>
@@ -273,7 +373,20 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
         <div class="weekday">Aha</div>
       </div>
       <div class="calendar-grid" id="calendarGrid">
-        <div class="loading" style="grid-column:1/-1">Memuatkan kalendar...</div>
+        <div class="skeleton-calendar" style="grid-column:1/-1">
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
+          <div class="skeleton-day"></div><div class="skeleton-day"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -317,11 +430,11 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
         <div class="more-icon">ℹ️</div>
         <div class="more-text">
           <div class="more-text-title">Tentang Musim Lab</div>
-          <div class="more-text-sub">Apa itu Musim Lab?</div>
+          <div class="more-text-sub">Kenali kami</div>
         </div>
         <div class="more-chev">›</div>
       </div>
-      <div class="more-item" onclick="showToast('Brochure akan datang!')">
+      <div class="more-item" onclick="showToast('📄 Brochure akan datang!')">
         <div class="more-icon">📄</div>
         <div class="more-text">
           <div class="more-text-title">Download Brochure</div>
@@ -329,15 +442,39 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
         </div>
         <div class="more-chev">›</div>
       </div>
-      <div class="more-item" onclick="showAbout()">
-        <div class="more-icon">🛍️</div>
+      <div class="more-item" onclick="showAds()">
+        <div class="more-icon">🤝</div>
         <div class="more-text">
-          <div class="more-text-title">PESANAN PENAJA</div>
-          <div class="more-text-sub">TANPA ANDA SIAPA KAMI</div>
+          <div class="more-text-title">Iklan & Kerjasama</div>
+          <div class="more-text-sub">Peluang penajaan & partnership</div>
+        </div>
+        <div class="more-chev">›</div>
+      </div>
+      <div class="more-item" onclick="showContact()">
+        <div class="more-icon">✉️</div>
+        <div class="more-text">
+          <div class="more-text-title">Hubungi Kami</div>
+          <div class="more-text-sub">Feedback & pertanyaan</div>
         </div>
         <div class="more-chev">›</div>
       </div>
     </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-logo">MUSIM<span>LAB</span></div>
+      <div class="footer-tagline">Musim Berubah, Kita Berubah</div>
+      <div class="footer-links">
+        <a onclick="showAbout()">Tentang</a>
+        <a onclick="showContact()">Contact</a>
+        <a onclick="showToast('Privacy policy akan datang')">Privacy</a>
+        <a onclick="showToast('Terms akan datang')">Terms</a>
+      </div>
+      <div class="footer-copy">
+        © 2025 Musim Lab. Dibina dengan ❤️ di Malaysia.<br>
+        Info dari sumber rasmi & komuniti.
+      </div>
+    </footer>
   </section>
 
 </main>
@@ -348,8 +485,8 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 <div class="bottom-sheet" id="dateSheet">
   <div class="sheet-handle"></div>
   <div class="sheet-scroll">
-    <div class="sheet-heading" id="dateSheetTitle">15 Januari 2026</div>
-    <div class="sheet-heading-sub" id="dateSheetSub">0 event</div>
+    <div class="sheet-heading" id="dateSheetTitle">—</div>
+    <div class="sheet-heading-sub" id="dateSheetSub"></div>
     <div id="dateSheetContent"></div>
   </div>
   <div class="sheet-bottom">
@@ -397,6 +534,19 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   </div>
 </nav>
 
+<!-- PWA INSTALL BANNER -->
+<div class="pwa-banner" id="pwaBanner">
+  <div class="pwa-icon">🦎</div>
+  <div class="pwa-text">
+    <div class="pwa-title">Pasang Musim Lab</div>
+    <div class="pwa-sub">Akses laju, macam app biasa</div>
+  </div>
+  <div class="pwa-actions">
+    <button class="pwa-btn ghost" onclick="dismissPWA()">Nanti</button>
+    <button class="pwa-btn primary" onclick="installPWA()">Pasang</button>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
   <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
@@ -409,7 +559,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 <script>
 /* =====================================================
-   MUSIM LAB — INDEX v8
+   MUSIM LAB — INDEX v9 (Chameleon Theme)
 ===================================================== */
 
 const API_URL = "https://script.google.com/macros/s/AKfycbz_Aqg5XEskKKpwsoz9WA4HcSCV5H61cK63hj9kw78YD_eRCCQgkm71q_KJhoG2SfX4/exec";
@@ -427,7 +577,7 @@ const EMPTY_QUOTES = [
 let allEvents = [];
 let allSeasons = [];
 let allNews = [];
-let allItems = [];  
+let allItems = [];
 let holidayData = [];
 let currentDate = new Date();
 let selectedDate = null;
@@ -487,8 +637,6 @@ function parseDate(value){
   if(value instanceof Date) return new Date(value.getFullYear(),value.getMonth(),value.getDate());
   const text = String(value).trim();
   if(!text) return null;
-
-  // ISO format dari Sheet → adjust +8 Malaysia
   if(text.includes("T")){
     const d = new Date(text);
     if(!isNaN(d.getTime())){
@@ -496,7 +644,6 @@ function parseDate(value){
       return new Date(my.getUTCFullYear(), my.getUTCMonth(), my.getUTCDate());
     }
   }
-
   let m = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
   if(m) return new Date(+m[1],+m[2]-1,+m[3]);
   m = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
@@ -617,18 +764,11 @@ function renderNewsTicker(){
   const ticker = $("newsTicker");
   const inner = $("newsTickerInner");
   const dots = $("newsDots");
-
   const active = allNews.filter(n => String(n.Status||"").toLowerCase() === "active");
-
-  if(!active.length){
-    ticker.style.display = "none";
-    return;
-  }
-
+  if(!active.length){ticker.style.display = "none";return;}
   ticker.style.display = "block";
   inner.innerHTML = "";
   dots.innerHTML = "";
-
   active.forEach((n, i) => {
     const sev = getSevInfo(n["Severity"]);
     const slide = document.createElement("div");
@@ -645,15 +785,12 @@ function renderNewsTicker(){
     `;
     slide.addEventListener("click", () => openNewsDetail(n["News ID"]));
     inner.appendChild(slide);
-
     const dot = document.createElement("div");
     dot.className = "news-dot" + (i === 0 ? " active" : "");
     dot.addEventListener("click", () => goToNewsSlide(i));
     dots.appendChild(dot);
   });
-
   dots.style.display = active.length > 1 ? "flex" : "none";
-
   newsTickerIndex = 0;
   startNewsTicker();
 }
@@ -667,28 +804,21 @@ function startNewsTicker(){
     goToNewsSlide(next);
   }, 5000);
 }
-
-function stopNewsTicker(){
-  if(newsTickerTimer){clearInterval(newsTickerTimer);newsTickerTimer = null;}
-}
+function stopNewsTicker(){if(newsTickerTimer){clearInterval(newsTickerTimer);newsTickerTimer = null;}}
 
 function goToNewsSlide(index){
   const inner = $("newsTickerInner");
   const slides = inner.querySelectorAll(".news-slide");
   const dots = $("newsDots").querySelectorAll(".news-dot");
   if(!slides.length) return;
-
   slides.forEach(s => s.classList.remove("active","leaving"));
-
   const current = slides[newsTickerIndex];
   if(current && newsTickerIndex !== index){
     current.classList.add("leaving");
     setTimeout(() => current.classList.remove("leaving"), 600);
   }
-
   slides[index].classList.add("active");
   dots.forEach((d,i) => d.classList.toggle("active", i === index));
-
   newsTickerIndex = index;
   startNewsTicker();
 }
@@ -699,18 +829,14 @@ function openNewsDetail(newsId){
   if(!n) return;
   selectedNews = n;
   $("newsShareBtn").dataset.newsId = newsId;
-
   const sev = getSevInfo(n["Severity"]);
   const images = parseImages(n["Image URL"]);
   const credit = n["Credit"];
   const link = n["Link"];
   const created = n["Created"] ? new Date(n["Created"]) : null;
-
   let timeAgo = "";
   if(created && !isNaN(created.getTime())) timeAgo = formatTimeAgo(created);
-
   let html = "";
-
   if(images.length){
     html += buildCarousel(images, sev.icon, "news_" + newsId);
   } else {
@@ -718,7 +844,6 @@ function openNewsDetail(newsId){
       <div style="font-size:64px;line-height:1">${sev.icon}</div>
     </div>`;
   }
-
   html += `
     <div class="news-detail-badge" style="background:${sev.color}15;color:${sev.color}">
       ${sev.icon} ${escapeHtml(n["Severity"]||"Info")}
@@ -727,7 +852,6 @@ function openNewsDetail(newsId){
     <div class="news-detail-meta">${timeAgo ? "🕐 " + timeAgo : ""}</div>
     <div class="news-detail-body">${escapeHtml(n["Body"]||"")}</div>
   `;
-
   if(credit){
     if(link){
       html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="news-credit">📰 Sumber: ${escapeHtml(credit)} →</a>`;
@@ -735,13 +859,11 @@ function openNewsDetail(newsId){
       html += `<div class="news-credit">📰 Sumber: ${escapeHtml(credit)}</div>`;
     }
   }
-
   html += `<div id="affiliateNewsContainer"></div>`;
-
   $("newsSheetContent").innerHTML = html;
   openSheet("newsSheet");
   if(images.length) setTimeout(() => attachCarouselScroll("news_" + newsId), 60);
-   loadNewsPreparation(newsId, "affiliateNewsContainer");
+  loadNewsPreparation(newsId, "affiliateNewsContainer");
 }
 
 function formatTimeAgo(date){
@@ -763,18 +885,15 @@ function renderCalendar(){
   const y = currentDate.getFullYear();
   const m = currentDate.getMonth();
   $("monthName").textContent = `${monthNames[m]} ${y}`;
-
   const first = new Date(y,m,1);
   const offset = (first.getDay() + 6) % 7;
   const days = new Date(y,m+1,0).getDate();
   const today = new Date();
-
   for(let i=0;i<offset;i++){
     const b = document.createElement("div");
     b.className = "day-cell empty";
     grid.appendChild(b);
   }
-
   for(let d=1;d<=days;d++){
     const date = new Date(y,m,d);
     const cell = document.createElement("div");
@@ -783,12 +902,10 @@ function renderCalendar(){
     if(dow === 0 || dow === 6) cell.classList.add("weekend");
     if(sameDate(date,today)) cell.classList.add("today");
     if(selectedDate && sameDate(date,selectedDate)) cell.classList.add("selected");
-
     const num = document.createElement("div");
     num.className = "day-number";
     num.textContent = d;
     cell.appendChild(num);
-
     const events = getEventsForDate(date);
     if(events.length > 0){
       const dotsWrap = document.createElement("div");
@@ -810,7 +927,6 @@ function renderCalendar(){
       });
       cell.appendChild(dotsWrap);
     }
-
     cell.addEventListener("click", () => selectDate(date));
     grid.appendChild(cell);
   }
@@ -839,17 +955,14 @@ function selectDate(date){
   renderCalendar();
   const events = getEventsForDate(date);
   const holidays = getHolidayForDate(date);
-
   $("dateSheetTitle").textContent = `${dayNames[date.getDay()]}, ${formatDate(date)}`;
   const container = $("dateSheetContent");
-
   let html = "";
   if(holidays.length > 0){
     html += `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:12px;margin-bottom:12px;font-size:12px;font-weight:700;color:#92400e">
       🎉 ${holidays.map(h=>h.name||"Cuti").join(" • ")}
     </div>`;
   }
-
   if(events.length === 0){
     const quote = EMPTY_QUOTES[(date.getDate() - 1) % EMPTY_QUOTES.length];
     html += `<div class="empty-state">
@@ -904,7 +1017,6 @@ function buildCarousel(images, icon, key){
     : "";
   return `<div class="carousel-wrap" data-carousel="${key}"><div class="carousel-track">${slides}</div>${dots}</div>`;
 }
-
 function attachCarouselScroll(key){
   const wrap = document.querySelector(`[data-carousel="${key}"]`);
   if(!wrap) return;
@@ -921,18 +1033,12 @@ function attachCarouselScroll(key){
 function buildDateRange(start, end){
   let dateMain = "", dateSub = "";
   if(!start) return { dateMain: "—", dateSub: "" };
-
   const sD = start.getDate(), sM = monthShort[start.getMonth()], sY = start.getFullYear();
-
   if(end && !sameDate(start, end)){
     const eD = end.getDate(), eM = monthShort[end.getMonth()], eY = end.getFullYear();
-    if(sM === eM && sY === eY){
-      dateMain = `${sD} – ${eD} ${sM} ${sY}`;
-    } else if(sY === eY){
-      dateMain = `${sD} ${sM} – ${eD} ${eM} ${sY}`;
-    } else {
-      dateMain = `${sD} ${sM} ${sY} – ${eD} ${eM} ${eY}`;
-    }
+    if(sM === eM && sY === eY){ dateMain = `${sD} – ${eD} ${sM} ${sY}`; }
+    else if(sY === eY){ dateMain = `${sD} ${sM} – ${eD} ${eM} ${sY}`; }
+    else { dateMain = `${sD} ${sM} ${sY} – ${eD} ${eM} ${eY}`; }
     dateSub = `${dayNames[start.getDay()]} – ${dayNames[end.getDay()]}`;
   } else {
     dateMain = `${sD} ${sM} ${sY}`;
@@ -947,7 +1053,6 @@ function openEventDetail(id){
   if(!e) return;
   selectedEvent = e;
   $("shareBtn").dataset.eventId = id;
-
   const cat = getEventCat(e);
   const info = getCatInfo(cat);
   const start = getEventStart(e);
@@ -957,10 +1062,8 @@ function openEventDetail(id){
   const fullDesc = getEventDesc(e);
   const isSaved = savedIds.includes(id);
   const images = parseImages(getEventImg(e));
-
   const { dateMain, dateSub } = buildDateRange(start, end);
   const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
-
   let html = `
     ${buildCarousel(images, info.icon, id)}
     <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
@@ -981,7 +1084,6 @@ function openEventDetail(id){
       <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
     </div>
   `;
-
   if(fullDesc && fullDesc !== syn){
     html += `<button class="action-btn primary full" style="margin-bottom:10px" onclick="openFullDetail('${id}')">📖 Baca Penuh</button>`;
   }
@@ -989,19 +1091,16 @@ function openEventDetail(id){
     html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary full" style="margin-bottom:10px">🔗 Official Website</a>`;
   }
   html += `<div id="affiliateContainer_${id}"></div>`;
-
   $("detailSheetContent").innerHTML = html;
   openSheet("detailSheet");
   setTimeout(() => attachCarouselScroll(id), 60);
-   loadEventPreparation(id, "affiliateContainer_" + id);
+  loadEventPreparation(id, "affiliateContainer_" + id);
 }
 
-/* ============ FULL DETAIL ============ */
 function openFullDetail(id){
   const e = allEvents.find(x => getEventId(x) === id);
   if(!e) return;
   $("shareBtn").dataset.eventId = id;
-
   const cat = getEventCat(e);
   const info = getCatInfo(cat);
   const start = getEventStart(e);
@@ -1009,29 +1108,23 @@ function openFullDetail(id){
   const link = getEventLink(e);
   const fullDesc = getEventDesc(e);
   const isSaved = savedIds.includes(id);
-
   const { dateMain, dateSub } = buildDateRange(start, end);
   const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
-
   let html = `
     <div style="display:flex;justify-content:flex-start;margin-bottom:12px">
       <button class="mini-btn" onclick="openEventDetail('${id}')">← Kembali</button>
     </div>
-
     <div class="cat-pill" style="background:${info.color}15;color:${info.color}">
       <span class="cat-dot" style="background:${info.color}"></span>
       ${info.icon} ${escapeHtml(cat||"Lain-lain")}
     </div>
-
     <div class="date-range-block">
       <div class="date-range-main">${dateMain}</div>
       <div class="date-range-sub">${dateSub}</div>
     </div>
-
     <h1 class="detail-title">${escapeHtml(getEventName(e))}</h1>
     ${locLine ? `<div class="detail-meta">📍 ${escapeHtml(locLine)}</div>` : ""}
     <div class="detail-synopsis">${escapeHtml(fullDesc)}</div>
-
     <div class="detail-actions">
       <button class="action-btn ${isSaved?"success":"secondary"}" onclick="toggleSave('${id}', this)">
         ${isSaved ? "✓ Disimpan" : "❤ Simpan"}
@@ -1039,74 +1132,41 @@ function openFullDetail(id){
       <button class="action-btn secondary" onclick="downloadICS('${id}')">🔔 Ingatkan</button>
     </div>
   `;
-
   if(link){
     html += `<a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="action-btn primary full" style="margin-bottom:10px">🔗 Official Website</a>`;
   }
   html += `<div id="affiliateFull_${id}"></div>`;
-
   $("detailSheetContent").innerHTML = html;
   $("detailSheet").querySelector(".sheet-scroll").scrollTop = 0;
-   loadEventPreparation(id, "affiliateFull_" + id);
+  loadEventPreparation(id, "affiliateFull_" + id);
 }
 
 async function loadEventPreparation(eventId, containerId){
   const container = $(containerId);
   if(!container) return;
-
   try{
     const r = await fetch(`${API_URL}?action=getEventItems&eventId=${encodeURIComponent(eventId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-
     if(!mappings.length) return;
-
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds
-      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
-      .filter(Boolean);
-
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length) return;
-
-    container.innerHTML = `
-      <div class="affiliate-section">
-        <div class="affiliate-title">🛍️ Persediaan & Beli</div>
-        ${selectedItems.map(it => {
-          const icon = it["Icon"] || "🛍️";
-          const name = it["Name"] || "";
-          const desc = it["Description"] || "";
-          const url = it["URL"] || "";
-          return `
-            <div class="affiliate-card">
-              <div class="affiliate-card-head">
-                <div class="affiliate-name">${escapeHtml(icon)} ${escapeHtml(name)}</div>
-              </div>
-              ${desc ? `<div class="affiliate-desc">${escapeHtml(desc)}</div>` : ""}
-              ${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="affiliate-buy">🛒 Beli Sekarang →</a>` : ""}
-            </div>
-          `;
-        }).join("")}
-      </div>
-    `;
-  }catch(e){
-    console.error("event preparation err", e);
-  }
+    container.innerHTML = renderPreparationCards(selectedItems);
+  }catch(e){ console.error("event preparation err", e); }
 }
 
-  async function loadSeasonPreparation(seasonId, containerId){
+async function loadSeasonPreparation(seasonId, containerId){
   const container = $(containerId);
   if(!container) return;
-
   try{
     const r = await fetch(`${API_URL}?action=getSeasonItems&seasonId=${encodeURIComponent(seasonId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
     if(!mappings.length) return;
-
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length) return;
-
     container.innerHTML = renderPreparationCards(selectedItems);
   }catch(e){ console.error("season prep err", e); }
 }
@@ -1114,17 +1174,14 @@ async function loadEventPreparation(eventId, containerId){
 async function loadNewsPreparation(newsId, containerId){
   const container = $(containerId);
   if(!container) return;
-
   try{
     const r = await fetch(`${API_URL}?action=getNewsItems&newsId=${encodeURIComponent(newsId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
     if(!mappings.length) return;
-
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length) return;
-
     container.innerHTML = renderPreparationCards(selectedItems);
   }catch(e){ console.error("news prep err", e); }
 }
@@ -1150,40 +1207,6 @@ function renderPreparationCards(selectedItems){
       }).join("")}
     </div>
   `;
-}
-  
-  
-/* ============ AFFILIATE ============ */
-async function loadAffiliates(itemId, containerId){
-  const container = $(containerId);
-  if(!container) return;
-  try{
-    const r = await fetch(`${API_URL}?action=getLinks&eventId=${encodeURIComponent(itemId)}&token=${API_TOKEN}&t=${Date.now()}`);
-    const res = await r.json();
-    const items = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    if(!items.length) return;
-    container.innerHTML = `
-      <div class="affiliate-section">
-        <div class="affiliate-title">🛍️ Persediaan & Beli</div>
-        ${items.map(it => {
-          const title = it.Title || "";
-          const body = it.URL || "";
-          const urlMatch = body.match(/https?:\/\/[^\s]+/);
-          const url = urlMatch ? urlMatch[0] : "";
-          const desc = url ? body.replace(url, "").trim() : body;
-          return `
-            <div class="affiliate-card">
-              <div class="affiliate-card-head">
-                <div class="affiliate-name">${escapeHtml(title)}</div>
-              </div>
-              ${desc ? `<div class="affiliate-desc">${escapeHtml(desc)}</div>` : ""}
-              ${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="affiliate-buy">🛒 Beli Sekarang →</a>` : ""}
-            </div>
-          `;
-        }).join("")}
-      </div>
-    `;
-  }catch(e){console.error("affiliate err", e)}
 }
 
 /* ============ SAVE EVENT ============ */
@@ -1405,7 +1428,7 @@ function openSeasonDetail(id){
   `;
   $("seasonSheetContent").innerHTML = html;
   openSheet("seasonSheet");
-   loadSeasonPreparation(id, "seasonAffiliateContainer");
+  loadSeasonPreparation(id, "seasonAffiliateContainer");
 }
 
 /* ============ SHEET ============ */
@@ -1511,8 +1534,54 @@ function showAbout(){
   $("dateSheetContent").innerHTML = `
     <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
       <p style="margin-bottom:12px"><strong>Musim Lab</strong> bantu anda tahu apa yang akan datang di Malaysia — musim, cuti, event — dan bersedia sebelum tiba.</p>
-      <p style="margin-bottom:12px">Kami kumpul info dari pelbagai sumber dan susun dalam satu kalendar mudah.</p>
-      <p style="color:#888;font-size:12px"><strong>PESANAN PENAJA:</strong> TANPA ANDA, SIAPALAH KAMI.</p>
+      <p style="margin-bottom:12px">Kami kumpul info dari pelbagai sumber rasmi dan komuniti, susun dalam satu kalendar mudah.</p>
+      <p style="color:#888;font-size:12px;margin-top:16px"><strong>Musim Berubah, Kita Berubah.</strong> 🦎</p>
+    </div>
+  `;
+  openSheet("dateSheet");
+}
+
+function showAds(){
+  $("dateSheetTitle").textContent = "🤝 Iklan & Kerjasama";
+  $("dateSheetSub").textContent = "";
+  $("dateSheetContent").innerHTML = `
+    <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
+      <p style="margin-bottom:12px">Anda ada event, produk, atau servis yang berkaitan dengan musim Malaysia? Kami buka peluang untuk:</p>
+      <ul style="margin:12px 0 16px 20px;padding:0;line-height:2">
+        <li>📌 Featured event</li>
+        <li>🎯 Sponsored listing</li>
+        <li>🛍️ Affiliate partnership</li>
+        <li>📰 Branded content</li>
+      </ul>
+      <p style="margin-bottom:12px">Hubungi kami: <a href="mailto:hello@musimlab.com" style="color:#8b5cf6;font-weight:700;text-decoration:none">hello@musimlab.com</a></p>
+      <p style="color:#888;font-size:12px;margin-top:16px"><strong>Tanpa anda, siapa kami.</strong></p>
+    </div>
+  `;
+  openSheet("dateSheet");
+}
+
+function showContact(){
+  $("dateSheetTitle").textContent = "✉️ Hubungi Kami";
+  $("dateSheetSub").textContent = "";
+  $("dateSheetContent").innerHTML = `
+    <div style="font-size:14px;line-height:1.7;color:#333;padding:4px 0">
+      <p style="margin-bottom:12px">Ada feedback, cadangan, atau jumpa event menarik? Bagitau kami!</p>
+      <div style="display:grid;gap:10px;margin-top:16px">
+        <a href="mailto:hello@musimlab.com" style="display:flex;align-items:center;gap:12px;padding:14px;background:#fafafa;border:1px solid #ededed;border-radius:12px;text-decoration:none;color:#171717">
+          <span style="font-size:24px">📧</span>
+          <div>
+            <div style="font-size:13px;font-weight:800">Email</div>
+            <div style="font-size:11px;color:#888">hello@musimlab.com</div>
+          </div>
+        </a>
+        <a href="https://t.me/musimlab" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;padding:14px;background:#fafafa;border:1px solid #ededed;border-radius:12px;text-decoration:none;color:#171717">
+          <span style="font-size:24px">💬</span>
+          <div>
+            <div style="font-size:13px;font-weight:800">Telegram</div>
+            <div style="font-size:11px;color:#888">@musimlab</div>
+          </div>
+        </a>
+      </div>
     </div>
   `;
   openSheet("dateSheet");
@@ -1574,53 +1643,35 @@ async function loadItems(){
     allItems = [];
   }
 }
-  
+
 /* ============ NEWS TICKER SWIPE ============ */
 (function(){
   const ticker = $("newsTicker");
   if(!ticker) return;
-
   let sx = 0, sy = 0, swiped = false;
-
   ticker.addEventListener("touchstart", e => {
     sx = e.touches[0].clientX;
     sy = e.touches[0].clientY;
     swiped = false;
     stopNewsTicker();
   }, {passive:true});
-
   ticker.addEventListener("touchmove", e => {
     const dx = Math.abs(e.touches[0].clientX - sx);
     const dy = Math.abs(e.touches[0].clientY - sy);
     if(dx > 10 || dy > 10) swiped = true;
   }, {passive:true});
-
   ticker.addEventListener("touchend", e => {
     const dx = e.changedTouches[0].clientX - sx;
     const dy = e.changedTouches[0].clientY - sy;
     const total = allNews.filter(n => String(n.Status||"").toLowerCase() === "active").length;
-
-    if(!swiped || total <= 1){
-      startNewsTicker();
-      return;
-    }
-
+    if(!swiped || total <= 1){ startNewsTicker(); return; }
     if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
-      if(dx < 0){
-        goToNewsSlide((newsTickerIndex + 1) % total);
-      } else {
-        goToNewsSlide((newsTickerIndex - 1 + total) % total);
-      }
-    } else {
-      startNewsTicker();
-    }
+      if(dx < 0){ goToNewsSlide((newsTickerIndex + 1) % total); }
+      else { goToNewsSlide((newsTickerIndex - 1 + total) % total); }
+    } else { startNewsTicker(); }
   }, {passive:true});
-
   ticker.addEventListener("click", e => {
-    if(swiped){
-      e.stopPropagation();
-      e.preventDefault();
-    }
+    if(swiped){ e.stopPropagation(); e.preventDefault(); }
   }, true);
 })();
 
@@ -1632,6 +1683,39 @@ function checkDeepLink(){
     const id = decodeURIComponent(m[1]);
     setTimeout(() => openEventDetail(id), 500);
   }
+}
+
+/* ============ PWA INSTALL ============ */
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Tunjuk banner selepas 10 saat
+  setTimeout(() => {
+    if(!localStorage.getItem("pwa_dismissed")){
+      $("pwaBanner").classList.add("show");
+    }
+  }, 10000);
+});
+
+function installPWA(){
+  if(!deferredPrompt){
+    showToast("Guna menu browser → Add to Home Screen");
+    return;
+  }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choice) => {
+    if(choice.outcome === "accepted"){
+      showToast("✅ Musim Lab dipasang!");
+    }
+    deferredPrompt = null;
+    $("pwaBanner").classList.remove("show");
+  });
+}
+
+function dismissPWA(){
+  $("pwaBanner").classList.remove("show");
+  localStorage.setItem("pwa_dismissed", "1");
 }
 
 /* ============ INIT ============ */
