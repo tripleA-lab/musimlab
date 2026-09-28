@@ -1687,26 +1687,58 @@ function checkDeepLink(){
 
 /* ============ PWA INSTALL ============ */
 let deferredPrompt = null;
+
+// ===== Event: beforeinstallprompt =====
 window.addEventListener("beforeinstallprompt", (e) => {
+  console.log("[PWA] beforeinstallprompt fired!");
   e.preventDefault();
   deferredPrompt = e;
-  // Tunjuk banner selepas 10 saat
-  setTimeout(() => {
-    if(!localStorage.getItem("pwa_dismissed")){
-      $("pwaBanner").classList.add("show");
-    }
-  }, 10000);
+  // Trigger banner SERTA-MERTA bila event fire
+  if(!localStorage.getItem("pwa_dismissed")){
+    $("pwaBanner").classList.add("show");
+  }
 });
 
+// ===== Fallback: Tunjuk banner selepas 15 saat (kalau event tak fire) =====
+setTimeout(() => {
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches 
+                       || window.navigator.standalone === true;
+  if(!isStandalone && !localStorage.getItem("pwa_dismissed")){
+    $("pwaBanner").classList.add("show");
+  }
+}, 15000);
+
+// ===== Detect: Kalau user dah install =====
+window.addEventListener("appinstalled", () => {
+  console.log("[PWA] App installed!");
+  $("pwaBanner").classList.remove("show");
+  localStorage.setItem("pwa_installed", "1");
+  deferredPrompt = null;
+});
+
+// ===== Install handler =====
 function installPWA(){
   if(!deferredPrompt){
-    showToast("Guna menu browser → Add to Home Screen");
+    // Fallback: Bagi arahan manual
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    if(isIOS){
+      alert("📱 Untuk install:\n\n1. Tap butang Share (kotak dengan panah)\n2. Scroll & tap 'Add to Home Screen'\n3. Tap 'Add'");
+    } else if(isAndroid){
+      alert("📱 Untuk install:\n\n1. Tap menu (⋮) kanan atas\n2. Tap 'Install app' atau 'Add to Home screen'\n3. Confirm");
+    } else {
+      alert("💻 Untuk install:\n\n1. Cari icon install kat address bar\n2. Atau: Chrome menu (⋮) → 'Install Musim Lab'");
+    }
     return;
   }
+  
   deferredPrompt.prompt();
   deferredPrompt.userChoice.then((choice) => {
     if(choice.outcome === "accepted"){
       showToast("✅ Musim Lab dipasang!");
+    } else {
+      showToast("Nanti boleh install bila-bila masa 👋");
     }
     deferredPrompt = null;
     $("pwaBanner").classList.remove("show");
@@ -1716,6 +1748,10 @@ function installPWA(){
 function dismissPWA(){
   $("pwaBanner").classList.remove("show");
   localStorage.setItem("pwa_dismissed", "1");
+  // Reset lepas 7 hari
+  setTimeout(() => {
+    localStorage.removeItem("pwa_dismissed");
+  }, 7 * 24 * 60 * 60 * 1000);
 }
 
 /* ============ INIT ============ */
