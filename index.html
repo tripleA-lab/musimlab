@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
-<title>Musim Lab — musim berubah , kita berubah </title>
+<title>Musim Lab — musim berubah , kita berubah</title>
 <meta name="description" content="Kalendar event, musim, cuti & berita terkini Malaysia. Tahu apa yang akan datang. Bersedia sebelum tiba.">
 <meta name="keywords" content="kalendar malaysia, event malaysia, cuti umum, musim malaysia, musim lab">
 <meta name="author" content="Musim Lab">
@@ -47,22 +47,6 @@
   --hijau-soft: #dcfce7;
   --hitam: #171717;
 
-  /* ============ SKELETON (Affiliate) ============ */
-.skeleton-card{opacity:.85}
-.skeleton-line{
-  background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
-  background-size:200% 100%;
-  animation:skeleton-pulse 1.5s ease-in-out infinite;
-  border-radius:6px;
-}
-@keyframes skeleton-pulse{
-  0%,100%{opacity:1}
-  50%{opacity:.45}
-}
-
-
-
-  
   /* ===== Neutral ===== */
   --bg: #f7f7f8;
   --card: #ffffff;
@@ -107,6 +91,13 @@ img{max-width:100%;display:block}
   background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);
   background-size:200% 100%;
   animation:skeleton-pulse 1.5s ease-in-out infinite;
+}
+.skeleton-card{opacity:.85}
+.skeleton-line{
+  background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
+  background-size:200% 100%;
+  animation:skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius:6px;
 }
 
 /* ============ MAIN ============ */
@@ -575,7 +566,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 <script>
 /* =====================================================
-   MUSIM LAB — INDEX v9 (Chameleon Theme)
+   MUSIM LAB — INDEX v10 (Hybrid Preload + Skeleton)
 ===================================================== */
 
 const API_URL = "https://script.google.com/macros/s/AKfycbz_Aqg5XEskKKpwsoz9WA4HcSCV5H61cK63hj9kw78YD_eRCCQgkm71q_KJhoG2SfX4/exec";
@@ -594,9 +585,9 @@ let allEvents = [];
 let allSeasons = [];
 let allNews = [];
 let allItems = [];
-let allEventItems = [];      // ← TAMBAH
-let allSeasonItems = [];     // ← TAMBAH
-let allNewsItems = [];       // ← TAMBAH  
+let allEventItems = [];
+let allSeasonItems = [];
+let allNewsItems = [];
 let holidayData = [];
 let currentDate = new Date();
 let selectedDate = null;
@@ -1160,19 +1151,18 @@ function openFullDetail(id){
   loadEventPreparation(id, "affiliateFull_" + id);
 }
 
-  async function loadEventPreparation(eventId, containerId){
+/* ============ PREPARATION LOADERS (HYBRID) ============ */
+async function loadEventPreparation(eventId, containerId){
   const container = $(containerId);
   if(!container) return;
 
-  // ===== STEP 1: Preload dulu =====
+  // STEP 1: Preload dulu
   const preloaded = allEventItems.filter(m => String(m["Event ID"]) === String(eventId));
-
   if(preloaded.length){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds
       .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
       .filter(Boolean);
-
     if(selectedItems.length){
       container.innerHTML = renderPreparationCards(selectedItems);
       console.log(`[Instant] Event ${eventId} — ${selectedItems.length} items`);
@@ -1180,23 +1170,12 @@ function openFullDetail(id){
     }
   }
 
-  // ===== STEP 2: Kalau preload TAKDE data, berarti user baru save.
-  // Tunjuk skeleton singkat (max 3 saat), then fallback =====
-  container.innerHTML = `
-    <div class="affiliate-section">
-      <div class="affiliate-title">🛍️ Persediaan & Beli</div>
-      <div class="affiliate-card skeleton-card">
-        <div class="skeleton-line" style="width:55%;height:14px;margin-bottom:12px"></div>
-        <div class="skeleton-line" style="width:90%;height:11px;margin-bottom:6px"></div>
-        <div class="skeleton-line" style="width:130px;height:36px;border-radius:9px;margin-top:12px"></div>
-      </div>
-    </div>
-  `;
+  // STEP 2: Fallback skeleton + API
+  container.innerHTML = renderSkeletonPrep();
 
-  // Timeout 3 saat — kalau API tak respond, buang skeleton
   const timeoutId = setTimeout(() => {
-    console.warn(`[Timeout] Event ${eventId} — API lambat, buang skeleton`);
     if(container.querySelector(".skeleton-card")){
+      console.warn(`[Timeout] Event ${eventId} — API lambat`);
       container.innerHTML = "";
     }
   }, 3000);
@@ -1207,10 +1186,9 @@ function openFullDetail(id){
     clearTimeout(timeoutId);
 
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-
     if(!mappings.length){ 
       container.innerHTML = ""; 
-      console.log(`[Empty] Event ${eventId} — takde item`);
+      console.log(`[Empty] Event ${eventId}`);
       return; 
     }
 
@@ -1220,23 +1198,26 @@ function openFullDetail(id){
       .filter(Boolean);
 
     if(!selectedItems.length){ container.innerHTML = ""; return; }
-
     container.innerHTML = renderPreparationCards(selectedItems);
     console.log(`[Fallback] Event ${eventId} — ${selectedItems.length} items`);
- 
+  }catch(e){
+    clearTimeout(timeoutId);
+    console.error("event preparation err", e);
+    container.innerHTML = "";
+  }
+}
+
 async function loadSeasonPreparation(seasonId, containerId){
   const container = $(containerId);
   if(!container) return;
 
-  // ===== STEP 1: Preload dulu =====
+  // STEP 1: Preload
   const preloaded = allSeasonItems.filter(m => String(m["Season ID"]) === String(seasonId));
-
   if(preloaded.length){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds
       .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
       .filter(Boolean);
-
     if(selectedItems.length){
       container.innerHTML = renderPreparationCards(selectedItems);
       console.log(`[Instant] Season ${seasonId} — ${selectedItems.length} items`);
@@ -1244,17 +1225,8 @@ async function loadSeasonPreparation(seasonId, containerId){
     }
   }
 
-  // ===== STEP 2: Fallback =====
-  container.innerHTML = `
-    <div class="affiliate-section">
-      <div class="affiliate-title">🛍️ Persediaan & Beli</div>
-      <div class="affiliate-card skeleton-card">
-        <div class="skeleton-line" style="width:55%;height:14px;margin-bottom:12px"></div>
-        <div class="skeleton-line" style="width:90%;height:11px;margin-bottom:6px"></div>
-        <div class="skeleton-line" style="width:130px;height:36px;border-radius:9px;margin-top:12px"></div>
-      </div>
-    </div>
-  `;
+  // STEP 2: Fallback
+  container.innerHTML = renderSkeletonPrep();
 
   const timeoutId = setTimeout(() => {
     if(container.querySelector(".skeleton-card")){
@@ -1284,28 +1256,60 @@ async function loadSeasonPreparation(seasonId, containerId){
     container.innerHTML = "";
   }
 }
-    
+
 async function loadNewsPreparation(newsId, containerId){
   const container = $(containerId);
   if(!container) return;
 
-  // Preload check
+  // STEP 1: Preload
   const preloaded = allNewsItems.filter(m => String(m["News ID"]) === String(newsId));
-  
   if(preloaded.length){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds
       .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
       .filter(Boolean);
-    
     if(selectedItems.length){
       container.innerHTML = renderPreparationCards(selectedItems);
+      console.log(`[Instant] News ${newsId} — ${selectedItems.length} items`);
       return;
     }
   }
 
-  // Fallback
-  container.innerHTML = `
+  // STEP 2: Fallback
+  container.innerHTML = renderSkeletonPrep();
+
+  const timeoutId = setTimeout(() => {
+    if(container.querySelector(".skeleton-card")){
+      container.innerHTML = "";
+    }
+  }, 3000);
+
+  try{
+    const r = await fetch(`${API_URL}?action=getNewsItems&newsId=${encodeURIComponent(newsId)}&token=${API_TOKEN}&t=${Date.now()}`);
+    const res = await r.json();
+    clearTimeout(timeoutId);
+
+    const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    if(!mappings.length){ container.innerHTML = ""; return; }
+
+    const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds
+      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
+      .filter(Boolean);
+
+    if(!selectedItems.length){ container.innerHTML = ""; return; }
+    container.innerHTML = renderPreparationCards(selectedItems);
+    console.log(`[Fallback] News ${newsId} — ${selectedItems.length} items`);
+  }catch(e){
+    clearTimeout(timeoutId);
+    console.error("news prep err", e);
+    container.innerHTML = "";
+  }
+}
+
+/* ============ RENDER HELPERS ============ */
+function renderSkeletonPrep(){
+  return `
     <div class="affiliate-section">
       <div class="affiliate-title">🛍️ Persediaan & Beli</div>
       <div class="affiliate-card skeleton-card">
@@ -1316,25 +1320,6 @@ async function loadNewsPreparation(newsId, containerId){
       </div>
     </div>
   `;
-
-  try{
-    const r = await fetch(`${API_URL}?action=getNewsItems&newsId=${encodeURIComponent(newsId)}&token=${API_TOKEN}&t=${Date.now()}`);
-    const res = await r.json();
-    const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    
-    if(!mappings.length){ container.innerHTML = ""; return; }
-    
-    const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds
-      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
-      .filter(Boolean);
-    
-    if(!selectedItems.length){ container.innerHTML = ""; return; }
-    container.innerHTML = renderPreparationCards(selectedItems);
-  }catch(e){
-    console.error("news prep err", e);
-    container.innerHTML = "";
-  }
 }
 
 function renderPreparationCards(selectedItems){
@@ -1791,18 +1776,18 @@ async function loadItems(){
     const res1 = await r1.json();
     allItems = (res1 && res1.success && Array.isArray(res1.data)) ? res1.data : [];
 
-    // 2. Load semua event item mappings (1 API call)
+    // 2. Preload semua event-item mappings
     try{
       const r2 = await fetch(`${API_URL}?action=getAllEventItems&token=${API_TOKEN}&t=${Date.now()}`);
       const res2 = await r2.json();
       allEventItems = (res2 && res2.success && Array.isArray(res2.data)) ? res2.data : [];
       console.log(`[Preload] ${allEventItems.length} event-item mappings`);
-    }catch(e){ 
+    }catch(e){
       console.warn("Preload event items failed:", e);
       allEventItems = [];
     }
 
-    // 3. Load semua season item mappings
+    // 3. Preload semua season-item mappings
     try{
       const r3 = await fetch(`${API_URL}?action=getAllSeasonItems&token=${API_TOKEN}&t=${Date.now()}`);
       const res3 = await r3.json();
@@ -1813,7 +1798,7 @@ async function loadItems(){
       allSeasonItems = [];
     }
 
-    // 4. Load semua news item mappings
+    // 4. Preload semua news-item mappings
     try{
       const r4 = await fetch(`${API_URL}?action=getAllNewsItems&token=${API_TOKEN}&t=${Date.now()}`);
       const res4 = await r4.json();
@@ -1823,7 +1808,6 @@ async function loadItems(){
       console.warn("Preload news items failed:", e);
       allNewsItems = [];
     }
-
   }catch(e){
     console.error("items err", e);
     allItems = [];
@@ -1874,27 +1858,23 @@ function checkDeepLink(){
 /* ============ PWA INSTALL ============ */
 let deferredPrompt = null;
 
-// ===== Event: beforeinstallprompt =====
 window.addEventListener("beforeinstallprompt", (e) => {
   console.log("[PWA] beforeinstallprompt fired!");
   e.preventDefault();
   deferredPrompt = e;
-  // Trigger banner SERTA-MERTA bila event fire
   if(!localStorage.getItem("pwa_dismissed")){
     $("pwaBanner").classList.add("show");
   }
 });
 
-// ===== Fallback: Tunjuk banner selepas 15 saat (kalau event tak fire) =====
 setTimeout(() => {
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches 
                        || window.navigator.standalone === true;
-  if(!isStandalone && !localStorage.getItem("pwa_dismissed")){
+  if(!isStandalone && !localStorage.getItem("pwa_dismissed") && !localStorage.getItem("pwa_installed")){
     $("pwaBanner").classList.add("show");
   }
 }, 15000);
 
-// ===== Detect: Kalau user dah install =====
 window.addEventListener("appinstalled", () => {
   console.log("[PWA] App installed!");
   $("pwaBanner").classList.remove("show");
@@ -1902,13 +1882,10 @@ window.addEventListener("appinstalled", () => {
   deferredPrompt = null;
 });
 
-// ===== Install handler =====
 function installPWA(){
   if(!deferredPrompt){
-    // Fallback: Bagi arahan manual
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const isAndroid = /Android/.test(navigator.userAgent);
-    
     if(isIOS){
       alert("📱 Untuk install:\n\n1. Tap butang Share (kotak dengan panah)\n2. Scroll & tap 'Add to Home Screen'\n3. Tap 'Add'");
     } else if(isAndroid){
@@ -1918,7 +1895,6 @@ function installPWA(){
     }
     return;
   }
-  
   deferredPrompt.prompt();
   deferredPrompt.userChoice.then((choice) => {
     if(choice.outcome === "accepted"){
@@ -1934,7 +1910,6 @@ function installPWA(){
 function dismissPWA(){
   $("pwaBanner").classList.remove("show");
   localStorage.setItem("pwa_dismissed", "1");
-  // Reset lepas 7 hari
   setTimeout(() => {
     localStorage.removeItem("pwa_dismissed");
   }, 7 * 24 * 60 * 60 * 1000);
@@ -1962,7 +1937,6 @@ if ("serviceWorker" in navigator) {
       });
   });
 }
-  
 </script>
 
 </body>
