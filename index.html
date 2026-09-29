@@ -1917,13 +1917,25 @@ function dismissPWA(){
 
 /* ============ INIT ============ */
 renderBanner();
-loadEvents();
-loadHolidays();
-loadSeasons();
-loadNews();
-loadItems();
 updateSavedCount();
 checkDeepLink();
+
+// ===== PARALLEL LOADING — semua serentak =====
+Promise.allSettled([
+  loadEvents(),
+  loadHolidays(),
+  loadSeasons(),
+  loadNews(),
+  loadItems()
+]).then((results) => {
+  console.log("[Init] Semua data loaded");
+  results.forEach((r, i) => {
+    if(r.status === "rejected"){
+      const names = ["events","holidays","seasons","news","items"];
+      console.warn(`[Init] Gagal load ${names[i]}:`, r.reason);
+    }
+  });
+});
 
 /* ============ SERVICE WORKER ============ */
 if ("serviceWorker" in navigator) {
