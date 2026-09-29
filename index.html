@@ -594,6 +594,9 @@ let allEvents = [];
 let allSeasons = [];
 let allNews = [];
 let allItems = [];
+let allEventItems = [];      // ← TAMBAH
+let allSeasonItems = [];     // ← TAMBAH
+let allNewsItems = [];       // ← TAMBAH  
 let holidayData = [];
 let currentDate = new Date();
 let selectedDate = null;
@@ -1220,47 +1223,68 @@ function openFullDetail(id){
 
     container.innerHTML = renderPreparationCards(selectedItems);
     console.log(`[Fallback] Event ${eventId} — ${selectedItems.length} items`);
-  }catch(e){
-    clearTimeout(timeoutId);
-    console.error("event preparation err", e);
-    container.innerHTML = "";
+ 
+async function loadSeasonPreparation(seasonId, containerId){
+  const container = $(containerId);
+  if(!container) return;
+
+  // ===== STEP 1: Preload dulu =====
+  const preloaded = allSeasonItems.filter(m => String(m["Season ID"]) === String(seasonId));
+
+  if(preloaded.length){
+    const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds
+      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
+      .filter(Boolean);
+
+    if(selectedItems.length){
+      container.innerHTML = renderPreparationCards(selectedItems);
+      console.log(`[Instant] Season ${seasonId} — ${selectedItems.length} items`);
+      return;
+    }
   }
-}
 
-
-  // Fallback — skeleton + API
+  // ===== STEP 2: Fallback =====
   container.innerHTML = `
     <div class="affiliate-section">
       <div class="affiliate-title">🛍️ Persediaan & Beli</div>
       <div class="affiliate-card skeleton-card">
         <div class="skeleton-line" style="width:55%;height:14px;margin-bottom:12px"></div>
         <div class="skeleton-line" style="width:90%;height:11px;margin-bottom:6px"></div>
-        <div class="skeleton-line" style="width:70%;height:11px;margin-bottom:14px"></div>
-        <div class="skeleton-line" style="width:130px;height:36px;border-radius:9px"></div>
+        <div class="skeleton-line" style="width:130px;height:36px;border-radius:9px;margin-top:12px"></div>
       </div>
     </div>
   `;
 
+  const timeoutId = setTimeout(() => {
+    if(container.querySelector(".skeleton-card")){
+      container.innerHTML = "";
+    }
+  }, 3000);
+
   try{
     const r = await fetch(`${API_URL}?action=getSeasonItems&seasonId=${encodeURIComponent(seasonId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
+    clearTimeout(timeoutId);
+
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    
     if(!mappings.length){ container.innerHTML = ""; return; }
-    
+
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds
       .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
       .filter(Boolean);
-    
+
     if(!selectedItems.length){ container.innerHTML = ""; return; }
     container.innerHTML = renderPreparationCards(selectedItems);
+    console.log(`[Fallback] Season ${seasonId} — ${selectedItems.length} items`);
   }catch(e){
+    clearTimeout(timeoutId);
     console.error("season prep err", e);
     container.innerHTML = "";
   }
 }
-
+    
 async function loadNewsPreparation(newsId, containerId){
   const container = $(containerId);
   if(!container) return;
