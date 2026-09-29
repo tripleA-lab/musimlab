@@ -47,6 +47,22 @@
   --hijau-soft: #dcfce7;
   --hitam: #171717;
 
+  /* ============ SKELETON (Affiliate) ============ */
+.skeleton-card{opacity:.85}
+.skeleton-line{
+  background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
+  background-size:200% 100%;
+  animation:skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius:6px;
+}
+@keyframes skeleton-pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.45}
+}
+
+
+
+  
   /* ===== Neutral ===== */
   --bg: #f7f7f8;
   --card: #ffffff;
@@ -1144,46 +1160,167 @@ function openFullDetail(id){
 async function loadEventPreparation(eventId, containerId){
   const container = $(containerId);
   if(!container) return;
+
+  // ===== STEP 1: Cuba PRELOAD dulu (instant) =====
+  const preloaded = allEventItems.filter(m => String(m["Event ID"]) === String(eventId));
+  
+  if(preloaded.length){
+    const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds
+      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
+      .filter(Boolean);
+    
+    if(selectedItems.length){
+      container.innerHTML = renderPreparationCards(selectedItems);
+      console.log(`[Instant] Event ${eventId} — ${selectedItems.length} items dari preload`);
+      return;
+    }
+  }
+
+  // ===== STEP 2: FALLBACK — Tunjuk skeleton, call API =====
+  container.innerHTML = `
+    <div class="affiliate-section">
+      <div class="affiliate-title">🛍️ Persediaan & Beli</div>
+      <div class="affiliate-card skeleton-card">
+        <div class="skeleton-line" style="width:55%;height:14px;margin-bottom:12px"></div>
+        <div class="skeleton-line" style="width:90%;height:11px;margin-bottom:6px"></div>
+        <div class="skeleton-line" style="width:70%;height:11px;margin-bottom:14px"></div>
+        <div class="skeleton-line" style="width:130px;height:36px;border-radius:9px"></div>
+      </div>
+    </div>
+  `;
+
   try{
     const r = await fetch(`${API_URL}?action=getEventItems&eventId=${encodeURIComponent(eventId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    if(!mappings.length) return;
+    
+    if(!mappings.length){
+      container.innerHTML = "";
+      return;
+    }
+    
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
-    if(!selectedItems.length) return;
+    const selectedItems = itemIds
+      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
+      .filter(Boolean);
+    
+    if(!selectedItems.length){
+      container.innerHTML = "";
+      return;
+    }
+    
     container.innerHTML = renderPreparationCards(selectedItems);
-  }catch(e){ console.error("event preparation err", e); }
+    console.log(`[Fallback] Event ${eventId} — ${selectedItems.length} items dari API`);
+    
+  }catch(e){
+    console.error("event preparation err", e);
+    container.innerHTML = "";
+  }
 }
 
 async function loadSeasonPreparation(seasonId, containerId){
   const container = $(containerId);
   if(!container) return;
+
+  // Preload check
+  const preloaded = allSeasonItems.filter(m => String(m["Season ID"]) === String(seasonId));
+  
+  if(preloaded.length){
+    const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds
+      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
+      .filter(Boolean);
+    
+    if(selectedItems.length){
+      container.innerHTML = renderPreparationCards(selectedItems);
+      return;
+    }
+  }
+
+  // Fallback — skeleton + API
+  container.innerHTML = `
+    <div class="affiliate-section">
+      <div class="affiliate-title">🛍️ Persediaan & Beli</div>
+      <div class="affiliate-card skeleton-card">
+        <div class="skeleton-line" style="width:55%;height:14px;margin-bottom:12px"></div>
+        <div class="skeleton-line" style="width:90%;height:11px;margin-bottom:6px"></div>
+        <div class="skeleton-line" style="width:70%;height:11px;margin-bottom:14px"></div>
+        <div class="skeleton-line" style="width:130px;height:36px;border-radius:9px"></div>
+      </div>
+    </div>
+  `;
+
   try{
     const r = await fetch(`${API_URL}?action=getSeasonItems&seasonId=${encodeURIComponent(seasonId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    if(!mappings.length) return;
+    
+    if(!mappings.length){ container.innerHTML = ""; return; }
+    
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
-    if(!selectedItems.length) return;
+    const selectedItems = itemIds
+      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
+      .filter(Boolean);
+    
+    if(!selectedItems.length){ container.innerHTML = ""; return; }
     container.innerHTML = renderPreparationCards(selectedItems);
-  }catch(e){ console.error("season prep err", e); }
+  }catch(e){
+    console.error("season prep err", e);
+    container.innerHTML = "";
+  }
 }
 
 async function loadNewsPreparation(newsId, containerId){
   const container = $(containerId);
   if(!container) return;
+
+  // Preload check
+  const preloaded = allNewsItems.filter(m => String(m["News ID"]) === String(newsId));
+  
+  if(preloaded.length){
+    const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
+    const selectedItems = itemIds
+      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
+      .filter(Boolean);
+    
+    if(selectedItems.length){
+      container.innerHTML = renderPreparationCards(selectedItems);
+      return;
+    }
+  }
+
+  // Fallback
+  container.innerHTML = `
+    <div class="affiliate-section">
+      <div class="affiliate-title">🛍️ Persediaan & Beli</div>
+      <div class="affiliate-card skeleton-card">
+        <div class="skeleton-line" style="width:55%;height:14px;margin-bottom:12px"></div>
+        <div class="skeleton-line" style="width:90%;height:11px;margin-bottom:6px"></div>
+        <div class="skeleton-line" style="width:70%;height:11px;margin-bottom:14px"></div>
+        <div class="skeleton-line" style="width:130px;height:36px;border-radius:9px"></div>
+      </div>
+    </div>
+  `;
+
   try{
     const r = await fetch(`${API_URL}?action=getNewsItems&newsId=${encodeURIComponent(newsId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    if(!mappings.length) return;
+    
+    if(!mappings.length){ container.innerHTML = ""; return; }
+    
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
-    if(!selectedItems.length) return;
+    const selectedItems = itemIds
+      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
+      .filter(Boolean);
+    
+    if(!selectedItems.length){ container.innerHTML = ""; return; }
     container.innerHTML = renderPreparationCards(selectedItems);
-  }catch(e){ console.error("news prep err", e); }
+  }catch(e){
+    console.error("news prep err", e);
+    container.innerHTML = "";
+  }
 }
 
 function renderPreparationCards(selectedItems){
@@ -1635,9 +1772,44 @@ async function loadNews(){
 
 async function loadItems(){
   try{
-    const r = await fetch(`${API_URL}?action=getItems&token=${API_TOKEN}&t=${Date.now()}`);
-    const res = await r.json();
-    allItems = (res && res.success && Array.isArray(res.data)) ? res.data : [];
+    // 1. Load items master
+    const r1 = await fetch(`${API_URL}?action=getItems&token=${API_TOKEN}&t=${Date.now()}`);
+    const res1 = await r1.json();
+    allItems = (res1 && res1.success && Array.isArray(res1.data)) ? res1.data : [];
+
+    // 2. Load semua event item mappings (1 API call)
+    try{
+      const r2 = await fetch(`${API_URL}?action=getAllEventItems&token=${API_TOKEN}&t=${Date.now()}`);
+      const res2 = await r2.json();
+      allEventItems = (res2 && res2.success && Array.isArray(res2.data)) ? res2.data : [];
+      console.log(`[Preload] ${allEventItems.length} event-item mappings`);
+    }catch(e){ 
+      console.warn("Preload event items failed:", e);
+      allEventItems = [];
+    }
+
+    // 3. Load semua season item mappings
+    try{
+      const r3 = await fetch(`${API_URL}?action=getAllSeasonItems&token=${API_TOKEN}&t=${Date.now()}`);
+      const res3 = await r3.json();
+      allSeasonItems = (res3 && res3.success && Array.isArray(res3.data)) ? res3.data : [];
+      console.log(`[Preload] ${allSeasonItems.length} season-item mappings`);
+    }catch(e){
+      console.warn("Preload season items failed:", e);
+      allSeasonItems = [];
+    }
+
+    // 4. Load semua news item mappings
+    try{
+      const r4 = await fetch(`${API_URL}?action=getAllNewsItems&token=${API_TOKEN}&t=${Date.now()}`);
+      const res4 = await r4.json();
+      allNewsItems = (res4 && res4.success && Array.isArray(res4.data)) ? res4.data : [];
+      console.log(`[Preload] ${allNewsItems.length} news-item mappings`);
+    }catch(e){
+      console.warn("Preload news items failed:", e);
+      allNewsItems = [];
+    }
+
   }catch(e){
     console.error("items err", e);
     allItems = [];
