@@ -1397,7 +1397,9 @@ $("shareBtn").addEventListener("click", async () => {
   const start = getEventStart(e);
   const locLine = [getEventLoc(e), getEventNegeri(e)].filter(Boolean).join(", ");
   const text = `${getEventName(e)} — ${formatDate(start)}${locLine ? ` • ${locLine}` : ""}`;
-  const url = window.location.origin + window.location.pathname + "#event=" + id;
+  // ⬇️ GANTI INI — guna event.html
+  const base = window.location.href.replace(/\/[^\/]*$/, "/");
+  const url = base + "event.html?id=" + encodeURIComponent(id);
   if(navigator.share){
     try{await navigator.share({ title: getEventName(e), text: text, url: url });}
     catch(err){if(err.name !== "AbortError") console.error(err);}
@@ -1413,7 +1415,8 @@ $("newsShareBtn").addEventListener("click", async () => {
   const n = allNews.find(x => String(x["News ID"]) === id);
   if(!n){showToast("News tak dijumpai");return;}
   const text = `${n["Title"]}\n\n${(n["Body"]||"").substring(0,100)}...`;
-  const url = window.location.origin + window.location.pathname;
+  const base = window.location.href.replace(/\/[^\/]*$/, "/");
+  const url = base + "event.html?news=" + encodeURIComponent(id);
   if(navigator.share){
     try{await navigator.share({ title: n["Title"], text: text, url: url });}
     catch(err){if(err.name !== "AbortError") console.error(err);}
