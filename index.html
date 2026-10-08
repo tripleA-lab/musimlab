@@ -516,6 +516,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   <div class="sheet-handle"></div>
   <div class="sheet-scroll" id="seasonSheetContent"></div>
   <div class="sheet-bottom">
+    <button class="sheet-share" id="seasonShareBtn">📤 Kongsi</button>
     <button class="sheet-close" onclick="closeSheet('seasonSheet')">✕ Tutup</button>
   </div>
 </div>
@@ -1426,6 +1427,23 @@ $("newsShareBtn").addEventListener("click", async () => {
   }
 });
 
+  $("seasonShareBtn").addEventListener("click", async () => {
+  const id = $("seasonShareBtn").dataset.seasonId;
+  if(!id) return;
+  const s = allSeasons.find(x => String(x["Season ID"]) === id);
+  if(!s){showToast("Musim tak dijumpai");return;}
+  const text = `${s["Season Name"]} — Musim aktif di Malaysia`;
+  const base = window.location.href.replace(/\/[^\/]*$/, "/");
+  const url = base + "event.html?season=" + encodeURIComponent(id);
+  if(navigator.share){
+    try{await navigator.share({ title: s["Season Name"], text: text, url: url });}
+    catch(err){if(err.name !== "AbortError") console.error(err);}
+  } else {
+    try{await navigator.clipboard.writeText(`${text}\n${url}`);showToast("📋 Link disalin!");}
+    catch(err){showToast("Tak dapat copy link");}
+  }
+});
+
 /* ============ LIGHTBOX ============ */
 let lbImages = [];
 let lbIndex = 0;
@@ -1552,6 +1570,7 @@ function hexWithAlpha(hex, alpha){
 function openSeasonDetail(id){
   const s = allSeasons.find(x => String(x["Season ID"]) === id);
   if(!s) return;
+  $("seasonShareBtn").dataset.seasonId = id;   // ⬅️ TAMBAH INI
   const icon = s["Icon"] || "🌧️";
   const color = s["Color"] || "#6366f1";
   const colorSoft = hexWithAlpha(color, 0.25);
