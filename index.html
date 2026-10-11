@@ -830,7 +830,6 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 /* ============ RESPONSIVE ============ */
 @media (max-width:420px){
-  .calendar-split{grid-template-columns:minmax(0, 1.35fr) minmax(0, 1fr);gap:8px}
   .month-picker-minimal .month-label{font-size:12.5px}
   .month-picker-minimal button{width:26px;height:26px;font-size:13px}
   .weekday-mini{font-size:8px;padding:3px 1px}
@@ -844,17 +843,22 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   .upcoming-card{flex:0 0 calc((100% - 16px) / 2.2);min-width:170px}
   .upcoming-title{font-size:13px}
 }
-@media (min-width:700px){
-  ...
-  .calendar-split{grid-template-columns:minmax(0, 1.55fr) minmax(0, 1fr);gap:14px}
-  ...
-}
 
 @media (min-width:600px){
   .calendar-split{
     grid-template-columns:minmax(0, 1.4fr) minmax(0, 1fr);
     gap:12px;
   }
+
+
+   
+@media (min-width:700px){
+  ...
+  .calendar-split{grid-template-columns:minmax(0, 1.55fr) minmax(0, 1fr);gap:14px}
+  ...
+}
+
+
 }
 
 
