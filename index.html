@@ -202,8 +202,20 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .section-link:active{opacity:.7}
 
 /* ============ NEWS HERO ============ */
-.news-hero{position:relative;margin:0 0 8px;border-radius:20px;overflow:hidden;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow-md);cursor:pointer;transition:transform .2s;aspect-ratio:16/10;min-height:280px}
-.news-hero:active{transform:scale(.985)}
+.news-hero{
+  position:relative;
+  margin:0 0 8px;
+  border-radius:20px;
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-md);
+  cursor:pointer;
+  transition:transform .2s;
+  height:280px;
+  min-height:280px;
+  max-height:280px;
+}
 .news-hero-track{position:absolute;inset:0;display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1)}
 .news-hero-slide{flex:0 0 100%;position:relative;overflow:hidden}
 .news-hero-slide img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
@@ -838,7 +850,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   .bottom-sheet.open{transform:translate(-50%,0)}
   .carousel-slide{aspect-ratio:16/9}
   .bottom-nav{left:50%;right:auto;width:520px;transform:translateX(-50%)}
-  .banner-wrap img{max-height:220px}
+
   .news-hero{aspect-ratio:21/9;min-height:340px}
   .news-hero-title{font-size:28px}
   .news-hero-desc{font-size:14px}
@@ -893,10 +905,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 <main>
 
-  <!-- BANNER -->
-  <div class="banner-wrap" id="bannerWrap" style="display:none">
-    <img id="bannerImg" src="" alt="Musim Lab" onclick="showToast('Selamat datang ke Musim Lab! 🦎')">
-  </div>
+  
 
   <!-- CALENDAR VIEW -->
   <section class="view active" id="viewCalendar">
@@ -2753,7 +2762,7 @@ function dismissPWA(){
 }
 
 /* ============ INIT ============ */
-renderBanner();
+
 updateSavedCount();
 checkDeepLink();
 
