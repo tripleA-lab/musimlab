@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="ms" data-theme="dark">
+<html lang="ms">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
-<title>Musim Lab — musim berubah , kita berubah</title>
+<title>Musim Lab — Musim Berubah, Kita Berubah</title>
 <meta name="description" content="Kalendar event, musim, cuti & berita terkini Malaysia. Tahu apa yang akan datang. Bersedia sebelum tiba.">
 <meta name="keywords" content="kalendar malaysia, event malaysia, cuti umum, musim malaysia, musim lab">
 <meta name="author" content="Musim Lab">
-<meta name="theme-color" content="#0f172a" id="metaThemeColor">
+<meta name="theme-color" content="#0a1628" id="metaThemeColor">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://triplea-lab.github.io/musimlab/">
-<meta property="og:title" content="Musim Lab — musim berubah , kita berubah.">
-<meta property="og:description" content="Kalendar event, musim, cuti & berita terkini Malaysia. Tahu apa yang akan datang.">
+<meta property="og:title" content="Musim Lab — Musim Berubah, Kita Berubah">
+<meta property="og:description" content="Kalendar event, musim, cuti & berita terkini Malaysia.">
 <meta property="og:image" content="https://triplea-lab.github.io/musimlab/assets/web-app-manifest-512x512.png">
 <meta property="og:site_name" content="Musim Lab">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Musim Lab — Tahu musim. Tahu keperluan.">
+<meta name="twitter:title" content="Musim Lab — Musim Berubah, Kita Berubah">
 <meta name="twitter:description" content="Kalendar event, musim, cuti & berita terkini Malaysia.">
 <meta name="twitter:image" content="https://triplea-lab.github.io/musimlab/assets/web-app-manifest-512x512.png">
 
@@ -43,101 +43,96 @@
 
 <style>
 /* =====================================================
-   MUSIM LAB — DARK MODE v1
-   Default: Dark 🌙 | Toggle: Light ☀️
+   MUSIM LAB — v12 (Step 2: News Hero Card)
+   Dark mode first, follow system
 ===================================================== */
 
 /* ============ THEME: DARK (DEFAULT) ============ */
 :root,
 :root[data-theme="dark"] {
-  /* Background */
-  --bg: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --bg-elevated: #1e293b;
+  --bg: #0a1628;
+  --bg-secondary: #142135;
+  --bg-tertiary: #1e2f47;
+  --bg-elevated: #1a2842;
   
-  /* Text */
   --text: #f1f5f9;
   --text-soft: #cbd5e1;
   --text-mute: #94a3b8;
   --text-faded: #64748b;
   
-  /* Border */
-  --border: #334155;
-  --border-soft: #1e293b;
+  --border: #1e2f47;
+  --border-soft: #142135;
   
-  /* Card */
-  --card: #1e293b;
-  --card-hover: #334155;
+  --card: #142135;
+  --card-hover: #1e2f47;
   
-  /* Chameleon accent (untuk brand) */
   --hijau-cerah: #bef264;
+  --hijau-dark: #a3e635;
   --ungu: #c4b5fd;
   --ungu-dark: #a78bfa;
-  --ungu-soft: rgba(196, 181, 253, 0.15);
-  --hijau-gelap: #86efac;
+  --cyan: #67e8f9;
+  --pink: #f9a8d4;
+  
   --hijau-soft: rgba(190, 242, 100, 0.15);
+  --ungu-soft: rgba(196, 181, 253, 0.15);
   
-  /* Gradients */
   --gradient-brand: linear-gradient(135deg, #bef264 0%, #c4b5fd 100%);
-  --gradient-soft: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  --gradient-hero: linear-gradient(180deg, rgba(10,22,40,0.15) 0%, rgba(10,22,40,0.85) 60%, rgba(10,22,40,0.98) 100%);
   
-  /* Nav */
-  --nav-bg: rgba(30, 41, 59, 0.85);
-  --nav-border: rgba(148, 163, 184, 0.1);
-  --nav-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  --nav-bg: rgba(20, 33, 53, 0.88);
+  --nav-border: rgba(148, 163, 184, 0.08);
+  --nav-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   
-  /* Sheet */
-  --sheet-bg: #1e293b;
-  --sheet-border: rgba(148, 163, 184, 0.1);
+  --sheet-bg: #142135;
+  --sheet-border: rgba(148, 163, 184, 0.08);
   
-  /* Shadow */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
   
-  /* Overlay */
-  --overlay: rgba(0, 0, 0, 0.7);
+  --overlay: rgba(0, 0, 0, 0.75);
   
-  /* Skeleton */
-  --skeleton-base: #1e293b;
-  --skeleton-shine: #334155;
+  --skeleton-base: #142135;
+  --skeleton-shine: #1e2f47;
 }
 
 /* ============ THEME: LIGHT ============ */
 :root[data-theme="light"] {
-  --bg: #f7f7f8;
+  --bg: #f7f8fa;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f1f5f9;
   --bg-elevated: #ffffff;
   
-  --text: #171717;
-  --text-soft: #444;
-  --text-mute: #888;
-  --text-faded: #aaa;
+  --text: #0a1628;
+  --text-soft: #475569;
+  --text-mute: #94a3b8;
+  --text-faded: #cbd5e1;
   
-  --border: #ededed;
-  --border-soft: #f0f0f0;
+  --border: #e2e8f0;
+  --border-soft: #f1f5f9;
   
   --card: #ffffff;
-  --card-hover: #fafafa;
+  --card-hover: #f7f8fa;
   
-  --hijau-cerah: #84cc16;
+  --hijau-cerah: #65a30d;
+  --hijau-dark: #4d7c0f;
   --ungu: #8b5cf6;
   --ungu-dark: #6d28d9;
-  --ungu-soft: #ede9fe;
-  --hijau-gelap: #10b981;
-  --hijau-soft: #dcfce7;
+  --cyan: #0891b2;
+  --pink: #db2777;
+  
+  --hijau-soft: rgba(132, 204, 22, 0.15);
+  --ungu-soft: rgba(139, 92, 246, 0.12);
   
   --gradient-brand: linear-gradient(135deg, #84cc16 0%, #8b5cf6 100%);
-  --gradient-soft: linear-gradient(135deg, #f5f3ff 0%, #f0fdf4 100%);
+  --gradient-hero: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.95) 100%);
   
   --nav-bg: rgba(255, 255, 255, 0.94);
   --nav-border: rgba(0, 0, 0, 0.04);
   --nav-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.04);
   
   --sheet-bg: #ffffff;
-  --sheet-border: #f0f0f0;
+  --sheet-border: #f1f5f9;
   
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -199,7 +194,7 @@ img{max-width:100%;display:block}
   border-radius:6px;
 }
 
-/* ============ HEADER ============ */
+/* ============ APP HEADER ============ */
 .app-header{
   position:sticky;
   top:0;
@@ -212,24 +207,75 @@ img{max-width:100%;display:block}
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:12px;
   transition:background .3s ease, border-color .3s ease;
 }
-.app-logo{
+
+.brand{
   display:flex;
   align-items:center;
-  gap:8px;
-  font-size:17px;
-  font-weight:800;
-  letter-spacing:-.3px;
-  color:var(--text);
+  gap:10px;
+  min-width:0;
+  flex:1;
 }
-.app-logo .logo-emoji{font-size:22px;line-height:1}
-.app-logo span{font-weight:400;color:var(--text-mute)}
 
-/* Theme toggle button */
+.brand-logo{
+  width:44px;
+  height:44px;
+  object-fit:contain;
+  flex-shrink:0;
+  filter:drop-shadow(0 2px 6px rgba(190,242,100,.3));
+}
+.brand-logo-fallback{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  background:var(--gradient-brand);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  flex-shrink:0;
+}
+
+.brand-text{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+.brand-name{
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:-.5px;
+  color:var(--text);
+  line-height:1.1;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.brand-name .lab-box{
+  border:2px solid var(--hijau-cerah);
+  border-radius:6px;
+  padding:0 6px;
+  color:var(--hijau-cerah);
+  font-weight:900;
+}
+
+.brand-tagline{
+  font-size:10px;
+  color:var(--text-mute);
+  font-weight:500;
+  letter-spacing:.2px;
+  margin-top:2px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
 .theme-toggle{
-  width:40px;
-  height:40px;
+  width:42px;
+  height:42px;
   border-radius:12px;
   border:1px solid var(--border);
   background:var(--bg-secondary);
@@ -238,7 +284,7 @@ img{max-width:100%;display:block}
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:18px;
+  font-size:19px;
   transition:all .2s ease;
   flex-shrink:0;
 }
@@ -256,20 +302,157 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .banner-wrap{margin:0 0 12px;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:var(--bg-secondary)}
 .banner-wrap img{width:100%;height:auto;display:block;object-fit:cover;max-height:180px;cursor:pointer}
 
-/* ============ NEWS TICKER ============ */
-.news-ticker{margin:0 0 12px;border-radius:14px;overflow:hidden;position:relative;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow-sm);transition:all .3s ease}
-.news-ticker-inner{position:relative;height:62px}
-.news-slide{position:absolute;inset:0;display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:transform .55s cubic-bezier(.4,0,.2,1),opacity .5s ease;transform:translateX(100%);opacity:0;border-left:4px solid var(--news-color,var(--ungu))}
-.news-slide.active{transform:translateX(0);opacity:1}
-.news-slide.leaving{transform:translateX(-100%);opacity:0}
-.news-slide-icon{font-size:24px;flex-shrink:0;line-height:1}
-.news-slide-content{min-width:0;flex:1}
-.news-slide-title{font-size:13px;font-weight:800;color:var(--text);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
-.news-slide-sub{font-size:11px;color:var(--text-mute);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.news-slide-arrow{font-size:14px;color:var(--text-faded);flex-shrink:0}
-.news-dots{display:flex;justify-content:center;gap:5px;padding:0 0 8px}
-.news-dot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:.2s;cursor:pointer}
-.news-dot.active{background:var(--gradient-brand);width:14px;border-radius:999px}
+/* ============ NEWS HERO ============ */
+.news-hero{
+  position:relative;
+  margin:0 0 20px;
+  border-radius:20px;
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-md);
+  cursor:pointer;
+  transition:transform .2s;
+  aspect-ratio:16/10;
+  min-height:280px;
+}
+.news-hero:active{transform:scale(.985)}
+
+.news-hero-track{
+  position:absolute;
+  inset:0;
+  display:flex;
+  transition:transform .5s cubic-bezier(.4,0,.2,1);
+}
+
+.news-hero-slide{
+  flex:0 0 100%;
+  position:relative;
+  overflow:hidden;
+}
+
+.news-hero-slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  position:absolute;
+  inset:0;
+}
+
+.news-hero-fallback{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:72px;
+  background:linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+  position:absolute;
+  inset:0;
+}
+
+.news-hero-overlay{
+  position:absolute;
+  inset:0;
+  background:var(--gradient-hero);
+  z-index:2;
+}
+
+.news-hero-content{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:20px 20px 22px;
+  z-index:3;
+  color:#fff;
+}
+
+.news-hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 11px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  background:var(--hijau-cerah);
+  color:#0a1628;
+  margin-bottom:10px;
+}
+.news-hero-badge.sev-warning{background:#fdba74;color:#0a1628}
+.news-hero-badge.sev-danger{background:#f9a8d4;color:#0a1628}
+.news-hero-badge.sev-info{background:var(--hijau-cerah);color:#0a1628}
+
+.news-hero-title{
+  font-size:24px;
+  font-weight:900;
+  line-height:1.15;
+  letter-spacing:-.5px;
+  margin:0 0 8px;
+  color:#fff;
+  text-shadow:0 2px 12px rgba(0,0,0,.4);
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.news-hero-desc{
+  font-size:13px;
+  line-height:1.55;
+  color:rgba(255,255,255,.85);
+  margin:0 0 14px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  max-width:90%;
+}
+
+.news-hero-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:10px 18px;
+  border-radius:999px;
+  background:var(--hijau-cerah);
+  color:#0a1628;
+  font-size:13px;
+  font-weight:800;
+  border:0;
+  cursor:pointer;
+  font-family:inherit;
+  transition:all .2s;
+}
+.news-hero-cta:active{transform:scale(.96)}
+
+.news-hero-dots{
+  position:absolute;
+  top:16px;
+  right:16px;
+  display:flex;
+  gap:5px;
+  z-index:4;
+}
+.news-hero-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:rgba(255,255,255,.4);
+  transition:all .25s;
+  cursor:pointer;
+  border:0;
+  padding:0;
+}
+.news-hero-dot.active{
+  background:var(--hijau-cerah);
+  width:20px;
+  border-radius:999px;
+}
 
 /* ============ FILTER CHIP ============ */
 .filter-chip{display:none;align-items:center;gap:6px;background:var(--ungu-soft);color:var(--ungu);padding:6px 10px 6px 12px;border-radius:999px;font-size:12px;font-weight:700;margin:0 4px 12px;width:fit-content;cursor:pointer;max-width:100%;border:1px solid var(--ungu-soft)}
@@ -284,9 +467,8 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .month-buttons{display:flex;gap:4px}
 .month-btn{width:34px;height:34px;border:0;border-radius:10px;background:var(--bg-tertiary);color:var(--text);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .month-btn:active{transform:scale(.92);background:var(--border)}
-.today-btn-sm{background:var(--hijau-soft);border:1px solid var(--hijau-gelap);padding:0 12px;height:34px;border-radius:10px;font-size:11px;font-weight:800;color:var(--hijau-cerah);cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;transition:all .2s}
+.today-btn-sm{background:var(--hijau-soft);border:1px solid var(--hijau-cerah);padding:0 12px;height:34px;border-radius:10px;font-size:11px;font-weight:800;color:var(--hijau-cerah);cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;transition:all .2s}
 .today-btn-sm:active{transform:scale(.95)}
-[data-theme="light"] .today-btn-sm{color:#166534}
 .weekdays{display:grid;grid-template-columns:repeat(7,1fr);padding:0 6px 4px;border-bottom:1px solid var(--border-soft)}
 .weekday{text-align:center;padding:6px 2px;font-size:10px;font-weight:700;color:var(--text-faded);text-transform:uppercase;letter-spacing:.4px}
 .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);padding:6px}
@@ -295,9 +477,9 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .day-cell:active{background:var(--bg-tertiary)}
 .day-number{font-size:14px;font-weight:600;color:var(--text-soft);line-height:1}
 .day-cell.weekend .day-number{color:var(--text-faded)}
-.day-cell.today{background:var(--gradient-brand);box-shadow:0 4px 12px rgba(196,181,253,.4)}
-.day-cell.today .day-number{color:#0f172a;font-weight:800}
-.day-cell.today .day-dot{background:#0f172a !important}
+.day-cell.today{background:var(--hijau-cerah);box-shadow:0 4px 12px rgba(190,242,100,.4)}
+.day-cell.today .day-number{color:#0a1628;font-weight:800}
+.day-cell.today .day-dot{background:#0a1628 !important}
 .day-cell.selected{background:var(--ungu-soft);outline:2px solid var(--ungu);outline-offset:-2px}
 .day-cell.selected .day-number{color:var(--ungu);font-weight:800}
 .day-dots{display:flex;gap:2px;position:absolute;bottom:6px;left:50%;transform:translateX(-50%);min-height:4px}
@@ -322,7 +504,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .explore-name{font-size:14px;font-weight:800;line-height:1.25;color:var(--text)}
 .explore-count{font-size:11px;color:var(--text-mute);margin-top:auto}
 
-/* ============ SEASON ============ */
+/* ============ MUSIM ============ */
 .season-card{background:var(--card);border:1px solid var(--border);border-radius:20px;margin-bottom:12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
 .season-card:active{transform:scale(.985)}
 .season-hero{height:100px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--season-color-soft,#c4b5fd40),var(--season-color-lighter,#c4b5fd15));position:relative;overflow:hidden}
@@ -331,7 +513,6 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .season-body{padding:16px}
 .season-name{font-size:17px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--text)}
 .season-badge{font-size:10px;font-weight:800;background:var(--hijau-soft);color:var(--hijau-cerah);padding:3px 8px;border-radius:999px}
-[data-theme="light"] .season-badge{color:#166534}
 .season-synopsis{font-size:13px;color:var(--text-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px}
 .season-cta{font-size:12px;font-weight:800;color:var(--season-color,var(--ungu))}
 
@@ -352,18 +533,18 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .footer-tagline{font-size:11px;color:var(--text-mute);margin-bottom:16px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
 .footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:14px}
 .footer-links a{font-size:12px;color:var(--text-soft);text-decoration:none;font-weight:600;cursor:pointer;transition:color .15s}
-.footer-links a:active{color:var(--ungu)}
+.footer-links a:active{color:var(--hijau-cerah)}
 .footer-copy{font-size:10px;color:var(--text-faded);line-height:1.6}
 
-/* ============ NAV PILL ============ */
+/* ============ NAV ============ */
 .bottom-nav{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;background:var(--nav-bg);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-radius:24px;padding:6px;box-shadow:var(--nav-shadow);border:1px solid var(--nav-border);max-width:520px;margin:0 auto;overflow:visible;transition:background .3s ease, border-color .3s ease}
 .nav-inner{display:grid;grid-template-columns:repeat(5,1fr);align-items:center;height:56px;position:relative;overflow:visible}
 .nav-button{border:0;background:transparent;padding:4px 2px;cursor:pointer;color:var(--text-mute);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;transition:color .25s;overflow:visible}
 .nav-button .nav-icon{font-size:20px;line-height:1;transition:all .3s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%}
 .nav-button .nav-label{font-size:9px;font-weight:700;transition:all .25s;white-space:nowrap}
-.nav-button.active{color:var(--ungu)}
-.nav-button.active .nav-icon{background:var(--gradient-brand);color:#0f172a;font-size:19px;box-shadow:0 6px 18px rgba(196,181,253,.4);transform:translateY(-14px);border:3px solid var(--bg)}
-.nav-button.active .nav-label{transform:translateY(-8px);font-weight:800;color:var(--ungu)}
+.nav-button.active{color:var(--hijau-cerah)}
+.nav-button.active .nav-icon{background:var(--hijau-cerah);color:#0a1628;font-size:19px;box-shadow:0 6px 18px rgba(190,242,100,.4);transform:translateY(-14px);border:3px solid var(--bg)}
+.nav-button.active .nav-label{transform:translateY(-8px);font-weight:800;color:var(--hijau-cerah)}
 
 /* ============ SHEET ============ */
 .sheet-overlay{position:fixed;inset:0;background:var(--overlay);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
@@ -384,8 +565,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .sheet-event-actions{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
 .mini-btn{border:1px solid var(--border);background:var(--card);padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;color:var(--text);transition:all .15s}
 .mini-btn:active{transform:scale(.95)}
-.mini-btn.saved{background:var(--hijau-soft);color:var(--hijau-cerah);border-color:var(--hijau-gelap)}
-[data-theme="light"] .mini-btn.saved{color:#166534}
+.mini-btn.saved{background:var(--hijau-soft);color:var(--hijau-cerah);border-color:var(--hijau-cerah)}
 
 /* ============ CAROUSEL ============ */
 .carousel-wrap{position:relative;margin:-8px -16px 16px;background:var(--bg-tertiary)}
@@ -393,10 +573,10 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .carousel-track::-webkit-scrollbar{display:none}
 .carousel-slide{flex:0 0 100%;scroll-snap-align:start;position:relative;aspect-ratio:16/10;background:var(--bg-tertiary);overflow:hidden}
 .carousel-slide img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
-.carousel-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:var(--gradient-soft)}
+.carousel-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:linear-gradient(135deg,var(--bg-tertiary),var(--border))}
 .carousel-dots{display:flex;justify-content:center;gap:6px;padding:10px 0;background:var(--bg-tertiary)}
 .carousel-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:.2s}
-.carousel-dot.active{background:var(--ungu);width:20px;border-radius:999px}
+.carousel-dot.active{background:var(--hijau-cerah);width:20px;border-radius:999px}
 
 /* ============ DETAIL ============ */
 .cat-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:14px}
@@ -410,10 +590,9 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .detail-actions{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .action-btn{flex:1;min-width:calc(50% - 4px);padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;text-decoration:none;font-family:inherit;color:var(--text)}
 .action-btn:active{transform:scale(.96)}
-.action-btn.primary{background:var(--gradient-brand);color:#0f172a;box-shadow:0 4px 14px rgba(196,181,253,.3)}
+.action-btn.primary{background:var(--gradient-brand);color:#0a1628;box-shadow:0 4px 14px rgba(190,242,100,.3)}
 .action-btn.secondary{background:var(--bg-tertiary);color:var(--text)}
-.action-btn.success{background:var(--hijau-soft);color:var(--hijau-cerah);border:1px solid var(--hijau-gelap)}
-[data-theme="light"] .action-btn.success{color:#166534}
+.action-btn.success{background:var(--hijau-soft);color:var(--hijau-cerah);border:1px solid var(--hijau-cerah)}
 .action-btn.full{min-width:100%}
 
 /* ============ AFFILIATE ============ */
@@ -423,7 +602,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .affiliate-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
 .affiliate-name{font-size:14px;font-weight:800;color:var(--text);flex:1}
 .affiliate-desc{font-size:12px;color:var(--text-soft);line-height:1.6;white-space:pre-line;margin-bottom:12px}
-.affiliate-buy{display:inline-flex;align-items:center;gap:6px;background:var(--ungu);color:#0f172a;text-decoration:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800;transition:all .15s}
+.affiliate-buy{display:inline-flex;align-items:center;gap:6px;background:var(--hijau-cerah);color:#0a1628;text-decoration:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800;transition:all .15s}
 .affiliate-buy:active{transform:scale(.96)}
 
 /* ============ NEWS DETAIL ============ */
@@ -438,7 +617,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .sheet-bottom{flex-shrink:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--sheet-border);background:var(--sheet-bg);display:flex;gap:8px}
 .sheet-close{flex:1;padding:14px;border-radius:14px;border:0;background:var(--bg-tertiary);color:var(--text);font-size:14px;font-weight:800;cursor:pointer;transition:all .15s}
 .sheet-close:active{transform:scale(.98);background:var(--card-hover)}
-.sheet-share{flex:1;padding:14px;border-radius:14px;border:0;background:var(--gradient-brand);color:#0f172a;font-size:14px;font-weight:800;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 14px rgba(196,181,253,.3)}
+.sheet-share{flex:1;padding:14px;border-radius:14px;border:0;background:var(--gradient-brand);color:#0a1628;font-size:14px;font-weight:800;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 14px rgba(190,242,100,.3)}
 .sheet-share:active{transform:scale(.98);opacity:.9}
 
 /* ============ EMPTY ============ */
@@ -456,10 +635,10 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .lightbox-hint{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:11px;font-weight:600;white-space:nowrap}
 
 /* ============ TOAST ============ */
-.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--gradient-brand);color:#0f172a;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:400;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(196,181,253,.4)}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--gradient-brand);color:#0a1628;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:400;max-width:calc(100vw - 32px);text-align:center;box-shadow:0 10px 30px rgba(190,242,100,.4)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-/* ============ PWA INSTALL BANNER ============ */
+/* ============ PWA BANNER ============ */
 .pwa-banner{position:fixed;left:12px;right:12px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:85;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;display:none;align-items:center;gap:12px;box-shadow:var(--shadow-lg);max-width:520px;margin:0 auto}
 .pwa-banner.show{display:flex}
 .pwa-icon{width:40px;height:40px;border-radius:10px;background:var(--gradient-brand);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
@@ -468,7 +647,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 .pwa-sub{font-size:11px;color:var(--text-mute)}
 .pwa-actions{display:flex;gap:6px;flex-shrink:0}
 .pwa-btn{padding:8px 12px;border-radius:9px;border:0;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
-.pwa-btn.primary{background:var(--gradient-brand);color:#0f172a}
+.pwa-btn.primary{background:var(--gradient-brand);color:#0a1628}
 .pwa-btn.ghost{background:transparent;color:var(--text-mute)}
 
 .loading{text-align:center;padding:40px 15px;color:var(--text-mute);font-size:13px}
@@ -480,6 +659,9 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   .carousel-slide{aspect-ratio:16/9}
   .bottom-nav{left:50%;right:auto;width:520px;transform:translateX(-50%)}
   .banner-wrap img{max-height:220px}
+  .news-hero{aspect-ratio:21/9;min-height:340px}
+  .news-hero-title{font-size:28px}
+  .news-hero-desc{font-size:14px}
 }
 </style>
 
@@ -491,14 +673,34 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   gtag('js', new Date());
   gtag('config', 'G-90RWGEK9LY');
 </script>
+
+<!-- THEME INIT — Sebelum body render -->
+<script>
+(function initTheme(){
+  const saved = localStorage.getItem("ml_theme");
+  let theme;
+  if (saved === "dark" || saved === "light") {
+    theme = saved;
+  } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+    theme = "light";
+  } else {
+    theme = "dark";
+  }
+  document.documentElement.setAttribute("data-theme", theme);
+})();
+</script>
 </head>
 <body>
 
 <!-- APP HEADER -->
 <header class="app-header">
-  <div class="app-logo">
-    <span class="logo-emoji">🦎</span>
-    MUSIM<span>LAB</span>
+  <div class="brand">
+    <img class="brand-logo" src="assets/web-app-manifest-192x192.png" alt="Musim Lab" 
+         onerror="this.outerHTML='<div class=\'brand-logo-fallback\'>🦎</div>'">
+    <div class="brand-text">
+      <div class="brand-name">MUSIM<span class="lab-box">LAB</span></div>
+      <div class="brand-tagline">Musim berubah, kita berubah</div>
+    </div>
   </div>
   <button class="theme-toggle" id="themeToggle" aria-label="Tukar tema" title="Tukar tema">
     <span id="themeIcon">☀️</span>
@@ -512,11 +714,13 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
     <img id="bannerImg" src="" alt="Musim Lab" onclick="showToast('Selamat datang ke Musim Lab! 🦎')">
   </div>
 
-  <!-- CALENDAR -->
+  <!-- CALENDAR VIEW -->
   <section class="view active" id="viewCalendar">
-    <div class="news-ticker" id="newsTicker" style="display:none">
-      <div class="news-ticker-inner" id="newsTickerInner"></div>
-      <div class="news-dots" id="newsDots"></div>
+    
+    <!-- NEWS HERO (Ganti news ticker) -->
+    <div class="news-hero" id="newsHero" style="display:none">
+      <div class="news-hero-track" id="newsHeroTrack"></div>
+      <div class="news-hero-dots" id="newsHeroDots"></div>
     </div>
 
     <div class="filter-chip" id="filterChip" onclick="clearFilter()">
@@ -627,7 +831,6 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
       </div>
     </div>
 
-    <!-- FOOTER -->
     <footer class="site-footer">
       <div class="footer-logo">MUSIM<span>LAB</span></div>
       <div class="footer-tagline">Musim Berubah, Kita Berubah</div>
@@ -702,7 +905,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   </div>
 </nav>
 
-<!-- PWA INSTALL BANNER -->
+<!-- PWA BANNER -->
 <div class="pwa-banner" id="pwaBanner">
   <div class="pwa-icon">🦎</div>
   <div class="pwa-text">
@@ -725,24 +928,17 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
 <div class="toast" id="toast"></div>
 
-<!-- ⚠️ JANGAN TUTUP </body> DI SINI — TUNGGU BAHAGIAN 3 -->
-  <script>
+<script>
 /* =====================================================
-   MUSIM LAB — INDEX v11 (Dark Mode)
+   MUSIM LAB — v12 (Step 2: News Hero Card)
 ===================================================== */
 
 /* ============ THEME SYSTEM ============ */
-(function initTheme(){
-  const saved = localStorage.getItem("ml_theme") || "dark";
-  document.documentElement.setAttribute("data-theme", saved);
-  updateThemeUI(saved);
-})();
-
 function updateThemeUI(theme){
   const icon = document.getElementById("themeIcon");
   const meta = document.getElementById("metaThemeColor");
   if(icon) icon.textContent = theme === "dark" ? "☀️" : "🌙";
-  if(meta) meta.setAttribute("content", theme === "dark" ? "#0f172a" : "#f7f7f8");
+  if(meta) meta.setAttribute("content", theme === "dark" ? "#0a1628" : "#f7f8fa");
 }
 
 function toggleTheme(){
@@ -754,7 +950,19 @@ function toggleTheme(){
   showToast(next === "dark" ? "🌙 Dark mode" : "☀️ Light mode");
 }
 
+if (window.matchMedia) {
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    if (!localStorage.getItem("ml_theme")) {
+      const next = e.matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", next);
+      updateThemeUI(next);
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  const current = document.documentElement.getAttribute("data-theme") || "dark";
+  updateThemeUI(current);
   const btn = document.getElementById("themeToggle");
   if(btn) btn.addEventListener("click", toggleTheme);
 });
@@ -789,8 +997,10 @@ let activeCategory = "ALL";
 let activeNegeri = "ALL";
 let savedIds = JSON.parse(localStorage.getItem("ml_saved") || "[]");
 
-let newsTickerIndex = 0;
-let newsTickerTimer = null;
+let newsHeroIndex = 0;
+let newsHeroTimer = null;
+const NEWS_HERO_MAX = 5;
+const NEWS_HERO_INTERVAL = 4000;
 
 const monthNames = ["Januari","Februari","Mac","April","Mei","Jun","Julai","Ogos","September","Oktober","November","Disember"];
 const monthShort = ["JAN","FEB","MAC","APR","MEI","JUN","JUL","OGO","SEP","OKT","NOV","DIS"];
@@ -819,9 +1029,9 @@ const CATEGORIES = [
 ];
 
 const SEVERITY_MAP = {
-  "Info": { icon: "ℹ️", color: "#93c5fd" },
-  "Warning": { icon: "⚠️", color: "#fdba74" },
-  "Danger": { icon: "🚨", color: "#f9a8d4" }
+  "Info": { icon: "ℹ️", color: "#93c5fd", badgeClass: "sev-info" },
+  "Warning": { icon: "⚠️", color: "#fdba74", badgeClass: "sev-warning" },
+  "Danger": { icon: "🚨", color: "#f9a8d4", badgeClass: "sev-danger" }
 };
 function getSevInfo(s){return SEVERITY_MAP[s] || SEVERITY_MAP["Info"];}
 
@@ -960,68 +1170,155 @@ function renderBanner(){
   img.onload = () => { wrap.style.display = "block"; };
 }
 
-/* ============ NEWS TICKER ============ */
-function renderNewsTicker(){
-  const ticker = $("newsTicker");
-  const inner = $("newsTickerInner");
-  const dots = $("newsDots");
-  const active = allNews.filter(n => String(n.Status||"").toLowerCase() === "active");
-  if(!active.length){ticker.style.display = "none";return;}
-  ticker.style.display = "block";
-  inner.innerHTML = "";
-  dots.innerHTML = "";
+/* ============ NEWS HERO ============ */
+function renderNewsHero(){
+  const hero = $("newsHero");
+  const track = $("newsHeroTrack");
+  const dotsWrap = $("newsHeroDots");
+
+  const active = allNews
+    .filter(n => String(n.Status||"").toLowerCase() === "active")
+    .slice(0, NEWS_HERO_MAX);
+
+  if(!active.length){
+    hero.style.display = "none";
+    return;
+  }
+
+  hero.style.display = "block";
+  track.innerHTML = "";
+  dotsWrap.innerHTML = "";
+
   active.forEach((n, i) => {
     const sev = getSevInfo(n["Severity"]);
+    const images = parseImages(n["Image URL"]);
+    const imgSrc = images[0] || "";
+    const body = (n["Body"] || "").substring(0, 140);
+
     const slide = document.createElement("div");
-    slide.className = "news-slide" + (i === 0 ? " active" : "");
-    slide.style.setProperty("--news-color", sev.color);
+    slide.className = "news-hero-slide";
     slide.dataset.index = i;
+
+    let imgHtml;
+    if(imgSrc){
+      imgHtml = `<img src="${escapeHtml(imgSrc)}" alt="" loading="${i===0?'eager':'lazy'}"
+                   onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'news-hero-fallback\\'>${sev.icon}</div>'">`;
+    } else {
+      imgHtml = `<div class="news-hero-fallback">${sev.icon}</div>`;
+    }
+
     slide.innerHTML = `
-      <div class="news-slide-icon">${sev.icon}</div>
-      <div class="news-slide-content">
-        <div class="news-slide-title">${escapeHtml(n["Title"]||"")}</div>
-        <div class="news-slide-sub">${escapeHtml(n["Severity"]||"Info")} • Klik untuk baca</div>
+      ${imgHtml}
+      <div class="news-hero-overlay"></div>
+      <div class="news-hero-content">
+        <div class="news-hero-badge ${sev.badgeClass}">${sev.icon} Info Terkini</div>
+        <h2 class="news-hero-title">${escapeHtml(n["Title"]||"")}</h2>
+        <p class="news-hero-desc">${escapeHtml(body)}${body.length >= 140 ? "..." : ""}</p>
+        <button class="news-hero-cta" type="button">Ketahui lebih lanjut →</button>
       </div>
-      <div class="news-slide-arrow">›</div>
     `;
+
     slide.addEventListener("click", () => openNewsDetail(n["News ID"]));
-    inner.appendChild(slide);
-    const dot = document.createElement("div");
-    dot.className = "news-dot" + (i === 0 ? " active" : "");
-    dot.addEventListener("click", () => goToNewsSlide(i));
-    dots.appendChild(dot);
+    track.appendChild(slide);
+
+    const dot = document.createElement("button");
+    dot.className = "news-hero-dot" + (i === 0 ? " active" : "");
+    dot.type = "button";
+    dot.setAttribute("aria-label", `Berita ${i+1}`);
+    dot.addEventListener("click", (e) => {
+      e.stopPropagation();
+      goToNewsHero(i);
+    });
+    dotsWrap.appendChild(dot);
   });
-  dots.style.display = active.length > 1 ? "flex" : "none";
-  newsTickerIndex = 0;
-  startNewsTicker();
+
+  dotsWrap.style.display = active.length > 1 ? "flex" : "none";
+  newsHeroIndex = 0;
+  updateNewsHeroTrack();
+  startNewsHeroTicker();
+  attachNewsHeroSwipe();
 }
 
-function startNewsTicker(){
-  stopNewsTicker();
-  const active = allNews.filter(n => String(n.Status||"").toLowerCase() === "active");
-  if(active.length <= 1) return;
-  newsTickerTimer = setInterval(() => {
-    const next = (newsTickerIndex + 1) % active.length;
-    goToNewsSlide(next);
-  }, 5000);
+function updateNewsHeroTrack(){
+  const track = $("newsHeroTrack");
+  if(!track) return;
+  track.style.transform = `translateX(-${newsHeroIndex * 100}%)`;
+  const dots = $("newsHeroDots").querySelectorAll(".news-hero-dot");
+  dots.forEach((d,i) => d.classList.toggle("active", i === newsHeroIndex));
 }
-function stopNewsTicker(){if(newsTickerTimer){clearInterval(newsTickerTimer);newsTickerTimer = null;}}
 
-function goToNewsSlide(index){
-  const inner = $("newsTickerInner");
-  const slides = inner.querySelectorAll(".news-slide");
-  const dots = $("newsDots").querySelectorAll(".news-dot");
-  if(!slides.length) return;
-  slides.forEach(s => s.classList.remove("active","leaving"));
-  const current = slides[newsTickerIndex];
-  if(current && newsTickerIndex !== index){
-    current.classList.add("leaving");
-    setTimeout(() => current.classList.remove("leaving"), 600);
-  }
-  slides[index].classList.add("active");
-  dots.forEach((d,i) => d.classList.toggle("active", i === index));
-  newsTickerIndex = index;
-  startNewsTicker();
+function startNewsHeroTicker(){
+  stopNewsHeroTicker();
+  const track = $("newsHeroTrack");
+  if(!track) return;
+  const total = track.querySelectorAll(".news-hero-slide").length;
+  if(total <= 1) return;
+  newsHeroTimer = setInterval(() => {
+    newsHeroIndex = (newsHeroIndex + 1) % total;
+    updateNewsHeroTrack();
+  }, NEWS_HERO_INTERVAL);
+}
+
+function stopNewsHeroTicker(){
+  if(newsHeroTimer){ clearInterval(newsHeroTimer); newsHeroTimer = null; }
+}
+
+function goToNewsHero(index){
+  const track = $("newsHeroTrack");
+  if(!track) return;
+  const total = track.querySelectorAll(".news-hero-slide").length;
+  if(!total) return;
+  newsHeroIndex = (index + total) % total;
+  updateNewsHeroTrack();
+  startNewsHeroTicker();
+}
+
+function attachNewsHeroSwipe(){
+  const hero = $("newsHero");
+  if(!hero || hero.dataset.swipeAttached) return;
+  hero.dataset.swipeAttached = "1";
+
+  let sx = 0, sy = 0, swiped = false, tracking = false;
+
+  hero.addEventListener("touchstart", e => {
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+    swiped = false;
+    tracking = true;
+    stopNewsHeroTicker();
+  }, {passive:true});
+
+  hero.addEventListener("touchmove", e => {
+    if(!tracking) return;
+    const dx = Math.abs(e.touches[0].clientX - sx);
+    const dy = Math.abs(e.touches[0].clientY - sy);
+    if(dx > 10 || dy > 10) swiped = true;
+  }, {passive:true});
+
+  hero.addEventListener("touchend", e => {
+    if(!tracking) return;
+    tracking = false;
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    const track = $("newsHeroTrack");
+    const total = track ? track.querySelectorAll(".news-hero-slide").length : 0;
+
+    if(!swiped || total <= 1){ startNewsHeroTicker(); return; }
+
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0){ goToNewsHero(newsHeroIndex + 1); }
+      else { goToNewsHero(newsHeroIndex - 1); }
+    } else {
+      startNewsHeroTicker();
+    }
+  }, {passive:true});
+
+  hero.addEventListener("click", e => {
+    if(swiped){
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }, true);
 }
 
 /* ============ NEWS DETAIL ============ */
@@ -1346,52 +1643,31 @@ function openFullDetail(id){
 async function loadEventPreparation(eventId, containerId){
   const container = $(containerId);
   if(!container) return;
-
   const preloaded = allEventItems.filter(m => String(m["Event ID"]) === String(eventId));
   if(preloaded.length){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds
-      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
-      .filter(Boolean);
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(selectedItems.length){
       container.innerHTML = renderPreparationCards(selectedItems);
-      console.log(`[Instant] Event ${eventId} — ${selectedItems.length} items`);
       return;
     }
   }
-
   container.innerHTML = renderSkeletonPrep();
-
   const timeoutId = setTimeout(() => {
-    if(container.querySelector(".skeleton-card")){
-      console.warn(`[Timeout] Event ${eventId} — API lambat`);
-      container.innerHTML = "";
-    }
+    if(container.querySelector(".skeleton-card")) container.innerHTML = "";
   }, 3000);
-
   try{
     const r = await fetch(`${API_URL}?action=getEventItems&eventId=${encodeURIComponent(eventId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     clearTimeout(timeoutId);
-
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    if(!mappings.length){ 
-      container.innerHTML = ""; 
-      console.log(`[Empty] Event ${eventId}`);
-      return; 
-    }
-
+    if(!mappings.length){ container.innerHTML = ""; return; }
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds
-      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
-      .filter(Boolean);
-
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length){ container.innerHTML = ""; return; }
     container.innerHTML = renderPreparationCards(selectedItems);
-    console.log(`[Fallback] Event ${eventId} — ${selectedItems.length} items`);
   }catch(e){
     clearTimeout(timeoutId);
-    console.error("event preparation err", e);
     container.innerHTML = "";
   }
 }
@@ -1399,47 +1675,31 @@ async function loadEventPreparation(eventId, containerId){
 async function loadSeasonPreparation(seasonId, containerId){
   const container = $(containerId);
   if(!container) return;
-
   const preloaded = allSeasonItems.filter(m => String(m["Season ID"]) === String(seasonId));
   if(preloaded.length){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds
-      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
-      .filter(Boolean);
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(selectedItems.length){
       container.innerHTML = renderPreparationCards(selectedItems);
-      console.log(`[Instant] Season ${seasonId} — ${selectedItems.length} items`);
       return;
     }
   }
-
   container.innerHTML = renderSkeletonPrep();
-
   const timeoutId = setTimeout(() => {
-    if(container.querySelector(".skeleton-card")){
-      container.innerHTML = "";
-    }
+    if(container.querySelector(".skeleton-card")) container.innerHTML = "";
   }, 3000);
-
   try{
     const r = await fetch(`${API_URL}?action=getSeasonItems&seasonId=${encodeURIComponent(seasonId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     clearTimeout(timeoutId);
-
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
     if(!mappings.length){ container.innerHTML = ""; return; }
-
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds
-      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
-      .filter(Boolean);
-
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length){ container.innerHTML = ""; return; }
     container.innerHTML = renderPreparationCards(selectedItems);
-    console.log(`[Fallback] Season ${seasonId} — ${selectedItems.length} items`);
   }catch(e){
     clearTimeout(timeoutId);
-    console.error("season prep err", e);
     container.innerHTML = "";
   }
 }
@@ -1447,52 +1707,35 @@ async function loadSeasonPreparation(seasonId, containerId){
 async function loadNewsPreparation(newsId, containerId){
   const container = $(containerId);
   if(!container) return;
-
   const preloaded = allNewsItems.filter(m => String(m["News ID"]) === String(newsId));
   if(preloaded.length){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds
-      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
-      .filter(Boolean);
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(selectedItems.length){
       container.innerHTML = renderPreparationCards(selectedItems);
-      console.log(`[Instant] News ${newsId} — ${selectedItems.length} items`);
       return;
     }
   }
-
   container.innerHTML = renderSkeletonPrep();
-
   const timeoutId = setTimeout(() => {
-    if(container.querySelector(".skeleton-card")){
-      container.innerHTML = "";
-    }
+    if(container.querySelector(".skeleton-card")) container.innerHTML = "";
   }, 3000);
-
   try{
     const r = await fetch(`${API_URL}?action=getNewsItems&newsId=${encodeURIComponent(newsId)}&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     clearTimeout(timeoutId);
-
     const mappings = (res && res.success && Array.isArray(res.data)) ? res.data : [];
     if(!mappings.length){ container.innerHTML = ""; return; }
-
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
-    const selectedItems = itemIds
-      .map(id => allItems.find(it => String(it["Item ID"]) === String(id)))
-      .filter(Boolean);
-
+    const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length){ container.innerHTML = ""; return; }
     container.innerHTML = renderPreparationCards(selectedItems);
-    console.log(`[Fallback] News ${newsId} — ${selectedItems.length} items`);
   }catch(e){
     clearTimeout(timeoutId);
-    console.error("news prep err", e);
     container.innerHTML = "";
   }
 }
 
-/* ============ RENDER HELPERS ============ */
 function renderSkeletonPrep(){
   return `
     <div class="affiliate-section">
@@ -1782,7 +2025,7 @@ function openSheet(id){
   document.body.classList.add("no-scroll");
   const sc = $(id).querySelector(".sheet-scroll");
   if(sc) sc.scrollTop = 0;
-  if(id === "newsSheet") stopNewsTicker();
+  if(id === "newsSheet") stopNewsHeroTicker();
 }
 function closeSheet(id){
   if(id) $(id).classList.remove("open");
@@ -1791,7 +2034,7 @@ function closeSheet(id){
     $("sheetOverlay").classList.remove("open");
     document.body.classList.remove("no-scroll");
     openSheetId = null;
-    startNewsTicker();
+    startNewsHeroTicker();
   }
 }
 $("sheetOverlay").addEventListener("click", () => closeSheet());
@@ -1894,7 +2137,7 @@ function showAds(){
         <li>🛍️ Affiliate partnership</li>
         <li>📰 Branded content</li>
       </ul>
-      <p style="margin-bottom:12px">Hubungi kami: <a href="mailto:hello@musimlab.com" style="color:var(--ungu);font-weight:700;text-decoration:none">hello@musimlab.com</a></p>
+      <p style="margin-bottom:12px">Hubungi kami: <a href="mailto:hello@musimlab.com" style="color:var(--hijau-cerah);font-weight:700;text-decoration:none">hello@musimlab.com</a></p>
       <p style="color:var(--text-mute);font-size:12px;margin-top:16px"><strong>Tanpa anda, siapa kami.</strong></p>
     </div>
   `;
@@ -1970,7 +2213,7 @@ async function loadNews(){
     const r = await fetch(`${API_URL}?action=getNews&token=${API_TOKEN}&t=${Date.now()}`);
     const res = await r.json();
     allNews = (res && res.success && Array.isArray(res.data)) ? res.data : [];
-    renderNewsTicker();
+    renderNewsHero();
   }catch(e){console.error("news err", e)}
 }
 
@@ -1979,72 +2222,26 @@ async function loadItems(){
     const r1 = await fetch(`${API_URL}?action=getItems&token=${API_TOKEN}&t=${Date.now()}`);
     const res1 = await r1.json();
     allItems = (res1 && res1.success && Array.isArray(res1.data)) ? res1.data : [];
-
     try{
       const r2 = await fetch(`${API_URL}?action=getAllEventItems&token=${API_TOKEN}&t=${Date.now()}`);
       const res2 = await r2.json();
       allEventItems = (res2 && res2.success && Array.isArray(res2.data)) ? res2.data : [];
-      console.log(`[Preload] ${allEventItems.length} event-item mappings`);
-    }catch(e){
-      console.warn("Preload event items failed:", e);
-      allEventItems = [];
-    }
-
+    }catch(e){ allEventItems = []; }
     try{
       const r3 = await fetch(`${API_URL}?action=getAllSeasonItems&token=${API_TOKEN}&t=${Date.now()}`);
       const res3 = await r3.json();
       allSeasonItems = (res3 && res3.success && Array.isArray(res3.data)) ? res3.data : [];
-      console.log(`[Preload] ${allSeasonItems.length} season-item mappings`);
-    }catch(e){
-      console.warn("Preload season items failed:", e);
-      allSeasonItems = [];
-    }
-
+    }catch(e){ allSeasonItems = []; }
     try{
       const r4 = await fetch(`${API_URL}?action=getAllNewsItems&token=${API_TOKEN}&t=${Date.now()}`);
       const res4 = await r4.json();
       allNewsItems = (res4 && res4.success && Array.isArray(res4.data)) ? res4.data : [];
-      console.log(`[Preload] ${allNewsItems.length} news-item mappings`);
-    }catch(e){
-      console.warn("Preload news items failed:", e);
-      allNewsItems = [];
-    }
+    }catch(e){ allNewsItems = []; }
   }catch(e){
     console.error("items err", e);
     allItems = [];
   }
 }
-
-/* ============ NEWS TICKER SWIPE ============ */
-(function(){
-  const ticker = $("newsTicker");
-  if(!ticker) return;
-  let sx = 0, sy = 0, swiped = false;
-  ticker.addEventListener("touchstart", e => {
-    sx = e.touches[0].clientX;
-    sy = e.touches[0].clientY;
-    swiped = false;
-    stopNewsTicker();
-  }, {passive:true});
-  ticker.addEventListener("touchmove", e => {
-    const dx = Math.abs(e.touches[0].clientX - sx);
-    const dy = Math.abs(e.touches[0].clientY - sy);
-    if(dx > 10 || dy > 10) swiped = true;
-  }, {passive:true});
-  ticker.addEventListener("touchend", e => {
-    const dx = e.changedTouches[0].clientX - sx;
-    const dy = e.changedTouches[0].clientY - sy;
-    const total = allNews.filter(n => String(n.Status||"").toLowerCase() === "active").length;
-    if(!swiped || total <= 1){ startNewsTicker(); return; }
-    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)){
-      if(dx < 0){ goToNewsSlide((newsTickerIndex + 1) % total); }
-      else { goToNewsSlide((newsTickerIndex - 1 + total) % total); }
-    } else { startNewsTicker(); }
-  }, {passive:true});
-  ticker.addEventListener("click", e => {
-    if(swiped){ e.stopPropagation(); e.preventDefault(); }
-  }, true);
-})();
 
 /* ============ DEEP LINK ============ */
 function checkDeepLink(){
@@ -2060,7 +2257,6 @@ function checkDeepLink(){
 let deferredPrompt = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
-  console.log("[PWA] beforeinstallprompt fired!");
   e.preventDefault();
   deferredPrompt = e;
   if(!localStorage.getItem("pwa_dismissed")){
@@ -2077,7 +2273,6 @@ setTimeout(() => {
 }, 15000);
 
 window.addEventListener("appinstalled", () => {
-  console.log("[PWA] App installed!");
   $("pwaBanner").classList.remove("show");
   localStorage.setItem("pwa_installed", "1");
   deferredPrompt = null;
@@ -2127,26 +2322,16 @@ Promise.allSettled([
   loadSeasons(),
   loadNews(),
   loadItems()
-]).then((results) => {
+]).then(() => {
   console.log("[Init] Semua data loaded");
-  results.forEach((r, i) => {
-    if(r.status === "rejected"){
-      const names = ["events","holidays","seasons","news","items"];
-      console.warn(`[Init] Gagal load ${names[i]}:`, r.reason);
-    }
-  });
 });
 
 /* ============ SERVICE WORKER ============ */
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/musimlab/service-worker.js")
-      .then((reg) => {
-        console.log("[PWA] Service Worker registered:", reg.scope);
-      })
-      .catch((err) => {
-        console.warn("[PWA] Service Worker failed:", err);
-      });
+      .then((reg) => console.log("[PWA] Service Worker registered:", reg.scope))
+      .catch((err) => console.warn("[PWA] Service Worker failed:", err));
   });
 }
 </script>
