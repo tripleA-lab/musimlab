@@ -99,6 +99,20 @@
   --skeleton-shine: #1e2f47;
 }
 
+/* ============ SPLIT TITLE (Mobile only) ============ */
+.split-title-mobile{
+  display:none;
+  margin:0 4px 8px;
+}
+
+@media (max-width:599px){
+  .split-title-mobile{
+    display:block;
+    margin-top:4px;
+  }
+}
+
+   
 /* ============ THEME: LIGHT ============ */
 :root[data-theme="light"] {
   --bg: #f7f8fa;
@@ -936,70 +950,41 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 
     <!-- 3. KALENDAR SPLIT -->
     <div id="calendarSection">
-      <div class="section-header">
-        <h2 class="section-title"><span class="section-icon">📅</span> Kalendar</h2>
-      </div>
+  <div class="section-header">
+    <h2 class="section-title"><span class="section-icon">📅</span> Kalendar</h2>
+  </div>
 
-      <div class="filter-chip" id="filterChip" onclick="clearFilter()">
-        <span id="filterChipText">Semua</span>
-        <span class="x">×</span>
-      </div>
+  <div class="filter-chip" id="filterChip" onclick="clearFilter()">
+    <span id="filterChipText">Semua</span>
+    <span class="x">×</span>
+  </div>
 
-      <div class="calendar-split">
-        <!-- KIRI: KALENDAR -->
-        <div class="calendar-main" id="calendarCard">
-          <div class="month-picker-minimal">
-            <button id="prevMonth" aria-label="Sebelum">‹</button>
-            <div class="month-label" id="monthName">—</div>
-            <button id="nextMonth" aria-label="Seterusnya">›</button>
-          </div>
-          <div class="weekdays-mini">
-            <div class="weekday-mini">Ahd</div>
-            <div class="weekday-mini">Isn</div>
-            <div class="weekday-mini">Sel</div>
-            <div class="weekday-mini">Rab</div>
-            <div class="weekday-mini">Kha</div>
-            <div class="weekday-mini">Jum</div>
-            <div class="weekday-mini">Sab</div>
-          </div>
-          <div class="calendar-grid-mini" id="calendarGrid">
-            <div class="skeleton-calendar" style="grid-column:1/-1">
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div><div class="skeleton-day"></div>
-              <div class="skeleton-day"></div><div class="skeleton-day"></div>
-            </div>
+  <div class="calendar-split">
+    <!-- KIRI: KALENDAR -->
+    <div class="calendar-main" id="calendarCard">
+      ...
+    </div>
+
+    <!-- KANAN: PREVIEW -->
+    <div>
+      <!-- ✨ TAJUK BARU -->
+      <div class="split-title-mobile">
+        <h2 class="section-title"><span class="section-icon">🔍</span> Preview Next Month!</h2>
+      </div>
+      
+      <div class="preview-panel">
+        <div class="preview-header">
+          <div class="preview-header-icon" id="previewIcon">📅</div>
+          <div class="preview-header-text">
+            <div class="preview-header-label" id="previewLabel">Bulan Depan</div>
+            <div class="preview-header-title" id="previewTitle">—</div>
           </div>
         </div>
-
-        <!-- KANAN: PREVIEW -->
-        <div class="preview-panel">
-          <div class="preview-header">
-            <div class="preview-header-icon" id="previewIcon">📅</div>
-            <div class="preview-header-text">
-              <div class="preview-header-label" id="previewLabel">Bulan Depan</div>
-              <div class="preview-header-title" id="previewTitle">—</div>
-            </div>
-          </div>
-          <div class="preview-list" id="previewList">
-            <div class="skeleton-line" style="width:80%;height:12px;margin:12px"></div>
-            <div class="skeleton-line" style="width:60%;height:12px;margin:12px"></div>
-            <div class="skeleton-line" style="width:70%;height:12px;margin:12px"></div>
-          </div>
-          <div class="preview-see-all" id="previewSeeAll" onclick="openAllUpcoming()">
-            Lihat semua →
-          </div>
-        </div>
+        ...
       </div>
     </div>
+  </div>
+</div>
   </section>
 
   <!-- EXPLORE -->
