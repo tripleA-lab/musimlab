@@ -98,7 +98,7 @@
   --skeleton-base: #142135;
   --skeleton-shine: #1e2f47;
 }
- 
+
 /* ============ SPLIT TITLE (Mobile only) ============ */
 .split-title-mobile{
   display:none;
@@ -858,30 +858,21 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   .upcoming-title{font-size:13px}
 }
 
-/* ============ TABLET (600px+) ============ */
 @media (min-width:600px){
   .calendar-split{
     grid-template-columns:minmax(0, 1.4fr) minmax(0, 1fr);
     gap:12px;
   }
-  .split-title-mobile{
-    display:none;
-  }
+
+
+   
+@media (min-width:700px){
+  ...
+  .calendar-split{grid-template-columns:minmax(0, 1.55fr) minmax(0, 1fr);gap:14px}
+  ...
 }
 
-/* ============ DESKTOP (700px+) ============ */
-@media (min-width:700px){
-  .bottom-sheet{left:50%;right:auto;width:560px;transform:translate(-50%,110%)}
-  .bottom-sheet.open{transform:translate(-50%,0)}
-  .carousel-slide{aspect-ratio:16/9}
-  .bottom-nav{left:50%;right:auto;width:520px;transform:translateX(-50%)}
-  .news-hero{aspect-ratio:21/9;min-height:340px}
-  .news-hero-title{font-size:28px}
-  .news-hero-desc{font-size:14px}
-  .upcoming-card{flex:0 0 calc((100% - 36px) / 3.3);min-width:220px;max-width:260px}
-  .calendar-split{grid-template-columns:minmax(0, 1.55fr) minmax(0, 1fr);gap:14px}
-  .day-number-mini{font-size:13px}
-  .weekday-mini{font-size:10px}
+
 }
 
 
