@@ -1351,6 +1351,19 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   </div>
 </div>
 
+   <!-- PREP SHEET (Semua Item Persediaan) -->
+<div class="bottom-sheet" id="prepSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-scroll">
+    <div class="sheet-heading">🛍️ Persediaan & Beli</div>
+    <div class="sheet-heading-sub">Semua barang yang kami cadangkan</div>
+    <div id="prepSheetContent" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"></div>
+  </div>
+  <div class="sheet-bottom">
+    <button class="sheet-close" onclick="closeSheet('prepSheet')">✕ Tutup</button>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav class="bottom-nav">
   <div class="nav-inner">
@@ -2282,6 +2295,70 @@ function openFullDetail(id){
   loadEventPreparation(id, "affiliateFull_" + id);
 }
 
+/* ============ PREP CAROUSEL RENDERER ============ */
+function renderPreparationCards(selectedItems){
+  if(!selectedItems || !selectedItems.length) return "";
+
+  const cards = selectedItems.map(it => {
+    const icon = it["Icon"] || "🛍️";
+    const name = it["Name"] || "";
+    const desc = it["Description"] || "";
+    const url = it["URL"] || "";
+    const price = it["Price"] || "";
+    const imageUrl = it["Image URL"] || "";
+
+    // Imej: cuba imej asal → fallback emoji
+    let imgHtml;
+    if(imageUrl){
+      const directImg = driveToDirect(imageUrl);
+      imgHtml = `<img src="${escapeHtml(directImg)}" alt="${escapeHtml(name)}" loading="lazy"
+                   onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'prep-img-fallback\\'>${icon}</div>'">`;
+    } else {
+      imgHtml = `<div class="prep-img-fallback">${icon}</div>`;
+    }
+
+    // Harga: RM prefix auto
+    const priceBadge = price ? `<div class="prep-price-badge">RM ${escapeHtml(price)}</div>` : "";
+
+    // CTA: kalau ada URL → link, kalau tak → disable
+    const ctaHtml = url
+      ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="prep-cta" onclick="event.stopPropagation()">🛒 Beli Sekarang</a>`
+      : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed">Tiada Link</div>`;
+
+    // Klik card → buka URL
+    const cardClick = url ? `onclick="window.open('${escapeHtml(url)}', '_blank')"` : "";
+
+    return `
+      <div class="prep-card" ${cardClick}>
+        <div class="prep-img-wrap">
+          ${imgHtml}
+          ${priceBadge}
+        </div>
+        <div class="prep-body">
+          <div class="prep-name">${escapeHtml(icon)} ${escapeHtml(name)}</div>
+          ${desc ? `<div class="prep-desc">${escapeHtml(desc)}</div>` : ""}
+          ${ctaHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="prep-section">
+      <div class="prep-header">
+        <div class="prep-title">🛍️ Persediaan & Beli</div>
+        <div class="prep-see-all" onclick="openAllPrepItems()">Lihat semua →</div>
+      </div>
+      <div class="prep-subtitle">Jom siapkan barang-barang ni!</div>
+      <div class="prep-scroll">
+        ${cards}
+      </div>
+    </div>
+  `;
+}
+
+
+      
 /* ============ PREPARATION LOADERS ============ */
 async function loadEventPreparation(eventId, containerId){
   const container = $(containerId);
@@ -2290,8 +2367,11 @@ async function loadEventPreparation(eventId, containerId){
   if(preloaded.length){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
-    if(selectedItems.length){
-      container.innerHTML = renderPreparationCards(selectedItems);
+       if(selectedItems.length){
+      allPrepItems = selectedItems;
+        allPrepItems = selectedItems;
+    container.innerHTML = renderPreparationCards(selectedItems);
+    console.log(`[Fallback] Event ${eventId} — ${selectedItems.length} items`);
       return;
     }
   }
@@ -2315,7 +2395,7 @@ async function loadEventPreparation(eventId, containerId){
   }
 }
 
-async function loadSeasonPreparation(seasonId, containerId){
+      async function loadSeasonPreparation(seasonId, containerId){
   const container = $(containerId);
   if(!container) return;
   const preloaded = allSeasonItems.filter(m => String(m["Season ID"]) === String(seasonId));
@@ -2323,6 +2403,7 @@ async function loadSeasonPreparation(seasonId, containerId){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(selectedItems.length){
+      allPrepItems = selectedItems;                        // ← TAMBAH
       container.innerHTML = renderPreparationCards(selectedItems);
       return;
     }
@@ -2340,12 +2421,14 @@ async function loadSeasonPreparation(seasonId, containerId){
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length){ container.innerHTML = ""; return; }
+    allPrepItems = selectedItems;                          // ← TAMBAH
     container.innerHTML = renderPreparationCards(selectedItems);
   }catch(e){
     clearTimeout(timeoutId);
     container.innerHTML = "";
   }
 }
+
 
 async function loadNewsPreparation(newsId, containerId){
   const container = $(containerId);
@@ -2355,6 +2438,7 @@ async function loadNewsPreparation(newsId, containerId){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(selectedItems.length){
+      allPrepItems = selectedItems;                        // ← TAMBAH
       container.innerHTML = renderPreparationCards(selectedItems);
       return;
     }
@@ -2372,11 +2456,66 @@ async function loadNewsPreparation(newsId, containerId){
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length){ container.innerHTML = ""; return; }
+    allPrepItems = selectedItems;                          // ← TAMBAH
     container.innerHTML = renderPreparationCards(selectedItems);
   }catch(e){
     clearTimeout(timeoutId);
     container.innerHTML = "";
   }
+}
+
+      /* ============ LIHAT SEMUA ITEMS (Sheet) ============ */
+let allPrepItems = [];
+
+function openAllPrepItems(){
+  if(!allPrepItems.length){
+    showToast("Takde item setakat ni");
+    return;
+  }
+
+  // Populate sheet
+  const container = document.getElementById("prepSheetContent");
+  if(!container) return;
+
+  container.innerHTML = allPrepItems.map(it => {
+    const icon = it["Icon"] || "🛍️";
+    const name = it["Name"] || "";
+    const desc = it["Description"] || "";
+    const url = it["URL"] || "";
+    const price = it["Price"] || "";
+    const imageUrl = it["Image URL"] || "";
+
+    let imgHtml;
+    if(imageUrl){
+      const directImg = driveToDirect(imageUrl);
+      imgHtml = `<img src="${escapeHtml(directImg)}" alt="${escapeHtml(name)}" loading="lazy"
+                   onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'prep-img-fallback\\'>${icon}</div>'">`;
+    } else {
+      imgHtml = `<div class="prep-img-fallback">${icon}</div>`;
+    }
+
+    const priceBadge = price ? `<div class="prep-price-badge">RM ${escapeHtml(price)}</div>` : "";
+    const ctaHtml = url
+      ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="prep-cta" onclick="event.stopPropagation()">🛒 Beli Sekarang</a>`
+      : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed">Tiada Link</div>`;
+    const cardClick = url ? `onclick="window.open('${escapeHtml(url)}', '_blank')"` : "";
+
+    return `
+      <div class="prep-card" style="flex:0 0 calc((100% - 12px) / 2);max-width:none;min-width:0" ${cardClick}>
+        <div class="prep-img-wrap">
+          ${imgHtml}
+          ${priceBadge}
+        </div>
+        <div class="prep-body">
+          <div class="prep-name">${escapeHtml(icon)} ${escapeHtml(name)}</div>
+          ${desc ? `<div class="prep-desc">${escapeHtml(desc)}</div>` : ""}
+          ${ctaHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  openSheet("prepSheet");
 }
 
 function renderSkeletonPrep(){
@@ -2393,28 +2532,7 @@ function renderSkeletonPrep(){
   `;
 }
 
-function renderPreparationCards(selectedItems){
-  return `
-    <div class="affiliate-section">
-      <div class="affiliate-title">🛍️ Persediaan & Beli</div>
-      ${selectedItems.map(it => {
-        const icon = it["Icon"] || "🛍️";
-        const name = it["Name"] || "";
-        const desc = it["Description"] || "";
-        const url = it["URL"] || "";
-        return `
-          <div class="affiliate-card">
-            <div class="affiliate-card-head">
-              <div class="affiliate-name">${escapeHtml(icon)} ${escapeHtml(name)}</div>
-            </div>
-            ${desc ? `<div class="affiliate-desc">${escapeHtml(desc)}</div>` : ""}
-            ${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="affiliate-buy">🛒 Beli Sekarang →</a>` : ""}
-          </div>
-        `;
-      }).join("")}
-    </div>
-  `;
-}
+
 
 /* ============ SAVE EVENT ============ */
 function toggleSave(id, btn){
