@@ -534,11 +534,22 @@ textarea{min-height:110px;resize:vertical}
       <small>💡 Imej produk. Guna Google Drive atau link terus.</small>
     </div>
     <div class="field full">
-      <label>Affiliate URL</label>
-      <input type="url" id="itemUrl" placeholder="https://shopee.com/...">
-    </div>
-    <div class="field">
-      <label>Harga (RM)</label>
+     <div class="field full">
+  <label>Image URL (Google Drive)</label>
+  <input type="url" id="itemImageUrl" placeholder="https://drive.google.com/file/d/...">
+  <small>💡 Imej produk. Guna Google Drive atau link terus.</small>
+</div>
+<div class="field full">
+  <label>Affiliate URL</label>
+  <input type="url" id="itemUrl" placeholder="https://shopee.com/...">
+</div>
+<div class="field">
+  <label>Harga (RM)</label>
+  <input type="text" id="itemPrice" placeholder="25.90">
+  <small>Nombor sahaja. Contoh: 25, 25.90, 150</small>
+</div>
+<div class="field">
+  <label>Status</label>
       <input type="text" id="itemPrice" placeholder="25.90">
       <small>Contoh: 25, 25.90, 150</small>
     </div>
@@ -649,6 +660,43 @@ function showMessage(text){
   setTimeout(() => el.classList.remove("show"), 2500);
 }
 
+  async function saveItem(){
+  if(isSaving) return;
+  setSaving(true);
+
+  const name = document.getElementById("itemName").value.trim();
+  const url = document.getElementById("itemUrl").value.trim();
+
+  if(!name){showMessage("Nama item diperlukan.");setSaving(false);return;}
+  if(!url){showMessage("URL diperlukan.");setSaving(false);return;}
+
+  const data = {
+    itemId: currentItemId,
+    icon: document.getElementById("itemIcon").value.trim() || "🛍️",
+    name: name,
+    description: document.getElementById("itemDescription").value,
+    imageUrl: document.getElementById("itemImageUrl").value.trim(),
+    url: url,
+    price: document.getElementById("itemPrice").value.trim(),
+    status: document.getElementById("itemStatus").value
+  };
+  const action = currentItemId ? "updateItem" : "addItem";
+
+  try{
+    const result = await apiPost(action, data);
+    if(!result.success){showMessage(result.message || "Gagal.");setSaving(false);return;}
+    showMessage(result.message || "Item berjaya disimpan.");
+    closeItemForm();
+    await loadItems();
+  }catch(e){
+    console.error(e);
+    showMessage("Error simpan item.");
+  }
+  setSaving(false);
+}
+
+
+  
 /*************************************************
  * TABS
  *************************************************/
@@ -863,15 +911,17 @@ function renderItems(){
     const name = it["Name"] || "";
     const desc = it["Description"] || "";
     const url = it["URL"] || "";
+    const price = it["Price"] || "";
     return `
       <div class="item-card ${isActive ? "" : "inactive"}">
         <div class="item-left">
           <div class="item-icon-box">${escapeHtml(icon)}</div>
           <div class="item-details">
             <div class="item-title">
-              ${escapeHtml(name)}
-              ${isActive ? `<span class="badge badge-status">Active</span>` : `<span class="badge badge-off">Inactive</span>`}
-            </div>
+  ${escapeHtml(name)}
+  ${price ? `<span class="badge" style="background:#dcfce7;color:#166534">RM ${escapeHtml(price)}</span>` : ""}
+  ${isActive ? `<span class="badge badge-status">Active</span>` : `<span class="badge badge-off">Inactive</span>`}
+</div>
             ${desc ? `<div class="item-desc">${escapeHtml(desc)}</div>` : ""}
             ${url ? `<div class="item-url">${escapeHtml(url)}</div>` : ""}
           </div>
@@ -889,19 +939,23 @@ function renderItems(){
   }).join("");
 }
 
-function openAddItemForm(){
-  currentItemId = null;
-  document.getElementById("itemFormTitle").textContent = "Add Item";
-  document.getElementById("itemIcon").value = "";
-  document.getElementById("itemName").value = "";
-  document.getElementById("itemDescription").value = "";
-  document.getElementById("itemImageUrl").value = "";
-  document.getElementById("itemUrl").value = "";
-  document.getElementById("itemPrice").value = "";
-  document.getElementById("itemStatus").value = "Active";
+
+  function editItem(itemId){
+  const it = items.find(x => String(x["Item ID"]) === String(itemId));
+  if(!it) return;
+  currentItemId = it["Item ID"];
+  document.getElementById("itemFormTitle").textContent = "Edit Item";
+  document.getElementById("itemIcon").value = it["Icon"] || "";
+  document.getElementById("itemName").value = it["Name"] || "";
+  document.getElementById("itemDescription").value = it["Description"] || "";
+  document.getElementById("itemImageUrl").value = it["Image URL"] || "";   // ← TAMBAH
+  document.getElementById("itemUrl").value = it["URL"] || "";
+  document.getElementById("itemPrice").value = it["Price"] || "";           // ← TAMBAH
+  document.getElementById("itemStatus").value = it["Status"] || "Active";
   document.getElementById("itemsDashboard").classList.add("hidden");
   document.getElementById("itemFormView").classList.add("active");
 }
+
 
 function closeItemForm(){
   document.getElementById("itemFormView").classList.remove("active");
