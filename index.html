@@ -1224,6 +1224,105 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   .prep-cta{font-size:11.5px;padding:10px 12px}
 }
 
+/* ============ PREP DETAIL POPUP ============ */
+.prep-detail-img{
+  position:relative;
+  margin:-8px -16px 20px;
+  aspect-ratio:1/1;
+  max-height:380px;
+  background:var(--bg-tertiary);
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.prep-detail-img img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;
+}
+.prep-detail-img .prep-img-fallback{
+  font-size:120px;
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg, var(--bg-tertiary), var(--border));
+}
+
+.prep-detail-price{
+  position:absolute;
+  bottom:16px;left:16px;
+  background:var(--hijau-cerah);
+  color:#0a1628;
+  padding:10px 18px;
+  border-radius:999px;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:-.3px;
+  box-shadow:0 8px 20px rgba(0,0,0,.35);
+}
+
+.prep-detail-body{
+  padding:0 4px;
+}
+.prep-detail-name{
+  font-size:22px;
+  font-weight:900;
+  line-height:1.25;
+  letter-spacing:-.4px;
+  color:var(--text);
+  margin:0 0 12px;
+}
+.prep-detail-desc{
+  font-size:14px;
+  line-height:1.7;
+  color:var(--text-soft);
+  white-space:pre-line;
+  margin-bottom:24px;
+}
+.prep-detail-cta{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:var(--hijau-cerah);
+  color:#0a1628;
+  text-decoration:none;
+  padding:16px 20px;
+  border-radius:14px;
+  font-size:15px;
+  font-weight:800;
+  transition:all .2s;
+  width:100%;
+  box-sizing:border-box;
+  box-shadow:0 4px 14px rgba(190,242,100,.3);
+}
+.prep-detail-cta:active{
+  transform:scale(.97);
+  opacity:.95;
+}
+.prep-detail-cta.disabled{
+  background:var(--bg-tertiary);
+  color:var(--text-mute);
+  cursor:not-allowed;
+  box-shadow:none;
+}
+
+@media (min-width:700px){
+  .prep-detail-img{
+    max-height:440px;
+  }
+  .prep-detail-price{
+    font-size:20px;
+    padding:12px 22px;
+  }
+  .prep-detail-name{
+    font-size:26px;
+  }
+  .prep-detail-cta{
+    font-size:16px;
+    padding:18px 24px;
+  }
+}
+   
    
 /* ============ RESPONSIVE ============ */
 @media (max-width:420px){
@@ -1564,6 +1663,15 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   </div>
 </div>
 
+<!-- PREP DETAIL SHEET (Popup Detail Item) -->
+<div class="bottom-sheet" id="prepDetailSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-scroll" id="prepDetailContent"></div>
+  <div class="sheet-bottom">
+    <button class="sheet-close" onclick="closeSheet('prepDetailSheet')">✕ Tutup</button>
+  </div>
+</div>
+   
 <!-- NAV -->
 <nav class="bottom-nav">
   <div class="nav-inner">
@@ -2525,8 +2633,14 @@ function renderPreparationCards(selectedItems){
       ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="prep-cta" onclick="event.stopPropagation()">🛒 Beli Sekarang</a>`
       : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed">Tiada Link</div>`;
 
-    // Klik card → buka URL
-    const cardClick = url ? `onclick="window.open('${escapeHtml(url)}', '_blank')"` : "";
+        // Klik card → buka popup detail
+    const itemId = it["Item ID"] || "";
+    const cardClick = itemId ? `onclick="openPrepDetail('${escapeHtml(itemId)}')"` : "";
+
+    // CTA → direct Shopee (stopPropagation supaya tak trigger card click)
+    const ctaHtml = url
+      ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="prep-cta" onclick="event.stopPropagation()">🛒 Beli Sekarang</a>`
+      : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed" onclick="event.stopPropagation()">Tiada Link</div>`;
 
     return `
       <div class="prep-card" ${cardClick}>
@@ -2666,6 +2780,56 @@ async function loadNewsPreparation(newsId, containerId){
   }
 }
 
+/* ============ PREP DETAIL POPUP ============ */
+function openPrepDetail(itemId){
+  const it = allPrepItems.find(x => String(x["Item ID"]) === String(itemId));
+  if(!it){
+    showToast("Item tak dijumpai");
+    return;
+  }
+
+  const icon = it["Icon"] || "🛍️";
+  const name = it["Name"] || "";
+  const desc = it["Description"] || "";
+  const url = it["URL"] || "";
+  const price = it["Price"] || "";
+  const imageUrl = it["Image URL"] || "";
+
+  // Imej
+  let imgHtml;
+  if(imageUrl){
+    const directImg = driveToDirect(imageUrl);
+    imgHtml = `<img src="${escapeHtml(directImg)}" alt="${escapeHtml(name)}" loading="lazy"
+                 onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'prep-img-fallback\\'>${icon}</div>'">`;
+  } else {
+    imgHtml = `<div class="prep-img-fallback">${icon}</div>`;
+  }
+
+  // Harga badge
+  const priceBadge = price ? `<div class="prep-detail-price">RM ${escapeHtml(price)}</div>` : "";
+
+  // CTA
+  const ctaHtml = url
+    ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="prep-detail-cta">🛒 Beli Sekarang →</a>`
+    : `<div class="prep-detail-cta disabled">Tiada Link</div>`;
+
+  // Build HTML
+  const html = `
+    <div class="prep-detail-img">
+      ${imgHtml}
+      ${priceBadge}
+    </div>
+    <div class="prep-detail-body">
+      <h2 class="prep-detail-name">${escapeHtml(icon)} ${escapeHtml(name)}</h2>
+      ${desc ? `<div class="prep-detail-desc">${escapeHtml(desc)}</div>` : ""}
+      ${ctaHtml}
+    </div>
+  `;
+
+  $("prepDetailContent").innerHTML = html;
+  openSheet("prepDetailSheet");
+}
+      
       /* ============ LIHAT SEMUA ITEMS (Sheet) ============ */
 let allPrepItems = [];
 
@@ -2697,14 +2861,14 @@ function openAllPrepItems(){
     }
 
     const priceBadge = price ? `<div class="prep-price-badge">RM ${escapeHtml(price)}</div>` : "";
+       const itemId = it["Item ID"] || "";
     const ctaHtml = url
       ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="prep-cta" onclick="event.stopPropagation()">🛒 Beli Sekarang</a>`
-      : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed">Tiada Link</div>`;
-    const cardClick = url ? `onclick="window.open('${escapeHtml(url)}', '_blank')"` : "";
+      : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed" onclick="event.stopPropagation()">Tiada Link</div>`;
+    const cardClick = itemId ? `onclick="openPrepDetail('${escapeHtml(itemId)}')"` : "";
 
     return `
       <div class="prep-card" style="flex:0 0 calc((100% - 12px) / 2);max-width:none;min-width:0" ${cardClick}>
-        <div class="prep-img-wrap">
           ${imgHtml}
           ${priceBadge}
         </div>
