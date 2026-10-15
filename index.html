@@ -1132,7 +1132,7 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
     </div>
 
     <!-- 3. KALENDAR SPLIT -->
-    <div id="calendarSection">
+   
       <div class="section-header">
         <h2 class="section-title"><span class="section-icon">📅</span> Kalendar </h2>
       </div>
@@ -2357,9 +2357,6 @@ function renderPreparationCards(selectedItems){
   `;
 }
 
-
-      
-/* ============ PREPARATION LOADERS ============ */
 async function loadEventPreparation(eventId, containerId){
   const container = $(containerId);
   if(!container) return;
@@ -2367,11 +2364,10 @@ async function loadEventPreparation(eventId, containerId){
   if(preloaded.length){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
-       if(selectedItems.length){
+    if(selectedItems.length){
       allPrepItems = selectedItems;
-        allPrepItems = selectedItems;
-    container.innerHTML = renderPreparationCards(selectedItems);
-    console.log(`[Fallback] Event ${eventId} — ${selectedItems.length} items`);
+      container.innerHTML = renderPreparationCards(selectedItems);
+      console.log(`[Instant] Event ${eventId} — ${selectedItems.length} items`);
       return;
     }
   }
@@ -2388,14 +2384,16 @@ async function loadEventPreparation(eventId, containerId){
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length){ container.innerHTML = ""; return; }
+    allPrepItems = selectedItems;
     container.innerHTML = renderPreparationCards(selectedItems);
+    console.log(`[Fallback] Event ${eventId} — ${selectedItems.length} items`);
   }catch(e){
     clearTimeout(timeoutId);
     container.innerHTML = "";
   }
 }
-
-      async function loadSeasonPreparation(seasonId, containerId){
+      
+async function loadSeasonPreparation(seasonId, containerId){
   const container = $(containerId);
   if(!container) return;
   const preloaded = allSeasonItems.filter(m => String(m["Season ID"]) === String(seasonId));
@@ -2403,8 +2401,9 @@ async function loadEventPreparation(eventId, containerId){
     const itemIds = preloaded.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(selectedItems.length){
-      allPrepItems = selectedItems;                        // ← TAMBAH
+      allPrepItems = selectedItems;
       container.innerHTML = renderPreparationCards(selectedItems);
+      console.log(`[Instant] Season ${seasonId} — ${selectedItems.length} items`);
       return;
     }
   }
@@ -2421,13 +2420,16 @@ async function loadEventPreparation(eventId, containerId){
     const itemIds = mappings.map(m => m["Item ID"]).filter(Boolean);
     const selectedItems = itemIds.map(id => allItems.find(it => String(it["Item ID"]) === String(id))).filter(Boolean);
     if(!selectedItems.length){ container.innerHTML = ""; return; }
-    allPrepItems = selectedItems;                          // ← TAMBAH
+    allPrepItems = selectedItems;
     container.innerHTML = renderPreparationCards(selectedItems);
+    console.log(`[Fallback] Season ${seasonId} — ${selectedItems.length} items`);
   }catch(e){
     clearTimeout(timeoutId);
     container.innerHTML = "";
   }
 }
+
+
 
 
 async function loadNewsPreparation(newsId, containerId){
