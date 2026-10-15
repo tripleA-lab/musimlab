@@ -2647,6 +2647,7 @@ function renderPreparationCards(selectedItems){
     const url = it["URL"] || "";
     const price = it["Price"] || "";
     const imageUrl = it["Image URL"] || "";
+    const itemId = it["Item ID"] || "";
 
     // Imej
     let imgHtml;
@@ -2667,7 +2668,6 @@ function renderPreparationCards(selectedItems){
       : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed" onclick="event.stopPropagation()">Tiada Link</div>`;
 
     // Klik card → buka popup
-    const itemId = it["Item ID"] || "";
     const cardClick = itemId ? `onclick="openPrepDetail('${escapeHtml(itemId)}')"` : "";
 
     return `
@@ -2685,19 +2685,18 @@ function renderPreparationCards(selectedItems){
     `;
   }).join("");
 
-return `
-  <div class="prep-card prep-card-grid" ${cardClick}>
-    <div class="prep-img-wrap">
-      ${imgHtml}
-      ${priceBadge}
+  return `
+    <div class="prep-section">
+      <div class="prep-header">
+        <div class="prep-title">🛍️ Persediaan & Beli</div>
+        <div class="prep-see-all" onclick="openAllPrepItems()">Lihat semua →</div>
+      </div>
+      <div class="prep-subtitle">Jom siapkan barang-barang ni!</div>
+      <div class="prep-scroll">
+        ${cards}
+      </div>
     </div>
-    <div class="prep-body">
-      <div class="prep-name">${escapeHtml(icon)} ${escapeHtml(name)}</div>
-      ${desc ? `<div class="prep-desc">${escapeHtml(desc)}</div>` : ""}
-      ${ctaHtml}
-    </div>
-  </div>
-`;
+  `;
 }
 
 async function loadEventPreparation(eventId, containerId){
