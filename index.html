@@ -2603,7 +2603,6 @@ function openFullDetail(id){
   loadEventPreparation(id, "affiliateFull_" + id);
 }
 
-/* ============ PREP CAROUSEL RENDERER ============ */
 function renderPreparationCards(selectedItems){
   if(!selectedItems || !selectedItems.length) return "";
 
@@ -2615,7 +2614,7 @@ function renderPreparationCards(selectedItems){
     const price = it["Price"] || "";
     const imageUrl = it["Image URL"] || "";
 
-    // Imej: cuba imej asal → fallback emoji
+    // Imej
     let imgHtml;
     if(imageUrl){
       const directImg = driveToDirect(imageUrl);
@@ -2625,22 +2624,17 @@ function renderPreparationCards(selectedItems){
       imgHtml = `<div class="prep-img-fallback">${icon}</div>`;
     }
 
-    // Harga: RM prefix auto
+    // Harga badge
     const priceBadge = price ? `<div class="prep-price-badge">RM ${escapeHtml(price)}</div>` : "";
 
-    // CTA: kalau ada URL → link, kalau tak → disable
-    const ctaHtml = url
-      ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="prep-cta" onclick="event.stopPropagation()">🛒 Beli Sekarang</a>`
-      : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed">Tiada Link</div>`;
-
-        // Klik card → buka popup detail
-    const itemId = it["Item ID"] || "";
-    const cardClick = itemId ? `onclick="openPrepDetail('${escapeHtml(itemId)}')"` : "";
-
-    // CTA → direct Shopee (stopPropagation supaya tak trigger card click)
+    // CTA — direct Shopee
     const ctaHtml = url
       ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="prep-cta" onclick="event.stopPropagation()">🛒 Beli Sekarang</a>`
       : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed" onclick="event.stopPropagation()">Tiada Link</div>`;
+
+    // Klik card → buka popup
+    const itemId = it["Item ID"] || "";
+    const cardClick = itemId ? `onclick="openPrepDetail('${escapeHtml(itemId)}')"` : "";
 
     return `
       <div class="prep-card" ${cardClick}>
