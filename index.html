@@ -919,17 +919,13 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:8px;
+  padding:10px;
 }
 .prep-img-wrap img{
   width:100%;height:100%;
-  object-fit:cover;      /* default — auto adjust via JS */
+  object-fit:contain;
   display:block;
   transition:transform .4s ease;
-}
-.prep-img-wrap img.fit-contain{
-  object-fit:contain;
-  padding:8px;
 }
  
 
@@ -1276,11 +1272,8 @@ main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
 }
 .prep-detail-img img{
   width:100%;height:100%;
-  object-fit:cover;       /* default */
-  display:block;
-}
-.prep-detail-img img.fit-contain{
   object-fit:contain;
+  display:block;
 }
    
 .prep-detail-img .prep-img-fallback{
@@ -2675,7 +2668,7 @@ function renderPreparationCards(selectedItems){
     if(imageUrl){
       const directImg = driveToDirect(imageUrl);
       imgHtml = `<img src="${escapeHtml(directImg)}" alt="${escapeHtml(name)}" loading="lazy"
-                   onload="autoFitImage(this)"
+                   
                    onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'prep-img-fallback\\'>${icon}</div>'">`;
     } else {
       imgHtml = `<div class="prep-img-fallback">${icon}</div>`;
@@ -2716,18 +2709,6 @@ function renderPreparationCards(selectedItems){
   `;
 }
       
-/* ============ AUTO FIT IMAGE ============ */
-function autoFitImage(img){
-  if(!img || !img.naturalWidth || !img.naturalHeight) return;
-  const ratio = img.naturalWidth / img.naturalHeight;
-  // Landscape (>1.2) → contain
-  // Portrait / Square (≤1.2) → cover
-  if(ratio > 1.2){
-    img.classList.add("fit-contain");
-  } else {
-    img.classList.remove("fit-contain");
-  }
-}
       
 async function loadEventPreparation(eventId, containerId){
   const container = $(containerId);
@@ -2861,7 +2842,7 @@ function openPrepDetail(itemId){
   if(imageUrl){
     const directImg = driveToDirect(imageUrl);
     imgHtml = `<img src="${escapeHtml(directImg)}" alt="${escapeHtml(name)}" loading="lazy"
-                 onload="autoFitImage(this)"
+                
                  onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'prep-img-fallback\\'>${icon}</div>'">`;
   } else {
     imgHtml = `<div class="prep-img-fallback">${icon}</div>`;
@@ -2916,7 +2897,7 @@ function openAllPrepItems(){
     if(imageUrl){
       const directImg = driveToDirect(imageUrl);
       imgHtml = `<img src="${escapeHtml(directImg)}" alt="${escapeHtml(name)}" loading="lazy"
-                   onload="autoFitImage(this)"
+                   
                    onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'prep-img-fallback\\'>${icon}</div>'">`;
     } else {
       imgHtml = `<div class="prep-img-fallback">${icon}</div>`;
