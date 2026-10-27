@@ -2646,63 +2646,7 @@ function openFullDetail(id){
   loadEventPreparation(id, "affiliateFull_" + id);
 }
 
-/* ============ PREP CAROUSEL RENDERER ============ */
-function renderPreparationCards(selectedItems){
-  if(!selectedItems || !selectedItems.length) return "";
 
-  const cards = selectedItems.map(it => {
-    const icon = it["Icon"] || "🛍️";
-    const name = it["Name"] || "";
-    const desc = it["Description"] || "";
-    const url = it["URL"] || "";
-    const price = it["Price"] || "";
-    const imageUrl = it["Image URL"] || "";
-    const itemId = it["Item ID"] || "";
-
-    // Gambar auto-fit (background putih)
-    let imgHtml;
-    if(imageUrl){
-      const directImg = driveToDirect(imageUrl);
-      imgHtml = `<img src="${escapeHtml(directImg)}" alt="${escapeHtml(name)}" loading="lazy"
-                   onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'prep-img-fallback\\'>${icon}</div>'">`;
-    } else {
-      imgHtml = `<div class="prep-img-fallback">${icon}</div>`;
-    }
-
-    const priceBadge = price ? `<div class="prep-price-badge">RM ${escapeHtml(price)}</div>` : "";
-    const ctaHtml = url
-      ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="prep-cta" onclick="event.stopPropagation()">🛒 Beli Sekarang</a>`
-      : `<div class="prep-cta" style="opacity:.5;cursor:not-allowed" onclick="event.stopPropagation()">Tiada Link</div>`;
-    const cardClick = itemId ? `onclick="openPrepDetail('${escapeHtml(itemId)}')"` : "";
-
-    return `
-      <div class="prep-card" ${cardClick}>
-        <div class="prep-img-wrap">
-          ${imgHtml}
-          ${priceBadge}
-        </div>
-        <div class="prep-body">
-          <div class="prep-name">${escapeHtml(icon)} ${escapeHtml(name)}</div>
-          ${desc ? `<div class="prep-desc">${escapeHtml(desc)}</div>` : ""}
-          ${ctaHtml}
-        </div>
-      </div>
-    `;
-  }).join("");
-
-  return `
-    <div class="prep-section">
-      <div class="prep-header">
-        <div class="prep-title">🛍️ Persediaan & Beli</div>
-        <div class="prep-see-all" onclick="openAllPrepItems()">Lihat semua →</div>
-      </div>
-      <div class="prep-subtitle">Jom siapkan barang-barang ni!</div>
-      <div class="prep-scroll">
-        ${cards}
-      </div>
-    </div>
-  `;
-}
       
       
 async function loadEventPreparation(eventId, containerId){
